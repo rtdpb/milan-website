@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 1
 status: in_progress
-stopped_at: "Phase 1 Plan 04 complete — RevealOnScroll island + Testimonials mosaic + Story dark band built"
-last_updated: "2026-08-18T18:30:00Z"
+stopped_at: "Phase 1 Plan 05 complete — Newsletter signup + Recente artikelen placeholder cards built"
+last_updated: "2026-08-18T16:35:09Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
 current_phase_name: Foundation, Design System & Dutch Homepage
 ---
 
@@ -28,8 +28,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **Milestone:** v1 — Dutch homepage MVP
 - **Current phase:** 1
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
-- **Plans completed:** 4/6 (Plan 01 — Walking Skeleton; Plan 02 — Global chrome + UI kit; Plan 03 — PressStrip + Samenwerken; Plan 04 — RevealOnScroll + Testimonials + Story)
-- **Last action:** Executed Plan 01-04 — RevealOnScroll island (reduced-motion safe) + Testimonials mosaic (3 verbatim quotes) + Story dark band (full copy, portrait, id=verhaal)
+- **Plans completed:** 5/6 (Plan 01 — Walking Skeleton; Plan 02 — Global chrome + UI kit; Plan 03 — PressStrip + Samenwerken; Plan 04 — RevealOnScroll + Testimonials + Story; Plan 05 — Newsletter + Articles)
+- **Last action:** Executed Plan 01-05 — Newsletter signup (honest disabled submit, labelled naam+mailadres form) + Recente artikelen (3 PlaceholderBadge-tagged cards, DATA SHAPE CONTRACT for Phase 3)
 
 ## Key Facts
 
@@ -49,6 +49,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **NEW: RevealOnScroll** — IntersectionObserver island (prefers-reduced-motion JS guard + CSS fallback), reusable stagger wrapper — COMPLETE
 - **NEW: Testimonials** — 3-card Sevora-style mosaic (1 large dark + 2 light), verbatim quotes + attributions, yellow quote mark on dark card — COMPLETE
 - **NEW: Story** — full-width dark band (#111110), verbatim story copy, signature, portrait + mission photos (AVIF/WebP pipeline), id=verhaal anchor — COMPLETE
+- **NEW: Newsletter** — light section, explicit naam+mailadres labels, 16px inputs, aria-disabled Substack submit tied to TODO_SUBSTACK_URL, no fake success state (D-09, HOME-07) — COMPLETE
+- **NEW: Articles** — 3 placeholder cards (PlaceholderBadge + fictional titles + isPlaceholder flag), disabled "Lees verder"/"Alle artikelen", ArticleCard type contract for Phase 3 Substack swap (D-10, HOME-08) — COMPLETE
 - Primary source: `Input homepage Milan.docx`; design inspiration: Sevora (not copied literally)
 - Brand: accent `#FFDD11` used sparingly (primary CTA only); typeface Naste (licensed fallback for now, swappable)
 - Photos: 6 real photos supplied; hero = `10 Jaar Soly-77` (extracted + downscaled); mapping in `.planning/ASSETS.md`
@@ -68,6 +70,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Mission photo (milan-energy-mission.jpg) resized to 1000px wide (189KB) at quality 80 to stay under 300KB threshold (FND-10)
 - TypeScript as const literal narrowing in Testimonials.astro worked around via type alias cast in frontmatter
 - Story yellow accent: 4px left-border on eyebrow label only (D-02 rule: exactly 1 usage per section)
+- Newsletter submit: rendered as `<span role=button aria-disabled>` (not `<button disabled>`) so AT can discover and read it while it's clearly non-functional
+- Articles cards: :global(.articles__card) flex override + loop with single TODO comment covering the whole placeholder array (plan allows this; array marked isPlaceholder:true)
 
 ## Performance Metrics
 
@@ -77,16 +81,17 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 01 | 02 | ~12 min | 3/3 | 8 created, 1 modified |
 | 01 | 03 | ~8 min | 2/2 | 2 created |
 | 01 | 04 | ~10 min | 3/3 | 5 created |
+| 01 | 05 | ~6 min | 2/2 | 2 created |
 
 ## Next Step
 
-Execute Plan 05 (wave 3): Newsletter section component. Then Plan 06 (wave 4): final assembly wiring all sections into index.astro in document order.
+Execute Plan 06 (wave 4): final assembly — wire all sections into src/pages/index.astro in document order (Hero → PressStrip → Samenwerken → Testimonials → Story → Newsletter → Articles → Footer).
 
 ---
-*Last updated: 2026-08-18 after Plan 01-04 execution*
+*Last updated: 2026-08-18 after Plan 01-05 execution*
 
 ## Session
 
-**Last session:** 2026-08-18T18:30:00Z
-**Stopped at:** Plan 01-04 complete — RevealOnScroll + Testimonials + Story built (4/6 plans done)
-**Resume file:** .planning/phases/01-foundation-design-system-dutch-homepage/01-05-PLAN.md
+**Last session:** 2026-08-18T16:35:09Z
+**Stopped at:** Plan 01-05 complete — Newsletter + Recente artikelen built (5/6 plans done)
+**Resume file:** .planning/phases/01-foundation-design-system-dutch-homepage/01-06-PLAN.md
