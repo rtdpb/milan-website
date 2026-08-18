@@ -29,6 +29,12 @@ import { SITE_NAME, DISABLED_TOOLTIP } from '../../config';
 // Phase 3 Plan 03: nieuwsbrief enabled — /nieuwsbrief page now exists; boek still disabled
 const currentPath = Astro.url.pathname;
 
+// WR-04: exact-match active detection with trailing-slash normalization.
+// Prevents /coaching matching /coaching-tips if such a path existed, and
+// handles the common Astro trailing-slash convention correctly.
+const isActive = (href: string) =>
+  currentPath === href || currentPath === href.replace(/\/$/, '') + '/';
+
 const navItems = [
   { label: nl.nav.coaching,    href: `${import.meta.env.BASE_URL}coaching` },
   { label: nl.nav.spreker,     href: `${import.meta.env.BASE_URL}spreker` },
@@ -55,8 +61,8 @@ const navItems = [
             {item.href ? (
               <a
                 href={item.href}
-                class={`nav-link${currentPath.startsWith(item.href) ? ' nav-link--active' : ''}`}
-                aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+                class={`nav-link${isActive(item.href) ? ' nav-link--active' : ''}`}
+                aria-current={isActive(item.href) ? 'page' : undefined}
               >
                 {item.label}
               </a>
@@ -177,8 +183,8 @@ const navItems = [
             {item.href ? (
               <a
                 href={item.href}
-                class={`mobile-nav__link${currentPath.startsWith(item.href) ? ' mobile-nav__link--active' : ''}`}
-                aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+                class={`mobile-nav__link${isActive(item.href) ? ' mobile-nav__link--active' : ''}`}
+                aria-current={isActive(item.href) ? 'page' : undefined}
               >
                 {item.label}
               </a>
