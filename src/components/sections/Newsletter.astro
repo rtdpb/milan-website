@@ -112,10 +112,18 @@ const { heading, subtext, labelEmail, cta, disclaimer } = nl.newsletter;
         </a>
       )}
 
-      <!-- Screen-reader note explaining the disabled / redirect state -->
-      <p id="newsletter-submit-note" class="newsletter__submit-note" aria-live="polite">
-        Aanmelden is binnenkort beschikbaar via Substack.
-      </p>
+      <!-- Screen-reader note: conditional on sentinel state (CR-03).
+           Sentinel state: "coming soon" with aria-live (correct — no action possible yet).
+           Live state: redirect info without aria-live (link is functional, no announcement needed). -->
+      {IS_SENTINEL ? (
+        <p id="newsletter-submit-note" class="newsletter__submit-note" aria-live="polite">
+          Aanmelden is binnenkort beschikbaar via Substack.
+        </p>
+      ) : (
+        <p id="newsletter-submit-note" class="newsletter__submit-note">
+          Je wordt doorgestuurd naar Substack om je in te schrijven.
+        </p>
+      )}
 
     </form>
 
