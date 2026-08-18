@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 1
 status: in_progress
-stopped_at: "Phase 1 Plan 02 complete — Global chrome + UI kit built"
-last_updated: "2026-08-18T18:12:00Z"
+stopped_at: "Phase 1 Plan 03 complete — PressStrip + Samenwerken section components built"
+last_updated: "2026-08-18T18:20:00Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 6
-  completed_plans: 2
+  completed_plans: 3
 current_phase_name: Foundation, Design System & Dutch Homepage
 ---
 
@@ -28,8 +28,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **Milestone:** v1 — Dutch homepage MVP
 - **Current phase:** 1
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
-- **Plans completed:** 2/6 (Plan 01 — Walking Skeleton; Plan 02 — Global chrome + UI kit)
-- **Last action:** Executed Plan 01-02 — site header (Nav) + site footer + reusable UI kit + single-source i18n/config
+- **Plans completed:** 3/6 (Plan 01 — Walking Skeleton; Plan 02 — Global chrome + UI kit; Plan 03 — PressStrip + Samenwerken)
+- **Last action:** Executed Plan 01-03 — PressStrip credibility band (6 text placeholder chips) + Samenwerken 3-card commitment ladder (disabled CTAs)
 
 ## Key Facts
 
@@ -44,6 +44,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **NEW: UI Kit** — Button/Card/SectionWrapper/PlaceholderBadge, all token-styled — COMPLETE
 - **NEW: i18n** — src/i18n/nl.ts typed const with all Dutch strings; Phase 4 shape ready — COMPLETE
 - **NEW: Config** — src/config.ts with TODO_SUBSTACK_URL, TODO_CONTACT_URL, TODO_LINKEDIN_URL — COMPLETE
+- **NEW: PressStrip** — slim "Bekend van" band with 6 text/wordmark placeholder chips, mobile scroll-snap — COMPLETE
+- **NEW: Samenwerken** — 3-card commitment ladder (Nieuwsbrief/Lezing/Coaching) with disabled CTAs, responsive grid — COMPLETE
 - Primary source: `Input homepage Milan.docx`; design inspiration: Sevora (not copied literally)
 - Brand: accent `#FFDD11` used sparingly (primary CTA only); typeface Naste (licensed fallback for now, swappable)
 - Photos: 6 real photos supplied; hero = `10 Jaar Soly-77` (extracted + downscaled); mapping in `.planning/ASSETS.md`
@@ -57,6 +59,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - `is:inline` added to JSON-LD `<script>` tag in BaseHead to silence Astro hint
 - Non-null assertions (!) used in Nav.astro script island after early-return guard — Astro TS strict cannot narrow null in closures
 - nav-cta styled inline in Nav context (not Button import) to avoid scoped CSS scope leakage
+- PressStrip: --section-padding-y overridden via :global CSS class instead of new SectionWrapper prop — one-off exception, keeps SectionWrapper API clean
+- Samenwerken: card photos omitted — not extracted from zip (optional); :global(.samenwerken__card) overrides Card.astro to add flex layout for bottom-aligned CTAs
 
 ## Performance Metrics
 
@@ -64,16 +68,17 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 |-------|------|----------|-------|-------|
 | 01 | 01 | ~6 min | 4/4 | 17 created |
 | 01 | 02 | ~12 min | 3/3 | 8 created, 1 modified |
+| 01 | 03 | ~8 min | 2/2 | 2 created |
 
 ## Next Step
 
-Execute Plan 03: Homepage sections — PressStrip, Samenwerken (3-card commitment ladder), Testimonials mosaic.
+Execute Plan 04 and/or Plan 05 (wave 3 parallel): Testimonials mosaic + Story/Newsletter sections. Then Plan 06 (wave 4): final assembly wiring all sections into index.astro.
 
 ---
-*Last updated: 2026-08-18 after Plan 01-02 execution*
+*Last updated: 2026-08-18 after Plan 01-03 execution*
 
 ## Session
 
-**Last session:** 2026-08-18T18:12:00Z
-**Stopped at:** Plan 01-02 complete — Global chrome + UI kit built and wired into BaseLayout
-**Resume file:** .planning/phases/01-foundation-design-system-dutch-homepage/01-03-PLAN.md
+**Last session:** 2026-08-18T18:20:00Z
+**Stopped at:** Plan 01-03 complete — PressStrip + Samenwerken section components built
+**Resume file:** .planning/phases/01-foundation-design-system-dutch-homepage/01-04-PLAN.md
