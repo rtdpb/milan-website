@@ -55,20 +55,20 @@ Plans:
 **Goal:** Add the primary conversion subpages (Coaching, Spreker, Mijn verhaal, Contact) and make lead capture functional so "Boek lezing" / "Plan kennismaking" / Contact produce real inquiries.
 **Mode:** mvp
 **Requirements:** PAGE-01, PAGE-02, PAGE-03, PAGE-04, PAGE-05
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 Plans:
 
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — Tracer: end-to-end lead-capture slice (config constants + nl.contact, ContactForm.astro Web3Forms progressive-enhancement, /contact page, enable Nav Contact CTA)
+- [x] 02-01-PLAN.md — Tracer: end-to-end lead-capture slice (config constants + nl.contact, ContactForm.astro Web3Forms progressive-enhancement, /contact page, enable Nav Contact CTA)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 02-02-PLAN.md — Coaching + Spreker editorial landing pages (photo extraction, nl copy, single-testimonial redistribution, Nav/Footer enablement)
+- [x] 02-02-PLAN.md — Coaching + Spreker editorial landing pages (photo extraction, nl copy, single-testimonial redistribution, Nav/Footer enablement)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 02-03-PLAN.md — Mijn verhaal expanded story page + homepage CTA wiring (Hero/Samenwerken → contact flow, Story teaser link, Nav/Footer mijn-verhaal enablement)
+- [x] 02-03-PLAN.md — Mijn verhaal expanded story page + homepage CTA wiring (Hero/Samenwerken → contact flow, Story teaser link, Nav/Footer mijn-verhaal enablement)
 
 **Success Criteria:**
 
