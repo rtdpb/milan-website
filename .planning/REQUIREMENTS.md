@@ -31,8 +31,8 @@ Initial milestone — the focused Dutch homepage MVP. All map to **Phase 1**.
 - [ ] **HOME-07**: Newsletter signup section (naam + mailadres) — submits to placeholder/Substack endpoint
 - [ ] **HOME-08**: "Recente artikelen" section — 3 static placeholder article cards
 - [ ] **HOME-09**: Footer — navigation, LinkedIn, legal/placeholder content
-- [ ] **HOME-10**: All supplied CTAs functional where the destination is known; clearly-marked placeholders otherwise
-- [ ] **HOME-11**: Preserve supplied factual claims, names, and quotes verbatim; flag suspected typos/inconsistencies rather than silently changing them
+- [ ] **HOME-10**: Every CTA with a known destination works; CTAs with unknown destinations are clearly documented and temporarily disabled (not clickable) — no fake working buttons; missing logos/assets shown as clearly-marked placeholders
+- [ ] **HOME-11**: Preserve supplied factual claims, names, and quotes; obvious spelling/language errors may be corrected, but factual claims/names are not changed without consulting the user (flag suspected factual inconsistencies)
 
 ## v2 Requirements
 

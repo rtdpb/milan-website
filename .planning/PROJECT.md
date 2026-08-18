@@ -26,7 +26,7 @@ Make Milan feel like a **credible, experienced, and honest founder** — human a
 - [ ] Dutch homepage matching the docx: header, hero, credibility indicators, collaboration/services, testimonials, personal story, newsletter signup, recent articles, footer
 - [ ] Reusable component library and a consistent design system (premium, editorial, restrained yellow accent)
 - [ ] Real photography used throughout instead of generic placeholders, with an optimized responsive asset pipeline
-- [ ] All supplied CTAs functional where destinations are known; clearly-marked placeholders elsewhere
+- [ ] CTAs with known destinations functional; CTAs with unknown destinations clearly documented and temporarily disabled (never fake working buttons); missing assets shown as clearly-marked placeholders
 - [ ] Baseline SEO, accessibility, performance, responsive behaviour, and metadata
 - [ ] Architecture that does not block future pages, i18n (NL/EN), Substack integration, or a later CMS
 
@@ -46,7 +46,7 @@ Make Milan feel like a **credible, experienced, and honest founder** — human a
 - **Primary source**: `Input homepage Milan.docx` (Dutch homepage copy, section structure, CTAs, and design references). Design inspiration: https://sevora.framer.website/ (composition, typography, spacing, cards, image treatment) — inspiration only, not to be copied literally.
 - **Homepage sections (from docx)**: Header (nav: Coaching · Spreker · Nieuwsbrief · Mijn verhaal · Boek pre-order; header CTA: Contact; NL/EN switch + LinkedIn icon) → Hero ("Je bedrijf schalen, zonder jezelf te verliezen", primary CTA Contact, secondary CTA Mijn verhaal, USPs 12+ jaar · 180 medewerkers · 9 markten) → "bekend van" logo carousel (MT Sprout, Quote, NOS, EenVandaag, Telegraaf, De Ondernemer) → Sectie 2 "Samenwerken" (Nieuwsbrief / Presentatie / 1:1 Coaching cards) → Sectie 3 Testimonials (Yang Soo Kloosterhof, Ruud Koornstra, Oranjewoud Export Academy) → Sectie 4 personal story "Waarom ik nu mijn lessen deel" (signed Milan van der Meulen) → Sectie 5 newsletter signup (naam + mailadres) → Sectie 6 "Recente artikelen" (static placeholders in v1) → Footer.
 - **Photography**: 6 real photos supplied (`fotos/wetransfer_…zip`, ~86 MB). Manifest and section mapping recorded in `.planning/ASSETS.md`. Hero = "10 Jaar Soly-77" (yellow stage backdrop, on-brand).
-- **Content integrity**: Preserve supplied factual claims, names, and quotes. Flag suspected typos/inconsistencies (e.g. "markteno.a." spacing, "commerci�le" encoding artifacts) rather than silently rewriting.
+- **Content integrity**: Obvious spelling/language errors in the supplied copy may be corrected. Factual claims and names must not be changed without consulting the user — flag suspected factual inconsistencies instead. (Note: some artifacts in the extracted docx text, e.g. "markteno.a." run-together spacing and "commerci�le" mojibake, are extraction glitches, not necessarily errors in the source — verify against the original before "fixing".)
 
 ## Constraints
 
@@ -67,6 +67,8 @@ Make Milan feel like a **credible, experienced, and honest founder** — human a
 | Hero photo = "10 Jaar Soly-77" | Yellow backdrop matches `#FFDD11`; honest, confident expression; subject faces into layout | — Pending |
 | NL-only content now, i18n-ready structure | Focused first milestone; EN is a later phase | — Pending |
 | Static placeholder articles in v1 | Live Substack/LinkedIn feeds deferred to a later phase | — Pending |
+| Unknown-destination CTAs disabled + documented (not fake buttons) | Honest UX; avoid dead links | — Pending |
+| Only optimized AVIF/WebP assets in production; originals never served/committed | Keep the ~86 MB originals out of the bundle | — Pending |
 
 ## Evolution
 
