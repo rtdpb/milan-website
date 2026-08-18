@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 3
 status: in_progress
-stopped_at: Completed Phase 3 Plan 03 — Nieuwsbrief enabled in Nav/Footer/Samenwerken; human-verify checkpoint APPROVED
-last_updated: "2026-08-19T00:00:00Z"
+stopped_at: "Phase 3 uitgevoerd + code-review-fixes + verifier — wacht op human UAT (status: human_needed)"
+last_updated: "2026-08-18T22:56:13.693Z"
 progress:
   total_phases: 5
   completed_phases: 3
@@ -132,6 +132,6 @@ Phase 3 Plan 03 complete and human-verified. All three Nieuwsbrief entry points 
 
 ## Session
 
-**Last session:** 2026-08-19T00:00:00Z
-**Stopped at:** Completed Phase 3 Plan 03 — Nieuwsbrief enabled in Nav/Footer/Samenwerken; human-verify checkpoint APPROVED
-**Resume file:** None
+**Last session:** 2026-08-18T22:56:13.682Z
+**Stopped at:** Phase 3 uitgevoerd + code-review-fixes + verifier — wacht op human UAT (status: human_needed)
+**Resume file:** .planning/phases/03-newsletter-substack-integration/03-UAT.md
