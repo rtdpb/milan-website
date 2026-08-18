@@ -258,7 +258,9 @@ const navItems = [
     }, { passive: true });
 
     // ── Mobile nav open / close ─────────────────────────────────────────────
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Evaluate live so a mid-session OS preference change is respected (WR-06).
+    const prefersReducedMotion = () =>
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function openNav() {
       p.hidden = false;
@@ -271,7 +273,7 @@ const navItems = [
       c.focus();
 
       // Animate in (if motion is OK)
-      if (!reducedMotion) {
+      if (!prefersReducedMotion()) {
         // Small rAF delay allows `hidden` removal + paint before transition
         requestAnimationFrame(function () {
           p.classList.add('mobile-nav--open');
@@ -288,7 +290,7 @@ const navItems = [
       t.setAttribute('aria-label', 'Menu openen');
       document.body.style.overflow = '';
 
-      if (!reducedMotion) {
+      if (!prefersReducedMotion()) {
         p.classList.remove('mobile-nav--open');
         b.classList.remove('mobile-nav-backdrop--visible');
         // Wait for CSS transition to finish before hiding from DOM
@@ -304,8 +306,12 @@ const navItems = [
         b.hidden = true;
       }
 
-      // Return focus to the toggle button
-      t.focus();
+      // Return focus to the toggle button — but only if it is visible.
+      // On desktop the hamburger is display:none, so focusing it would drop
+      // focus silently (WR-06). offsetParent is null when not rendered.
+      if (t.offsetParent !== null) {
+        t.focus();
+      }
     }
 
     // Toggle button

@@ -40,7 +40,7 @@ export const nl = {
   hero: {
     eyebrow:   'Founder · Coach · Spreker',
     h1:        'Je bedrijf schalen, zonder jezelf te verliezen',
-    subtext:   'Als founder heb ik Soly van start-up naar 9 landen en 180 medewerkers gebracht. Nu help ik andere ondernemers hetzelfde te doen — op hun manier, in hun tempo.',
+    subtext:   'Ik help ondernemers met lef hun bedrijf schalen. Niet vanuit abstracte theorie, maar vanuit doorleefde ervaring.',
     ctaPrimary:   'Contact',
     ctaSecondary: 'Mijn verhaal',
     usp1: '12+ jaar',

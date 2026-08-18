@@ -109,7 +109,8 @@ h1 {
 
 /* ── Section Defaults ───────────────────────────────────────────────────── */
 
-section {
+/* SectionWrapper owns its own padding-block; exclude it to avoid double padding (WR-01). */
+section:not(.section-wrapper) {
   padding-block: var(--section-padding-y);
 }
 
