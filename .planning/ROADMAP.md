@@ -82,21 +82,21 @@ Plans:
 **Goal:** Replace newsletter/article placeholders with the real Substack: functional signup and an automatically updated recent-articles feed.
 **Mode:** mvp
 **Requirements:** NEWS-01, NEWS-02, NEWS-03
-**Plans:** 3 plans
+**Plans:** 3/3 plans executed
 
 Plans:
 
 **Wave 1**
 
-- [ ] 03-01-PLAN.md — Tracer: end-to-end RSS slice (fast-xml-parser, src/lib/rss.ts, sentinel-guarded homepage Articles feed, GitHub Actions deploy + daily cron) [NEWS-03]
+- [x] 03-01-PLAN.md — Tracer: end-to-end RSS slice (fast-xml-parser, src/lib/rss.ts, sentinel-guarded homepage Articles feed, GitHub Actions deploy + daily cron) [NEWS-03]
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 03-02-PLAN.md — /nieuwsbrief editorial landing page + email-only honest Substack redirect signup (Newsletter.astro rewire, nl.nieuwsbrief copy) [NEWS-01, NEWS-02]
+- [x] 03-02-PLAN.md — /nieuwsbrief editorial landing page + email-only honest Substack redirect signup (Newsletter.astro rewire, nl.nieuwsbrief copy) [NEWS-01, NEWS-02]
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 03-03-PLAN.md — Enable Nieuwsbrief in Nav (desktop+mobile), Footer, and the Samenwerken card + phase human-verify checkpoint [NEWS-01]
+- [x] 03-03-PLAN.md — Enable Nieuwsbrief in Nav (desktop+mobile), Footer, and the Samenwerken card + phase human-verify checkpoint [NEWS-01]
 
 **Success Criteria:**
 

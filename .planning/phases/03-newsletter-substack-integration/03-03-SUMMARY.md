@@ -3,7 +3,7 @@ phase: 03-newsletter-substack-integration
 plan: "03"
 subsystem: navigation-entry-points
 tags: [nav, footer, samenwerken, nieuwsbrief, enable, internal-link]
-status: checkpoint
+status: complete
 
 dependency_graph:
   requires: ["03-02"]   # /nieuwsbrief page must exist before enabling nav/footer/card links
@@ -34,11 +34,11 @@ decisions:
 
 metrics:
   duration: "~2 min"
-  completed_date: "2026-08-18"
-  tasks_completed: 2
+  completed_date: "2026-08-19"
+  tasks_completed: 3
   tasks_total: 3
   commits: 2
-  status_note: "2 autonomous tasks committed; Task 3 is a blocking human-verify checkpoint — awaiting human verification"
+  status_note: "2 autonomous tasks committed; Task 3 human-verify checkpoint APPROVED by user — build green (6 pages, 0 errors)"
 
 actuals:
   tokens: 8000
@@ -94,7 +94,7 @@ Two autonomous tasks completed; one blocking human-verify checkpoint pending.
 - [x] Samenwerken ladderCards[0] has `disabled: false`, `placeholderReason: undefined`, `href: ...nieuwsbrief`
 - [x] Nieuwsbrief card Button renders `variant="primary"`; other two cards `variant="secondary"`
 - [x] No `external` prop / `target="_blank"` on Nieuwsbrief card (internal link)
-- [ ] Human-verify checkpoint: Task 3 — phase end-to-end verification (pending)
+- [x] Human-verify checkpoint: Task 3 — phase end-to-end verification APPROVED by user (build green, 6 pages, 0 errors)
 
 ## Deviations from Plan
 
@@ -113,7 +113,7 @@ No other deviations — plan executed as written.
 |------|------|--------|-------|
 | 1 | Enable Nieuwsbrief in Nav.astro and Footer.astro | `4488f23` | src/components/layout/Nav.astro, src/components/layout/Footer.astro |
 | 2 | Enable Samenwerken Nieuwsbrief card CTA | `e9bb2a9` | src/components/sections/Samenwerken.astro |
-| 3 | Human-verify checkpoint | — | (pending human verification) |
+| 3 | Human-verify checkpoint — phase end-to-end | APPROVED | user approved; build green (6 pages, 0 errors) |
 
 ## Threat Surface Scan
 

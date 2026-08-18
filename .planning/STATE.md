@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 3
 status: in_progress
-stopped_at: Phase 3 Plan 03 — Task 3 blocking human-verify checkpoint reached; Nav/Footer/Samenwerken Nieuwsbrief entries enabled
-last_updated: "2026-08-18T22:28:55.809Z"
+stopped_at: Completed Phase 3 Plan 03 — Nieuwsbrief enabled in Nav/Footer/Samenwerken; human-verify checkpoint APPROVED
+last_updated: "2026-08-19T00:00:00Z"
 progress:
   total_phases: 5
   completed_phases: 3
@@ -125,13 +125,13 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 
 ## Next Step
 
-Phase 3 Plan 02 complete. /nieuwsbrief page is live in sentinel state. Nav/Footer/Samenwerken nieuwsbrief enable deferred (not in 03-02 scope). Next: Phase 3 Plan 03 (if exists) or check remaining Phase 3 plans. One grep-replace of TODO_SUBSTACK_URL flips the entire newsletter integration live.
+Phase 3 Plan 03 complete and human-verified. All three Nieuwsbrief entry points (Nav desktop+mobile, Footer, Samenwerken card) now link to /nieuwsbrief. Phase 3 (all 3 plans) done — NEWS-01 delivered; NEWS-02/NEWS-03 ship integration-ready behind the TODO_SUBSTACK_URL sentinel (one grep-replace flips the whole newsletter integration live). Next: Phase 4 (Internationalization — NL/EN switch) or milestone review.
 
 ---
-*Last updated: 2026-08-19 after Plan 03-02 execution*
+*Last updated: 2026-08-19 after Plan 03-03 execution*
 
 ## Session
 
-**Last session:** 2026-08-18T22:28:42.951Z
-**Stopped at:** Phase 3 Plan 03 — Task 3 blocking human-verify checkpoint reached; Nav/Footer/Samenwerken Nieuwsbrief entries enabled
+**Last session:** 2026-08-19T00:00:00Z
+**Stopped at:** Completed Phase 3 Plan 03 — Nieuwsbrief enabled in Nav/Footer/Samenwerken; human-verify checkpoint APPROVED
 **Resume file:** None
