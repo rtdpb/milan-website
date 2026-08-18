@@ -8,10 +8,14 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // TODO: Confirm production domain before deploying — see ASSUMPTION A6
-  site: 'https://milanvandermeulen.nl',
+  // Deployed to a GitHub Pages PROJECT site under the rtdpb account:
+  //   https://rtdpb.github.io/milan-website/
+  // When the real domain (e.g. milanvandermeulen.nl) is ready:
+  //   set `site` to it and REMOVE `base` (root deploys need no base path).
+  site: 'https://rtdpb.github.io',
+  base: '/milan-website/',
   output: 'static',
-  trailingSlash: 'never',
+  trailingSlash: 'ignore',
 
   i18n: {
     defaultLocale: 'nl',

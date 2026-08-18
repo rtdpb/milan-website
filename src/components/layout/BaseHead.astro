@@ -12,17 +12,43 @@ interface Props {
   ogImage?: string;
 }
 
+// Base path (import.meta.env.BASE_URL) — '/' locally, '/milan-website/' on
+// GitHub Pages project deploy. All static asset URLs (favicon, fonts, og-image)
+// must be prefixed with it so they resolve under the project subpath.
+const base = import.meta.env.BASE_URL;
+
 const {
   title,
   description,
-  ogImage = '/og-image.jpg',
+  ogImage = `${base}og-image.jpg`,
 } = Astro.props;
 
-// Canonical URL — requires `site` set in astro.config.mjs (RESEARCH Pitfall 3)
+// Canonical URL — requires `site` set in astro.config.mjs (RESEARCH Pitfall 3).
+// Astro.url.pathname already includes the base at build time.
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 // OG image absolute URL
 const ogImageURL = new URL(ogImage, Astro.site);
+
+// @font-face — authored here (not tokens.css) so src URLs carry the base path.
+// Self-hosted WOFF2 in public/fonts/. Vite leaves is:inline styles untouched.
+const fontFaceCss = `
+@font-face {
+  font-family: 'Fraunces';
+  src: url('${base}fonts/Fraunces-subset.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('${base}fonts/DMSans-subset.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}`;
 
 /**
  * JSON-LD Person schema — establishes Milan's authorship.
@@ -50,24 +76,27 @@ const personSchema = {
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Favicon (interim SVG — replace with brand favicon when supplied) -->
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+
+<!-- Self-hosted @font-face (base-aware — see frontmatter). is:inline so Vite leaves url() untouched. -->
+<style is:inline set:html={fontFaceCss}></style>
 
 <!--
   Font preloads — CRITICAL for FND-07 / LCP performance.
   Preloading the WOFF2 files prevents FOUT on the first render.
-  Both files must match the @font-face src URLs in tokens.css exactly.
+  Both files must match the @font-face src URLs above exactly (base-prefixed).
   Source: RESEARCH §Fonts, §Pattern 6, §Common Pitfalls 7.
 -->
 <link
   rel="preload"
-  href="/fonts/Fraunces-subset.woff2"
+  href={`${base}fonts/Fraunces-subset.woff2`}
   as="font"
   type="font/woff2"
   crossorigin
 />
 <link
   rel="preload"
-  href="/fonts/DMSans-subset.woff2"
+  href={`${base}fonts/DMSans-subset.woff2`}
   as="font"
   type="font/woff2"
   crossorigin
