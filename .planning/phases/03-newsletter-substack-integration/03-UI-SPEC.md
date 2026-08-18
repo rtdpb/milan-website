@@ -299,7 +299,8 @@ The `isPlaceholder` discriminant drives all conditional rendering — no new pro
 
 ## UI Considerations
 
-Applicable state considerations resolved: 8 covered, 2 backstop, 0 unresolved
+Applicable state considerations resolved: 38 applicable (probe engine), 0 unresolved.
+Curated resolutions below: 8 explicit (verification: explicit) + remaining categories backstop (verification: backstop, `--auto` floor — visual/state test at execute time). No category dismissed; no silent drops.
 
 | Category | Element | Status | Resolution |
 |----------|---------|--------|------------|
@@ -313,6 +314,14 @@ Applicable state considerations resolved: 8 covered, 2 backstop, 0 unresolved
 | overflow | Article excerpt — long excerpt from RSS | 🧪 backstop | Excerpt capped at 160 chars in `rss.ts`; visual test: confirm 160-char excerpt renders within card without overflow at min grid width (300px) |
 | disabled | Newsletter submit — sentinel state | ✅ covered | Existing `aria-disabled` span with `opacity: 0.5`, `pointer-events: none`; screen-reader note persists |
 | disabled | Nav/Footer/Samenwerken items — sentinel | ✅ covered | All three flip from disabled to enabled via href-or-reason union; no intermediate half-enabled state |
+
+**Backstop coverage (probe categories folded above — `verification: backstop`, no silent drops):**
+
+- `{ statement: "Signup surface (E1) — the redirect button has no loading/error/partial/overflow runtime state (navigation only); disabled sentinel state is the sole non-happy state and is covered above", verification: backstop }`
+- `{ statement: "/nieuwsbrief hero + value-prop (E2) — static editorial content inherits the Phase 1 typography/overflow/long-text and responsive contract; no data-driven empty/loading/error states of its own", verification: backstop }`
+- `{ statement: "Article feed (E3) zero-one-many — homepage caps at 3, /nieuwsbrief at 6–10; grid reads correctly at 0 (placeholder), 1, and many; confirm 1-item and 2-item rows do not stretch full-width awkwardly at each breakpoint", verification: backstop }`
+- `{ statement: "Article feed (E3/E4) long-text / overflow — RSS title and excerpt are untrusted-length; title uses text-wrap:balance and excerpt is capped at 160 chars; visual test a max-length title+excerpt card at 300px min grid width", verification: backstop }`
+- `{ statement: "Nav/Footer/Samenwerken (E5) — a nav link has no data-bearing empty/loading/error/partial/populated states; only enabled vs disabled applies and is covered explicitly above", verification: backstop }`
 
 ---
 
