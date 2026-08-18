@@ -71,7 +71,9 @@ function wordCountToReadTime(html: string): string {
  * Uses a hard-coded Dutch month-name array — no runtime locale dependency.
  */
 function formatPubDate(pubDate: string): string {
+  if (!pubDate) return '';          // guard: no pubDate in item
   const d = new Date(pubDate);
+  if (isNaN(d.getTime())) return ''; // guard: unparseable date string
   const months = [
     'januari', 'februari', 'maart', 'april', 'mei', 'juni',
     'juli', 'augustus', 'september', 'oktober', 'november', 'december',
