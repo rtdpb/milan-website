@@ -26,13 +26,16 @@
 import { nl } from '../../i18n/nl';
 import { SITE_NAME, TODO_LINKEDIN_URL, DISABLED_TOOLTIP } from '../../config';
 
-// Nav items: all disabled in Phase 1 — pages arrive in Phase 2+
+// Nav items — Phase 2: coaching + spreker enabled; nieuwsbrief/mijnVerhaal/boek still disabled
+// mijnVerhaal: remains disabled here — enabled in Plan 03 (page ships in Plan 03)
+const currentPath = Astro.url.pathname;
+
 const navItems = [
-  { label: nl.nav.coaching,    reason: 'Coaching pagina volgt in fase 2' },
-  { label: nl.nav.spreker,     reason: 'Spreker pagina volgt in fase 2' },
-  { label: nl.nav.nieuwsbrief, reason: 'Nieuwsbrief pagina volgt in fase 2' },
-  { label: nl.nav.mijnVerhaal, reason: 'Mijn verhaal pagina volgt in fase 2' },
-  { label: nl.nav.boek,        reason: 'Boek pagina volgt in fase 2' },
+  { label: nl.nav.coaching,    href: `${import.meta.env.BASE_URL}coaching` },
+  { label: nl.nav.spreker,     href: `${import.meta.env.BASE_URL}spreker` },
+  { label: nl.nav.nieuwsbrief, reason: 'Nieuwsbrief pagina volgt in fase 3' },
+  { label: nl.nav.mijnVerhaal, reason: 'Mijn verhaal pagina volgt in fase 2, plan 3' },
+  { label: nl.nav.boek,        reason: 'Boek pagina volgt in fase 5' },
 ];
 ---
 
@@ -50,20 +53,26 @@ const navItems = [
       <ul class="nav-list" role="list">
         {navItems.map((item) => (
           <li>
-            <!--
-              TODO Phase 2: replace aria-disabled span with real <a href="/{page}"> when page exists.
-              Destinations centralised in src/config.ts — grep TODO_ to find all placeholders.
-            -->
-            <span
-              class="nav-link nav-link--disabled"
-              role="link"
-              aria-disabled="true"
-              tabindex="-1"
-              data-placeholder={item.reason}
-              title={DISABLED_TOOLTIP}
-            >
-              {item.label}
-            </span>
+            {item.href ? (
+              <a
+                href={item.href}
+                class={`nav-link${currentPath.startsWith(item.href) ? ' nav-link--active' : ''}`}
+                aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <span
+                class="nav-link nav-link--disabled"
+                role="link"
+                aria-disabled="true"
+                tabindex="-1"
+                data-placeholder={item.reason}
+                title={DISABLED_TOOLTIP}
+              >
+                {item.label}
+              </span>
+            )}
           </li>
         ))}
       </ul>
@@ -168,19 +177,25 @@ const navItems = [
       <ul class="mobile-nav__list" role="list">
         {navItems.map((item) => (
           <li>
-            <!--
-              TODO Phase 2: replace with real <a> when page exists.
-              All disabled states preserved on mobile (HOME-10).
-            -->
-            <span
-              class="mobile-nav__link mobile-nav__link--disabled"
-              role="link"
-              aria-disabled="true"
-              tabindex="-1"
-              title={DISABLED_TOOLTIP}
-            >
-              {item.label}
-            </span>
+            {item.href ? (
+              <a
+                href={item.href}
+                class={`mobile-nav__link${currentPath.startsWith(item.href) ? ' mobile-nav__link--active' : ''}`}
+                aria-current={currentPath.startsWith(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <span
+                class="mobile-nav__link mobile-nav__link--disabled"
+                role="link"
+                aria-disabled="true"
+                tabindex="-1"
+                title={DISABLED_TOOLTIP}
+              >
+                {item.label}
+              </span>
+            )}
           </li>
         ))}
       </ul>
@@ -683,6 +698,13 @@ const navItems = [
   .mobile-nav__link--disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  /* Mobile active state — yellow left accent matching desktop underline concept */
+  .mobile-nav__link--active {
+    color: var(--color-text);
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-sm);
   }
 
   .mobile-nav__cta {
