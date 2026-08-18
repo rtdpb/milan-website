@@ -1,0 +1,48 @@
+---
+/**
+ * PlaceholderBadge.astro
+ * Visible [Placeholder] marker pill for press logos, article cards, and other
+ * elements whose real content has not yet been supplied.
+ *
+ * Source: PLAN 01-02 Task 1, UI-SPEC §Copywriting Contract, §Component Inventory,
+ *         D-10, D-11 (CONTEXT.md)
+ *
+ * Renders the nl.common.placeholderLabel string ("[Placeholder]") as a small,
+ * clearly non-content pill. Italic + secondary text colour signals "placeholder"
+ * to both sighted users and developers reading the source.
+ */
+
+import { nl } from '../../i18n/nl';
+
+interface Props {
+  /** Override the default label text. Default: "[Placeholder]" from nl.ts. */
+  label?: string;
+  class?: string;
+}
+
+const { label = nl.common.placeholderLabel, class: extraClass } = Astro.props;
+const classes = ['placeholder-badge', extraClass].filter(Boolean).join(' ');
+---
+
+<span class={classes} aria-label="Placeholder inhoud — wordt vervangen door echte content">
+  {label}
+</span>
+
+<style>
+  .placeholder-badge {
+    display: inline-flex;
+    align-items: center;
+    padding-inline: var(--space-sm);   /* 8px */
+    padding-block: var(--space-xs);    /* 4px */
+    border: 1px solid var(--color-text-secondary);  /* #5A5A52 */
+    border-radius: var(--radius-sm);   /* 4px */
+    font-family: var(--font-body);
+    font-size: var(--text-xs);         /* 12–14px */
+    font-style: italic;
+    color: var(--color-text-secondary);
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;              /* Purely informational — not interactive */
+    user-select: none;
+  }
+</style>

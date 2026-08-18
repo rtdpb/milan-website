@@ -1,0 +1,82 @@
+---
+/**
+ * SectionWrapper.astro
+ * Section landmark + max-width container with optional dark-band / surface variants.
+ *
+ * Source: PLAN 01-02 Task 1, UI-SPEC §Component Inventory SectionWrapper, FND-03
+ *
+ * Renders a <section> with:
+ *  - Semantic landmark (aria-labelledby for screen readers)
+ *  - Full-bleed outer section (for dark-band stretching to viewport edges)
+ *  - Max-width 1280px inner container
+ *  - Section padding via --section-padding-y token
+ *
+ * Variants:
+ *   default — off-white background (--color-bg)
+ *   dark    — full-bleed dark band (--color-dark-band) + light text
+ *   surface — secondary surface tint (--color-surface)
+ */
+
+interface Props {
+  /** ID of the heading element that labels this section (for aria-labelledby). */
+  labelledBy?: string;
+  /** Extra id to apply to the section element (for scroll/anchor targets). */
+  id?: string;
+  variant?: 'default' | 'dark' | 'surface';
+  class?: string;
+}
+
+const { labelledBy, id, variant = 'default', class: extraClass } = Astro.props;
+const sectionClasses = ['section-wrapper', `section-wrapper--${variant}`, extraClass]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<section
+  class={sectionClasses}
+  {...id ? { id } : {}}
+  {...labelledBy ? { 'aria-labelledby': labelledBy } : {}}
+>
+  <div class="section-wrapper__inner">
+    <slot />
+  </div>
+</section>
+
+<style>
+  /* ── Full-bleed outer section ─────────────────────────────────────────── */
+  .section-wrapper {
+    width: 100%;
+    padding-block: var(--section-padding-y);
+  }
+
+  /* ── Constrained inner content ────────────────────────────────────────── */
+  .section-wrapper__inner {
+    width: 100%;
+    max-width: var(--max-width);     /* 1280px */
+    margin-inline: auto;
+    padding-inline: var(--space-lg); /* 24px mobile gutters */
+  }
+
+  @media (min-width: 768px) {
+    .section-wrapper__inner {
+      padding-inline: var(--space-3xl); /* 64px tablet+ gutters */
+    }
+  }
+
+  /* ── Default: off-white ───────────────────────────────────────────────── */
+  .section-wrapper--default {
+    background-color: var(--color-bg);
+  }
+
+  /* ── Dark band: full-bleed near-black (story section, D-01) ─────────── */
+  .section-wrapper--dark {
+    background-color: var(--color-dark-band);  /* #111110 */
+    color: var(--color-dark-text);             /* #F5F2EC */
+  }
+
+  /* ── Surface: secondary card-surface tint ────────────────────────────── */
+  .section-wrapper--surface {
+    background-color: var(--color-surface);  /* #F0EDE7 */
+    color: var(--color-text);
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+/**
+ * Card.astro
+ * Reusable rounded card shell component.
+ *
+ * Source: PLAN 01-02 Task 1, UI-SPEC §Component Inventory, FND-03
+ *
+ * Variants:
+ *   default — light surface (--color-surface) with border and shadow
+ *   dark    — dark surface (--color-dark-surface) for testimonial accent card
+ *   surface — same as default (alias)
+ */
+
+interface Props {
+  variant?: 'default' | 'dark' | 'surface';
+  class?: string;
+}
+
+const { variant = 'default', class: extraClass } = Astro.props;
+const classes = ['card', `card--${variant}`, extraClass].filter(Boolean).join(' ');
+---
+
+<div class={classes}>
+  <slot />
+</div>
+
+<style>
+  /* ── Base Card Shell ──────────────────────────────────────────────────── */
+  .card {
+    border-radius: var(--radius-lg);      /* 16px — UI-SPEC card radius */
+    padding: var(--space-lg);             /* 24px inner padding */
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* ── Light Card (default / surface) ──────────────────────────────────── */
+  .card--default,
+  .card--surface {
+    background-color: var(--color-surface);  /* #F0EDE7 */
+    color: var(--color-text);
+  }
+
+  /* ── Dark Card (testimonial accent card, story section) ──────────────── */
+  .card--dark {
+    background-color: var(--color-dark-surface);  /* #222220 */
+    color: var(--color-dark-text);                /* #F5F2EC */
+    border-color: transparent;                    /* dark card — no visible border */
+  }
+</style>
