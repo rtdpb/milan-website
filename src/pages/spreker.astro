@@ -62,7 +62,8 @@ const testimonial = nl.testimonials.items[2]; // Oranjewoud Export Academy — s
           formats={['avif', 'webp']}
           widths={[400, 600, 800]}
           sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 520px"
-          loading="lazy"
+          loading="eager"
+          fetchpriority="high"
           alt={speakingAlt}
           class="spreker-hero__img"
         />

@@ -203,17 +203,14 @@ const {
     // cannot read search params at build time). Only valid option values are applied.
     const params = new URLSearchParams(window.location.search);
     const typeParam = params.get('type');
-    if (typeParam) {
-      // CSS.escape guard: only set value if a matching <option> exists
-      const safeValue = CSS.escape(typeParam);
-      const matchingOption = sel.querySelector(
-        `option[value="${safeValue}"]`
-      ) as HTMLOptionElement | null;
-      if (matchingOption) {
-        sel.value = typeParam;
-      }
-      // Unknown / unmatched values are silently ignored → remains "algemeen" default
+    // Validate directly against the fixed allowlist — do NOT build a querySelector
+    // from user input (CSS.escape does not escape `"`, so `?type=coaching"` would
+    // throw a SyntaxError and crash the island — WR-01).
+    const ALLOWED_TYPES = new Set(['algemeen', 'lezing', 'coaching']);
+    if (typeParam && ALLOWED_TYPES.has(typeParam)) {
+      sel.value = typeParam;
     }
+    // Unknown / unmatched values are silently ignored → remains "algemeen" default
 
     // ── Helper: show error in result region, re-enable button ──────────────
     function showError(message: string) {
@@ -233,6 +230,14 @@ const {
     // ── State 4–7: Fetch submit handler ────────────────────────────────────
     f.addEventListener('submit', async function (e) {
       e.preventDefault();
+
+      // Validate required fields before submitting. The form carries `novalidate`
+      // (so the browser doesn't block the no-JS path pre-Web3Forms), so the JS path
+      // must run the check itself and surface native messages (WR-02).
+      if (!f.checkValidity()) {
+        f.reportValidity();
+        return;
+      }
 
       // State 5: Submitting — disable button, change label text, dim opacity
       s.disabled = true;

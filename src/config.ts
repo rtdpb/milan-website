@@ -30,9 +30,11 @@ export const TODO_SUBSTACK_URL = 'TODO_SUBSTACK_URL';
 
 /**
  * Contact page — resolved in Phase 2 (D-11).
+ * BASE_URL-prefixed so it is href-ready on GitHub Pages (served under /milan-website/).
+ * Never a bare '/contact' — that 404s under the project subpath (CR-01).
  * Used in: Header "Contact" CTA, Nav.astro, Samenwerken.astro.
  */
-export const CONTACT_URL = '/contact';
+export const CONTACT_URL = `${import.meta.env.BASE_URL}contact`;
 
 /**
  * Web3Forms access key — generated at web3forms.com against Milan's email.
