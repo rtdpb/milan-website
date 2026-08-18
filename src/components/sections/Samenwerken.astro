@@ -9,8 +9,8 @@
  *   3. 1:1 Coaching (intensief traject — "Werk met mij")
  *
  * HONESTY RULE (HOME-10, D-12):
- * Phase 2 Plan 03 enables Lezing and Coaching CTAs; Nieuwsbrief stays disabled:
- *   - Nieuwsbrief CTA → TODO_SUBSTACK_URL (Phase 3 — still disabled)
+ * Phase 3 Plan 03: all three CTAs are now enabled:
+ *   - Nieuwsbrief CTA → /nieuwsbrief (enabled, primary yellow Button, internal link)
  *   - Lezing CTA → /contact?type=lezing (enabled, D-08)
  *   - Coaching CTA → /contact?type=coaching (enabled, D-08; Calendly seam D-09)
  * No href="#" on any CTA (HOME-10, D-12).
@@ -28,7 +28,6 @@ import SectionWrapper from '../ui/SectionWrapper.astro';
 import Card from '../ui/Card.astro';
 import Button from '../ui/Button.astro';
 import { nl } from '../../i18n/nl';
-import { TODO_SUBSTACK_URL } from '../../config';
 
 /*
  * Commitment ladder data — structured from nl.samenwerken.
@@ -43,9 +42,10 @@ const ladderCards = [
     title:             nl.samenwerken.cards[0].title,   // "Nieuwsbrief"
     description:       nl.samenwerken.cards[0].description,
     cta:               nl.samenwerken.cards[0].cta,     // "Schrijf je gratis in"
-    disabled:          true,
-    placeholderReason: `Substack-URL nog niet bekend — wordt ingevuld in fase 3 (${TODO_SUBSTACK_URL})`,
-    href:              undefined,
+    disabled:          false,                            // Phase 3 Plan 03: enabled — /nieuwsbrief page exists
+    placeholderReason: undefined,
+    href:              `${import.meta.env.BASE_URL}nieuwsbrief`,  // internal link (no external prop)
+    variant:           'primary' as const,               // yellow CTA — UI-SPEC §Surface 4 (one yellow per card)
     ariaId:            'samenwerken-card-1',
   },
   {
@@ -57,6 +57,7 @@ const ladderCards = [
     // Enabled: /contact?type=lezing pre-selects the Onderwerp select (D-08, Plan 02-01 T-2-04)
     href:              `${import.meta.env.BASE_URL}contact?type=lezing`,
     placeholderReason: undefined,
+    variant:           'secondary' as const,
     ariaId:            'samenwerken-card-2',
   },
   {
@@ -69,6 +70,7 @@ const ladderCards = [
     // Calendly seam: when TODO_CALENDLY_URL is supplied, swap href to TODO_CALENDLY_URL (D-09)
     href:              `${import.meta.env.BASE_URL}contact?type=coaching`,
     placeholderReason: undefined,
+    variant:           'secondary' as const,
     ariaId:            'samenwerken-card-3',
   },
 ];
@@ -103,15 +105,15 @@ const ladderCards = [
             </p>
 
             <!--
-              CTA — enabled or disabled per card:
-              - Nieuwsbrief: aria-disabled (Phase 3 — TODO_SUBSTACK_URL pending)
-              - Lezing: enabled → /contact?type=lezing (D-08)
-              - Coaching: enabled → /contact?type=coaching (D-08, D-09 Calendly seam)
+              CTA — enabled per card (Phase 3 Plan 03: all three CTAs now enabled):
+              - Nieuwsbrief: primary yellow Button → /nieuwsbrief (internal link, no external prop)
+              - Lezing: secondary → /contact?type=lezing (D-08)
+              - Coaching: secondary → /contact?type=coaching (D-08, D-09 Calendly seam)
               No href="#" on any CTA (HOME-10, D-12).
             -->
             <div class="samenwerken__cta-wrap">
               <Button
-                variant="secondary"
+                variant={card.variant ?? 'secondary'}
                 disabled={card.disabled}
                 href={card.href}
                 placeholderReason={card.placeholderReason}
