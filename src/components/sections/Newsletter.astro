@@ -5,28 +5,31 @@
  *
  * Source: PLAN 01-05 Task 1, UI-SPEC §NewsletterSection, CONTEXT D-09, D-12,
  *         HOME-07, HOME-10, FND-04, FND-06
+ *         Phase 3 PLAN 03-02 Task 2: rewired to email-only Substack redirect (D-05, NEWS-02)
  *
  * Design decisions:
- * - D-09: Substack URL not yet supplied → submit is an HONEST DISABLED PLACEHOLDER.
- *   No fake success state, no JS submit handler, no network call.
- *   TODO Phase 3: replace disabled button with real Substack redirect anchor
- *   (target="_blank" rel="noopener noreferrer") when TODO_SUBSTACK_URL is supplied.
- *   See config.ts: T-01-04 requires rel="noopener noreferrer" on any target=_blank redirect.
+ * - D-05: naam field removed — the redirect cannot honestly carry a name into Substack.
+ *   Only the email field remains. Single-field layout, max-width 480px centered.
+ * - D-09 / NEWS-02: IS_SENTINEL drives disabled span vs live redirect anchor.
+ *   Sentinel state: aria-disabled span (unchanged appearance from Phase 1).
+ *   Live state: <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">.
  * - D-12: No href="#" anywhere — disabled state uses aria-disabled + tabindex="-1".
- * - FND-04: Responsive — fields side-by-side on desktop, stacked on mobile.
- * - FND-06: Explicit <label> for each field (not placeholder-only), 16px font-size
- *   on inputs prevents iOS zoom, focus ring 2px --color-accent offset 2px.
- * - SECTION is LIGHT (--color-bg), not dark — this is a cream background section.
+ * - FND-06: Explicit <label> for email field, 16px font-size prevents iOS zoom, focus ring.
+ * - SECTION is LIGHT (--color-bg), not dark — cream background section.
  *
- * Security note (T-01-04): when Phase 3 wires the real Substack URL, the redirect
- * anchor MUST carry target="_blank" rel="noopener noreferrer" to prevent tab-napping.
+ * Security note (T-01-04): redirect anchor carries rel="noopener noreferrer" (tab-napping).
+ * No on-site success state — success is on Substack's hosted subscribe page.
+ * No ?email= prefill — unconfirmed by Substack (RESEARCH A1/Pitfall 6); plain redirect only.
  */
 
 import SectionWrapper from '../ui/SectionWrapper.astro';
 import { nl } from '../../i18n/nl';
 import { TODO_SUBSTACK_URL } from '../../config';
 
-const { heading, subtext, labelNaam, labelEmail, cta, disclaimer } = nl.newsletter;
+const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
+const subscribeUrl = `${TODO_SUBSTACK_URL}/subscribe`;
+
+const { heading, subtext, labelEmail, cta, disclaimer } = nl.newsletter;
 ---
 
 <SectionWrapper id="nieuwsbrief" labelledBy="newsletter-heading" variant="default">
@@ -44,39 +47,23 @@ const { heading, subtext, labelNaam, labelEmail, cta, disclaimer } = nl.newslett
 
     <!-- ── Signup form ───────────────────────────────────────────────────── -->
     <!--
-      PLACEHOLDER STATE (D-09, HOME-10):
-      The form fields are fully designed and accessible.
-      The submit button is aria-disabled because TODO_SUBSTACK_URL is not yet supplied.
-      NO onsubmit handler. NO JS submit listener. NO network call. NO success state.
-      When Phase 3 supplies the real Substack URL, replace the disabled <span> submit
-      with: <a href={REAL_SUBSTACK_URL} target="_blank" rel="noopener noreferrer" class="...">
+      REDIRECT STATE (D-05, NEWS-02):
+      IS_SENTINEL = true  → disabled aria-disabled span (no URL yet)
+      IS_SENTINEL = false → <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
+      No on-site success state. No ?email= prefill. No JS submit handler.
+      onsubmit="return false;" stays — form is never submitted on-site.
+      Security note (T-01-04): rel="noopener noreferrer" on any target=_blank redirect.
     -->
     <form
       class="newsletter__form"
-      aria-label="Nieuwsbrief aanmelden — versturen is tijdelijk uitgeschakeld"
+      aria-label="Nieuwsbrief aanmelden — versturen opent Substack in een nieuw tabblad"
       novalidate
       onsubmit="return false;"
     >
-      <!-- Field row: side-by-side on desktop, stacked on mobile (FND-04) -->
-      <div class="newsletter__fields">
+      <!-- Single email field, centered (D-05: naam removed, single-field layout) -->
+      <div class="newsletter__fields newsletter__fields--single">
 
-        <!-- Naam field — explicit label (FND-06, a11y) -->
-        <div class="newsletter__field-group">
-          <label for="nl-naam" class="newsletter__label">
-            {labelNaam}
-          </label>
-          <input
-            id="nl-naam"
-            type="text"
-            name="naam"
-            autocomplete="given-name"
-            placeholder="Jouw naam"
-            required
-            class="newsletter__input"
-          />
-        </div>
-
-        <!-- Mailadres field — explicit label, type=email, 16px prevents iOS zoom (FND-06) -->
+        <!-- Mailadres field — explicit label (FND-06, a11y) -->
         <div class="newsletter__field-group">
           <label for="nl-email" class="newsletter__label">
             {labelEmail}
@@ -95,32 +82,37 @@ const { heading, subtext, labelNaam, labelEmail, cta, disclaimer } = nl.newslett
       </div>
       <!-- End field row -->
 
-      <!-- Submit: DISABLED PLACEHOLDER (D-09, HOME-10, T-01-10)
-           aria-disabled="true" signals to AT that this button is not yet functional.
-           tabindex="-1" removes it from the tab sequence (HOME-10 §Disabled/Placeholder CTA Pattern).
-           data-placeholder and title explain the reason to developers and hovering users.
-           TODO_SUBSTACK_URL from config.ts is referenced here — grep for it when wiring Phase 3.
-
-           TODO Phase 3: replace this <span> with a real <a> redirect:
-             <a href={TODO_SUBSTACK_URL} target="_blank" rel="noopener noreferrer" class="newsletter__submit">
-               {cta}
-             </a>
-           That anchor MUST carry rel="noopener noreferrer" (T-01-04, config.ts §Security note).
+      <!-- Submit: conditional sentinel vs live redirect (D-05, NEWS-02)
+           Sentinel state: aria-disabled span — same visual as Phase 1, honestly non-functional.
+           Live state:     <a> redirect to Substack — new tab, rel="noopener noreferrer" (T-01-04).
+           No ?email= prefill (RESEARCH A1/Pitfall 6 unconfirmed — plain redirect is the honest default).
+           Security note (T-01-04): rel="noopener noreferrer" required on target="_blank" (tab-napping).
       -->
-      <!-- TODO: wire Substack submit when TODO_SUBSTACK_URL is known — Phase 3 -->
-      <span
-        class="newsletter__submit newsletter__submit--disabled"
-        role="button"
-        aria-disabled="true"
-        tabindex="-1"
-        data-placeholder={TODO_SUBSTACK_URL}
-        title="Link volgt zodra Substack-URL bekend is"
-        aria-describedby="newsletter-submit-note"
-      >
-        {cta}
-      </span>
+      {IS_SENTINEL ? (
+        <span
+          class="newsletter__submit newsletter__submit--disabled"
+          role="button"
+          aria-disabled="true"
+          tabindex="-1"
+          data-placeholder={TODO_SUBSTACK_URL}
+          title="Link volgt zodra Substack-URL bekend is"
+          aria-describedby="newsletter-submit-note"
+        >
+          {cta}
+        </span>
+      ) : (
+        <a
+          href={subscribeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="newsletter__submit"
+          aria-describedby="newsletter-submit-note"
+        >
+          {cta}
+        </a>
+      )}
 
-      <!-- Screen-reader note explaining the disabled state -->
+      <!-- Screen-reader note explaining the disabled / redirect state -->
       <p id="newsletter-submit-note" class="newsletter__submit-note" aria-live="polite">
         Aanmelden is binnenkort beschikbaar via Substack.
       </p>
@@ -190,19 +182,18 @@ const { heading, subtext, labelNaam, labelEmail, cta, disclaimer } = nl.newslett
     width: 100%;
   }
 
-  /* ── Fields row: stacked on mobile, side-by-side on desktop ─────────────── */
+  /* ── Fields row: single field, centered (D-05: naam removed) ─────────────── */
   .newsletter__fields {
     display: flex;
-    flex-direction: column;   /* Mobile: stacked (FND-04) */
+    flex-direction: column;
     gap: var(--space-md);
     width: 100%;
   }
 
-  @media (min-width: 768px) {
-    .newsletter__fields {
-      flex-direction: row;    /* Desktop: side-by-side (FND-04) */
-      gap: var(--space-md);
-    }
+  /* Single-field layout: constrained width + centered (UI-SPEC §Surface 1) */
+  .newsletter__fields--single {
+    max-width: 480px;
+    margin-inline: auto;
   }
 
   /* ── Individual field group (label + input) ──────────────────────────────── */
@@ -255,9 +246,8 @@ const { heading, subtext, labelNaam, labelEmail, cta, disclaimer } = nl.newslett
     border-color: var(--color-accent);
   }
 
-  /* ── Submit — DISABLED PLACEHOLDER (D-09, HOME-10, T-01-10) ─────────────── */
-  /* This is an honest disabled affordance. It does NOT submit or navigate.
-     Visual: primary yellow button appearance at 0.5 opacity + not-allowed cursor. */
+  /* ── Submit — shared base styles ─────────────────────────────────────────── */
+  /* Applies to both <span> (sentinel disabled) and <a> (live redirect anchor). */
   .newsletter__submit {
     display: inline-flex;
     align-items: center;
@@ -276,12 +266,23 @@ const { heading, subtext, labelNaam, labelEmail, cta, disclaimer } = nl.newslett
     background-color: var(--color-accent);  /* #FFDD11 */
     color: var(--color-text);               /* #1A1A18 */
     min-height: 44px;                       /* WCAG 2.5.5 touch target */
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform        var(--duration-fast) var(--ease-out);
   }
 
+  /* ── Disabled / Sentinel state ───────────────────────────────────────────── */
   .newsletter__submit--disabled {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;  /* belt + suspenders */
+  }
+
+  /* ── Enabled anchor hover/focus (UI-SPEC §Surface 1, 03-PATTERNS lines 288-297) ── */
+  /* Security note (T-01-04): this class only applies to the live <a> redirect. */
+  .newsletter__submit:not(.newsletter__submit--disabled):hover {
+    background-color: var(--color-accent-dark); /* #C9AC00 */
+    transform: scale(1.02);
   }
 
   /* Focus ring on submit (a11y) */

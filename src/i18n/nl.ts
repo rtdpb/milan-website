@@ -126,7 +126,7 @@ export const nl = {
   newsletter: {
     heading:     'Blijf op de hoogte',
     subtext:     'Elke maand een eerlijke update over ondernemen, schalen en de lessen die ik onderweg leer. Geen spam, geen tips die je al kent — alleen wat echt het verschil maakt.',
-    labelNaam:   'Naam',
+    // labelNaam removed (D-05): the Substack redirect cannot honestly carry a name field — Phase 3
     labelEmail:  'Mailadres',
     cta:         'Schrijf je in',
     disclaimer:  'Geen spam. Afmelden wanneer je wilt.',
@@ -307,6 +307,24 @@ export const nl = {
     ctaHeading:   'Boek Milan voor jouw event',
     ctaPrimary:   'Boek lezing',
     speakingAlt:  'Milan legt een grafiek uit tijdens een presentatie.',
+  },
+
+
+  // ── Nieuwsbrief Page (NEWS-01) ──────────────────────────────────────────
+  nieuwsbrief: {
+    pageTitle:      'Nieuwsbrief — Milan van der Meulen',
+    // Double-quoted to avoid TypeScript parse error on Dutch apostrophe (Rule 1 auto-fix pattern)
+    pageDesc:       "Elke maand eerlijke lessen over ondernemen, schalen en leiderschap. Schrijf je in op Milan's Substack nieuwsbrief.",
+    eyebrow:        'Nieuwsbrief',
+    heading:        'Eerlijke lessen voor ondernemers die willen groeien',
+    subtext:        'Elke maand een eerlijke update over ondernemen, schalen en de lessen die ik onderweg leer. Geen spam, geen tips die je al kent.',
+    cta:            'Schrijf je in op Substack',
+    archiveHeading: 'Eerder verschenen',
+    valueProps: [
+      { label: 'Eerlijk',      description: 'Geen glansrijke succesverhalen — alleen wat echt werkt.' },
+      { label: 'Praktisch',    description: 'Bruikbare lessen, direct uit de founder-praktijk.' },
+      { label: 'Maandelijks',  description: 'Één update per maand, nooit meer.' },
+    ],
   },
 
   // ── Common / Shared ──────────────────────────────────────────────────────
