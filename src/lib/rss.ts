@@ -54,6 +54,25 @@ const parser = new XMLParser({
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 /**
+ * Decodes common HTML entities to their plain-text equivalents.
+ * Applied after tag-stripping and before slicing to prevent literal entity
+ * strings (e.g. &#8217; → ') in article excerpts, and to avoid mid-entity cuts.
+ */
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    // Numeric decimal entities (e.g. &#8217; → ')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    // Numeric hex entities
+    .replace(/&#x([\da-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+}
+
+/**
  * Derives a Dutch read-time estimate from raw HTML string.
  * Strips tags, splits on whitespace, calculates at 200 wpm (industry standard).
  * Returns minimum "1 min leestijd".
@@ -126,8 +145,12 @@ export async function fetchSubstackFeed(
       return {
         category:      'Artikel',   // neutral static label — RSS has no category field (D-07)
         title:         item.title ?? '',
-        // Strip HTML tags from description for excerpt — NEVER render RSS HTML directly
-        excerpt:       (item.description ?? '').replace(/<[^>]+>/g, ' ').slice(0, 160),
+        // Strip HTML tags then decode entities before slicing — avoids literal
+        // entity strings (e.g. &#8217;) and mid-entity cuts in the 160-char excerpt.
+        // NEVER render RSS HTML directly (T-3-02).
+        excerpt:       decodeEntities(
+          (item.description ?? '').replace(/<[^>]+>/g, ' ')
+        ).replace(/\s+/g, ' ').trim().slice(0, 160),
         date:          formatPubDate(item.pubDate ?? ''),
         readTime:      wordCountToReadTime(content),
         isPlaceholder: false,
