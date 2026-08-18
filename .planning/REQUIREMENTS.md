@@ -100,6 +100,11 @@ Deferred to later phases — tracked, not in the first milestone.
 | HOME-09 | Phase 1 | Complete |
 | HOME-10 | Phase 1 | Complete |
 | HOME-11 | Phase 1 | Complete |
+| PAGE-01 | Phase 2 | Built — pending UAT |
+| PAGE-02 | Phase 2 | Built — pending UAT |
+| PAGE-03 | Phase 2 | Built — pending UAT |
+| PAGE-04 | Phase 2 | Built — pending UAT |
+| PAGE-05 | Phase 2 | Built — pending UAT |
 
 **Coverage:**
 
