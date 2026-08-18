@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 3 — Newsletter & Substack Integration
+current_phase: 3
 status: in_progress
-stopped_at: Phase 3 UI-SPEC approved
-last_updated: "2026-08-18T22:06:25.988Z"
+stopped_at: Completed Phase 3 Plan 01 — RSS tracer, rss.ts utility, Articles.astro wired, deploy.yml
+last_updated: "2026-08-18T22:13:35Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 12
-  completed_plans: 9
+  completed_plans: 10
 current_phase_name: Newsletter & Substack Integration
 ---
 
@@ -21,12 +21,12 @@ current_phase_name: Newsletter & Substack Integration
 See: `.planning/PROJECT.md` (updated 2026-08-18)
 
 **Core value:** Make Milan feel like a credible, experienced, and honest founder so the right entrepreneurs reach out for coaching/speaking and subscribe to the newsletter.
-**Current focus:** Phase 2 — Supporting Pages & Lead-Gen Forms
+**Current focus:** Phase 3 — Newsletter & Substack Integration
 
 ## Status
 
 - **Milestone:** v1 — Dutch homepage MVP
-- **Current phase:** 3 — Newsletter & Substack Integration
+- **Current phase:** 3
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
 - **Plans completed:** 6/6 Phase 1 + 3/3 Phase 2 (all PAGE-01..05 delivered)
 - **Last action:** Executed Plan 02-03 — /mijn-verhaal page + homepage CTA wiring + Nav/Footer full reconciliation; 5 pages built, 0 errors. Phase 2 complete.
@@ -67,6 +67,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **NEW: Samenwerken Lezing + Coaching CTAs enabled** — Lezing → /contact?type=lezing, Coaching → /contact?type=coaching; Nieuwsbrief stays disabled (Phase 3) — COMPLETE
 - **NEW: Story teaser link** — "Lees mijn hele verhaal →" → /mijn-verhaal added to Story.astro with isMijnVerhaalPage guard (no self-link on /mijn-verhaal) — COMPLETE
 - **NEW: Nav + Footer mijnVerhaal enabled** — real <a> links with active-state; Nieuwsbrief + Boek remain only disabled placeholders — COMPLETE
+- **NEW (Phase 3-01): RSS pipeline tracer** — fast-xml-parser@5.11.0 installed; src/lib/rss.ts (fetchSubstackFeed + ArticleCard/PlaceholderCard); Articles.astro rewired behind IS_SENTINEL guard (D-04: placeholder state honest, D-02: build-time fetch, D-06: fallback); .github/workflows/deploy.yml with push+cron+dispatch+concurrency — COMPLETE
 
 ## Decisions Made
 
@@ -92,6 +93,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - isMijnVerhaalPage guard in Story.astro: prevents circular self-link when Story.astro used as /mijn-verhaal opening band; baked at build time via Astro.url.pathname.includes
 - Samenwerken ladderCards as const removed: added explicit disabled/href/placeholderReason fields; TypeScript inference handles conditional render without explicit union type
 - nl.mijnVerhaal arc4Body: switched to double-quoted string to avoid TypeScript parse error on Dutch apostrophe in 's avonds (Rule 1 auto-fix)
+- Phase 3-01 action versions: used stable fallback majors (checkout@v4, withastro/action@v3, deploy-pages@v4); RESEARCH listed v7/v6/v5 as ASSUMED; runtime GitHub verification not possible
+- Phase 3-01 Task 3: no code changes — rss.ts behaviors (a)-(d) correctly implemented in tracer; smoke assertion RSS_SMOKE_OK
 
 ## Performance Metrics
 
@@ -106,16 +109,17 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 02 | 01 | ~8 min | 3/3 | 2 created, 4 modified |
 | 02 | 02 | ~15 min | 3/3 | 4 created, 3 modified |
 | 02 | 03 | ~15 min | 3/3 | 1 created, 6 modified |
+| 03 | 01 | ~10 min | 3/3 | 2 created, 4 modified |
 
 ## Next Step
 
-Phase 2 complete — all PAGE-01..05 delivered. Next milestone phase: Phase 3 — Newsletter / Substack integration + live articles feed. Before Phase 3: Milan should (1) review nl.mijnVerhaal copy in nl.ts, (2) supply real Web3Forms access key to config.ts, (3) smoke-test /contact form end-to-end.
+Phase 3 Plan 01 complete. Next: Phase 3 Plan 02 (if it exists) or Phase 3 final integration. RSS pipeline is proven end-to-end behind the sentinel — one grep-replace of TODO_SUBSTACK_URL flips the feed live.
 
 ---
-*Last updated: 2026-08-18 after Plan 02-03 execution*
+*Last updated: 2026-08-18 after Plan 03-01 execution*
 
 ## Session
 
-**Last session:** 2026-08-18T21:47:30.002Z
-**Stopped at:** Phase 3 UI-SPEC approved
-**Resume file:** C:/Users/PC/Desktop/claude/andere milan website/.planning/phases/03-newsletter-substack-integration/03-UI-SPEC.md
+**Last session:** 2026-08-18T22:13:35Z
+**Stopped at:** Completed Phase 3 Plan 01 — RSS tracer, rss.ts, Articles.astro wired, deploy.yml
+**Resume file:** None
