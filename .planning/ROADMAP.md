@@ -21,6 +21,14 @@
 **Goal:** Deliver a premium, editorial, fully responsive Dutch homepage matching the docx, built on an Astro foundation with a reusable design system and an optimized image pipeline — the credible first impression that drives coaching/speaking leads and newsletter signups.
 **Mode:** mvp
 **Requirements:** FND-01, FND-02, FND-03, FND-04, FND-05, FND-06, FND-07, FND-08, FND-09, FND-10, HOME-01, HOME-02, HOME-03, HOME-04, HOME-05, HOME-06, HOME-07, HOME-08, HOME-09, HOME-10, HOME-11
+**Plans:** 6 plans in 4 waves (+ SKELETON.md walking-skeleton)
+Plans:
+- [ ] 01-01-PLAN.md — Astro foundation + walking-skeleton tracer (config, tokens, fonts, SEO head, BaseLayout, image pipeline, Hero, `/`)
+- [ ] 01-02-PLAN.md — Reusable UI kit + global header/footer + honest-CTA system + single-source content/config (nl.ts, config.ts)
+- [ ] 01-03-PLAN.md — Credibility press strip + Samenwerken 3-card commitment ladder
+- [ ] 01-04-PLAN.md — Testimonials mosaic + dark-band personal Story + scroll-reveal island
+- [ ] 01-05-PLAN.md — Newsletter signup (disabled placeholder) + Recente artikelen placeholder cards
+- [ ] 01-06-PLAN.md — Full homepage assembly + a11y/SEO/perf/content-integrity audit + human-verify checkpoint
 **Success Criteria:**
 1. The Dutch homepage renders all docx sections (header, hero, credibility, samenwerken, testimonials, story, newsletter signup, recent articles, footer) with the supplied copy intact — obvious spelling/language errors may be corrected, but factual claims and names are not changed without consulting the user.
 2. Layout is high-quality and responsive across desktop, tablet, and mobile; animations are subtle and respect reduced-motion.
