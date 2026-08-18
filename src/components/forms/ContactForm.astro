@@ -1,0 +1,396 @@
+---
+/**
+ * ContactForm.astro
+ * Web3Forms progressive-enhancement contact form (PAGE-04, D-01, D-02, D-03, D-04).
+ *
+ * NO-JS PATH: native POST form submits to https://api.web3forms.com/submit
+ * directly — form delivers email without JavaScript.
+ *
+ * JS PATH: submit intercepted (preventDefault), POSTed via fetch as JSON.
+ * On {success:true}: form hidden, static Dutch success string shown.
+ * On {success:false} or thrown fetch: form stays visible, static error string shown.
+ *
+ * SECURITY RULES (T-2-02, T-2-04, T-2-05):
+ * - Result strings are ONLY from nl.contact — NEVER echoed from API response or user input.
+ * - ?type= query param validated against fixed option set (CSS.escape guard); unknown → ignored.
+ * - With placeholder key, form submits to Web3Forms which rejects it → API error path (State 7).
+ *   Success state is NEVER faked.
+ *
+ * HONEYPOT (T-2-01, D-03):
+ * - A hidden checkbox with name botcheck (display:none, tabindex=-1, aria-hidden).
+ *   Web3Forms requires a checkbox for honeypot detection, not type=hidden.
+ *
+ * ACCESSIBILITY:
+ * - Every field has a visible <label for> (never placeholder-only).
+ * - aria-live="polite" on result region for screen reader announcements.
+ * - aria-required="true" on required fields + native required attribute.
+ * - Autocomplete attributes on Naam and Mailadres.
+ *
+ * Source: 02-PATTERNS.md §ContactForm.astro, 02-UI-SPEC.md §State Machine,
+ *         02-RESEARCH.md §Pattern 3, PLAN 02-01 Task 2
+ */
+
+import { TODO_WEB3FORMS_ACCESS_KEY } from '../../config';
+import { nl } from '../../i18n/nl';
+
+const {
+  labelOnderwerp,
+  optionAlgemeen,
+  optionLezing,
+  optionCoaching,
+  labelNaam,
+  labelEmail,
+  labelBericht,
+  ctaSubmit,
+  ctaSubmitting,
+  successMsg,
+  errorMsg,
+  errorNetwork,
+} = nl.contact;
+---
+
+<!-- ContactForm: Web3Forms progressive-enhancement form (02-01 Task 2) -->
+<div class="contact-form-wrap">
+  <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
+  <form
+    id="contact-form"
+    method="POST"
+    action="https://api.web3forms.com/submit"
+    novalidate
+    class="contact-form"
+    data-submit={ctaSubmit}
+    data-submitting={ctaSubmitting}
+    data-success={successMsg}
+    data-error={errorMsg}
+    data-network={errorNetwork}
+    data-key={TODO_WEB3FORMS_ACCESS_KEY}
+  >
+    <!-- Hidden: Web3Forms access key — public client-side identifier (T-2-03) -->
+    <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
+    <input type="hidden" name="access_key" value={TODO_WEB3FORMS_ACCESS_KEY} />
+
+    <!-- Hidden: fixed Dutch subject line for Web3Forms email subject -->
+    <input type="hidden" name="subject" value="Nieuw bericht via milanvandermeulen.nl" />
+
+    <!-- Hidden: redirect for no-JS path (Web3Forms default thank-you page) -->
+    <input type="hidden" name="redirect" value="https://web3forms.com/success" />
+
+    <!-- Honeypot: botcheck checkbox (must be checkbox for Web3Forms — T-2-01, D-03) -->
+    <input
+      type="checkbox"
+      name="botcheck"
+      style="display:none"
+      tabindex="-1"
+      aria-hidden="true"
+    />
+
+    <!-- Onderwerp (subject/type) select — pre-selectable via ?type= query param (D-08) -->
+    <div class="form-group">
+      <label for="contact-onderwerp" class="form-label">
+        {labelOnderwerp}
+      </label>
+      <select
+        id="contact-onderwerp"
+        name="onderwerp"
+        class="form-input"
+      >
+        <option value="algemeen" selected>{optionAlgemeen}</option>
+        <option value="lezing">{optionLezing}</option>
+        <option value="coaching">{optionCoaching}</option>
+      </select>
+    </div>
+
+    <!-- Naam — required -->
+    <div class="form-group">
+      <label for="contact-naam" class="form-label">
+        {labelNaam}<span aria-hidden="true"> *</span>
+      </label>
+      <input
+        id="contact-naam"
+        type="text"
+        name="naam"
+        required
+        aria-required="true"
+        autocomplete="name"
+        class="form-input"
+      />
+    </div>
+
+    <!-- Mailadres — required -->
+    <div class="form-group">
+      <label for="contact-email" class="form-label">
+        {labelEmail}<span aria-hidden="true"> *</span>
+      </label>
+      <input
+        id="contact-email"
+        type="email"
+        name="email"
+        required
+        aria-required="true"
+        autocomplete="email"
+        class="form-input"
+      />
+    </div>
+
+    <!-- Bericht — required -->
+    <div class="form-group">
+      <label for="contact-bericht" class="form-label">
+        {labelBericht}<span aria-hidden="true"> *</span>
+      </label>
+      <textarea
+        id="contact-bericht"
+        name="bericht"
+        rows="5"
+        required
+        aria-required="true"
+        class="form-input form-textarea"
+      ></textarea>
+    </div>
+
+    <!-- Submit button -->
+    <button
+      type="submit"
+      id="contact-submit"
+      class="btn btn--primary contact-submit"
+    >
+      {ctaSubmit}
+    </button>
+  </form>
+
+  <!-- Result region: hidden until JS resolves success or error (aria-live for AT) -->
+  <div id="contact-result" aria-live="polite" hidden></div>
+</div>
+
+<!-- JS island: query-param pre-selection + fetch submit handler (D-04, D-08) -->
+<!-- Follows Nav.astro IIFE pattern: one IIFE, 'use strict', null guards, TS casts -->
+<script>
+  (function () {
+    'use strict';
+
+    // ── Element refs + null guards ──────────────────────────────────────────
+    const form      = document.getElementById('contact-form') as HTMLFormElement | null;
+    const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
+    const resultEl  = document.getElementById('contact-result') as HTMLElement | null;
+    const selectEl  = document.getElementById('contact-onderwerp') as HTMLSelectElement | null;
+
+    if (!form || !submitBtn || !resultEl || !selectEl) return;
+
+    // After the null check, use non-null refs inside closures (Nav.astro pattern):
+    const f = form!;
+    const s = submitBtn!;
+    const r = resultEl!;
+    const sel = selectEl!;
+
+    // ── Read copy from data-* attributes on the form element ──────────────
+    // Strings come from nl.contact (set in template above) — single source of truth.
+    const copySubmit     = f.dataset.submit     || 'Verstuur bericht';
+    const copySubmitting = f.dataset.submitting || 'Versturen…';
+    const copySuccess    = f.dataset.success    || '';
+    const copyError      = f.dataset.error      || '';
+    const copyNetwork    = f.dataset.network    || '';
+    const accessKey      = f.dataset.key        || '';
+
+    // ── State 2: Placeholder key detection (UI-SPEC State 2, D-02) ─────────
+    if (accessKey === 'TODO_WEB3FORMS_ACCESS_KEY') {
+      console.warn(
+        '[ContactForm] Web3Forms access key is a placeholder — form will not deliver email. ' +
+        'Replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts.'
+      );
+    }
+
+    // ── State 3: Query-param pre-selection (D-08, T-2-04) ──────────────────
+    // Read ?type= from window.location.search (client-side only; static builds
+    // cannot read search params at build time). Only valid option values are applied.
+    const params = new URLSearchParams(window.location.search);
+    const typeParam = params.get('type');
+    if (typeParam) {
+      // CSS.escape guard: only set value if a matching <option> exists
+      const safeValue = CSS.escape(typeParam);
+      const matchingOption = sel.querySelector(
+        `option[value="${safeValue}"]`
+      ) as HTMLOptionElement | null;
+      if (matchingOption) {
+        sel.value = typeParam;
+      }
+      // Unknown / unmatched values are silently ignored → remains "algemeen" default
+    }
+
+    // ── Helper: show error in result region, re-enable button ──────────────
+    function showError(message: string) {
+      const errorP = document.createElement('p');
+      errorP.className = 'form-error';
+      errorP.textContent = message;
+      r.innerHTML = '';
+      r.appendChild(errorP);
+      r.hidden = false;
+
+      // Re-enable submit button and restore label
+      s.disabled = false;
+      s.textContent = copySubmit;
+      (s as HTMLElement).style.opacity = '';
+    }
+
+    // ── State 4–7: Fetch submit handler ────────────────────────────────────
+    f.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // State 5: Submitting — disable button, change label text, dim opacity
+      s.disabled = true;
+      s.textContent = copySubmitting;
+      (s as HTMLElement).style.opacity = '0.7';
+
+      // Clear any previous result
+      r.hidden = true;
+      r.innerHTML = '';
+
+      try {
+        const data = Object.fromEntries(new FormData(f));
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const json = await response.json();
+
+        if (json && json.success === true) {
+          // State 6: Success — hide form, show STATIC success message
+          // NEVER echo json.message or any user input into the DOM (T-2-02)
+          (f as HTMLElement).hidden = true;
+          const successP = document.createElement('p');
+          successP.className = 'form-success';
+          successP.textContent = copySuccess;
+          r.appendChild(successP);
+          r.hidden = false;
+        } else {
+          // State 7: API error (invalid key, rate limit, etc.)
+          showError(copyError);
+        }
+      } catch (_err) {
+        // State 7: Network error (no connection, CORS, etc.)
+        showError(copyNetwork);
+      }
+    });
+  })();
+</script>
+
+<style>
+  /* ── Contact form wrapper ──────────────────────────────────────────────── */
+  .contact-form-wrap {
+    width: 100%;
+  }
+
+  /* ── Form layout ────────────────────────────────────────────────────────── */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Form group: label + input container ──────────────────────────────── */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);       /* 8px between label and input */
+    margin-bottom: var(--space-lg); /* 24px between groups */
+  }
+
+  /* ── Label ───────────────────────────────────────────────────────────────── */
+  .form-label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);    /* 14–16px label size */
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: 0.01em;
+    display: block;
+  }
+
+  /* ── Input / Select / Textarea ───────────────────────────────────────────── */
+  /* Newsletter pattern: 1.5px border (UI-SPEC §ContactForm field spec), height 48px,
+     font-size 1rem (iOS zoom prevention, FND-06), background --color-bg */
+  .form-input {
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);    /* 8px */
+    height: 48px;
+    padding-inline: var(--space-md);   /* 16px */
+    font-family: var(--font-body);
+    font-size: 1rem;                   /* 16px FIXED — prevents iOS zoom (FND-06) */
+    font-weight: 400;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow   var(--duration-fast) var(--ease-out);
+    /* Reset select / textarea browser defaults */
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  /* Textarea overrides: allow vertical resize, min-height 120px */
+  .form-textarea {
+    height: auto;
+    min-height: 120px;
+    padding: var(--space-sm) var(--space-md); /* 8px top/bottom, 16px inline */
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  /* Select: custom dropdown arrow (after appearance:none) */
+  .form-group select.form-input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235A5A52' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--space-md) center;
+    padding-right: calc(var(--space-md) + 24px);
+    cursor: pointer;
+  }
+
+  /* Focus ring: 2px --color-accent with 2px offset (UI-SPEC §Form Input Focus States) */
+  .form-input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-color: var(--color-accent);
+  }
+
+  /* Placeholder text */
+  .form-input::placeholder {
+    color: var(--color-text-secondary);
+  }
+
+  /* ── Submit button ────────────────────────────────────────────────────────── */
+  .contact-submit {
+    align-self: flex-start;
+    margin-top: var(--space-sm);
+    cursor: pointer;
+    border: none;
+  }
+
+  .contact-submit:disabled {
+    cursor: not-allowed;
+  }
+
+  /* ── Result region ────────────────────────────────────────────────────────── */
+  /* Success: neutral --color-text (not yellow — UI-SPEC State 6) */
+  .form-success {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);   /* 18–22px */
+    font-weight: 400;
+    color: var(--color-text);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Error: --color-destructive (#C0392B) — not yellow (D-02, UI-SPEC State 7) */
+  .form-error {
+    font-family: var(--font-body);
+    font-size: var(--text-base); /* 16–18px */
+    font-weight: 400;
+    color: var(--color-destructive);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>
