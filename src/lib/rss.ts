@@ -159,7 +159,9 @@ export async function fetchSubstackFeed(
         date:          formatPubDate(item.pubDate ?? ''),
         readTime:      wordCountToReadTime(content),
         isPlaceholder: false,
-        href:          item.link ?? '',
+        // WR-02: item.link may be an object when atom:link siblings exist in the feed.
+        // fast-xml-parser exposes text content as '#text' when an element also has attributes.
+        href:          (typeof item.link === 'string' ? item.link : item.link?.['#text'] ?? ''),
       };
     });
   } catch (err) {
