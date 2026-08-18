@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 2
 status: in_progress
-stopped_at: Phase 2 Plan 02 complete
-last_updated: "2026-08-18T21:40:00.000Z"
+stopped_at: Phase 2 Plan 03 complete — Phase 2 fully done
+last_updated: "2026-08-18T22:15:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 current_phase_name: Supporting Pages & Lead-Gen Forms
 ---
 
@@ -28,8 +28,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **Milestone:** v1 — Dutch homepage MVP
 - **Current phase:** 2
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
-- **Plans completed:** 6/6 (Plan 01 — Walking Skeleton; Plan 02 — Global chrome + UI kit; Plan 03 — PressStrip + Samenwerken; Plan 04 — RevealOnScroll + Testimonials + Story; Plan 05 — Newsletter + Articles; Plan 06 — Assembly + Audit)
-- **Last action:** Executed Plan 02-02 — /coaching + /spreker editorial landing pages with photos, copy, Nav/Footer enablement; 4 pages built, 0 errors.
+- **Plans completed:** 6/6 Phase 1 + 3/3 Phase 2 (all PAGE-01..05 delivered)
+- **Last action:** Executed Plan 02-03 — /mijn-verhaal page + homepage CTA wiring + Nav/Footer full reconciliation; 5 pages built, 0 errors. Phase 2 complete.
 
 ## Key Facts
 
@@ -62,6 +62,11 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **NEW: /spreker page** — editorial landing page (split-hero/PressStrip/aanbod-dark-band/testimonial/CTA/Newsletter), speaking-graph photo, Oranjewoud testimonial, Boek lezing → /contact?type=lezing — COMPLETE
 - **NEW: Nav Coaching + Spreker enabled** — href-or-reason refactor, active-state aria-current + nav-link--active, mobile panel covered — COMPLETE
 - **NEW: Footer Coaching + Spreker enabled** — same href-or-reason shape, real <a> links — COMPLETE
+- **NEW: /mijn-verhaal page** — expanded founder story (4 arc sections, .prose max-w 680px, Story.astro opening dark band, terminal CTA into /contact?type=coaching), nl.mijnVerhaal copy drafted from existing material, flagged for Milan review (D-05) — COMPLETE
+- **NEW: Homepage Hero Contact CTA enabled** — real <a href={BASE_URL}contact> replacing disabled span — COMPLETE
+- **NEW: Samenwerken Lezing + Coaching CTAs enabled** — Lezing → /contact?type=lezing, Coaching → /contact?type=coaching; Nieuwsbrief stays disabled (Phase 3) — COMPLETE
+- **NEW: Story teaser link** — "Lees mijn hele verhaal →" → /mijn-verhaal added to Story.astro with isMijnVerhaalPage guard (no self-link on /mijn-verhaal) — COMPLETE
+- **NEW: Nav + Footer mijnVerhaal enabled** — real <a> links with active-state; Nieuwsbrief + Boek remain only disabled placeholders — COMPLETE
 
 ## Decisions Made
 
@@ -84,6 +89,9 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Nav/Footer navItems: refactored from plain string/reason-only array to href-or-reason union shape — no explicit TypeScript union annotation needed, Astro's implicit type inference handles conditional render without errors
 - mijnVerhaal nav item: remains disabled in Plan 02 — page ships in Plan 03; reason string updated to "fase 2, plan 3"
 - nl.coaching + nl.spreker: copy drafted from story.body/USPs/samenwerken — flagged for Milan review (D-05); no invented facts/numbers/testimonials
+- isMijnVerhaalPage guard in Story.astro: prevents circular self-link when Story.astro used as /mijn-verhaal opening band; baked at build time via Astro.url.pathname.includes
+- Samenwerken ladderCards as const removed: added explicit disabled/href/placeholderReason fields; TypeScript inference handles conditional render without explicit union type
+- nl.mijnVerhaal arc4Body: switched to double-quoted string to avoid TypeScript parse error on Dutch apostrophe in 's avonds (Rule 1 auto-fix)
 
 ## Performance Metrics
 
@@ -97,16 +105,17 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 01 | 06 | ~8 min | 2/2 | 3 modified |
 | 02 | 01 | ~8 min | 3/3 | 2 created, 4 modified |
 | 02 | 02 | ~15 min | 3/3 | 4 created, 3 modified |
+| 02 | 03 | ~15 min | 3/3 | 1 created, 6 modified |
 
 ## Next Step
 
-Phase 2 Plan 02 (/coaching + /spreker pages) is complete. Next: Phase 2 Plan 03 — /mijn-verhaal page + Samenwerken CTA wiring + homepage CTA updates.
+Phase 2 complete — all PAGE-01..05 delivered. Next milestone phase: Phase 3 — Newsletter / Substack integration + live articles feed. Before Phase 3: Milan should (1) review nl.mijnVerhaal copy in nl.ts, (2) supply real Web3Forms access key to config.ts, (3) smoke-test /contact form end-to-end.
 
 ---
-*Last updated: 2026-08-18 after Plan 01-05 execution*
+*Last updated: 2026-08-18 after Plan 02-03 execution*
 
 ## Session
 
-**Last session:** 2026-08-18T21:40:00.000Z
-**Stopped at:** Phase 2 Plan 02 complete — /coaching + /spreker pages + Nav/Footer enablement
-**Resume file:** .planning/phases/02-supporting-pages-lead-gen-forms/02-03-PLAN.md
+**Last session:** 2026-08-18T22:15:00.000Z
+**Stopped at:** Phase 2 Plan 03 complete — /mijn-verhaal + homepage CTA wiring + Nav/Footer full reconciliation. Phase 2 done.
+**Resume file:** None — Phase 2 complete; next is Phase 3 planning.
