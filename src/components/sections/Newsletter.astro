@@ -1,0 +1,310 @@
+---
+/**
+ * Newsletter.astro
+ * Newsletter signup section — Sectie 5 (HOME-07).
+ *
+ * Source: PLAN 01-05 Task 1, UI-SPEC §NewsletterSection, CONTEXT D-09, D-12,
+ *         HOME-07, HOME-10, FND-04, FND-06
+ *
+ * Design decisions:
+ * - D-09: Substack URL not yet supplied → submit is an HONEST DISABLED PLACEHOLDER.
+ *   No fake success state, no JS submit handler, no network call.
+ *   TODO Phase 3: replace disabled button with real Substack redirect anchor
+ *   (target="_blank" rel="noopener noreferrer") when TODO_SUBSTACK_URL is supplied.
+ *   See config.ts: T-01-04 requires rel="noopener noreferrer" on any target=_blank redirect.
+ * - D-12: No href="#" anywhere — disabled state uses aria-disabled + tabindex="-1".
+ * - FND-04: Responsive — fields side-by-side on desktop, stacked on mobile.
+ * - FND-06: Explicit <label> for each field (not placeholder-only), 16px font-size
+ *   on inputs prevents iOS zoom, focus ring 2px --color-accent offset 2px.
+ * - SECTION is LIGHT (--color-bg), not dark — this is a cream background section.
+ *
+ * Security note (T-01-04): when Phase 3 wires the real Substack URL, the redirect
+ * anchor MUST carry target="_blank" rel="noopener noreferrer" to prevent tab-napping.
+ */
+
+import SectionWrapper from '../ui/SectionWrapper.astro';
+import { nl } from '../../i18n/nl';
+import { TODO_SUBSTACK_URL } from '../../config';
+
+const { heading, subtext, labelNaam, labelEmail, cta, disclaimer } = nl.newsletter;
+---
+
+<SectionWrapper id="nieuwsbrief" labelledBy="newsletter-heading" variant="default">
+  <div class="newsletter">
+
+    <!-- ── Header block ──────────────────────────────────────────────────── -->
+    <div class="newsletter__header">
+      <h2 id="newsletter-heading" class="newsletter__heading">
+        {heading}
+      </h2>
+      <p class="newsletter__subtext">
+        {subtext}
+      </p>
+    </div>
+
+    <!-- ── Signup form ───────────────────────────────────────────────────── -->
+    <!--
+      PLACEHOLDER STATE (D-09, HOME-10):
+      The form fields are fully designed and accessible.
+      The submit button is aria-disabled because TODO_SUBSTACK_URL is not yet supplied.
+      NO onsubmit handler. NO JS submit listener. NO network call. NO success state.
+      When Phase 3 supplies the real Substack URL, replace the disabled <span> submit
+      with: <a href={REAL_SUBSTACK_URL} target="_blank" rel="noopener noreferrer" class="...">
+    -->
+    <form
+      class="newsletter__form"
+      aria-label="Nieuwsbrief aanmelden — versturen is tijdelijk uitgeschakeld"
+      novalidate
+    >
+      <!-- Field row: side-by-side on desktop, stacked on mobile (FND-04) -->
+      <div class="newsletter__fields">
+
+        <!-- Naam field — explicit label (FND-06, a11y) -->
+        <div class="newsletter__field-group">
+          <label for="nl-naam" class="newsletter__label">
+            {labelNaam}
+          </label>
+          <input
+            id="nl-naam"
+            type="text"
+            name="naam"
+            autocomplete="given-name"
+            placeholder="Jouw naam"
+            required
+            class="newsletter__input"
+          />
+        </div>
+
+        <!-- Mailadres field — explicit label, type=email, 16px prevents iOS zoom (FND-06) -->
+        <div class="newsletter__field-group">
+          <label for="nl-email" class="newsletter__label">
+            {labelEmail}
+          </label>
+          <input
+            id="nl-email"
+            type="email"
+            name="email"
+            autocomplete="email"
+            placeholder="jouw@email.nl"
+            required
+            class="newsletter__input"
+          />
+        </div>
+
+      </div>
+      <!-- End field row -->
+
+      <!-- Submit: DISABLED PLACEHOLDER (D-09, HOME-10, T-01-10)
+           aria-disabled="true" signals to AT that this button is not yet functional.
+           tabindex="-1" removes it from the tab sequence (HOME-10 §Disabled/Placeholder CTA Pattern).
+           data-placeholder and title explain the reason to developers and hovering users.
+           TODO_SUBSTACK_URL from config.ts is referenced here — grep for it when wiring Phase 3.
+
+           TODO Phase 3: replace this <span> with a real <a> redirect:
+             <a href={TODO_SUBSTACK_URL} target="_blank" rel="noopener noreferrer" class="newsletter__submit">
+               {cta}
+             </a>
+           That anchor MUST carry rel="noopener noreferrer" (T-01-04, config.ts §Security note).
+      -->
+      <!-- TODO: wire Substack submit when TODO_SUBSTACK_URL is known — Phase 3 -->
+      <span
+        class="newsletter__submit newsletter__submit--disabled"
+        role="button"
+        aria-disabled="true"
+        tabindex="-1"
+        data-placeholder={TODO_SUBSTACK_URL}
+        title="Link volgt zodra Substack-URL bekend is"
+        aria-describedby="newsletter-submit-note"
+      >
+        {cta}
+      </span>
+
+      <!-- Screen-reader note explaining the disabled state -->
+      <p id="newsletter-submit-note" class="newsletter__submit-note" aria-live="polite">
+        Aanmelden is binnenkort beschikbaar via Substack.
+      </p>
+
+    </form>
+
+    <!-- Disclaimer -->
+    <p class="newsletter__disclaimer">
+      {disclaimer}
+    </p>
+
+  </div>
+</SectionWrapper>
+
+<style>
+  /* ── Section layout ────────────────────────────────────────────────────────── */
+  .newsletter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2xl);
+    text-align: center;
+    max-width: 680px;   /* reading measure — same as body text (UI-SPEC §Typography) */
+    margin-inline: auto;
+  }
+
+  /* ── Header ───────────────────────────────────────────────────────────────── */
+  .newsletter__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  .newsletter__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);   /* 24–36px — section heading size (UI-SPEC) */
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-text);
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 1024px) {
+    .newsletter__heading {
+      font-size: var(--text-3xl); /* Larger on desktop */
+    }
+  }
+
+  .newsletter__subtext {
+    font-family: var(--font-body);
+    font-size: var(--text-base);  /* 16–18px body */
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin: 0;
+    max-width: 560px;
+  }
+
+  /* ── Form container ───────────────────────────────────────────────────────── */
+  .newsletter__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    width: 100%;
+  }
+
+  /* ── Fields row: stacked on mobile, side-by-side on desktop ─────────────── */
+  .newsletter__fields {
+    display: flex;
+    flex-direction: column;   /* Mobile: stacked (FND-04) */
+    gap: var(--space-md);
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .newsletter__fields {
+      flex-direction: row;    /* Desktop: side-by-side (FND-04) */
+      gap: var(--space-md);
+    }
+  }
+
+  /* ── Individual field group (label + input) ──────────────────────────────── */
+  .newsletter__field-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    flex: 1;
+    text-align: left;
+  }
+
+  /* ── Label ────────────────────────────────────────────────────────────────── */
+  .newsletter__label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);   /* 14–16px label size */
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Input fields (UI-SPEC §NewsletterSection, FND-06) ───────────────────── */
+  .newsletter__input {
+    /* UI-SPEC: border 1px --color-border, border-radius 8px, height 48px,
+       --space-md horizontal padding, font-size 16px (iOS zoom prevention) */
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);  /* 8px */
+    height: 48px;
+    padding-inline: var(--space-md);  /* 16px */
+    font-family: var(--font-body);
+    font-size: 1rem;                  /* 16px FIXED — prevents iOS zoom (FND-06) */
+    font-weight: 400;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow   var(--duration-fast) var(--ease-out);
+  }
+
+  .newsletter__input::placeholder {
+    color: var(--color-text-secondary);
+  }
+
+  /* Focus ring: 2px --color-accent with 2px offset (UI-SPEC §Form Input Focus States, FND-06) */
+  .newsletter__input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-color: var(--color-accent);
+  }
+
+  /* ── Submit — DISABLED PLACEHOLDER (D-09, HOME-10, T-01-10) ─────────────── */
+  /* This is an honest disabled affordance. It does NOT submit or navigate.
+     Visual: primary yellow button appearance at 0.5 opacity + not-allowed cursor. */
+  .newsletter__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding-inline: var(--space-lg);  /* 24px — Button spec */
+    border-radius: var(--radius-md);  /* 8px */
+    font-family: var(--font-body);
+    font-size: 0.9375rem;             /* 15px — CTA/Button */
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    border: none;
+    background-color: var(--color-accent);  /* #FFDD11 */
+    color: var(--color-text);               /* #1A1A18 */
+    min-height: 44px;                       /* WCAG 2.5.5 touch target */
+  }
+
+  .newsletter__submit--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;  /* belt + suspenders */
+  }
+
+  /* Focus ring on submit (a11y) */
+  .newsletter__submit:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* ── Submit note (screen reader) ─────────────────────────────────────────── */
+  .newsletter__submit-note {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin: 0;
+    font-style: italic;
+  }
+
+  /* ── Disclaimer ──────────────────────────────────────────────────────────── */
+  .newsletter__disclaimer {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);   /* 12–14px meta/caption */
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    margin: 0;
+    font-style: italic;
+  }
+</style>
