@@ -1,0 +1,285 @@
+---
+/**
+ * Story.astro
+ * Full-width dark personal story band — the designated "feature band" (D-01).
+ *
+ * Source: PLAN 01-04 Task 3, UI-SPEC §StorySection (HOME-06), CONTEXT D-01, D-02,
+ *         ASSETS.md §Section→source mapping, HOME-11 (verbatim copy), FND-08
+ *
+ * Design decisions:
+ * - D-01: THE dark band on the page. Near-black (#111110) full-bleed background.
+ * - D-02: ONE yellow accent — a 4px left-border on the eyebrow label. Only usage.
+ * - Layout desktop: 2-column — reading column left (max 640px) + portrait right.
+ * - Layout mobile: stacked — reading column full-width, portrait below (or hidden).
+ * - id="verhaal" — target of the hero secondary CTA "Mijn verhaal" (D-12).
+ * - Portrait: astro:assets Picture (lazy, avif/webp, widths [400,600,900]).
+ * - Mission photo (optional): renders if present at ~50% column width.
+ * - Copy: preserved verbatim from nl.ts (HOME-11). Source = nl.story.body array.
+ *
+ * YELLOW CONSTRAINT (D-02): only 1 usage in this component — the eyebrow left-border.
+ * DO NOT add yellow text, headings, or any other accents here.
+ *
+ * Photo source: milan-story-portrait.jpg = "10 Jaar Soly-76 kopie.jpg" portrait (4311x6467)
+ *               milan-energy-mission.jpg  = "Foto.jpeg" (1440x960), optional
+ */
+
+import { Picture } from 'astro:assets';
+import SectionWrapper from '../ui/SectionWrapper.astro';
+import { nl } from '../../i18n/nl';
+
+// Import portrait photo via astro:assets for optimization pipeline
+import portraitSrc from '../../assets/photos/milan-story-portrait.jpg';
+import missionSrc from '../../assets/photos/milan-energy-mission.jpg';
+
+const { eyebrow, heading, body, signature, imageAlt } = nl.story;
+---
+
+<SectionWrapper id="verhaal" labelledBy="story-heading" variant="dark">
+  <div class="story">
+
+    <!-- ── Left: Reading column ─────────────────────────────────────────── -->
+    <div class="story__text">
+
+      <!-- Eyebrow — ONE yellow accent (D-02): 4px left-border on the eyebrow -->
+      <p class="story__eyebrow">
+        {eyebrow}
+      </p>
+
+      <!-- Section heading (dark-text, display font) -->
+      <h2 id="story-heading" class="story__heading">
+        {heading}
+      </h2>
+
+      <!-- Body copy: full verbatim story from nl.ts (HOME-11)
+           Source of copy: Input homepage Milan.docx via nl.story.body
+           Factual claims and names preserved exactly. Obvious encoding glitches
+           may be corrected but no factual alterations. -->
+      <div class="story__body">
+        {body.map((paragraph: string) => (
+          <p>{paragraph}</p>
+        ))}
+
+        <!-- Optional mission photo inline in copy column (at ~50% width, lazy) -->
+        <!-- Renders between the body paragraphs and signature for narrative context -->
+        <figure class="story__mission-figure">
+          <Picture
+            src={missionSrc}
+            formats={['avif', 'webp']}
+            widths={[400, 800]}
+            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 320px"
+            alt="Milan op het grote podium bij de ENERGY REVOLUTION-conferentie."
+            loading="lazy"
+            class="story__mission-img"
+          />
+          <figcaption class="story__mission-caption">
+            ENERGY REVOLUTION-conferentie
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Signature block: "Milan van der Meulen" in display font -->
+      <div class="story__signature-block">
+        <p class="story__signature">
+          {signature}
+        </p>
+        <p class="story__signature-role">
+          Founder, Coach &amp; Spreker
+        </p>
+      </div>
+
+    </div>
+    <!-- End reading column -->
+
+    <!-- ── Right: Portrait photo column ─────────────────────────────────── -->
+    <div class="story__portrait-column" aria-hidden="true">
+      <!-- Portrait: milan-story-portrait.jpg (= 10 Jaar Soly-76 kopie portrait)
+           Astro generates AVIF/WebP derivatives at build — no original jpg served.
+           loading="lazy" (below the fold). widths per UI-SPEC §Image Pipeline Contract. -->
+      <Picture
+        src={portraitSrc}
+        formats={['avif', 'webp']}
+        widths={[400, 600, 900]}
+        sizes="(max-width: 768px) 0vw, (max-width: 1200px) 40vw, 480px"
+        alt={imageAlt}
+        loading="lazy"
+        class="story__portrait-img"
+      />
+    </div>
+    <!-- End portrait column -->
+
+  </div>
+</SectionWrapper>
+
+<style>
+  /* ── Story layout: 2 columns on desktop, stacked on mobile ─────────────── */
+  .story {
+    display: grid;
+    grid-template-columns: 1fr;   /* Mobile: single column */
+    gap: var(--space-3xl);
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .story {
+      grid-template-columns: minmax(0, 640px) 1fr; /* Desktop: text | portrait */
+      gap: var(--space-4xl);
+      align-items: start;
+    }
+  }
+
+  /* ── Reading column ─────────────────────────────────────────────────────── */
+  .story__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    /* Reading measure backstop (UI-SPEC §UI Considerations long-text): never overflow */
+    max-width: 640px;
+    width: 100%;
+  }
+
+  /* ── Eyebrow with ONE yellow accent (D-02) ──────────────────────────────── */
+  /* This is the single yellow usage in Story (D-02: "one deliberate highlight").
+     A 4px left-border in --color-accent (#FFDD11) on the dark background.
+     NOT body text — it is a decorative left-border mark on a block element. */
+  .story__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-dark-text);
+    margin: 0;
+    padding-left: var(--space-md);       /* 16px indent from the border */
+    /* ONE yellow accent: 4px left-border (D-02) */
+    border-left: 4px solid var(--color-accent);  /* #FFDD11 */
+    line-height: 1.4;
+  }
+
+  /* ── Section heading ────────────────────────────────────────────────────── */
+  .story__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--color-dark-text);   /* Off-white text on dark band */
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 1024px) {
+    .story__heading {
+      font-size: var(--text-3xl); /* Larger on desktop */
+    }
+  }
+
+  /* ── Body copy ──────────────────────────────────────────────────────────── */
+  .story__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .story__body p {
+    font-family: var(--font-body);
+    font-size: var(--text-base);   /* 16–18px — body size */
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-dark-text);
+    margin: 0;
+    /* Long-text backstop: never wider than reading measure */
+    max-width: 640px;
+  }
+
+  /* ── Inline mission photo (optional, at ~50% column width) ─────────────── */
+  .story__mission-figure {
+    margin: 0;
+    width: 100%;
+    max-width: 320px; /* ~50% of the 640px reading column */
+    align-self: flex-start;
+  }
+
+  @media (min-width: 768px) {
+    .story__mission-figure {
+      float: right;
+      margin-left: var(--space-lg);
+      margin-bottom: var(--space-lg);
+      max-width: 45%;
+    }
+  }
+
+  .story__mission-img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    display: block;
+    object-fit: cover;
+  }
+
+  .story__mission-caption {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: rgba(245, 242, 236, 0.55); /* --color-dark-text at ~55% opacity */
+    margin-top: var(--space-xs);
+    font-style: italic;
+  }
+
+  /* Clearfix for float (mission photo) */
+  .story__body::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  /* ── Signature block ────────────────────────────────────────────────────── */
+  .story__signature-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(245, 242, 236, 0.15); /* subtle light divider */
+  }
+
+  .story__signature {
+    font-family: var(--font-display);
+    font-size: 20px;               /* UI-SPEC signature: 20px/600 */
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-dark-text);
+    margin: 0;
+  }
+
+  .story__signature-role {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: rgba(245, 242, 236, 0.6);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Portrait column ────────────────────────────────────────────────────── */
+  .story__portrait-column {
+    /* Hide portrait on mobile to keep reading column clean */
+    display: none;
+    position: relative;
+  }
+
+  @media (min-width: 1024px) {
+    .story__portrait-column {
+      display: block;
+      /* Portrait stretches to fill the story section height */
+      position: sticky;
+      top: var(--space-3xl);
+      align-self: start;
+    }
+  }
+
+  .story__portrait-img {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;            /* Cap portrait height on very tall screens */
+    object-fit: cover;
+    border-radius: var(--radius-xl);  /* Generous rounding for editorial feel */
+    display: block;
+  }
+</style>
