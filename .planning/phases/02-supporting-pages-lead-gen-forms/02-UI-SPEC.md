@@ -491,24 +491,37 @@ Inherited requirements (FND-06) carried forward to all new pages:
 
 ## UI Considerations
 
-Applicable state considerations resolved: 10 covered, 4 backstop, 0 unresolved
+State-coverage probe over 5 surfaces (ContactForm, Onderwerp select, Nav, CTAs, Testimonial cards): **27 applicable — 9 resolved (explicit), 4 backstop (visual check), 14 dismissed (N/A on a static SSG), 0 unresolved.** No item is left as an assumption for the planner.
 
-| Category | Element(s) | Status | Resolution / Reason |
-|----------|------------|--------|---------------------|
-| default | ContactForm — page load, JS running | ✅ covered | Form visible, Onderwerp default "Algemeen", submit active. Documented in State 1 of ContactForm interaction contract |
-| default | ContactForm — placeholder key | ✅ covered | Console warning only; no fake success; form renders identically. Documented in State 2 |
-| pre-selected | ContactForm — `?type=lezing\|coaching\|algemeen` | ✅ covered | JS reads `window.location.search` on DOMContentLoaded, sets `<select>.value` only for valid options. Documented in State 3 |
-| focus | ContactForm — all input fields | ✅ covered | `border-color: --color-accent`, `outline: 2px solid --color-accent`. Documented in State 4 |
-| loading | ContactForm — submitting | ✅ covered | Button disabled + text "Versturen…" at 0.7 opacity. Documented in State 5 |
-| success | ContactForm — Web3Forms `{ success: true }` | ✅ covered | Form hidden, inline Dutch success message visible via `aria-live`. Documented in State 6 |
-| error | ContactForm — API error | ✅ covered | Error message in `--color-destructive`, button re-enabled. Documented in State 7 |
-| error | ContactForm — network error | ✅ covered | Different copy ("Geen verbinding…"), same visual treatment. Documented in State 7 |
-| disabled | Nieuwsbrief CTA, Boek nav, NL/EN switch | ✅ covered | Honest-CTA pattern from Phase 1 carried forward — `aria-disabled`, no `href`, `title="Binnenkort beschikbaar"` |
-| empty | No-data states on new pages | ✅ covered | All pages render real or drafted content; no dynamic empty states exist in Phase 2 |
-| long-text | /mijn-verhaal expanded prose sections | 🧪 backstop | Long-form story copy must respect `.prose` max-width 680px and not overflow at mobile (375px viewport); verify at build with `npm run preview` |
-| long-text | ContactForm Bericht textarea — very long user input | 🧪 backstop | `resize: vertical` allows user expansion; verify no overflow against form container at 375px viewport |
-| overflow | Onderwerp `<select>` with long option text on mobile | 🧪 backstop | "Plan kennismaking" is 16 chars; verify no text truncation or arrow-icon overlap at 320px viewport |
-| zero-one-many | Testimonials on subpages (exactly 1 card per page) | 🧪 backstop | Each page shows exactly 1 testimonial card — no mosaic needed; verify layout is not broken when the 3-card Testimonials.astro component is bypassed in favor of an inline single card |
+**Resolved — explicit (a concrete truth the planner/executor must honor):**
+
+| Category | Element | Resolution |
+|----------|---------|------------|
+| empty | ContactForm | Default state (State 1): all fields empty, Onderwerp defaults to "Algemeen", submit active. The form IS the content — there is no zero-data variant. |
+| loading | ContactForm | Submitting state (State 5): submit button `disabled`, label "Versturen…", opacity 0.7, no spinner; fields stay readable. |
+| error | ContactForm | State 7: API error → "Er is iets misgegaan. Probeer het opnieuw of mail me direct."; network error → "Geen verbinding. Controleer je internetverbinding en probeer opnieuw."; button re-enabled; `aria-live="polite"`; copy from `nl.ts`, never echoed from the API. |
+| partial | ContactForm | Naam / Mailadres / Bericht carry the native `required` attribute (marked `*`); the browser blocks submit until valid on BOTH the JS and no-JS paths — no partial-submit state exists. |
+| error | Onderwerp select | Invalid / unknown `?type=` values are ignored (only valid option values accepted, `CSS.escape` guard) and fall back to "Algemeen" — no error surfaced to the user. |
+| populated | Nav | 4 enabled links (Coaching, Spreker, Mijn verhaal, Contact) + Contact CTA + disabled placeholders (Nieuwsbrief, Boek, NL/EN); current page gets a 2px `#FFDD11` underline via `aria-current="page"`. |
+| loading | CTAs | CTAs are static anchors — navigation to `/contact?type=…` is instant, no async state. The only submit-loading state is the form (see ContactForm/loading). |
+| populated | Testimonial cards | /coaching shows exactly ONE card (Yang Soo Kloosterhof); /spreker shows Oranjewoud Export Academy. Single `Card variant="default"`, attribution verbatim (D-07). |
+| zero-one-many | Testimonial cards | Subpages intentionally render exactly ONE relevant testimonial (not a grid); the homepage keeps the 3-card mosaic. Singular framing — no plural/empty copy needed. |
+
+**Resolved — backstop (held-out visual check at `npm run preview`, desktop→320px):**
+
+| Category | Element | Backstop check |
+|----------|---------|----------------|
+| overflow | ContactForm (Bericht) | Very long message: `textarea` `resize: vertical`, `min-height: 120px`; confirm no container break and result message wraps at 375px. |
+| long-text | ContactForm (inputs) | Long Naam/email values wrap or scroll within fixed inputs; success/error strings are fixed short copy — confirm no overflow at 320px. |
+| overflow | Nav (mobile) | Enabled + disabled items must fit; verify the Phase 1 hamburger pattern handles overflow at 320px. |
+| overflow | Testimonial card | Longest real quote (Oranjewoud) must wrap cleanly inside the single card — confirm card height/spacing holds. |
+
+**Dismissed — not a runtime state on a static Astro SSG (content baked at build, no async data, fixed authored sets):**
+
+- Onderwerp select: `loading`, `long-text` — options are fixed short authored labels rendered at build; query-param pre-selection is synchronous on `DOMContentLoaded`.
+- Nav: `empty`, `loading`, `error`, `partial`, `zero-one-many`, `long-text` — a fixed authored set of short links, static HTML, no fetch.
+- CTAs: `error`, `long-text` — internal links (a missing route fails at build as a 404, not a runtime error UI); labels are fixed short Dutch strings, button `min-height: 48px`.
+- Testimonial cards: `empty`, `loading`, `error`, `partial` — a fixed, authored, non-empty set of real quotes; static HTML, no fetch, never partial.
 
 ---
 
