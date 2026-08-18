@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+
+# Full-res photo originals — never commit as production assets
+fotos/
+assets/originals/
+*.zip
