@@ -115,15 +115,20 @@ function formatPubDate(pubDate: string): string {
  *   - excerpt derives from description stripped to plain text (T-3-02)
  *   - External anchors in the caller must carry rel="noopener noreferrer" (T-3-01)
  *
- * @param feedUrl  Full feed URL, e.g. "https://pub.substack.com/feed"
- * @param maxItems Maximum number of cards to return (default 3 for homepage)
+ * @param feedUrl   Full feed URL, e.g. "https://pub.substack.com/feed"
+ * @param maxItems  Maximum number of cards to return (default 3 for homepage)
+ * @param timeoutMs Abort timeout in ms — prevents stalled body from hanging the build (WR-01)
  */
 export async function fetchSubstackFeed(
   feedUrl: string,
-  maxItems = 3
+  maxItems = 3,
+  timeoutMs = 8000,
 ): Promise<ArticleCard[]> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(feedUrl);
+    const res = await fetch(feedUrl, { signal: controller.signal });
+    clearTimeout(timer);
     if (!res.ok) {
       console.warn(`[Phase 3] Substack RSS fetch failed: ${res.status} ${res.statusText}`);
       return [];
@@ -158,8 +163,9 @@ export async function fetchSubstackFeed(
       };
     });
   } catch (err) {
-    // Catch all: network errors (ENOTFOUND), XML parse errors, etc.
+    // Catch all: network errors (ENOTFOUND), XML parse errors, AbortError (timeout), etc.
     // Build must never fail on feed errors — D-06 / T-3-04.
+    clearTimeout(timer);
     console.warn('[Phase 3] Substack RSS fetch threw:', err);
     return [];
   }
