@@ -69,6 +69,8 @@ Make Milan feel like a **credible, experienced, and honest founder** — human a
 | Static placeholder articles in v1 | Live Substack/LinkedIn feeds deferred to a later phase | — Pending |
 | Unknown-destination CTAs disabled + documented (not fake buttons) | Honest UX; avoid dead links | — Pending |
 | Only optimized AVIF/WebP assets in production; originals never served/committed | Keep the ~86 MB originals out of the bundle | — Pending |
+| Web3Forms for the contact form (Phase 2) | Static GitHub Pages has no backend; client-side form API keeps the host, no server/infra. Access key is a public client identifier held as a config.ts placeholder until supplied | ✓ Phase 2 (pending real key + inbox check) |
+| Single /contact page; lead CTAs deep-link `?type=` (Phase 2) | "Boek lezing"/"Plan kennismaking"/Contact all route to one form with the Onderwerp pre-filled; one inbox, self-identifying inquiries; Calendly seam left open | ✓ Phase 2 |
 
 ## Evolution
 
@@ -88,4 +90,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-18 after initialization*
+*Last updated: 2026-08-18 after Phase 2 (Supporting Pages & Lead-Gen Forms) completion*
