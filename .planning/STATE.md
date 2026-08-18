@@ -4,12 +4,12 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 2 — Supporting Pages & Lead-Gen Forms
 status: in_progress
-stopped_at: Phase 2 context gathered
-last_updated: "2026-08-18T18:44:52.651Z"
+stopped_at: Phase 2 UI-SPEC approved
+last_updated: "2026-08-18T19:20:34.900Z"
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 6
+  total_plans: 9
   completed_plans: 6
 current_phase_name: Supporting Pages & Lead-Gen Forms
 ---
@@ -95,6 +95,6 @@ After approval: Phase 2 (subpages + contact form) begins.
 
 ## Session
 
-**Last session:** 2026-08-18T18:44:52.643Z
-**Stopped at:** Phase 2 context gathered
-**Resume file:** .planning/phases/02-supporting-pages-lead-gen-forms/02-CONTEXT.md
+**Last session:** 2026-08-18T19:03:13.866Z
+**Stopped at:** Phase 2 UI-SPEC approved
+**Resume file:** .planning/phases/02-supporting-pages-lead-gen-forms/02-UI-SPEC.md
