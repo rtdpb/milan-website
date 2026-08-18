@@ -1,0 +1,301 @@
+---
+/**
+ * Articles.astro
+ * "Recente artikelen" section — Sectie 6 (HOME-08).
+ *
+ * Source: PLAN 01-05 Task 2, UI-SPEC §ArticlesSection, CONTEXT D-10, D-12,
+ *         HOME-08, HOME-10, HOME-11, FND-04
+ *
+ * Design decisions:
+ * - D-10: NO real Substack articles in Phase 1. Exactly 3 CLEARLY PLACEHOLDER cards
+ *   are shown. Each card carries: a visible PlaceholderBadge pill + a code comment
+ *   marking it for Phase 3 replacement.
+ * - D-12: "Lees verder" and "Alle artikelen" are honest disabled placeholders (no href,
+ *   no href="#"). aria-disabled="true" + tabindex="-1" (HOME-10).
+ * - HOME-11: Titles are clearly fictional founder-topic copy — NOT asserted as real
+ *   published articles. The isPlaceholder flag in each item makes this explicit.
+ *
+ * DATA SHAPE CONTRACT (future Phase 3 Substack swap):
+ * Each article is typed as ArticleCard below. Phase 3 replaces the hardcoded
+ * `items` array with a real Substack content-collection fetch — the markup loop
+ * does not need to change; only the data source swaps.
+ *
+ * type ArticleCard = {
+ *   category:    string;   // e.g. "Leiderschap"
+ *   title:       string;   // Article title
+ *   excerpt:     string;   // One-sentence teaser
+ *   date:        string;   // "maand jaar" display string
+ *   readTime:    string;   // "X min leestijd"
+ *   isPlaceholder: true;   // Phase 3: remove this flag when real data arrives
+ * };
+ */
+
+import SectionWrapper from '../ui/SectionWrapper.astro';
+import Card from '../ui/Card.astro';
+import PlaceholderBadge from '../ui/PlaceholderBadge.astro';
+import { nl } from '../../i18n/nl';
+
+// ── Article data (Phase 3 replaces this with real Substack collection) ──────
+// TODO: replace with real Substack article (Phase 3) — see DATA SHAPE CONTRACT above
+const articles = nl.articles.items.map((item) => ({
+  ...item,
+  isPlaceholder: true as const,
+}));
+
+const { heading, seeAll } = nl.articles;
+---
+
+<SectionWrapper id="artikelen" labelledBy="articles-heading" variant="default">
+  <div class="articles">
+
+    <!-- ── Section heading ─────────────────────────────────────────────────── -->
+    <h2 id="articles-heading" class="articles__heading">
+      {heading}
+    </h2>
+
+    <!-- ── Article cards grid ─────────────────────────────────────────────── -->
+    <div class="articles__grid" role="list">
+
+      {articles.map((article) => (
+        <!-- TODO: replace with real Substack article (Phase 3) -->
+        <div class="articles__card-wrapper" role="listitem">
+          <Card class="articles__card">
+
+            <!-- Placeholder badge — top-right corner of card (D-10) -->
+            <!-- Visible marker: each placeholder card MUST show this badge (HOME-08, D-10) -->
+            <div class="articles__badge-row">
+              <PlaceholderBadge />
+            </div>
+
+            <!-- Eyebrow category -->
+            <p class="articles__category">
+              {article.category}
+            </p>
+
+            <!-- Article title — fictional founder-topic copy (HOME-11, D-10)
+                 These are clearly placeholder titles, NOT asserted as real published articles. -->
+            <h3 class="articles__title">
+              {article.title}
+            </h3>
+
+            <!-- One-sentence excerpt -->
+            <p class="articles__excerpt">
+              {article.excerpt}
+            </p>
+
+            <!-- Meta row: date + read time -->
+            <div class="articles__meta">
+              <span class="articles__date">{article.date}</span>
+              <span class="articles__separator" aria-hidden="true">·</span>
+              <span class="articles__read-time">{article.readTime}</span>
+            </div>
+
+            <!-- "Lees verder" — DISABLED PLACEHOLDER (D-12, HOME-10)
+                 No real article URL exists in Phase 1.
+                 aria-disabled + tabindex=-1: honest disabled, not href="#".
+                 TODO Phase 3: replace with real article URL from Substack. -->
+            <!-- TODO: wire real article URL when Substack integration lands — Phase 3 -->
+            <span
+              class="articles__read-more"
+              role="link"
+              aria-disabled="true"
+              tabindex="-1"
+              title="Binnenkort beschikbaar"
+              aria-label=`Lees "${article.title}" — binnenkort beschikbaar`
+            >
+              {nl.common.readMore}
+            </span>
+
+          </Card>
+        </div>
+      ))}
+
+    </div>
+    <!-- End article cards grid -->
+
+    <!-- "Alle artikelen" link — DISABLED PLACEHOLDER (D-12, HOME-10)
+         Future newsletter/blog page (Phase 2/3). No real destination.
+         aria-disabled + tabindex=-1: honest disabled. -->
+    <!-- TODO: wire "Alle artikelen" to real blog/Substack page — Phase 3 -->
+    <div class="articles__see-all-row">
+      <span
+        class="articles__see-all"
+        role="link"
+        aria-disabled="true"
+        tabindex="-1"
+        title="Binnenkort beschikbaar"
+      >
+        {seeAll}
+        <span class="articles__see-all-arrow" aria-hidden="true">→</span>
+      </span>
+    </div>
+
+  </div>
+</SectionWrapper>
+
+<style>
+  /* ── Section layout ────────────────────────────────────────────────────────── */
+  .articles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+  }
+
+  /* ── Section heading ──────────────────────────────────────────────────────── */
+  .articles__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);   /* 24–36px — section heading (UI-SPEC) */
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-text);
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 1024px) {
+    .articles__heading {
+      font-size: var(--text-3xl);
+    }
+  }
+
+  /* ── Cards grid: 1 column mobile → 2 col tablet → 3 col desktop (FND-04) ── */
+  .articles__grid {
+    display: grid;
+    grid-template-columns: 1fr;         /* Mobile: stacked */
+    gap: var(--space-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (min-width: 600px) {
+    .articles__grid {
+      grid-template-columns: repeat(2, 1fr); /* Tablet: 2 col */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .articles__grid {
+      grid-template-columns: repeat(3, 1fr); /* Desktop: 3 col */
+      gap: var(--space-xl);
+    }
+  }
+
+  /* ── Card wrapper (full height) ───────────────────────────────────────────── */
+  .articles__card-wrapper {
+    height: 100%;
+  }
+
+  /* ── Article card inner layout ────────────────────────────────────────────── */
+  /* Override Card.astro padding via :global to add flex layout for bottom-aligned "Lees verder" */
+  :global(.articles__card) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    height: 100%;
+    position: relative;  /* For badge positioning */
+  }
+
+  /* ── Placeholder badge row ────────────────────────────────────────────────── */
+  .articles__badge-row {
+    display: flex;
+    justify-content: flex-end;   /* Top-right corner (UI-SPEC §ArticlesSection) */
+    margin-bottom: calc(-1 * var(--space-xs)); /* Tighten gap above category */
+  }
+
+  /* ── Category eyebrow ────────────────────────────────────────────────────── */
+  .articles__category {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);   /* 12–14px — label/eyebrow */
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* ── Article title (Subheading: 22px/medium) ────────────────────────────── */
+  .articles__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);   /* 20–28px — subheading (UI-SPEC) */
+    font-weight: 600;            /* 600 — collapsed from medium per UI-SPEC note */
+    line-height: 1.25;
+    color: var(--color-text);
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  /* ── Excerpt (Body: 17px/400) ────────────────────────────────────────────── */
+  .articles__excerpt {
+    font-family: var(--font-body);
+    font-size: var(--text-base);  /* 16–18px body */
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin: 0;
+    flex: 1;  /* Pushes meta + read-more to bottom of card */
+  }
+
+  /* ── Meta row ────────────────────────────────────────────────────────────── */
+  .articles__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);   /* 12–14px — Meta/Caption (UI-SPEC) */
+    font-weight: 400;
+    color: var(--color-text-secondary);
+  }
+
+  .articles__separator {
+    opacity: 0.5;
+  }
+
+  /* ── "Lees verder" — DISABLED PLACEHOLDER (D-12, HOME-10) ─────────────── */
+  /* Visual: text-link style, but cursor not-allowed + opacity 0.5 — honest disabled */
+  .articles__read-more {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    /* Minimum 44px touch target height (WCAG 2.5.5) */
+    min-height: 44px;
+    align-self: flex-start;
+    padding-block: var(--space-sm);
+  }
+
+  /* ── "Alle artikelen" row ────────────────────────────────────────────────── */
+  .articles__see-all-row {
+    display: flex;
+    justify-content: center;
+    padding-top: var(--space-md);
+  }
+
+  /* "Alle artikelen" — DISABLED PLACEHOLDER (D-12, HOME-10) */
+  .articles__see-all {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    /* Minimum 44px touch target height (WCAG 2.5.5) */
+    min-height: 44px;
+    padding-block: var(--space-sm);
+  }
+
+  .articles__see-all-arrow {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+</style>
