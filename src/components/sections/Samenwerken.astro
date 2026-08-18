@@ -1,0 +1,231 @@
+---
+/**
+ * Samenwerken.astro — 3-card commitment ladder (HOME-04)
+ * Source: PLAN 01-03 Task 2, UI-SPEC §<SamenwerkSection>, CONTEXT.md D-07, D-09, D-12
+ *
+ * Three equal-height cards ordered as a commitment ladder:
+ *   1. Nieuwsbrief (gratis, laagdrempelig — "Begin hier gratis")
+ *   2. Presentatie / Lezing (verdieping — "Ga dieper")
+ *   3. 1:1 Coaching (intensief traject — "Werk met mij")
+ *
+ * HONESTY RULE (HOME-10, D-12):
+ * All 3 CTAs are honestly disabled — destinations unknown / deferred:
+ *   - Nieuwsbrief CTA → TODO_SUBSTACK_URL (Phase 3)
+ *   - Lezing CTA → TODO_CONTACT_URL (Phase 2)
+ *   - Coaching CTA → TODO_CONTACT_URL (Phase 2)
+ * Each button uses aria-disabled="true" with no href="#" or fake success state.
+ *
+ * PHOTOS (optional per ASSETS.md):
+ * milan-speaking-graph.jpg (Lezing card) and milan-networking.jpg (Coaching card)
+ * were not extracted from the fotos zip at plan-03 time. Cards render without
+ * photos. TODO Plan 01-06 or later: extract photos and add <Picture> elements
+ * to the Lezing and Coaching cards when present.
+ *
+ * NO FABRICATED STATS (D-08): no "trusted by N clients" or invented numbers.
+ */
+
+import SectionWrapper from '../ui/SectionWrapper.astro';
+import Card from '../ui/Card.astro';
+import Button from '../ui/Button.astro';
+import { nl } from '../../i18n/nl';
+import { TODO_SUBSTACK_URL, TODO_CONTACT_URL } from '../../config';
+
+/*
+ * Commitment ladder data — structured from nl.samenwerken.
+ * Eyebrow labels (Dutch, adapted from the reference "01/02/03" concept — D-07):
+ *   01 — Begin hier gratis
+ *   02 — Ga dieper
+ *   03 — Werk met mij
+ */
+const ladderCards = [
+  {
+    eyebrow:       nl.samenwerken.ladderEyebrow1,  // "01 — Begin hier gratis"
+    title:         nl.samenwerken.cards[0].title,   // "Nieuwsbrief"
+    description:   nl.samenwerken.cards[0].description,
+    cta:           nl.samenwerken.cards[0].cta,     // "Schrijf je gratis in"
+    placeholderReason: `Substack-URL nog niet bekend — wordt ingevuld in fase 3 (${TODO_SUBSTACK_URL})`,
+    ariaId:        'samenwerken-card-1',
+  },
+  {
+    eyebrow:       nl.samenwerken.ladderEyebrow2,  // "02 — Ga dieper"
+    title:         nl.samenwerken.cards[1].title,   // "Presentatie / Lezing"
+    description:   nl.samenwerken.cards[1].description,
+    cta:           nl.samenwerken.cards[1].cta,     // "Boek lezing"
+    placeholderReason: `Contactpagina nog niet gebouwd — wordt ingevuld in fase 2 (${TODO_CONTACT_URL})`,
+    ariaId:        'samenwerken-card-2',
+  },
+  {
+    eyebrow:       nl.samenwerken.ladderEyebrow3,  // "03 — Werk met mij"
+    title:         nl.samenwerken.cards[2].title,   // "1:1 Coaching"
+    description:   nl.samenwerken.cards[2].description,
+    cta:           nl.samenwerken.cards[2].cta,     // "Plan kennismaking"
+    placeholderReason: `Contactpagina nog niet gebouwd — wordt ingevuld in fase 2 (${TODO_CONTACT_URL})`,
+    ariaId:        'samenwerken-card-3',
+  },
+] as const;
+---
+
+<!-- Samenwerken: 3-card commitment ladder (HOME-04, D-07) -->
+<SectionWrapper id="samenwerken" variant="default" labelledBy="samenwerken-heading">
+  <div class="samenwerken">
+    <!-- Section heading -->
+    <h2 id="samenwerken-heading" class="samenwerken__heading">
+      {nl.samenwerken.heading}
+    </h2>
+
+    <!-- 3-card grid — equal height; desktop row / mobile stack -->
+    <div class="samenwerken__grid" role="list" aria-label="Samenwerkingsopties">
+      {ladderCards.map((card) => (
+        <div class="samenwerken__card-wrap" role="listitem">
+          <Card variant="default" class="samenwerken__card">
+            <!-- Numbered Dutch eyebrow label (D-07, UI-SPEC §SamenwerkSection) -->
+            <p class="samenwerken__eyebrow eyebrow" id={card.ariaId}>
+              {card.eyebrow}
+            </p>
+
+            <!-- Card subheading title (22px serif/medium — UI-SPEC §Typography Subheading) -->
+            <h3 class="samenwerken__card-title" aria-labelledby={card.ariaId}>
+              {card.title}
+            </h3>
+
+            <!-- Body description (17px/400/1.6 — UI-SPEC §Typography Body) -->
+            <p class="samenwerken__card-desc">
+              {card.description}
+            </p>
+
+            <!--
+              Honestly disabled CTA (HOME-10, D-12):
+              - aria-disabled="true" + no href="#" or fake success state
+              - placeholderReason surfaced as data-placeholder + title tooltip
+              - TODO comment indicates destination + phase when it will be wired
+            -->
+            <!-- TODO: wire destination when available — see placeholderReason prop -->
+            <div class="samenwerken__cta-wrap">
+              <Button
+                variant="secondary"
+                disabled={true}
+                placeholderReason={card.placeholderReason}
+              >
+                {card.cta}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      ))}
+    </div>
+  </div>
+</SectionWrapper>
+
+<style>
+  /* ── Samenwerken section layout ────────────────────────────────────────── */
+
+  .samenwerken {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xl); /* 64px between heading and card grid */
+  }
+
+  /* ── Section heading ────────────────────────────────────────────────────── */
+
+  .samenwerken__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);        /* 24–36px fluid — UI-SPEC §Typography Heading */
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-text);
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  /* ── 3-card grid ────────────────────────────────────────────────────────── */
+
+  .samenwerken__grid {
+    display: grid;
+    grid-template-columns: 1fr;      /* Mobile: stacked */
+    gap: var(--space-lg);             /* 24px between cards */
+    align-items: stretch;             /* Equal-height cards across the row */
+  }
+
+  @media (min-width: 768px) {
+    .samenwerken__grid {
+      grid-template-columns: 1fr 1fr; /* Tablet: 2 columns */
+      gap: var(--space-lg);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .samenwerken__grid {
+      grid-template-columns: 1fr 1fr 1fr; /* Desktop: 3 equal columns */
+      gap: var(--space-xl);               /* 32px on desktop */
+    }
+  }
+
+  /* ── Card wrapper: stretch to fill grid cell for equal height ──────────── */
+
+  .samenwerken__card-wrap {
+    display: flex;
+  }
+
+  /*
+   * Override Card.astro padding/display to ensure the card stretches
+   * and the CTA aligns at the bottom of each card (ladder feel).
+   */
+  :global(.samenwerken__card) {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: var(--space-md) !important;  /* 16px between card elements */
+  }
+
+  /* ── Card eyebrow (numbered ladder label) ──────────────────────────────── */
+
+  .samenwerken__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);         /* 12–14px — UI-SPEC §Typography Label */
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* ── Card subheading title ─────────────────────────────────────────────── */
+
+  .samenwerken__card-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);         /* 20–28px — UI-SPEC §Typography Subheading */
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  /* ── Card description (body copy) ──────────────────────────────────────── */
+
+  .samenwerken__card-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-base);       /* 16–18px — UI-SPEC §Typography Body */
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin: 0;
+    /* Allow text to grow and push CTA to bottom */
+    flex: 1;
+  }
+
+  /* ── CTA wrapper — pushes the button to the card bottom ──────────────── */
+
+  .samenwerken__cta-wrap {
+    margin-top: auto;                  /* Pins CTA to bottom of card */
+    padding-top: var(--space-sm);      /* 8px breathing room above button */
+  }
+
+  /*
+   * Ensure the disabled Button fills the card width on narrow viewports
+   * without breaking the inline-flex Button.astro layout.
+   */
+  :global(.samenwerken__cta-wrap .btn) {
+    width: 100%;
+    justify-content: center;
+  }
+</style>
