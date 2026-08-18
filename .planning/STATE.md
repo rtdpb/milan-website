@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 3
 status: in_progress
-stopped_at: Completed Phase 3 Plan 01 — RSS tracer, rss.ts utility, Articles.astro wired, deploy.yml
-last_updated: "2026-08-18T22:13:35Z"
+stopped_at: Completed Phase 3 Plan 02 — /nieuwsbrief page, Newsletter.astro rewired, nl.nieuwsbrief copy
+last_updated: "2026-08-19T00:22:00Z"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 12
-  completed_plans: 10
+  completed_plans: 11
 current_phase_name: Newsletter & Substack Integration
 ---
 
@@ -29,7 +29,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **Current phase:** 3
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
 - **Plans completed:** 6/6 Phase 1 + 3/3 Phase 2 (all PAGE-01..05 delivered)
-- **Last action:** Executed Plan 02-03 — /mijn-verhaal page + homepage CTA wiring + Nav/Footer full reconciliation; 5 pages built, 0 errors. Phase 2 complete.
+- **Last action:** Executed Plan 03-02 — /nieuwsbrief editorial landing page + Newsletter.astro email-only Substack redirect rewire; 6 pages built, 0 errors.
 
 ## Key Facts
 
@@ -68,6 +68,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **NEW: Story teaser link** — "Lees mijn hele verhaal →" → /mijn-verhaal added to Story.astro with isMijnVerhaalPage guard (no self-link on /mijn-verhaal) — COMPLETE
 - **NEW: Nav + Footer mijnVerhaal enabled** — real <a> links with active-state; Nieuwsbrief + Boek remain only disabled placeholders — COMPLETE
 - **NEW (Phase 3-01): RSS pipeline tracer** — fast-xml-parser@5.11.0 installed; src/lib/rss.ts (fetchSubstackFeed + ArticleCard/PlaceholderCard); Articles.astro rewired behind IS_SENTINEL guard (D-04: placeholder state honest, D-02: build-time fetch, D-06: fallback); .github/workflows/deploy.yml with push+cron+dispatch+concurrency — COMPLETE
+- **NEW (Phase 3-02): /nieuwsbrief page + Newsletter rewire** — src/pages/nieuwsbrief.astro (hero/value-prop/signup/10-item archive), Newsletter.astro email-only Substack redirect (naam field removed D-05), nl.nieuwsbrief copy block added; NEWS-01/NEWS-02 delivered — COMPLETE
 
 ## Decisions Made
 
@@ -95,6 +96,9 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - nl.mijnVerhaal arc4Body: switched to double-quoted string to avoid TypeScript parse error on Dutch apostrophe in 's avonds (Rule 1 auto-fix)
 - Phase 3-01 action versions: used stable fallback majors (checkout@v4, withastro/action@v3, deploy-pages@v4); RESEARCH listed v7/v6/v5 as ASSUMED; runtime GitHub verification not possible
 - Phase 3-01 Task 3: no code changes — rss.ts behaviors (a)-(d) correctly implemented in tracer; smoke assertion RSS_SMOKE_OK
+- Phase 3-02 Tasks 1+2 atomic commit: nl.ts labelNaam removal paired with Newsletter.astro destructure update — TypeScript would error between tasks if committed separately
+- Phase 3-02 nl.nieuwsbrief.pageDesc: double-quoted string for Dutch apostrophe in "Milan's" (consistent with arc4Body pattern)
+- Phase 3-02 social proof omitted: no newsletter-specific quote exists; fabricating or repurposing coaching/speaking quotes prohibited (HOME-11, UI-SPEC §2e)
 
 ## Performance Metrics
 
@@ -110,16 +114,17 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 02 | 02 | ~15 min | 3/3 | 4 created, 3 modified |
 | 02 | 03 | ~15 min | 3/3 | 1 created, 6 modified |
 | 03 | 01 | ~10 min | 3/3 | 2 created, 4 modified |
+| 03 | 02 | ~12 min | 3/3 | 1 created, 2 modified |
 
 ## Next Step
 
-Phase 3 Plan 01 complete. Next: Phase 3 Plan 02 (if it exists) or Phase 3 final integration. RSS pipeline is proven end-to-end behind the sentinel — one grep-replace of TODO_SUBSTACK_URL flips the feed live.
+Phase 3 Plan 02 complete. /nieuwsbrief page is live in sentinel state. Nav/Footer/Samenwerken nieuwsbrief enable deferred (not in 03-02 scope). Next: Phase 3 Plan 03 (if exists) or check remaining Phase 3 plans. One grep-replace of TODO_SUBSTACK_URL flips the entire newsletter integration live.
 
 ---
-*Last updated: 2026-08-18 after Plan 03-01 execution*
+*Last updated: 2026-08-19 after Plan 03-02 execution*
 
 ## Session
 
-**Last session:** 2026-08-18T22:13:35Z
-**Stopped at:** Completed Phase 3 Plan 01 — RSS tracer, rss.ts, Articles.astro wired, deploy.yml
+**Last session:** 2026-08-19T00:22:00Z
+**Stopped at:** Completed Phase 3 Plan 02 — /nieuwsbrief page, Newsletter.astro rewired, nl.nieuwsbrief copy
 **Resume file:** None
