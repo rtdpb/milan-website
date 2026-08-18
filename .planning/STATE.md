@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 2 — Supporting Pages & Lead-Gen Forms
+current_phase: 2
 status: in_progress
-stopped_at: Phase 2 UI-SPEC approved
-last_updated: "2026-08-18T19:20:34.900Z"
+stopped_at: Phase 2 Plan 01 complete
+last_updated: "2026-08-18T19:31:47.000Z"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 9
-  completed_plans: 6
+  completed_plans: 7
 current_phase_name: Supporting Pages & Lead-Gen Forms
 ---
 
@@ -21,12 +21,12 @@ current_phase_name: Supporting Pages & Lead-Gen Forms
 See: `.planning/PROJECT.md` (updated 2026-08-18)
 
 **Core value:** Make Milan feel like a credible, experienced, and honest founder so the right entrepreneurs reach out for coaching/speaking and subscribe to the newsletter.
-**Current focus:** Phase 1 — Foundation, Design System & Dutch Homepage
+**Current focus:** Phase 2 — Supporting Pages & Lead-Gen Forms
 
 ## Status
 
 - **Milestone:** v1 — Dutch homepage MVP
-- **Current phase:** 2 — Supporting Pages & Lead-Gen Forms
+- **Current phase:** 2
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
 - **Plans completed:** 6/6 (Plan 01 — Walking Skeleton; Plan 02 — Global chrome + UI kit; Plan 03 — PressStrip + Samenwerken; Plan 04 — RevealOnScroll + Testimonials + Story; Plan 05 — Newsletter + Articles; Plan 06 — Assembly + Audit)
 - **Last action:** Executed Plan 01-06 — assembled all 7 sections in docx order into index.astro, ran automated audit (all gates pass, Lighthouse Performance 98 / A11y 97 / SEO 100 / LCP 1.7s). Awaiting human-verify checkpoint for responsive/visual quality.
@@ -43,7 +43,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **NEW: Footer** — light bg, 3-column, disabled nav links + LinkedIn + copyright/legal placeholders — COMPLETE
 - **NEW: UI Kit** — Button/Card/SectionWrapper/PlaceholderBadge, all token-styled — COMPLETE
 - **NEW: i18n** — src/i18n/nl.ts typed const with all Dutch strings; Phase 4 shape ready — COMPLETE
-- **NEW: Config** — src/config.ts with TODO_SUBSTACK_URL, TODO_CONTACT_URL, TODO_LINKEDIN_URL — COMPLETE
+- **NEW: Config** — src/config.ts with TODO_SUBSTACK_URL, CONTACT_URL (resolved), TODO_WEB3FORMS_ACCESS_KEY, TODO_CALENDLY_URL, TODO_LINKEDIN_URL — COMPLETE
 - **NEW: PressStrip** — slim "Bekend van" band with 6 text/wordmark placeholder chips, mobile scroll-snap — COMPLETE
 - **NEW: Samenwerken** — 3-card commitment ladder (Nieuwsbrief/Lezing/Coaching) with disabled CTAs, responsive grid — COMPLETE
 - **NEW: RevealOnScroll** — IntersectionObserver island (prefers-reduced-motion JS guard + CSS fallback), reusable stagger wrapper — COMPLETE
@@ -54,7 +54,10 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Primary source: `Input homepage Milan.docx`; design inspiration: Sevora (not copied literally)
 - Brand: accent `#FFDD11` used sparingly (primary CTA only); typeface Naste (licensed fallback for now, swappable)
 - Photos: 6 real photos supplied; hero = `10 Jaar Soly-77` (extracted + downscaled); mapping in `.planning/ASSETS.md`
-- Placeholders pending: Substack URL, contact destination, LinkedIn URL, "bekend van" logos, real articles
+- Placeholders pending: Web3Forms access key (form submission-ready), Calendly URL seam, Substack URL, LinkedIn URL, "bekend van" logos, real articles
+- **NEW: ContactForm** — Web3Forms progressive-enhancement form (no-JS fallback, honeypot, 7-state machine, static Dutch copy, XSS-safe) — COMPLETE
+- **NEW: /contact page** — H1 + subtext, ContactForm (max-width 640px), Newsletter — COMPLETE
+- **NEW: Nav Contact CTA enabled** — desktop + mobile, import.meta.env.BASE_URL href — COMPLETE
 
 ## Decisions Made
 
@@ -72,6 +75,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Story yellow accent: 4px left-border on eyebrow label only (D-02 rule: exactly 1 usage per section)
 - Newsletter submit: rendered as `<span role=button aria-disabled>` (not `<button disabled>`) so AT can discover and read it while it's clearly non-functional
 - Articles cards: :global(.articles__card) flex override + loop with single TODO comment covering the whole placeholder array (plan allows this; array marked isPlaceholder:true)
+- ContactForm script: data-* bridge on <form> element (not on <script> tag) to pass nl.contact strings into TypeScript-processed island — avoids Astro is:inline downgrade
+- CONTACT_URL docblock: removed grep-comment alias to satisfy grep -c TODO_CONTACT_URL === 0 acceptance criterion
 
 ## Performance Metrics
 
@@ -83,18 +88,17 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 01 | 04 | ~10 min | 3/3 | 5 created |
 | 01 | 05 | ~6 min | 2/2 | 2 created |
 | 01 | 06 | ~8 min | 2/2 | 3 modified |
+| 02 | 01 | ~8 min | 3/3 | 2 created, 4 modified |
 
 ## Next Step
 
-Phase 1 is complete pending human-verify checkpoint (Task 3 of Plan 06). User should run `npm run build && npm run preview`, inspect the homepage at desktop/tablet/mobile, verify anchor, animations, and disabled CTAs.
-
-After approval: Phase 2 (subpages + contact form) begins.
+Phase 2 Plan 01 (contact form tracer) is complete. Next: Phase 2 Plan 02 — Coaching, Spreker, Mijn verhaal subpages + Samenwerken CTA wiring.
 
 ---
 *Last updated: 2026-08-18 after Plan 01-05 execution*
 
 ## Session
 
-**Last session:** 2026-08-18T19:03:13.866Z
-**Stopped at:** Phase 2 UI-SPEC approved
-**Resume file:** .planning/phases/02-supporting-pages-lead-gen-forms/02-UI-SPEC.md
+**Last session:** 2026-08-18T19:31:47.000Z
+**Stopped at:** Phase 2 Plan 01 complete — /contact page + ContactForm + Nav CTA enabled
+**Resume file:** .planning/phases/02-supporting-pages-lead-gen-forms/02-02-PLAN.md
