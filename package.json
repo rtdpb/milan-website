@@ -1,0 +1,22 @@
+{
+  "name": "milan-van-der-meulen-website",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Personal brand website for Milan van der Meulen — Founder Coach & Spreker",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.3",
+    "astro": "7.2.3",
+    "sharp": "0.35.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "typescript": "^5.0.0"
+  }
+}
