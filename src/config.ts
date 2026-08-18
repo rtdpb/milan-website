@@ -22,8 +22,13 @@ export const SITE_URL = 'https://milanvandermeulen.nl'; // TODO: confirm domain 
 // ── Placeholder Destinations (grep-replaceable when supplied) ────────────────
 
 /**
- * Substack newsletter URL.
+ * Substack newsletter publication URL.
  * TODO Phase 3: replace with the real Substack publication URL.
+ * Derived URLs (computed inline in components, not exported):
+ *   Feed:      `${TODO_SUBSTACK_URL}/feed`       — used by Articles.astro + nieuwsbrief.astro
+ *   Subscribe: `${TODO_SUBSTACK_URL}/subscribe`  — used by Newsletter.astro
+ * Sentinel check: `TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL'`
+ * Note: strip any trailing slash from the supplied URL before replacing.
  * Used in: Nieuwsbrief CTA (nav), newsletter signup section, "Schrijf je gratis in" button.
  */
 export const TODO_SUBSTACK_URL = 'TODO_SUBSTACK_URL';

@@ -5,42 +5,55 @@
  *
  * Source: PLAN 01-05 Task 2, UI-SPEC §ArticlesSection, CONTEXT D-10, D-12,
  *         HOME-08, HOME-10, HOME-11, FND-04
+ *         Phase 3 PLAN 03-01: RSS-fed via src/lib/rss.ts behind TODO_SUBSTACK_URL sentinel
  *
  * Design decisions:
- * - D-10: NO real Substack articles in Phase 1. Exactly 3 CLEARLY PLACEHOLDER cards
- *   are shown. Each card carries: a visible PlaceholderBadge pill + a code comment
- *   marking it for Phase 3 replacement.
- * - D-12: "Lees verder" and "Alle artikelen" are honest disabled placeholders (no href,
- *   no href="#"). aria-disabled="true" + tabindex="-1" (HOME-10).
- * - HOME-11: Titles are clearly fictional founder-topic copy — NOT asserted as real
- *   published articles. The isPlaceholder flag in each item makes this explicit.
+ * - D-02: Build-time RSS fetch (static HTML, zero runtime JS, no CORS proxy).
+ *   Refreshed daily by scheduled GitHub Actions cron rebuild.
+ * - D-04: While TODO_SUBSTACK_URL is the sentinel, renders existing 3 placeholder
+ *   cards with PlaceholderBadge (honest current state). One grep-replace flips live.
+ * - D-06: Feed failure / empty feed → honest placeholder + build-log warning; build
+ *   always succeeds (never fails on network error from Substack).
+ * - D-07: Homepage shows latest 3 posts. "Lees verder" → real post URL (target=_blank
+ *   rel=noopener). "Alle artikelen" → Substack publication home.
+ * - D-12: "Lees verder" and "Alle artikelen" are honest disabled placeholders when
+ *   IS_SENTINEL is true (no href, no href="#"). aria-disabled="true" + tabindex="-1".
+ * - T-3-01: All external anchors carry rel="noopener noreferrer" with target="_blank".
+ * - T-3-02: NEVER set:html on RSS content. Excerpts from description (stripped only).
  *
- * DATA SHAPE CONTRACT (future Phase 3 Substack swap):
- * Each article is typed as ArticleCard below. Phase 3 replaces the hardcoded
- * `items` array with a real Substack content-collection fetch — the markup loop
- * does not need to change; only the data source swaps.
- *
- * type ArticleCard = {
- *   category:    string;   // e.g. "Leiderschap"
- *   title:       string;   // Article title
- *   excerpt:     string;   // One-sentence teaser
- *   date:        string;   // "maand jaar" display string
- *   readTime:    string;   // "X min leestijd"
- *   isPlaceholder: true;   // Phase 3: remove this flag when real data arrives
- * };
+ * ArticleCard type is imported from src/lib/rss.ts (Phase 3 — replaces comment block).
  */
 
 import SectionWrapper from '../ui/SectionWrapper.astro';
 import Card from '../ui/Card.astro';
 import PlaceholderBadge from '../ui/PlaceholderBadge.astro';
 import { nl } from '../../i18n/nl';
+import { TODO_SUBSTACK_URL } from '../../config';
+import { fetchSubstackFeed, type ArticleCard, type PlaceholderCard } from '../../lib/rss';
 
-// ── Article data (Phase 3 replaces this with real Substack collection) ──────
-// TODO: replace with real Substack article (Phase 3) — see DATA SHAPE CONTRACT above
-const articles = nl.articles.items.map((item) => ({
-  ...item,
-  isPlaceholder: true as const,
-}));
+// ── Sentinel guard — decides placeholder vs live feed ───────────────────────
+const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
+const substackPublicationUrl = TODO_SUBSTACK_URL;
+
+let articles: ArticleCard[] | PlaceholderCard[];
+
+if (IS_SENTINEL) {
+  // D-04: honest placeholder state while Substack URL not yet supplied.
+  // Renders the same 3 fictional founder-topic cards from Phase 1 (HOME-11).
+  articles = nl.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
+} else {
+  // D-02: build-time RSS fetch — runs once at `astro build`, not in the browser.
+  const feedUrl = `${TODO_SUBSTACK_URL}/feed`;
+  const fetched = await fetchSubstackFeed(feedUrl, 3);
+  if (fetched.length === 0) {
+    // D-06: feed failure or empty feed → honest placeholder + build-log warning.
+    // Build must never fail on Substack errors (T-3-04).
+    console.warn('[Phase 3] Substack feed returned 0 items — rendering placeholder cards.');
+    articles = nl.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
+  } else {
+    articles = fetched;
+  }
+}
 
 const { heading, seeAll } = nl.articles;
 ---
@@ -57,22 +70,24 @@ const { heading, seeAll } = nl.articles;
     <div class="articles__grid" role="list">
 
       {articles.map((article) => (
-        <div class="articles__card-wrapper" role="listitem">{/* TODO: replace with real Substack article (Phase 3) */}
+        <div class="articles__card-wrapper" role="listitem">
           <Card class="articles__card">
 
             <!-- Placeholder badge — top-right corner of card (D-10) -->
-            <!-- Visible marker: each placeholder card MUST show this badge (HOME-08, D-10) -->
-            <div class="articles__badge-row">
-              <PlaceholderBadge />
-            </div>
+            <!-- Only shown when IS_SENTINEL or feed returned 0 items (D-04, D-06) -->
+            {article.isPlaceholder && (
+              <div class="articles__badge-row">
+                <PlaceholderBadge />
+              </div>
+            )}
 
             <!-- Eyebrow category -->
             <p class="articles__category">
               {article.category}
             </p>
 
-            <!-- Article title — fictional founder-topic copy (HOME-11, D-10)
-                 These are clearly placeholder titles, NOT asserted as real published articles. -->
+            <!-- Article title — fictional founder-topic copy when placeholder (HOME-11)
+                 When real RSS: exact title from Substack feed. -->
             <h3 class="articles__title">
               {article.title}
             </h3>
@@ -89,21 +104,30 @@ const { heading, seeAll } = nl.articles;
               <span class="articles__read-time">{article.readTime}</span>
             </div>
 
-            <!-- "Lees verder" — DISABLED PLACEHOLDER (D-12, HOME-10)
-                 No real article URL exists in Phase 1.
-                 aria-disabled + tabindex=-1: honest disabled, not href="#".
-                 TODO Phase 3: replace with real article URL from Substack. -->
-            <!-- TODO: wire real article URL when Substack integration lands — Phase 3 -->
-            <span
-              class="articles__read-more"
-              role="link"
-              aria-disabled="true"
-              tabindex="-1"
-              title="Binnenkort beschikbaar"
-              aria-label={`Lees "${article.title}" — binnenkort beschikbaar`}
-            >
-              {nl.common.readMore}
-            </span>
+            <!-- "Lees verder" — disabled when placeholder (D-12, HOME-10),
+                 real external link when live (T-3-01: rel="noopener noreferrer") -->
+            {article.isPlaceholder ? (
+              <span
+                class="articles__read-more"
+                role="link"
+                aria-disabled="true"
+                tabindex="-1"
+                title="Binnenkort beschikbaar"
+                aria-label={`Lees "${article.title}" — binnenkort beschikbaar`}
+              >
+                {nl.common.readMore}
+              </span>
+            ) : (
+              <a
+                href={(article as ArticleCard).href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="articles__read-more articles__read-more--enabled"
+                aria-label={`Lees "${article.title}" op Substack`}
+              >
+                {nl.common.readMore}
+              </a>
+            )}
 
           </Card>
         </div>
@@ -112,21 +136,31 @@ const { heading, seeAll } = nl.articles;
     </div>
     <!-- End article cards grid -->
 
-    <!-- "Alle artikelen" link — DISABLED PLACEHOLDER (D-12, HOME-10)
-         Future newsletter/blog page (Phase 2/3). No real destination.
-         aria-disabled + tabindex=-1: honest disabled. -->
-    <!-- TODO: wire "Alle artikelen" to real blog/Substack page — Phase 3 -->
+    <!-- "Alle artikelen" — disabled when IS_SENTINEL (D-12, HOME-10),
+         real external link to Substack publication home when live (D-07, T-3-01) -->
     <div class="articles__see-all-row">
-      <span
-        class="articles__see-all"
-        role="link"
-        aria-disabled="true"
-        tabindex="-1"
-        title="Binnenkort beschikbaar"
-      >
-        {seeAll}
-        <span class="articles__see-all-arrow" aria-hidden="true">→</span>
-      </span>
+      {IS_SENTINEL ? (
+        <span
+          class="articles__see-all"
+          role="link"
+          aria-disabled="true"
+          tabindex="-1"
+          title="Binnenkort beschikbaar"
+        >
+          {seeAll}
+          <span class="articles__see-all-arrow" aria-hidden="true">→</span>
+        </span>
+      ) : (
+        <a
+          href={substackPublicationUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="articles__see-all articles__see-all--enabled"
+        >
+          {seeAll}
+          <span class="articles__see-all-arrow" aria-hidden="true">→</span>
+        </a>
+      )}
     </div>
 
   </div>
@@ -250,8 +284,7 @@ const { heading, seeAll } = nl.articles;
     opacity: 0.5;
   }
 
-  /* ── "Lees verder" — DISABLED PLACEHOLDER (D-12, HOME-10) ─────────────── */
-  /* Visual: text-link style, but cursor not-allowed + opacity 0.5 — honest disabled */
+  /* ── "Lees verder" — base styles shared by disabled + enabled states ──────── */
   .articles__read-more {
     display: inline-flex;
     align-items: center;
@@ -259,14 +292,30 @@ const { heading, seeAll } = nl.articles;
     font-size: var(--text-sm);
     font-weight: 600;
     color: var(--color-text);
-    opacity: 0.5;
-    cursor: not-allowed;
     text-decoration: none;
     letter-spacing: 0.01em;
     /* Minimum 44px touch target height (WCAG 2.5.5) */
     min-height: 44px;
     align-self: flex-start;
     padding-block: var(--space-sm);
+    /* Disabled state (span): honest not-allowed cursor, muted opacity */
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Enabled "Lees verder" link — overrides disabled defaults */
+  .articles__read-more--enabled {
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  .articles__read-more--enabled:hover {
+    text-decoration: underline;
+  }
+
+  .articles__read-more--enabled:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 
   /* ── "Alle artikelen" row ────────────────────────────────────────────────── */
@@ -276,7 +325,7 @@ const { heading, seeAll } = nl.articles;
     padding-top: var(--space-md);
   }
 
-  /* "Alle artikelen" — DISABLED PLACEHOLDER (D-12, HOME-10) */
+  /* "Alle artikelen" — base styles shared by disabled + enabled states */
   .articles__see-all {
     display: inline-flex;
     align-items: center;
@@ -285,13 +334,29 @@ const { heading, seeAll } = nl.articles;
     font-size: var(--text-base);
     font-weight: 600;
     color: var(--color-text);
-    opacity: 0.5;
-    cursor: not-allowed;
     text-decoration: none;
     letter-spacing: 0.01em;
     /* Minimum 44px touch target height (WCAG 2.5.5) */
     min-height: 44px;
     padding-block: var(--space-sm);
+    /* Disabled state (span): honest not-allowed cursor, muted opacity */
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Enabled "Alle artikelen" link — overrides disabled defaults */
+  .articles__see-all--enabled {
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  .articles__see-all--enabled:hover .articles__see-all-arrow {
+    transform: translateX(4px);
+  }
+
+  .articles__see-all--enabled:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 
   .articles__see-all-arrow {
