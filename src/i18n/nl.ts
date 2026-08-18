@@ -227,6 +227,56 @@ export const nl = {
     networkingAlt: 'Milan in gesprek met ondernemers tijdens een evenement.',
   },
 
+  // ── Mijn Verhaal Page (PAGE-03) ─────────────────────────────────────────
+  mijnVerhaal: {
+    pageTitle:  'Mijn verhaal — Milan van der Meulen',
+    pageDesc:   'Het eerlijke verhaal van Soly: internationale expansie naar 9 landen, 180 medewerkers, en het faillissement dat alles veranderde.',
+    eyebrow:    'Mijn verhaal',
+
+    // ── Arc 1: De start van Soly ─────────────────────────────────────────
+    arc1Eyebrow: 'De start',
+    arc1Heading: 'Van overtuiging naar onderneming',
+    arc1Body: [
+      'Ik begon Soly met de overtuiging dat schone energie voor iedereen bereikbaar moest zijn. Niet vanuit een businessplan of een investeerdersdeck, maar vanuit een oprecht geloof dat dit kon — en moest.',
+      'In de beginjaren was alles handmatig, alles improviserend, alles met een klein team dat harder werkte dan slim was. Maar het werkte. We groeiden, we leerden, en we bouwden iets dat echt waarde had voor mensen.',
+    ],
+
+    // ── Arc 2: Internationale expansie ──────────────────────────────────
+    arc2Eyebrow: 'De expansie',
+    arc2Heading: 'Groeien naar 9 landen en 180 mensen',
+    arc2Body: [
+      'Op een gegeven moment stond Soly in 9 landen. We hadden bijna 180 medewerkers. Zonnepanelen op daken van gezinnen in heel Europa. Dat klinkt als succes — en op veel manieren was het dat ook.',
+      'Maar internationaal schalen is iets anders dan schalen in je eigen markt. Elke markt vraagt om zijn eigen aanpak, zijn eigen mensen, zijn eigen tempo. Ik leerde dat de harde manier: door fouten die ik niet van tevoren had kunnen bedenken.',
+      'Ik leerde wat het betekent om een bedrijf te bouwen dat niet meer past in je hoofd. Om beslissingen te nemen met onvolledige informatie. Om te vertrouwen op een team dat groter is dan je ooit voor mogelijk hield.',
+    ],
+
+    // ── Arc 3: Het faillissement ─────────────────────────────────────────
+    arc3Eyebrow: 'Het faillissement',
+    arc3Heading: 'Het bedrijf dat ik alles in had gestoken, viel om',
+    arc3Body: [
+      'En toen viel het om. Soly ging failliet. Het bedrijf waar ik tien jaar lang alles in had gestoken — mijn energie, mijn tijd, mijn identiteit — was er opeens niet meer.',
+      'Ik ga je de romantische versie niet geven. Het was zwaar. Er waren schuldeisers, mensen die werk verloren, partners die werden meegesleurd. Er waren nachten waarop ik niet wist hoe ik verder moest.',
+      'Maar er was ook iets anders. Een helderheid die ik daarvoor nooit had. Over wat echt telt. Over wat ik werkelijk had geleerd. Over wie ik was als je het succes weghaalt.',
+    ],
+
+    // ── Arc 4: Vandaag ──────────────────────────────────────────────────
+    arc4Eyebrow: 'Vandaag',
+    arc4Heading: 'Waarom ik nu mijn lessen deel',
+    arc4Body: [
+      'Vandaag help ik founders die op een kruispunt staan. Die weten dat ze groter kunnen worden, maar ook voelen dat de manier waarop ze nu werken niet duurzaam is.',
+      'Ik ben geen consultant met een framework. Ik ben geen coach die succes heeft gehad zonder ooit te zijn gevallen. Ik ben iemand die zelf heeft gebouwd, verloren, en weer is opgestaan — en die de lessen die dat opleverde nu doorgeeft aan anderen die het eerder willen leren dan ik deed.',
+      "Niet omdat ik alle antwoorden heb. Maar omdat ik de vragen ken — de echte vragen, die je jezelf 's avonds stelt als het bedrijf stil is en je alleen bent met je twijfels.",
+    ],
+
+    // ── Terminal CTA ─────────────────────────────────────────────────────
+    ctaEyebrow:   'Klaar voor de volgende stap?',
+    ctaHeading:   'Laten we kennismaken',
+    ctaPrimary:   'Plan kennismaking',
+    ctaSecondary: 'Lees over spreken',
+    /** Story teaser link on the homepage Story section */
+    teaserLink:   'Lees mijn hele verhaal →',
+  },
+
   // ── Spreker Page (PAGE-02) ────────────────────────────────────────────────
   spreker: {
     pageTitle:  'Spreker — Milan van der Meulen',

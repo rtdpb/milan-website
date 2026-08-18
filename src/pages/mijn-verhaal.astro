@@ -1,0 +1,210 @@
+---
+/**
+ * mijn-verhaal.astro — Full-length founder story page (PAGE-03)
+ * Route: /mijn-verhaal
+ *
+ * Source: 02-03-PLAN.md Task 1, 02-UI-SPEC.md §/mijn-verhaal (PAGE-03),
+ *         02-CONTEXT.md D-05, D-06, 02-PATTERNS.md §pages + §Story.astro
+ *
+ * Layout (top to bottom):
+ *   1. Story.astro — reused dark opening band (id="verhaal", dark band rule D-01)
+ *   2. Arc 1 — De start  (SectionWrapper default, .prose max-w 680px)
+ *   3. Arc 2 — Expansie  (SectionWrapper surface)
+ *   4. Arc 3 — Faillissement (SectionWrapper default)
+ *   5. Arc 4 — Vandaag   (SectionWrapper surface)
+ *   6. Terminal CTA section (SectionWrapper default)
+ *   7. Newsletter        (reused Newsletter.astro)
+ *
+ * CONTENT HONESTY (D-05, T-2-08):
+ *   - All copy drafted from existing material only (Soly arc, story.body, USPs).
+ *   - No invented facts, numbers, quotes, or statistics.
+ *   - Copy flagged for Milan's review in 02-03-SUMMARY.md before go-live.
+ *
+ * DARK BAND RULE (D-01): only 1 dark band — the Story.astro opening.
+ * YELLOW CONSTRAINT (D-02): no yellow additions beyond what Story.astro already contains.
+ * PROSE CONSTRAINT: all narrative columns use max-width 680px via .prose class.
+ * BASE_URL (Pitfall 2): all internal hrefs use `${import.meta.env.BASE_URL}slug`.
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Story from '../components/sections/Story.astro';
+import SectionWrapper from '../components/ui/SectionWrapper.astro';
+import Button from '../components/ui/Button.astro';
+import Newsletter from '../components/sections/Newsletter.astro';
+import { nl } from '../i18n/nl';
+
+const mv = nl.mijnVerhaal;
+---
+
+<BaseLayout
+  title={mv.pageTitle}
+  description={mv.pageDesc}
+>
+
+  <!--
+    Opening dark band — the Story.astro component reused wholesale.
+    id="verhaal" is the in-page anchor. On this page it becomes the page-top band
+    rather than an in-page scroll target.
+    The teaser link inside Story.astro is conditionally hidden on this page
+    (see Story.astro — checked via Astro.url.pathname on that component).
+  -->
+  <Story />
+
+  <!-- ── Arc 1: De start van Soly ─────────────────────────────────────── -->
+  <SectionWrapper id="verhaal-start" labelledBy="verhaal-start-heading" variant="default">
+    <div class="verhaal-section">
+      <p class="verhaal-eyebrow">{mv.arc1Eyebrow}</p>
+      <h2 id="verhaal-start-heading" class="verhaal-heading">{mv.arc1Heading}</h2>
+      <div class="prose">
+        {mv.arc1Body.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </SectionWrapper>
+
+  <!-- ── Arc 2: Internationale expansie ──────────────────────────────── -->
+  <SectionWrapper id="verhaal-expansie" labelledBy="verhaal-expansie-heading" variant="surface">
+    <div class="verhaal-section">
+      <p class="verhaal-eyebrow">{mv.arc2Eyebrow}</p>
+      <h2 id="verhaal-expansie-heading" class="verhaal-heading">{mv.arc2Heading}</h2>
+      <div class="prose">
+        {mv.arc2Body.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </SectionWrapper>
+
+  <!-- ── Arc 3: Het faillissement ─────────────────────────────────────── -->
+  <SectionWrapper id="verhaal-faillissement" labelledBy="verhaal-faillissement-heading" variant="default">
+    <div class="verhaal-section">
+      <p class="verhaal-eyebrow">{mv.arc3Eyebrow}</p>
+      <h2 id="verhaal-faillissement-heading" class="verhaal-heading">{mv.arc3Heading}</h2>
+      <div class="prose">
+        {mv.arc3Body.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </SectionWrapper>
+
+  <!-- ── Arc 4: Vandaag ───────────────────────────────────────────────── -->
+  <SectionWrapper id="verhaal-vandaag" labelledBy="verhaal-vandaag-heading" variant="surface">
+    <div class="verhaal-section">
+      <p class="verhaal-eyebrow">{mv.arc4Eyebrow}</p>
+      <h2 id="verhaal-vandaag-heading" class="verhaal-heading">{mv.arc4Heading}</h2>
+      <div class="prose">
+        {mv.arc4Body.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </SectionWrapper>
+
+  <!-- ── Terminal CTA: into the lead flow ──────────────────────────────── -->
+  <SectionWrapper id="verhaal-cta" labelledBy="verhaal-cta-heading" variant="default">
+    <div class="verhaal-cta-section">
+      <p class="verhaal-eyebrow verhaal-cta-eyebrow">{mv.ctaEyebrow}</p>
+      <h2 id="verhaal-cta-heading" class="verhaal-heading verhaal-cta-heading">{mv.ctaHeading}</h2>
+      <div class="verhaal-cta-row">
+        <!--
+          Primary CTA routes into the contact form with type=coaching pre-selected (D-08).
+          BASE_URL prefix required (Pitfall 2): no leading slash after BASE_URL.
+        -->
+        <Button
+          href={`${import.meta.env.BASE_URL}contact?type=coaching`}
+          variant="primary"
+        >
+          {mv.ctaPrimary}
+        </Button>
+        <!--
+          Ghost secondary — links to the Spreker page.
+          Real destination exists (Plan 02), so this is an honest enabled CTA.
+        -->
+        <Button
+          href={`${import.meta.env.BASE_URL}spreker`}
+          variant="secondary"
+        >
+          {mv.ctaSecondary}
+        </Button>
+      </div>
+    </div>
+  </SectionWrapper>
+
+  <!-- ── Newsletter — reused bottom section ────────────────────────────── -->
+  <Newsletter />
+
+</BaseLayout>
+
+<style>
+  /* ── Shared verhaal section layout ─────────────────────────────────── */
+  .verhaal-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);   /* 32px between eyebrow → heading → prose */
+    max-width: 800px;       /* section container cap */
+  }
+
+  /* ── Eyebrow label ──────────────────────────────────────────────────── */
+  .verhaal-eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ── Section heading ────────────────────────────────────────────────── */
+  .verhaal-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-text);
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 1024px) {
+    .verhaal-heading {
+      font-size: var(--text-3xl);
+    }
+  }
+
+  /* ── Prose column — reading-measure constraint (UI-SPEC §Typography) ── */
+  /* max-width: 680px for all long-form narrative columns (never full-width on desktop) */
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);   /* 24px between paragraphs */
+    max-width: 680px;       /* Reading measure (UI-SPEC §Long-form prose constraint) */
+  }
+
+  .prose p {
+    font-family: var(--font-body);
+    font-size: var(--text-base);   /* 16–18px — body size */
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  /* ── Terminal CTA section ───────────────────────────────────────────── */
+  .verhaal-cta-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    max-width: 680px;
+  }
+
+  .verhaal-cta-eyebrow {
+    /* Inherits .verhaal-eyebrow — no override needed */
+  }
+
+  .verhaal-cta-heading {
+    /* Inherits .verhaal-heading */
+  }
+
+  .verhaal-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);   /* 16px between buttons */
+    align-items: center;
+  }
+</style>
