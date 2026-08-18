@@ -1,0 +1,251 @@
+---
+/**
+ * Testimonials.astro
+ * Mixed-size testimonial mosaic — exactly 3 supplied quotes, no fabricated stats.
+ *
+ * Source: PLAN 01-04 Task 2, UI-SPEC §TestimonialsSection (HOME-05),
+ *         CONTEXT D-08 (no fabricated "trusted by N" stat), D-01 (one dark accent card)
+ *         D-02 (single yellow decorative quote mark on the dark card)
+ *         HOME-11 (verbatim attributions)
+ *
+ * Layout (Sevora-style mosaic):
+ *   Desktop — 2 columns: large card (~60%) | stacked small cards (~40%)
+ *   Mobile  — single column, all 3 cards stacked
+ *
+ * Cards:
+ *   - Card 0 (Yang Soo Kloosterhof): LARGE, dark surface (--color-dark-surface),
+ *             single yellow decorative open-quote glyph (D-02 counted accent).
+ *   - Card 1 (Ruud Koornstra): small, light surface (--color-surface)
+ *   - Card 2 (Oranjewoud Export Academy): small, light surface (--color-surface)
+ *
+ * PROHIBITED (D-08, HOME-11):
+ *   - No "trusted by N clients" stat
+ *   - No star ratings
+ *   - Attributions and quote text preserved verbatim from source
+ */
+
+import SectionWrapper from '../ui/SectionWrapper.astro';
+import RevealOnScroll from '../ui/RevealOnScroll.astro';
+import { nl } from '../../i18n/nl';
+
+const { heading, items } = nl.testimonials;
+
+// Fixed card order: large dark card first (Yang Soo Kloosterhof),
+// then two light cards stacked in the right column.
+// Exactly 3 items — hard-coded mosaic for v1 (UI-SPEC zero-one-many).
+type TestimonialItem = { quote: string; name: string; role: string };
+const allItems = items as unknown as TestimonialItem[];
+const [largeCard, ...smallCards] = allItems;
+---
+
+<SectionWrapper id="getuigenissen" labelledBy="testimonials-heading" variant="default">
+  <div class="testimonials">
+
+    <!-- Section heading -->
+    <RevealOnScroll>
+      <h2 id="testimonials-heading" class="testimonials__heading">
+        {heading}
+      </h2>
+    </RevealOnScroll>
+
+    <!-- Mixed-size mosaic grid: 1 large card + 2 small cards -->
+    <div class="testimonials__mosaic">
+
+      <!-- Large dark accent card (D-01, D-02 — one dark accent card in light section) -->
+      <RevealOnScroll delay={80} class="testimonials__large-wrap">
+        <article class="testimonials__card testimonials__card--large">
+          <!-- Single yellow decorative open-quote glyph (D-02 counted accent) -->
+          <!-- NOTE: Yellow #FFDD11 is used here as a DECORATIVE quote mark on the dark card only.
+               It is NOT used as body text (no contrast issue on dark bg). This is 1 of the
+               designated "signature moments" for yellow (UI-SPEC §Color — Accent reserved for). -->
+          <span class="testimonials__quote-mark" aria-hidden="true">&ldquo;</span>
+          <blockquote class="testimonials__quote testimonials__quote--large">
+            <p>{largeCard.quote}</p>
+          </blockquote>
+          <footer class="testimonials__attribution">
+            <cite class="testimonials__name">{largeCard.name}</cite>
+            {largeCard.role && (
+              <span class="testimonials__role">{largeCard.role}</span>
+            )}
+          </footer>
+        </article>
+      </RevealOnScroll>
+
+      <!-- Right column: 2 smaller light cards stacked -->
+      <div class="testimonials__small-column">
+        {smallCards.map((card, i) => (
+          <RevealOnScroll delay={(i + 2) * 80}>
+            <article class="testimonials__card testimonials__card--small">
+              <blockquote class="testimonials__quote testimonials__quote--small">
+                <p>{card.quote}</p>
+              </blockquote>
+              <footer class="testimonials__attribution">
+                <cite class="testimonials__name">{card.name}</cite>
+                {card.role && (
+                  <span class="testimonials__role">{card.role}</span>
+                )}
+              </footer>
+            </article>
+          </RevealOnScroll>
+        ))}
+      </div>
+
+    </div>
+    <!-- End mosaic grid -->
+
+  </div>
+</SectionWrapper>
+
+<style>
+  /* ── Section layout ────────────────────────────────────────────────────── */
+  .testimonials {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xl);
+  }
+
+  .testimonials__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-text);
+    margin: 0;
+    /* Center heading above mosaic on desktop, left-align on mobile */
+    text-align: left;
+  }
+
+  /* ── Mosaic grid ────────────────────────────────────────────────────────── */
+  .testimonials__mosaic {
+    display: grid;
+    grid-template-columns: 1fr;         /* Mobile: single column */
+    gap: var(--space-lg);
+  }
+
+  @media (min-width: 768px) {
+    .testimonials__mosaic {
+      grid-template-columns: 3fr 2fr;   /* Desktop: ~60% large | ~40% small */
+      align-items: stretch;
+    }
+  }
+
+  /* ── Right-column small cards ────────────────────────────────────────── */
+  .testimonials__small-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  /* ── Base card ───────────────────────────────────────────────────────── */
+  .testimonials__card {
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ── Large dark accent card (D-01: single dark card in light section) ── */
+  .testimonials__card--large {
+    background-color: var(--color-dark-surface); /* #222220 */
+    color: var(--color-dark-text);               /* #F5F2EC */
+    position: relative;
+    /* Prominent height on desktop */
+    min-height: 360px;
+  }
+
+  /* ── Small light cards ───────────────────────────────────────────────── */
+  .testimonials__card--small {
+    background-color: var(--color-surface);  /* #F0EDE7 */
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    flex: 1;
+  }
+
+  /* ── Decorative yellow open-quote (D-02: ONE yellow accent on dark card) */
+  .testimonials__quote-mark {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 80px;          /* Large decorative glyph (~64–80px per UI-SPEC) */
+    line-height: 0.8;
+    color: var(--color-accent); /* #FFDD11 — counted yellow signature moment (D-02) */
+    /* Yellow is decorative only — on dark background (#222220) it is
+       not body text, so there is no low-contrast issue for readers. */
+    user-select: none;
+    margin-bottom: var(--space-sm);
+  }
+
+  /* ── Quote text ─────────────────────────────────────────────────────── */
+  .testimonials__quote {
+    margin: 0;
+    font-style: normal;
+    flex: 1;
+  }
+
+  .testimonials__quote p {
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .testimonials__quote--large p {
+    font-size: var(--text-lg);  /* Slightly larger on the prominent card */
+    line-height: 1.6;
+  }
+
+  /* ── Attribution ────────────────────────────────────────────────────── */
+  .testimonials__attribution {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.12); /* subtle divider on dark */
+  }
+
+  .testimonials__card--small .testimonials__attribution {
+    border-top-color: var(--color-border);
+  }
+
+  .testimonials__name {
+    font-style: normal;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: inherit;
+  }
+
+  .testimonials__role {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  /* On dark card, role text should be lighter */
+  .testimonials__card--large .testimonials__role {
+    color: rgba(245, 242, 236, 0.65); /* --color-dark-text at 65% opacity */
+  }
+
+  /* ── Large-wrap fills its grid cell height ───────────────────────────── */
+  .testimonials__large-wrap {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* When RevealOnScroll wraps the large card, the article must fill it */
+  :global(.testimonials__large-wrap > [data-reveal]) {
+    height: 100%;
+  }
+
+  :global(.testimonials__large-wrap .testimonials__card--large) {
+    flex: 1;
+  }
+</style>
