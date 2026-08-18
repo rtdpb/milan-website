@@ -29,11 +29,27 @@ export const SITE_URL = 'https://milanvandermeulen.nl'; // TODO: confirm domain 
 export const TODO_SUBSTACK_URL = 'TODO_SUBSTACK_URL';
 
 /**
- * Contact / lead form destination.
- * TODO Phase 2: replace with the real contact page URL or Calendly link.
- * Used in: Header "Contact" CTA, "Boek lezing" button, "Plan kennismaking" button.
+ * Contact page — resolved in Phase 2 (D-11).
+ * Used in: Header "Contact" CTA, Nav.astro, Samenwerken.astro.
  */
-export const TODO_CONTACT_URL = 'TODO_CONTACT_URL';
+export const CONTACT_URL = '/contact';
+
+/**
+ * Web3Forms access key — generated at web3forms.com against Milan's email.
+ * TODO Phase 2: replace with real key from Web3Forms dashboard.
+ * Safe to commit once real: it is a public client-side identifier, not a secret.
+ * Used in: src/components/forms/ContactForm.astro hidden input[name="access_key"]
+ */
+export const TODO_WEB3FORMS_ACCESS_KEY = 'TODO_WEB3FORMS_ACCESS_KEY';
+
+/**
+ * Calendly scheduling link for "Plan kennismaking".
+ * TODO: supply when Milan creates a Calendly account.
+ * Seam: when supplied, the "Plan kennismaking" CTA href changes from
+ *   /contact?type=coaching  →  TODO_CALENDLY_URL
+ * Used in: src/pages/coaching.astro CTA, src/components/sections/Samenwerken.astro
+ */
+export const TODO_CALENDLY_URL = 'TODO_CALENDLY_URL';
 
 /**
  * LinkedIn profile URL.

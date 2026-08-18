@@ -28,7 +28,7 @@ import SectionWrapper from '../ui/SectionWrapper.astro';
 import Card from '../ui/Card.astro';
 import Button from '../ui/Button.astro';
 import { nl } from '../../i18n/nl';
-import { TODO_SUBSTACK_URL, TODO_CONTACT_URL } from '../../config';
+import { TODO_SUBSTACK_URL, CONTACT_URL } from '../../config';
 
 /*
  * Commitment ladder data — structured from nl.samenwerken.
@@ -51,7 +51,7 @@ const ladderCards = [
     title:         nl.samenwerken.cards[1].title,   // "Presentatie / Lezing"
     description:   nl.samenwerken.cards[1].description,
     cta:           nl.samenwerken.cards[1].cta,     // "Boek lezing"
-    placeholderReason: `Contactpagina nog niet gebouwd — wordt ingevuld in fase 2 (${TODO_CONTACT_URL})`,
+    placeholderReason: `Contactpagina aanwezig — wordt gekoppeld in fase 2 (${CONTACT_URL})`,
     ariaId:        'samenwerken-card-2',
   },
   {
@@ -59,7 +59,7 @@ const ladderCards = [
     title:         nl.samenwerken.cards[2].title,   // "1:1 Coaching"
     description:   nl.samenwerken.cards[2].description,
     cta:           nl.samenwerken.cards[2].cta,     // "Plan kennismaking"
-    placeholderReason: `Contactpagina nog niet gebouwd — wordt ingevuld in fase 2 (${TODO_CONTACT_URL})`,
+    placeholderReason: `Contactpagina aanwezig — wordt gekoppeld in fase 2 (${CONTACT_URL})`,
     ariaId:        'samenwerken-card-3',
   },
 ] as const;

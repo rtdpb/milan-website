@@ -173,6 +173,26 @@ export const nl = {
     copyright:  '© 2026 Milan van der Meulen. Alle rechten voorbehouden.',
   },
 
+  // ── Contact Page (PAGE-04) ──────────────────────────────────────────────
+  contact: {
+    pageTitle:      'Contact — Milan van der Meulen',
+    pageDesc:       'Neem contact op voor coaching, een lezing of een algemene vraag. Milan reageert persoonlijk.',
+    heading:        'Laten we kennismaken',
+    subtext:        'Vul het formulier in en ik neem zo snel mogelijk contact met je op.',
+    labelOnderwerp: 'Onderwerp',
+    optionAlgemeen: 'Algemeen',
+    optionLezing:   'Boek lezing',
+    optionCoaching: 'Plan kennismaking',
+    labelNaam:      'Naam',
+    labelEmail:     'Mailadres',
+    labelBericht:   'Bericht',
+    ctaSubmit:      'Verstuur bericht',
+    ctaSubmitting:  'Versturen…',
+    successMsg:     'Bedankt! Ik neem snel contact met je op.',
+    errorMsg:       'Er is iets misgegaan. Probeer het opnieuw of mail me direct.',
+    errorNetwork:   'Geen verbinding. Controleer je internetverbinding en probeer opnieuw.',
+  },
+
   // ── Common / Shared ──────────────────────────────────────────────────────
   common: {
     /** Visible marker pill on placeholder cards (UI-SPEC §Copywriting Contract) */

@@ -24,7 +24,7 @@
  */
 
 import { nl } from '../../i18n/nl';
-import { SITE_NAME, TODO_CONTACT_URL, TODO_LINKEDIN_URL, DISABLED_TOOLTIP } from '../../config';
+import { SITE_NAME, CONTACT_URL, TODO_LINKEDIN_URL, DISABLED_TOOLTIP } from '../../config';
 
 // Nav items: all disabled in Phase 1 — pages arrive in Phase 2+
 const navItems = [
@@ -82,7 +82,7 @@ const navItems = [
         role="button"
         aria-disabled="true"
         tabindex="-1"
-        data-placeholder={`Contact bestemming: ${TODO_CONTACT_URL} — wordt aangesloten in fase 2`}
+        data-placeholder={`Contact bestemming: ${CONTACT_URL} — wordt aangesloten in fase 2`}
         title={DISABLED_TOOLTIP}
       >
         {nl.nav.contact}
