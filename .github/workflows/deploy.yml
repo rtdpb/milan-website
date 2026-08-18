@@ -1,0 +1,57 @@
+# .github/workflows/deploy.yml
+# Deploys Milan van der Meulen's website to GitHub Pages on push to main,
+# and rebuilds daily to refresh the Substack RSS feed (NEWS-03 / D-02).
+#
+# Source: Phase 3 PLAN 03-01 Task 2, RESEARCH §Pattern 4, PATTERNS §deploy.yml
+# Site: https://rtdpb.github.io/milan-website/ (astro.config.mjs base: '/milan-website/')
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    # Daily at 06:00 UTC — triggers `astro build` which re-fetches the Substack RSS feed,
+    # keeping the homepage "Recente artikelen" section automatically fresh (NEWS-03 / D-02).
+    - cron: '0 6 * * *'
+    # Note: GitHub automatically disables scheduled workflows on public repos with no
+    # repository activity for 60+ days (RESEARCH Pitfall 5). Keep the repo active with
+    # periodic pushes, or use the workflow_dispatch trigger below to manually re-enable.
+  workflow_dispatch:   # Manual trigger: useful for testing and re-enabling after inactivity
+
+# Permissions required for GitHub Pages OIDC deploy
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Serialize concurrent runs so a scheduled cron rebuild and a push-triggered deploy
+# do not collide. cancel-in-progress: false ensures both complete (news stays fresh).
+# This addresses the concurrency edge in NEWS-01 and NEWS-03.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build site
+        # withastro/action installs Node.js, runs `astro build`, and uploads the
+        # dist/ artifact to GitHub Pages. The build-time fetch() in Articles.astro
+        # runs here — this is what makes the RSS feed refresh "automatic" (D-02).
+        uses: withastro/action@v3
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
