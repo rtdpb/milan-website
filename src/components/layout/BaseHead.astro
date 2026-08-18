@@ -1,0 +1,92 @@
+---
+/**
+ * BaseHead.astro
+ * Centralised <head> component for all pages.
+ * Source: RESEARCH §Pattern 4 (SEO BaseHead), §SEO/Metadata Checklist
+ * Emits: charset, viewport, title, description, canonical, OG, Twitter,
+ *        JSON-LD Person schema, font preloads, favicon.
+ */
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  ogImage = '/og-image.jpg',
+} = Astro.props;
+
+// Canonical URL — requires `site` set in astro.config.mjs (RESEARCH Pitfall 3)
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// OG image absolute URL
+const ogImageURL = new URL(ogImage, Astro.site);
+
+/**
+ * JSON-LD Person schema — establishes Milan's authorship.
+ * sameAs: TODO — add LinkedIn URL once supplied (RESEARCH Open Q4 / D-12).
+ * jobTitle from UI-SPEC §SEO.
+ */
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Milan van der Meulen',
+  jobTitle: 'Ondernemer, coach en spreker',
+  url: Astro.site?.toString(),
+  // TODO: replace TODO_LINKEDIN_URL with actual LinkedIn URL when supplied (D-12)
+  sameAs: [] as string[],
+};
+---
+
+<!-- Character encoding and viewport -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Primary meta -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Favicon (interim SVG — replace with brand favicon when supplied) -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!--
+  Font preloads — CRITICAL for FND-07 / LCP performance.
+  Preloading the WOFF2 files prevents FOUT on the first render.
+  Both files must match the @font-face src URLs in tokens.css exactly.
+  Source: RESEARCH §Fonts, §Pattern 6, §Common Pitfalls 7.
+-->
+<link
+  rel="preload"
+  href="/fonts/Fraunces-subset.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/DMSans-subset.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:locale" content="nl_NL" />
+<meta property="og:site_name" content="Milan van der Meulen" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />
+
+<!-- JSON-LD Person Schema (FND-05 — establishes authorship) -->
+<script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />

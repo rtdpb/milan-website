@@ -1,0 +1,62 @@
+---
+/**
+ * BaseLayout.astro
+ * Page shell for all pages. Imports global CSS (tokens + reset), renders
+ * <html lang="nl">, BaseHead, skip-link, and a <main> landmark for content.
+ *
+ * Source: RESEARCH §Architecture Patterns, §Accessibility Baseline; D-17
+ *
+ * Navigation and Footer are added in Plan 02.
+ * Leave clear slots/comments for them — do NOT stub fake nav here.
+ */
+import BaseHead from '../components/layout/BaseHead.astro';
+import '../styles/global.css'; // Global token CSS applied to every component
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  // Defaults sourced from UI-SPEC §SEO / Metadata Contract
+  title = 'Milan van der Meulen — Founder Coach & Spreker',
+  description = 'Milan van der Meulen is een ervaren ondernemer, founder coach en spreker. Hij hielp Soly groeien naar 9 landen en 180 medewerkers. Nu helpt hij andere founders schalen zonder zichzelf te verliezen.',
+  ogImage,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <BaseHead title={title} description={description} ogImage={ogImage} />
+  </head>
+  <body>
+    <!--
+      Skip-to-content link (a11y FND-06).
+      Visually hidden until focused — allows keyboard/screen-reader users
+      to bypass navigation and jump to main content directly.
+      Styled in global.css (.skip-link).
+    -->
+    <a href="#main-content" class="skip-link">Ga naar inhoud</a>
+
+    <!--
+      TODO Plan 02: <SiteHeader /> goes here
+      (Nav, Contact CTA, NL/EN switch, LinkedIn icon — all placeholder/disabled in Phase 1)
+    -->
+
+    <!--
+      Main content landmark — every page has exactly one <main>.
+      id="main-content" is the skip-link target.
+      aria-label not needed here because there is only one <main> per page.
+    -->
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <!--
+      TODO Plan 02: <SiteFooter /> goes here
+      (Nav links, LinkedIn, legal placeholder content)
+    -->
+  </body>
+</html>
