@@ -1,22 +1,31 @@
 ---
 /**
  * index.astro — Dutch Homepage (NL default locale, route: /)
- * The Walking Skeleton close (SKELETON.md): proves the full stack end-to-end.
  *
- * config → BaseLayout → tokens → astro:assets image pipeline → index → Hero
+ * Full homepage assembly — Plan 01-06.
+ * Section order (docx canonical order, CONTEXT.md §Section order):
+ *   BaseLayout (provides Header/Nav + Footer)
+ *   └─ Hero           — LCP image, H1, CTAs, USPs (Plan 01)
+ *   └─ PressStrip     — "Bekend van" slim credibility band (Plan 03)
+ *   └─ Samenwerken    — 3-card commitment ladder (Plan 03)
+ *   └─ Testimonials   — mixed-size mosaic, 3 supplied quotes (Plan 04)
+ *   └─ Story          — dark band personal story, id="verhaal" (Plan 04)
+ *   └─ Newsletter     — Substack signup, honest disabled submit (Plan 05)
+ *   └─ Articles       — 3 placeholder article cards (Plan 05)
  *
- * This is the NL default route — no /nl/ prefix (D-16, FND-09, RESEARCH §Pattern 3).
- * Phase-4 EN expansion will add prefixDefaultLocale: true; NL then moves to /nl/*.
+ * This is the NL default route — no /nl/ prefix (D-16, FND-09).
+ * Phase-4 EN expansion will add prefixDefaultLocale: true; NL moves to /nl/*.
  *
- * Subsequent plans add sections here as horizontal slices:
- * - Plan 02: SiteHeader + SiteFooter + reusable UI kit
- * - Plan 03: PressStrip + Samenwerken
- * - Plan 04: Testimonials + StorySection (adds #verhaal anchor)
- * - Plan 05: NewsletterSection + ArticlesSection
- * - Plan 06: Animation/a11y/SEO/perf polish
+ * CTA anchor: hero secondary "Mijn verhaal" targets #verhaal → Story section id.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/sections/Hero.astro';
+import PressStrip from '../components/sections/PressStrip.astro';
+import Samenwerken from '../components/sections/Samenwerken.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import Story from '../components/sections/Story.astro';
+import Newsletter from '../components/sections/Newsletter.astro';
+import Articles from '../components/sections/Articles.astro';
 ---
 
 <BaseLayout
@@ -24,17 +33,50 @@ import Hero from '../components/sections/Hero.astro';
   description="Milan van der Meulen is een ervaren ondernemer, founder coach en spreker. Hij hielp Soly groeien naar 9 landen en 180 medewerkers. Nu helpt hij andere founders schalen zonder zichzelf te verliezen."
 >
   <!--
-    Hero section — LCP image, H1, CTAs, USPs.
-    This is the primary above-the-fold content for Dutch visitors.
+    Hero section — LCP image, H1, CTAs ("Mijn verhaal" anchors to #verhaal), USPs.
+    Above-the-fold. Eager + fetchpriority=high for LCP (FND-07, HOME-02).
   -->
   <Hero />
 
   <!--
-    TODO Plan 03: <PressStrip /> — "Bekend van" credibility band (HOME-03)
-    TODO Plan 03: <SamenwerkSection /> — 3-card commitment ladder (HOME-04)
-    TODO Plan 04: <TestimonialsSection /> — mixed-size mosaic (HOME-05)
-    TODO Plan 04: <StorySection id="verhaal" /> — dark band personal story (HOME-06)
-    TODO Plan 05: <NewsletterSection /> — Substack signup (HOME-07)
-    TODO Plan 05: <ArticlesSection /> — 3 placeholder article cards (HOME-08)
+    PressStrip — "Bekend van" slim credibility band (HOME-03, D-06).
+    Sits directly under the hero (slim, adjacent visual).
+    Logo chips are text/wordmark placeholders — swap when real assets arrive (D-11).
   -->
+  <PressStrip />
+
+  <!--
+    Samenwerken — 3-card commitment ladder (HOME-04, D-07).
+    Card order: Nieuwsbrief (01) → Presentatie/Lezing (02) → 1:1 Coaching (03).
+    All CTAs honestly disabled (HOME-10, D-12).
+  -->
+  <Samenwerken />
+
+  <!--
+    Testimonials — mixed-size mosaic, 3 supplied quotes (HOME-05, D-08).
+    Verbatim attributions: Yang Soo Kloosterhof, Ruud Koornstra, Oranjewoud Export Academy.
+    No fabricated stats (D-08). Scroll-reveal animations (FND-08).
+  -->
+  <Testimonials />
+
+  <!--
+    Story — full-width dark personal story band (HOME-06, D-01).
+    id="verhaal" — target of the hero secondary "Mijn verhaal" CTA (D-12).
+    One yellow accent: eyebrow left-border only (D-02).
+  -->
+  <Story />
+
+  <!--
+    Newsletter — honest Substack signup section (HOME-07, D-09).
+    naam + mailadres form; submit is disabled pending TODO_SUBSTACK_URL (Phase 3).
+    No fake success state (HOME-10).
+  -->
+  <Newsletter />
+
+  <!--
+    Articles — 3 placeholder article cards (HOME-08, D-10).
+    PlaceholderBadge visible on each card. "Alle artikelen" disabled (HOME-10).
+    Real articles arrive Phase 3 (Substack integration).
+  -->
+  <Articles />
 </BaseLayout>
