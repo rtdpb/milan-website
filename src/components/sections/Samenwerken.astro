@@ -9,11 +9,11 @@
  *   3. 1:1 Coaching (intensief traject — "Werk met mij")
  *
  * HONESTY RULE (HOME-10, D-12):
- * All 3 CTAs are honestly disabled — destinations unknown / deferred:
- *   - Nieuwsbrief CTA → TODO_SUBSTACK_URL (Phase 3)
- *   - Lezing CTA → TODO_CONTACT_URL (Phase 2)
- *   - Coaching CTA → TODO_CONTACT_URL (Phase 2)
- * Each button uses aria-disabled="true" with no href="#" or fake success state.
+ * Phase 2 Plan 03 enables Lezing and Coaching CTAs; Nieuwsbrief stays disabled:
+ *   - Nieuwsbrief CTA → TODO_SUBSTACK_URL (Phase 3 — still disabled)
+ *   - Lezing CTA → /contact?type=lezing (enabled, D-08)
+ *   - Coaching CTA → /contact?type=coaching (enabled, D-08; Calendly seam D-09)
+ * No href="#" on any CTA (HOME-10, D-12).
  *
  * PHOTOS (optional per ASSETS.md):
  * milan-speaking-graph.jpg (Lezing card) and milan-networking.jpg (Coaching card)
@@ -28,7 +28,7 @@ import SectionWrapper from '../ui/SectionWrapper.astro';
 import Card from '../ui/Card.astro';
 import Button from '../ui/Button.astro';
 import { nl } from '../../i18n/nl';
-import { TODO_SUBSTACK_URL, CONTACT_URL } from '../../config';
+import { TODO_SUBSTACK_URL } from '../../config';
 
 /*
  * Commitment ladder data — structured from nl.samenwerken.
@@ -39,30 +39,39 @@ import { TODO_SUBSTACK_URL, CONTACT_URL } from '../../config';
  */
 const ladderCards = [
   {
-    eyebrow:       nl.samenwerken.ladderEyebrow1,  // "01 — Begin hier gratis"
-    title:         nl.samenwerken.cards[0].title,   // "Nieuwsbrief"
-    description:   nl.samenwerken.cards[0].description,
-    cta:           nl.samenwerken.cards[0].cta,     // "Schrijf je gratis in"
+    eyebrow:           nl.samenwerken.ladderEyebrow1,  // "01 — Begin hier gratis"
+    title:             nl.samenwerken.cards[0].title,   // "Nieuwsbrief"
+    description:       nl.samenwerken.cards[0].description,
+    cta:               nl.samenwerken.cards[0].cta,     // "Schrijf je gratis in"
+    disabled:          true,
     placeholderReason: `Substack-URL nog niet bekend — wordt ingevuld in fase 3 (${TODO_SUBSTACK_URL})`,
-    ariaId:        'samenwerken-card-1',
+    href:              undefined,
+    ariaId:            'samenwerken-card-1',
   },
   {
-    eyebrow:       nl.samenwerken.ladderEyebrow2,  // "02 — Ga dieper"
-    title:         nl.samenwerken.cards[1].title,   // "Presentatie / Lezing"
-    description:   nl.samenwerken.cards[1].description,
-    cta:           nl.samenwerken.cards[1].cta,     // "Boek lezing"
-    placeholderReason: `Contactpagina aanwezig — wordt gekoppeld in fase 2 (${CONTACT_URL})`,
-    ariaId:        'samenwerken-card-2',
+    eyebrow:           nl.samenwerken.ladderEyebrow2,  // "02 — Ga dieper"
+    title:             nl.samenwerken.cards[1].title,   // "Presentatie / Lezing"
+    description:       nl.samenwerken.cards[1].description,
+    cta:               nl.samenwerken.cards[1].cta,     // "Boek lezing"
+    disabled:          false,
+    // Enabled: /contact?type=lezing pre-selects the Onderwerp select (D-08, Plan 02-01 T-2-04)
+    href:              `${import.meta.env.BASE_URL}contact?type=lezing`,
+    placeholderReason: undefined,
+    ariaId:            'samenwerken-card-2',
   },
   {
-    eyebrow:       nl.samenwerken.ladderEyebrow3,  // "03 — Werk met mij"
-    title:         nl.samenwerken.cards[2].title,   // "1:1 Coaching"
-    description:   nl.samenwerken.cards[2].description,
-    cta:           nl.samenwerken.cards[2].cta,     // "Plan kennismaking"
-    placeholderReason: `Contactpagina aanwezig — wordt gekoppeld in fase 2 (${CONTACT_URL})`,
-    ariaId:        'samenwerken-card-3',
+    eyebrow:           nl.samenwerken.ladderEyebrow3,  // "03 — Werk met mij"
+    title:             nl.samenwerken.cards[2].title,   // "1:1 Coaching"
+    description:       nl.samenwerken.cards[2].description,
+    cta:               nl.samenwerken.cards[2].cta,     // "Plan kennismaking"
+    disabled:          false,
+    // Enabled: /contact?type=coaching pre-selects the Onderwerp select (D-08, Plan 02-01 T-2-04)
+    // Calendly seam: when TODO_CALENDLY_URL is supplied, swap href to TODO_CALENDLY_URL (D-09)
+    href:              `${import.meta.env.BASE_URL}contact?type=coaching`,
+    placeholderReason: undefined,
+    ariaId:            'samenwerken-card-3',
   },
-] as const;
+];
 ---
 
 <!-- Samenwerken: 3-card commitment ladder (HOME-04, D-07) -->
@@ -94,16 +103,17 @@ const ladderCards = [
             </p>
 
             <!--
-              Honestly disabled CTA (HOME-10, D-12):
-              - aria-disabled="true" + no href="#" or fake success state
-              - placeholderReason surfaced as data-placeholder + title tooltip
-              - TODO comment indicates destination + phase when it will be wired
+              CTA — enabled or disabled per card:
+              - Nieuwsbrief: aria-disabled (Phase 3 — TODO_SUBSTACK_URL pending)
+              - Lezing: enabled → /contact?type=lezing (D-08)
+              - Coaching: enabled → /contact?type=coaching (D-08, D-09 Calendly seam)
+              No href="#" on any CTA (HOME-10, D-12).
             -->
-            <!-- TODO: wire destination when available — see placeholderReason prop -->
             <div class="samenwerken__cta-wrap">
               <Button
                 variant="secondary"
-                disabled={true}
+                disabled={card.disabled}
+                href={card.href}
                 placeholderReason={card.placeholderReason}
               >
                 {card.cta}

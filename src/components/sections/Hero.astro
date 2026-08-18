@@ -43,20 +43,16 @@ import heroImage from '../../assets/photos/milan-hero-stage.jpg';
       <!-- CTA row -->
       <div class="hero__ctas" role="group" aria-label="Acties">
         <!--
-          Primary CTA: Contact — disabled (Plan 02 adds Button.astro + contact destination).
-          Rendered as span role=button aria-disabled=true (D-12 / HOME-10).
-          TODO Plan 02: replace with Button component when contact destination is known.
+          Primary CTA: Contact — enabled in Phase 2 Plan 03 (D-11).
+          Real <a> link to /contact (BASE_URL prefixed — Pitfall 2).
+          No aria-disabled; no tabindex=-1; no data-placeholder.
         -->
-        <span
-          class="hero__cta-primary btn btn--primary btn--disabled"
-          role="button"
-          aria-disabled="true"
-          tabindex="-1"
-          title="Binnenkort beschikbaar"
-          data-placeholder="Contact page not yet built — arrives in Phase 2"
+        <a
+          href={`${import.meta.env.BASE_URL}contact`}
+          class="hero__cta-primary btn btn--primary"
         >
           Contact
-        </span>
+        </a>
 
         <!--
           Secondary CTA: Mijn verhaal

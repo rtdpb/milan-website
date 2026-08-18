@@ -32,6 +32,14 @@ import portraitSrc from '../../assets/photos/milan-story-portrait.jpg';
 import missionSrc from '../../assets/photos/milan-energy-mission.jpg';
 
 const { eyebrow, heading, body, signature, imageAlt } = nl.story;
+
+// Show the "Lees mijn hele verhaal" teaser link only on pages OTHER than /mijn-verhaal.
+// On /mijn-verhaal the Story component is the opening band — a self-link would be circular.
+// Checked at build time (baked into static HTML per page via Astro.url.pathname).
+// Internal href uses BASE_URL template literal (Pitfall 2: no leading slash after BASE_URL).
+const currentPath = Astro.url.pathname;
+const isMijnVerhaalPage = currentPath.includes('mijn-verhaal');
+const teaserLink = `${import.meta.env.BASE_URL}mijn-verhaal`;
 ---
 
 <SectionWrapper id="verhaal" labelledBy="story-heading" variant="dark">
@@ -86,6 +94,18 @@ const { eyebrow, heading, body, signature, imageAlt } = nl.story;
           Founder, Coach &amp; Spreker
         </p>
       </div>
+
+      <!--
+        Story teaser link — "Lees mijn hele verhaal →" (UI-SPEC §Copywriting Contract)
+        Rendered only on the homepage (and other pages using this component), NOT on
+        /mijn-verhaal itself (isMijnVerhaalPage guard — prevents a circular self-link).
+        href uses BASE_URL template literal (Pitfall 2).
+      -->
+      {!isMijnVerhaalPage && (
+        <a href={teaserLink} class="story__teaser-link">
+          {nl.mijnVerhaal.teaserLink}
+        </a>
+      )}
 
     </div>
     <!-- End reading column -->
@@ -281,5 +301,30 @@ const { eyebrow, heading, body, signature, imageAlt } = nl.story;
     object-fit: cover;
     border-radius: var(--radius-xl);  /* Generous rounding for editorial feel */
     display: block;
+  }
+
+  /* ── Story teaser link (homepage only — guard in frontmatter) ──────────── */
+  /* Ghost link style on dark background (D-02: no yellow accent added here) */
+  .story__teaser-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-dark-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    letter-spacing: 0.01em;
+    transition: opacity var(--duration-fast) var(--ease-out);
+    margin-top: var(--space-sm);  /* 8px breathing room below signature block */
+  }
+
+  .story__teaser-link:hover {
+    opacity: 0.75;
+  }
+
+  .story__teaser-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 </style>
