@@ -1,18 +1,40 @@
 ---
 /**
  * index.astro — Dutch Homepage (NL default locale, route: /)
- * Task 3 stub: minimal page to verify BaseLayout + BaseHead build correctly.
- * Task 4 replaces this with the full Hero + route composition.
+ * The Walking Skeleton close (SKELETON.md): proves the full stack end-to-end.
+ *
+ * config → BaseLayout → tokens → astro:assets image pipeline → index → Hero
+ *
+ * This is the NL default route — no /nl/ prefix (D-16, FND-09, RESEARCH §Pattern 3).
+ * Phase-4 EN expansion will add prefixDefaultLocale: true; NL then moves to /nl/*.
+ *
+ * Subsequent plans add sections here as horizontal slices:
+ * - Plan 02: SiteHeader + SiteFooter + reusable UI kit
+ * - Plan 03: PressStrip + Samenwerken
+ * - Plan 04: Testimonials + StorySection (adds #verhaal anchor)
+ * - Plan 05: NewsletterSection + ArticlesSection
+ * - Plan 06: Animation/a11y/SEO/perf polish
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
 ---
 
 <BaseLayout
   title="Milan van der Meulen — Founder Coach & Spreker"
   description="Milan van der Meulen is een ervaren ondernemer, founder coach en spreker. Hij hielp Soly groeien naar 9 landen en 180 medewerkers. Nu helpt hij andere founders schalen zonder zichzelf te verliezen."
 >
-  <!-- Hero section rendered in Task 4 -->
-  <p style="padding: 4rem; font-family: var(--font-body); color: var(--color-text);">
-    Pagina wordt gebouwd&hellip;
-  </p>
+  <!--
+    Hero section — LCP image, H1, CTAs, USPs.
+    This is the primary above-the-fold content for Dutch visitors.
+  -->
+  <Hero />
+
+  <!--
+    TODO Plan 03: <PressStrip /> — "Bekend van" credibility band (HOME-03)
+    TODO Plan 03: <SamenwerkSection /> — 3-card commitment ladder (HOME-04)
+    TODO Plan 04: <TestimonialsSection /> — mixed-size mosaic (HOME-05)
+    TODO Plan 04: <StorySection id="verhaal" /> — dark band personal story (HOME-06)
+    TODO Plan 05: <NewsletterSection /> — Substack signup (HOME-07)
+    TODO Plan 05: <ArticlesSection /> — 3 placeholder article cards (HOME-08)
+  -->
 </BaseLayout>

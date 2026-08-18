@@ -1,0 +1,289 @@
+---
+/**
+ * Hero.astro — Split-card Hero Section (HOME-02)
+ * Source: PLAN 01-01 Task 4, UI-SPEC §<HeroSection>, RESEARCH §Pattern 2
+ *
+ * Layout: Two columns on desktop (text left, photo card right).
+ * Stacks to single column on mobile — text first, then image (D-04).
+ * The hero photo is the LCP image: eager + fetchpriority="high" (D-05 / FND-10).
+ *
+ * CTA handling (D-12, HOME-10):
+ * - Primary "Contact": disabled affordance — real Button component arrives in Plan 02.
+ *   Uses <span role="button" aria-disabled="true"> with title attribute.
+ *   Per PLAN: honest disabled state — no fake href on disabled elements.
+ * - Secondary "Mijn verhaal": in-page anchor to #verhaal (story section in Plan 04).
+ *   This is a legitimate on-page anchor per D-12.
+ */
+import { Picture } from 'astro:assets';
+import heroImage from '../../assets/photos/milan-hero-stage.jpg';
+---
+
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero__container container">
+    <!-- ── Left column: Text content ─────────────────────────────────────── -->
+    <div class="hero__text">
+      <!-- Eyebrow label — establishes Milan's roles at a glance -->
+      <p class="hero__eyebrow eyebrow">Founder · Coach · Spreker</p>
+
+      <!--
+        Page heading (a11y: exactly one heading level 1 per page).
+        "Je bedrijf schalen, zonder jezelf te verliezen" — copy preserved from docx (D-17 / HOME-11).
+        Display size serif: --font-display + --text-5xl fluid scale.
+      -->
+      <h1 id="hero-heading" class="hero__title">
+        Je bedrijf schalen, zonder jezelf te verliezen
+      </h1>
+
+      <!-- Subtext body copy (UI-SPEC §<HeroSection> left column item 3) -->
+      <p class="hero__subtext">
+        Na negen landen, 180 medewerkers en een miljoen zonnepanelen weet ik wat er misgaat als je
+        als founder te snel groeit. Nu help ik andere ondernemers schalen op hun eigen voorwaarden.
+      </p>
+
+      <!-- CTA row -->
+      <div class="hero__ctas" role="group" aria-label="Acties">
+        <!--
+          Primary CTA: Contact — disabled (Plan 02 adds Button.astro + contact destination).
+          Rendered as span role=button aria-disabled=true (D-12 / HOME-10).
+          TODO Plan 02: replace with Button component when contact destination is known.
+        -->
+        <span
+          class="hero__cta-primary btn btn--primary btn--disabled"
+          role="button"
+          aria-disabled="true"
+          tabindex="-1"
+          title="Binnenkort beschikbaar"
+          data-placeholder="Contact page not yet built — arrives in Phase 2"
+        >
+          Contact
+        </span>
+
+        <!--
+          Secondary CTA: Mijn verhaal
+          In-page anchor to #verhaal (StorySection, Plan 04).
+          Legitimate on-page anchor per D-12.
+        -->
+        <a href="#verhaal" class="hero__cta-secondary btn btn--secondary">
+          Mijn verhaal
+        </a>
+      </div>
+
+      <!-- USP row: three proof points separated by a bullet (UI-SPEC §<HeroSection>) -->
+      <div class="hero__usps" role="list" aria-label="Resultaten">
+        <span class="hero__usp" role="listitem">12+ jaar</span>
+        <span class="hero__usp-sep" aria-hidden="true">·</span>
+        <span class="hero__usp" role="listitem">180 medewerkers</span>
+        <span class="hero__usp-sep" aria-hidden="true">·</span>
+        <span class="hero__usp" role="listitem">9 markten</span>
+      </div>
+    </div>
+
+    <!-- ── Right column: Hero photo card ─────────────────────────────────── -->
+    <div class="hero__image-card">
+      <!--
+        LCP image — astro:assets <Picture> (RESEARCH §Pattern 2)
+        - priority: sets loading="eager" + fetchpriority="high" (D-05 / FND-10 / HOME-02)
+        - formats: AVIF first, WebP fallback (no JPEG fallback — avoids >300KB derivative; WebP
+          is widely supported in all modern browsers)
+        - widths: responsive srcset [400, 800, 1200, 1600] (UI-SPEC §Image Pipeline Contract)
+        - sizes: 100vw on mobile, 50vw on desktop (matches split-card layout)
+        - alt: Dutch descriptive text per UI-SPEC §Image Pipeline Contract
+        Source: RESEARCH §Pattern 2; docs.astro.build/en/reference/modules/astro-assets/
+      -->
+      <Picture
+        src={heroImage}
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        widths={[400, 800, 1200, 1600]}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        alt="Milan van der Meulen spreekt op het podium met geel en blauw decor."
+        priority
+        class="hero__photo"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Hero Section Layout ─────────────────────────────────────────────── */
+
+  .hero {
+    padding-block: var(--space-5xl) var(--space-4xl);
+    background-color: var(--color-bg);
+  }
+
+  @media (max-width: 767px) {
+    .hero {
+      padding-block: var(--space-3xl) var(--space-2xl);
+    }
+  }
+
+  /* Two-column grid on desktop (UI-SPEC: split-card layout D-04) */
+  .hero__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3xl);
+    align-items: center;
+  }
+
+  @media (min-width: 1200px) {
+    .hero__container {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3xl);
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .hero__container {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-2xl);
+    }
+  }
+
+  /* ── Text column ─────────────────────────────────────────────────────── */
+
+  .hero__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    /* Text first on all viewport widths (RESEARCH Open Q3 recommendation) */
+    order: 1;
+  }
+
+  .hero__eyebrow {
+    /* Uses global .eyebrow class for consistent label styling */
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--color-text);
+    /* Prevent orphaned single words on final line */
+    text-wrap: balance;
+  }
+
+  .hero__subtext {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    max-width: 560px;
+  }
+
+  /* ── CTA Row ─────────────────────────────────────────────────────────── */
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  /* Shared button base (Plan 02 Button.astro will own this globally) */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 var(--space-lg);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  /* Primary button — yellow (D-02: one of the deliberate accent moments) */
+  .btn--primary {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+    border: none;
+  }
+
+  .btn--primary:not(.btn--disabled):hover {
+    background-color: var(--color-accent-dark);
+    transform: scale(1.02);
+  }
+
+  /* Secondary / ghost button */
+  .btn--secondary {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-text);
+  }
+
+  .btn--secondary:hover {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    transform: scale(1.02);
+  }
+
+  /* Disabled state (D-12, HOME-10) */
+  .btn--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* ── USP Row ─────────────────────────────────────────────────────────── */
+
+  .hero__usps {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-usps-gap); /* 12px — compact on mobile (UI-SPEC exception) */
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .hero__usp {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.04em;
+  }
+
+  .hero__usp-sep {
+    color: var(--color-border);
+    font-size: var(--text-sm);
+  }
+
+  /* ── Image card column ───────────────────────────────────────────────── */
+
+  .hero__image-card {
+    order: 2; /* Image below text on mobile (D-04) */
+    border-radius: var(--radius-card); /* 20px — Sevora-style rounded card */
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    /* Enforce aspect ratio so the card doesn't collapse before image loads */
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Ensure the generated <img> fills the card (object-fit + focal point) */
+  .hero__image-card :global(img.hero__photo) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Keep Milan's face/expression in frame on all crops (RESEARCH Assumption A4) */
+    object-position: center top;
+    display: block;
+  }
+
+  /* Make the <picture> wrapper fill the card too */
+  .hero__image-card :global(picture) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
