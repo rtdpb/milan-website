@@ -1,0 +1,108 @@
+/*
+ * src/styles/reset.css
+ * Milan van der Meulen — Modern CSS Reset
+ * Minimal reset targeting box-model consistency + baseline accessibility.
+ *
+ * IMPORTANT: prefers-reduced-motion global rule at the bottom satisfies
+ * FND-08 (animations respect reduced-motion) site-wide. The IntersectionObserver
+ * island in RevealOnScroll.astro also checks this media query for belt+braces.
+ */
+
+/* ── Box model ──────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ── Margin reset ───────────────────────────────────────────────────────── */
+* {
+  margin: 0;
+}
+
+/* ── Body defaults ──────────────────────────────────────────────────────── */
+html {
+  /* Prevent layout shift from scrollbar appearing */
+  overflow-y: scroll;
+  /* Improve text rendering on macOS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ── Images and media ───────────────────────────────────────────────────── */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ── Typography ─────────────────────────────────────────────────────────── */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Avoid text overflow in narrow containers */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* ── Focus visible (a11y — FND-06) ─────────────────────────────────────── */
+/*
+ * Default focus-visible outline using the brand accent colour.
+ * Applied globally so all interactive elements meet WCAG 2.4.7.
+ * Yellow #FFDD11 on near-black (#1A1A18) ≈ 8:1 contrast (AA large pass).
+ * This counts as one of the deliberate accent colour "signature moments" (D-02).
+ */
+:focus-visible {
+  outline: 2px solid var(--color-accent, #FFDD11);
+  outline-offset: 2px;
+}
+
+/* Remove default focus ring for mouse users (preserved for keyboard users above) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Lists ──────────────────────────────────────────────────────────────── */
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+}
+
+/* ── Reduced Motion (FND-08 — global baseline) ──────────────────────────── */
+/*
+ * This rule neutralises all CSS animations and transitions for users who
+ * prefer reduced motion. It is the global safety net — individual components
+ * with @keyframes or transition properties do not need their own reduced-motion
+ * queries as long as they only use CSS transitions/animations (not JS-driven
+ * inline styles). The IntersectionObserver island additionally gates its
+ * JS-driven opacity/transform changes.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

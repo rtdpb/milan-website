@@ -1,0 +1,124 @@
+/*
+ * src/styles/tokens.css
+ * Milan van der Meulen — Design Tokens
+ * All design system values as CSS custom properties at :root.
+ *
+ * FONTS: Interim pairing — Fraunces (display serif) + DM Sans (grotesque sans).
+ * Both licensed SIL Open Font License 1.1 [ASSUMED — OFL confirmed via Google Fonts].
+ * Self-hosted WOFF2 files in public/fonts/. No Google Fonts CDN links.
+ *
+ * SWAP to Naste when files arrive:
+ *   1. Add @font-face for Naste in this file (below existing @font-face blocks)
+ *   2. Change --font-display value to: 'Naste', Georgia, 'Times New Roman', serif
+ *   That single variable change propagates across all components.
+ */
+
+/* ── @font-face: Self-hosted Interim Fonts ──────────────────────────────── */
+
+/* Fraunces — display/heading serif (D-13) */
+/* [ASSUMED OFL] SIL Open Font License 1.1 — free commercial use */
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/Fraunces-subset.woff2') format('woff2');
+  font-weight: 100 900;      /* variable font — full weight axis */
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF; /* Basic Latin + Latin-1 Supplement (Dutch) */
+}
+
+/* DM Sans — body grotesque sans (D-13) */
+/* [ASSUMED OFL] SIL Open Font License 1.1 — free commercial use */
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/DMSans-subset.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* When Naste WOFF2 files arrive — add @font-face here, then update --font-display below:
+@font-face {
+  font-family: 'Naste';
+  src: url('/fonts/Naste-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+/* ── :root — All Design Tokens ─────────────────────────────────────────── */
+
+:root {
+  /* ── Color Tokens ───────────────────────────────────────────────────── */
+  /* Source: UI-SPEC §Color palette; D-01, D-02, D-03 */
+
+  --color-bg:             #FAF8F4;  /* Off-white/cream — page background (60%) */
+  --color-surface:        #F0EDE7;  /* Card + secondary surface backgrounds (30%) */
+  --color-text:           #1A1A18;  /* Near-black — primary text */
+  --color-text-secondary: #5A5A52;  /* Mid-grey — captions, placeholders */
+  --color-border:         #E2DDD6;  /* Cream-grey dividers and card borders */
+  --color-accent:         #FFDD11;  /* Yellow — single accent (10%), signature moments only */
+  --color-accent-dark:    #C9AC00;  /* Yellow darkened 20% — hover on accent elements */
+  --color-dark-band:      #111110;  /* Near-black — full-width dark section backgrounds */
+  --color-dark-text:      #F5F2EC;  /* Off-white — text on dark bands */
+  --color-dark-surface:   #222220;  /* Dark card background (testimonial accent) */
+  --color-destructive:    #C0392B;  /* Error/destructive — form validation only */
+
+  /* ── Typography — Font Stacks ────────────────────────────────────────── */
+  /* D-13: single swappable variables */
+  /* TODO Naste swap: change --font-display value to 'Naste', Georgia, serif */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* ── Fluid Type Scale (clamp: min vp, preferred, max vp) ─────────────── */
+  /* Source: UI-SPEC §Typography Type Scale + RESEARCH §Pattern 1 */
+  /* Corresponds to: xs=12-14px, sm=14-16px, base=16-18px, lg=18-22px,
+     xl=20-28px, 2xl=24-36px, 3xl=30-48px, 4xl=36-64px, 5xl=48-88px */
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem); /* 12–14px — meta/caption */
+  --text-sm:   clamp(0.875rem, 0.85rem + 0.25vw, 1rem);     /* 14–16px — label/eyebrow */
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem); /* 16–18px — body */
+  --text-lg:   clamp(1.125rem, 1rem    + 0.5vw,  1.375rem); /* 18–22px — subheading sm */
+  --text-xl:   clamp(1.25rem,  1rem    + 0.75vw, 1.75rem);  /* 20–28px — subheading */
+  --text-2xl:  clamp(1.5rem,   1.1rem  + 1vw,    2.25rem);  /* 24–36px — section heading */
+  --text-3xl:  clamp(1.875rem, 1.2rem  + 1.5vw,  3rem);     /* 30–48px — large heading */
+  --text-4xl:  clamp(2.25rem,  1.3rem  + 2vw,    4rem);     /* 36–64px — display small */
+  --text-5xl:  clamp(3rem,     1.5rem  + 3vw,    5.5rem);   /* 48–88px — hero H1 display */
+
+  /* ── Spacing Scale (4-pt base; multiples per UI-SPEC §Spacing Scale) ─── */
+  --space-xs:   4px;    /* Icon-to-label gaps, badge padding */
+  --space-sm:   8px;    /* Button padding vertical, list row gaps */
+  --space-md:   16px;   /* Card inner padding, paragraph gap */
+  --space-lg:   24px;   /* Card vertical padding, component margin-bottom */
+  --space-xl:   32px;   /* Section inner padding mobile */
+  --space-2xl:  48px;   /* Section padding tablet */
+  --space-3xl:  64px;   /* Section padding desktop, hero gap */
+  --space-4xl:  96px;   /* Major section breaks */
+  --space-5xl:  128px;  /* Hero / dark-band vertical padding desktop */
+
+  /* Section exceptions (UI-SPEC §Spacing Scale — Exceptions) */
+  --space-press-strip-y: 20px; /* Press strip slim vertical padding */
+  --space-usps-gap:      12px; /* USP row column gap in hero */
+
+  /* ── Layout ──────────────────────────────────────────────────────────── */
+  --max-width:        1280px;  /* Max content width (wide: extra whitespace beyond) */
+  --content-width:    1024px;  /* Standard content container */
+  --section-padding-y: clamp(var(--space-xl), 6vw, var(--space-5xl));
+
+  /* ── Border Radii ────────────────────────────────────────────────────── */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-card: 20px;  /* Sevora-style rounded photo/content cards */
+
+  /* ── Shadows ─────────────────────────────────────────────────────────── */
+  --shadow-card: 0 2px 16px rgba(26, 26, 24, 0.08), 0 1px 4px rgba(26, 26, 24, 0.04);
+
+  /* ── Motion Tokens ───────────────────────────────────────────────────── */
+  /* Source: RESEARCH §Animations; D-15 — subtle, purposeful */
+  --duration-fast:  150ms;
+  --duration-base:  300ms;
+  --duration-slow:  500ms;
+  --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
+}
