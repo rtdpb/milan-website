@@ -1,0 +1,132 @@
+---
+/**
+ * RevealOnScroll.astro
+ * Scroll-reveal island — fades/translates slotted content in as it enters the viewport.
+ *
+ * Source: PLAN 01-04 Task 1, UI-SPEC §Interaction Contracts (Scroll-Reveal),
+ *         CONTEXT D-15, FND-08
+ *
+ * Usage:
+ *   <RevealOnScroll>
+ *     <YourContent />
+ *   </RevealOnScroll>
+ *
+ *   Staggered cards (pass delay in ms):
+ *   {cards.map((card, i) => (
+ *     <RevealOnScroll delay={i * 80}>
+ *       <Card ... />
+ *     </RevealOnScroll>
+ *   ))}
+ *
+ * Behaviour:
+ *   - Default: opacity 0 → 1, translateY(16px) → translateY(0) over 400ms ease-out.
+ *   - IntersectionObserver triggers at 15% visibility (rootMargin '-40px' bottom).
+ *   - Once visible, the observer disconnects (one-shot reveal).
+ *   - prefers-reduced-motion: CSS forces full visibility instantly; JS skips observer
+ *     entirely so content is NEVER hidden for users who prefer no motion.
+ *
+ * Props:
+ *   delay — stagger delay in ms (default 0). Applied only when motion is allowed.
+ */
+
+interface Props {
+  delay?: number;
+  class?: string;
+}
+
+const { delay = 0, class: extraClass } = Astro.props;
+const classes = ['reveal-wrapper', extraClass].filter(Boolean).join(' ');
+---
+
+<div
+  class={classes}
+  data-reveal
+  data-delay={delay}
+>
+  <slot />
+</div>
+
+<!-- Intersection Observer island — no framework (D-14) -->
+<script>
+  (function initReveal() {
+    /* --- Reduced-motion guard (JS side) ---
+     * If the user prefers reduced motion, we skip the observer entirely.
+     * The CSS below already forces data-reveal elements to be fully visible,
+     * but this guard prevents any JS-side opacity/transform writes from
+     * momentarily fighting the CSS declaration. Content is always accessible.
+     */
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches) return; // Motion disabled — CSS handles visibility
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const el = entry.target as HTMLElement;
+          const delay = Number(el.dataset.delay ?? 0);
+
+          if (delay > 0) {
+            setTimeout(() => el.classList.add('is-visible'), delay);
+          } else {
+            el.classList.add('is-visible');
+          }
+
+          // One-shot: stop observing once revealed
+          observer.unobserve(el);
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px', // Trigger 40px before the bottom edge
+      }
+    );
+
+    // Observe all current and future data-reveal elements
+    // (handles components rendered after DOMContentLoaded)
+    const observeAll = () => {
+      document
+        .querySelectorAll('[data-reveal]:not(.is-visible)')
+        .forEach((el) => observer.observe(el));
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', observeAll);
+    } else {
+      observeAll();
+    }
+  })();
+</script>
+
+<style>
+  /* ── Reveal wrapper — hidden initial state ──────────────────────────────── */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 400ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+      transform 400ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+    /* Ensure content does not cause layout shift during transition */
+    will-change: opacity, transform;
+  }
+
+  /* ── Revealed state ─────────────────────────────────────────────────────── */
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── prefers-reduced-motion: force content fully visible, no transition ─── */
+  /* This is the CSS-side reduced-motion fallback (FND-08, D-15).
+   * Even if JS has not run or is blocked, data-reveal elements are visible.
+   * The JS guard above additionally skips the IntersectionObserver so there
+   * is no risk of a brief hidden state before the media query resolves. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      will-change: auto;
+    }
+  }
+</style>
