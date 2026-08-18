@@ -22,9 +22,6 @@
 import { nl } from '../../i18n/nl';
 import {
   SITE_NAME,
-  TODO_LINKEDIN_URL,
-  TODO_PRIVACY_URL,
-  TODO_TERMS_URL,
   DISABLED_TOOLTIP,
   COPYRIGHT_YEAR,
 } from '../../config';
@@ -92,7 +89,6 @@ const navItems = [
         aria-label={`${nl.nav.linkedin} — ${DISABLED_TOOLTIP}`}
         tabindex="-1"
         title={DISABLED_TOOLTIP}
-        data-placeholder={`LinkedIn URL: ${TODO_LINKEDIN_URL} — wire when available`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +115,6 @@ const navItems = [
           aria-disabled="true"
           tabindex="-1"
           title={DISABLED_TOOLTIP}
-          data-placeholder={`Privacy pagina: ${TODO_PRIVACY_URL} — volgt in fase 2`}
         >
           {nl.footer.privacy}
         </span>
@@ -130,7 +125,6 @@ const navItems = [
           aria-disabled="true"
           tabindex="-1"
           title={DISABLED_TOOLTIP}
-          data-placeholder={`Voorwaarden pagina: ${TODO_TERMS_URL} — volgt in fase 2`}
         >
           {nl.footer.terms}
         </span>

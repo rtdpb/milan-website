@@ -24,7 +24,7 @@
  */
 
 import { nl } from '../../i18n/nl';
-import { SITE_NAME, TODO_LINKEDIN_URL, DISABLED_TOOLTIP } from '../../config';
+import { SITE_NAME, DISABLED_TOOLTIP } from '../../config';
 
 // Phase 3 Plan 03: nieuwsbrief enabled — /nieuwsbrief page now exists; boek still disabled
 const currentPath = Astro.url.pathname;
@@ -66,7 +66,6 @@ const navItems = [
                 role="link"
                 aria-disabled="true"
                 tabindex="-1"
-                data-placeholder={item.reason}
                 title={DISABLED_TOOLTIP}
               >
                 {item.label}
@@ -112,7 +111,6 @@ const navItems = [
         aria-label={`${nl.nav.linkedin} — ${DISABLED_TOOLTIP}`}
         tabindex="-1"
         title={DISABLED_TOOLTIP}
-        data-placeholder={`LinkedIn URL: ${TODO_LINKEDIN_URL} — wire when available`}
       >
         <!-- LinkedIn inline SVG (authorised static markup, T-01-06 accepted) -->
         <svg
