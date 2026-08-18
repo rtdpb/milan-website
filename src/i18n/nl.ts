@@ -193,6 +193,72 @@ export const nl = {
     errorNetwork:   'Geen verbinding. Controleer je internetverbinding en probeer opnieuw.',
   },
 
+  // ── Coaching Page (PAGE-01) ──────────────────────────────────────────────
+  coaching: {
+    pageTitle:  'Coaching voor Founders — Milan van der Meulen',
+    pageDesc:   '1:1 coaching voor founders die klaar zijn voor de volgende stap. Sparringpartner die zelf heeft gebouwd, verloren en weer opgestaan.',
+    eyebrow:    '1:1 Coaching',
+    heading:    'Schalen zonder jezelf te verliezen',
+    body: [
+      'Na tien jaar bouwen, internationaal uitbreiden naar 9 landen, 180 medewerkers aansturen — en uiteindelijk het faillissement doormaken — weet ik wat er op het spel staat als founder. Niet vanuit theorie, maar van dichtbij.',
+      'Ik coach founders die klaar zijn voor de volgende stap, maar voelen dat de huidige manier van werken niet duurzaam is. Samen kijken we wat er werkelijk nodig is: betere delegatie, scherpere keuzes, of juist ruimte om te stoppen met wat niet werkt.',
+      'Dit is geen gestandaardiseerd coachingprogramma. Het is een intensief 1:1 traject waarbij ik als sparringpartner meeden vanuit doorleefde ervaring.',
+    ],
+    offerHeading:  'Wat we samen doen',
+    offerEyebrow:  'Aanpak',
+    offerCards: [
+      {
+        title:       'Scherpe diagnose',
+        description: 'We starten met een eerlijk gesprek over waar je nu staat en wat je tegenhoudt. Geen standaard intake — gewoon een direct gesprek tussen twee ondernemers.',
+      },
+      {
+        title:       'Intensieve begeleiding',
+        description: 'Regelmatige 1:1 sessies, gericht op de keuzes die ertoe doen. Delegeren, groeien, loslaten — wat je nodig hebt, niet wat het programma voorschrijft.',
+      },
+      {
+        title:       'Directe sparring',
+        description: 'Je kunt me bereiken als je een klankbord nodig hebt buiten de sessies om. Ik denk mee op het moment dat het er echt toe doet.',
+      },
+    ],
+    testimonialEyebrow: 'Wat anderen zeggen',
+    ctaHeading:    'Klaar voor de volgende stap?',
+    ctaPrimary:    'Plan kennismaking',
+    ctaSecondary:  'Meer over mij',
+    networkingAlt: 'Milan in gesprek met ondernemers tijdens een evenement.',
+  },
+
+  // ── Spreker Page (PAGE-02) ────────────────────────────────────────────────
+  spreker: {
+    pageTitle:  'Spreker — Milan van der Meulen',
+    pageDesc:   'Milan spreekt voor teams, events en conferences over ondernemerschap, schalen en eerlijk leiderschap. Boek hem voor jouw event.',
+    eyebrow:    'Spreker',
+    heading:    'Een eerlijk verhaal over bouwen, falen en weer opstaan',
+    body: [
+      'Ik heb Soly gebouwd van een startup naar een bedrijf met 180 medewerkers in 9 landen. En ik heb het zien omvallen. Dat verhaal vertel ik niet met de romantiek die er achteraf omheen geweven wordt, maar zoals het was.',
+      'Ik spreek voor ondernemersorganisaties, corporates en events over schalen, leiderschap en de momenten waarop je als founder echt wordt getest. Eerlijk, direct en vanuit de praktijk.',
+    ],
+    aanbodHeading:  'Presentaties en lezingen',
+    aanbodEyebrow:  'Aanbod',
+    aanbodCards: [
+      {
+        title:       'Schalen zonder te breken',
+        description: 'Over de keuzes, vergissingen en lessen uit de internationale expansie van Soly. Wat werkt bij het bouwen van een team over meerdere markten — en wat echt niet.',
+      },
+      {
+        title:       'Eerlijk leiderschap',
+        description: 'Leiderschap gaat niet over het hebben van alle antwoorden. Het gaat over het stellen van de juiste vragen — en het lef om te doen wat nodig is, ook als het pijn doet.',
+      },
+      {
+        title:       'De ondernemer achter het bedrijf',
+        description: 'Hoe blijf je jezelf als founder onder druk? Over identiteit, keuzes en het verschil tussen groeien als bedrijf en groeien als persoon.',
+      },
+    ],
+    testimonialEyebrow: 'Wat anderen zeggen',
+    ctaHeading:   'Boek Milan voor jouw event',
+    ctaPrimary:   'Boek lezing',
+    speakingAlt:  'Milan legt een grafiek uit tijdens een presentatie.',
+  },
+
   // ── Common / Shared ──────────────────────────────────────────────────────
   common: {
     /** Visible marker pill on placeholder cards (UI-SPEC §Copywriting Contract) */
