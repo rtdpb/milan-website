@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 3
 status: in_progress
-stopped_at: Completed Phase 3 Plan 02 — /nieuwsbrief page, Newsletter.astro rewired, nl.nieuwsbrief copy
-last_updated: "2026-08-19T00:22:00Z"
+stopped_at: Phase 3 Plan 03 — Task 3 blocking human-verify checkpoint reached; Nav/Footer/Samenwerken Nieuwsbrief entries enabled
+last_updated: "2026-08-18T22:28:55.809Z"
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 12
-  completed_plans: 11
+  completed_plans: 12
 current_phase_name: Newsletter & Substack Integration
 ---
 
@@ -99,6 +99,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Phase 3-02 Tasks 1+2 atomic commit: nl.ts labelNaam removal paired with Newsletter.astro destructure update — TypeScript would error between tasks if committed separately
 - Phase 3-02 nl.nieuwsbrief.pageDesc: double-quoted string for Dutch apostrophe in "Milan's" (consistent with arc4Body pattern)
 - Phase 3-02 social proof omitted: no newsletter-specific quote exists; fabricating or repurposing coaching/speaking quotes prohibited (HOME-11, UI-SPEC §2e)
+- [Phase ?]: Nieuwsbrief nav/footer: single-entry navItems change; existing item.href conditional handles active-state render — no markup change required
+- [Phase ?]: Samenwerken Nieuwsbrief card: no external prop (internal link to /nieuwsbrief, not Substack redirect); variant field added to ladderCards
 
 ## Performance Metrics
 
@@ -115,6 +117,11 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 02 | 03 | ~15 min | 3/3 | 1 created, 6 modified |
 | 03 | 01 | ~10 min | 3/3 | 2 created, 4 modified |
 | 03 | 02 | ~12 min | 3/3 | 1 created, 2 modified |
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 03 P03 | ~2 min | 2 tasks | 3 files |
 
 ## Next Step
 
@@ -125,6 +132,6 @@ Phase 3 Plan 02 complete. /nieuwsbrief page is live in sentinel state. Nav/Foote
 
 ## Session
 
-**Last session:** 2026-08-19T00:22:00Z
-**Stopped at:** Completed Phase 3 Plan 02 — /nieuwsbrief page, Newsletter.astro rewired, nl.nieuwsbrief copy
+**Last session:** 2026-08-18T22:28:42.951Z
+**Stopped at:** Phase 3 Plan 03 — Task 3 blocking human-verify checkpoint reached; Nav/Footer/Samenwerken Nieuwsbrief entries enabled
 **Resume file:** None
