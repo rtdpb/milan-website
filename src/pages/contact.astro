@@ -1,0 +1,101 @@
+---
+/**
+ * contact.astro — Contact page (PAGE-04)
+ *
+ * Source: PLAN 02-01 Task 3, 02-UI-SPEC.md §/contact (PAGE-04), D-08, D-12
+ *
+ * Layout:
+ *   1. Page header — SectionWrapper default, H1 + subtext (nl.contact)
+ *   2. Contact form — ContactForm.astro, max-width 640px (UI-SPEC §/contact)
+ *   3. Newsletter — reused Newsletter.astro at bottom
+ *
+ * SEO (D-12): unique title + description via BaseLayout → BaseHead.
+ * No dark band on this page — form section stays light (cream --color-bg).
+ * No sidebar — lean single-column focus (UI-SPEC §/contact: no sidebar).
+ *
+ * Internal hrefs: import.meta.env.BASE_URL prefix (PATTERNS.md §BASE_URL).
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionWrapper from '../components/ui/SectionWrapper.astro';
+import ContactForm from '../components/forms/ContactForm.astro';
+import Newsletter from '../components/sections/Newsletter.astro';
+import { nl } from '../i18n/nl';
+
+const { pageTitle, pageDesc, heading, subtext } = nl.contact;
+---
+
+<BaseLayout title={pageTitle} description={pageDesc}>
+
+  <!-- Page header: H1 + subtext (UI-SPEC §/contact, PAGE-04) -->
+  <SectionWrapper id="contact-header" labelledBy="contact-heading" variant="default">
+    <div class="contact-header">
+      <h1 id="contact-heading" class="contact-header__heading">
+        {heading}
+      </h1>
+      <p class="contact-header__subtext">
+        {subtext}
+      </p>
+    </div>
+  </SectionWrapper>
+
+  <!-- Contact form: constrained to max-width 640px (UI-SPEC §/contact) -->
+  <SectionWrapper id="contact-form-section" labelledBy="contact-form-label" variant="default">
+    <div class="contact-form-section">
+      <!-- Visually hidden label for the section landmark -->
+      <span id="contact-form-label" class="visually-hidden">Contactformulier</span>
+      <ContactForm />
+    </div>
+  </SectionWrapper>
+
+  <!-- Newsletter: reused at bottom (UI-SPEC §/contact) -->
+  <Newsletter />
+
+</BaseLayout>
+
+<style>
+  /* ── Page header ──────────────────────────────────────────────────────── */
+  .contact-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 640px;  /* match form width for visual alignment */
+  }
+
+  .contact-header__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);   /* display size, same as homepage H1 */
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--color-text);
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .contact-header__subtext {
+    font-family: var(--font-body);
+    font-size: var(--text-base);  /* 16–18px */
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* ── Form section: constrained to 640px (UI-SPEC §/contact) ─────────── */
+  .contact-form-section {
+    max-width: 640px;
+  }
+
+  /* ── Visually hidden utility (a11y — section label) ─────────────────── */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

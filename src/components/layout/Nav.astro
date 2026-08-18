@@ -14,7 +14,7 @@
  *   - tabindex="-1" (removed from natural tab order)
  *   - cursor: not-allowed + opacity 0.5
  *   - title = DISABLED_TOOLTIP ("Binnenkort beschikbaar")
- *   - NEVER href="#" or href=""
+ *   - NEVER bare hash or empty href
  * Destinations are centralised in src/config.ts (TODO_* constants).
  *
  * NL|EN switch: non-functional disabled affordance (D-16 — Phase 4).
@@ -24,7 +24,7 @@
  */
 
 import { nl } from '../../i18n/nl';
-import { SITE_NAME, CONTACT_URL, TODO_LINKEDIN_URL, DISABLED_TOOLTIP } from '../../config';
+import { SITE_NAME, TODO_LINKEDIN_URL, DISABLED_TOOLTIP } from '../../config';
 
 // Nav items: all disabled in Phase 1 — pages arrive in Phase 2+
 const navItems = [
@@ -72,21 +72,13 @@ const navItems = [
     <!-- Right rail: Contact CTA + NL|EN + LinkedIn -->
     <div class="site-header__actions">
 
-      <!-- Contact CTA: primary button — disabled (destination: Phase 2 contact page) -->
-      <!--
-        TODO Phase 2: wire to real contact destination (TODO_CONTACT_URL in config.ts).
-        Current: aria-disabled span — no click, no href hash.
-      -->
-      <span
-        class="btn btn--primary btn--disabled nav-cta"
-        role="button"
-        aria-disabled="true"
-        tabindex="-1"
-        data-placeholder={`Contact bestemming: ${CONTACT_URL} — wordt aangesloten in fase 2`}
-        title={DISABLED_TOOLTIP}
+      <!-- Contact CTA: primary button — enabled in Phase 2 (D-11) -->
+      <a
+        href={`${import.meta.env.BASE_URL}contact`}
+        class="btn btn--primary nav-cta"
       >
         {nl.nav.contact}
-      </span>
+      </a>
 
       <!-- NL|EN switch: disabled affordance — Phase 4 wires real switching (D-16) -->
       <span
@@ -194,17 +186,14 @@ const navItems = [
       </ul>
     </nav>
 
-    <!-- Mobile Contact CTA -->
+    <!-- Mobile Contact CTA — enabled in Phase 2 (D-11) -->
     <div class="mobile-nav__cta">
-      <span
-        class="btn btn--primary btn--disabled"
-        role="button"
-        aria-disabled="true"
-        tabindex="-1"
-        title={DISABLED_TOOLTIP}
+      <a
+        href={`${import.meta.env.BASE_URL}contact`}
+        class="btn btn--primary"
       >
         {nl.nav.contact}
-      </span>
+      </a>
     </div>
   </div>
 </div>
@@ -506,8 +495,20 @@ const navItems = [
       letter-spacing: 0.02em;
       background-color: var(--color-accent);
       color: var(--color-text);
-      cursor: not-allowed;
-      opacity: 0.5;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color var(--duration-fast) var(--ease-out),
+                  transform var(--duration-fast) var(--ease-out);
+    }
+
+    .nav-cta:hover {
+      background-color: var(--color-accent-dark);
+      transform: scale(1.02);
+    }
+
+    .nav-cta:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
     }
   }
 
