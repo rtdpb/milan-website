@@ -9,30 +9,30 @@ Initial milestone — the focused Dutch homepage MVP. All map to **Phase 1**.
 
 ### Foundation & Design System
 
-- [ ] **FND-01**: Astro project scaffolded with component-based structure and build/dev tooling
-- [ ] **FND-02**: Design system with tokens — color (incl. `#FFDD11` used sparingly as accent), typographic scale, spacing scale — and a swappable brand-font variable (licensed Naste-fallback now)
-- [ ] **FND-03**: Reusable UI components — CTA/button variants, cards, section wrapper, nav, footer
-- [ ] **FND-04**: High-quality responsive layouts across desktop, tablet, and mobile
-- [ ] **FND-05**: Baseline SEO + metadata — title, description, Open Graph/Twitter, favicon, semantic HTML, sitemap, robots
-- [ ] **FND-06**: Accessibility baseline — landmarks, alt text, visible focus states, color contrast, keyboard navigation
-- [ ] **FND-07**: Performance baseline — optimized fonts, minimal JS, strong Core Web Vitals
-- [ ] **FND-08**: Subtle, purposeful animations that respect `prefers-reduced-motion`
-- [ ] **FND-09**: i18n-ready structure (routing/content organized so EN adds without a refactor); NL content only in v1
-- [ ] **FND-10**: Responsive image pipeline — AVIF/WebP derivatives, `srcset`/`sizes`, lazy loading, focal-point crops; originals kept separate and uncommitted
+- [x] **FND-01**: Astro project scaffolded with component-based structure and build/dev tooling
+- [x] **FND-02**: Design system with tokens — color (incl. `#FFDD11` used sparingly as accent), typographic scale, spacing scale — and a swappable brand-font variable (licensed Naste-fallback now)
+- [x] **FND-03**: Reusable UI components — CTA/button variants, cards, section wrapper, nav, footer
+- [x] **FND-04**: High-quality responsive layouts across desktop, tablet, and mobile
+- [x] **FND-05**: Baseline SEO + metadata — title, description, Open Graph/Twitter, favicon, semantic HTML, sitemap, robots
+- [x] **FND-06**: Accessibility baseline — landmarks, alt text, visible focus states, color contrast, keyboard navigation
+- [x] **FND-07**: Performance baseline — optimized fonts, minimal JS, strong Core Web Vitals
+- [x] **FND-08**: Subtle, purposeful animations that respect `prefers-reduced-motion`
+- [x] **FND-09**: i18n-ready structure (routing/content organized so EN adds without a refactor); NL content only in v1
+- [x] **FND-10**: Responsive image pipeline — AVIF/WebP derivatives, `srcset`/`sizes`, lazy loading, focal-point crops; originals kept separate and uncommitted
 
 ### Homepage
 
-- [ ] **HOME-01**: Header — nav (Coaching · Spreker · Nieuwsbrief · Mijn verhaal · Boek), Contact CTA, NL/EN switch affordance, LinkedIn icon (placeholders where target unknown)
-- [ ] **HOME-02**: Hero — title "Je bedrijf schalen, zonder jezelf te verliezen", subtext, primary CTA Contact, secondary CTA Mijn verhaal, USPs (12+ jaar · 180 medewerkers · 9 markten), hero photo (`10 Jaar Soly-77`)
-- [ ] **HOME-03**: Credibility "bekend van" logo carousel — MT Sprout, Quote, NOS, EenVandaag, Telegraaf, De Ondernemer (placeholder logos)
-- [ ] **HOME-04**: "Samenwerken" section — three offer cards (Nieuwsbrief, Presentatie/lezing, 1:1 Coaching), each with its supplied CTA
-- [ ] **HOME-05**: Testimonials section — the 3 supplied quotes with attributions (Yang Soo Kloosterhof, Ruud Koornstra, Oranjewoud Export Academy)
-- [ ] **HOME-06**: Personal story "Waarom ik nu mijn lessen deel" — full supplied copy, signature, supporting photo(s)
-- [ ] **HOME-07**: Newsletter signup section (naam + mailadres) — submits to placeholder/Substack endpoint
-- [ ] **HOME-08**: "Recente artikelen" section — 3 static placeholder article cards
-- [ ] **HOME-09**: Footer — navigation, LinkedIn, legal/placeholder content
-- [ ] **HOME-10**: Every CTA with a known destination works; CTAs with unknown destinations are clearly documented and temporarily disabled (not clickable) — no fake working buttons; missing logos/assets shown as clearly-marked placeholders
-- [ ] **HOME-11**: Preserve supplied factual claims, names, and quotes; obvious spelling/language errors may be corrected, but factual claims/names are not changed without consulting the user (flag suspected factual inconsistencies)
+- [x] **HOME-01**: Header — nav (Coaching · Spreker · Nieuwsbrief · Mijn verhaal · Boek), Contact CTA, NL/EN switch affordance, LinkedIn icon (placeholders where target unknown)
+- [x] **HOME-02**: Hero — title "Je bedrijf schalen, zonder jezelf te verliezen", subtext, primary CTA Contact, secondary CTA Mijn verhaal, USPs (12+ jaar · 180 medewerkers · 9 markten), hero photo (`10 Jaar Soly-77`)
+- [x] **HOME-03**: Credibility "bekend van" logo carousel — MT Sprout, Quote, NOS, EenVandaag, Telegraaf, De Ondernemer (placeholder logos)
+- [x] **HOME-04**: "Samenwerken" section — three offer cards (Nieuwsbrief, Presentatie/lezing, 1:1 Coaching), each with its supplied CTA
+- [x] **HOME-05**: Testimonials section — the 3 supplied quotes with attributions (Yang Soo Kloosterhof, Ruud Koornstra, Oranjewoud Export Academy)
+- [x] **HOME-06**: Personal story "Waarom ik nu mijn lessen deel" — full supplied copy, signature, supporting photo(s)
+- [x] **HOME-07**: Newsletter signup section (naam + mailadres) — submits to placeholder/Substack endpoint
+- [x] **HOME-08**: "Recente artikelen" section — 3 static placeholder article cards
+- [x] **HOME-09**: Footer — navigation, LinkedIn, legal/placeholder content
+- [x] **HOME-10**: Every CTA with a known destination works; CTAs with unknown destinations are clearly documented and temporarily disabled (not clickable) — no fake working buttons; missing logos/assets shown as clearly-marked placeholders
+- [x] **HOME-11**: Preserve supplied factual claims, names, and quotes; obvious spelling/language errors may be corrected, but factual claims/names are not changed without consulting the user (flag suspected factual inconsistencies)
 
 ## v2 Requirements
 
@@ -79,29 +79,30 @@ Deferred to later phases — tracked, not in the first milestone.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FND-01 | Phase 1 | Pending |
-| FND-02 | Phase 1 | Pending |
-| FND-03 | Phase 1 | Pending |
-| FND-04 | Phase 1 | Pending |
-| FND-05 | Phase 1 | Pending |
-| FND-06 | Phase 1 | Pending |
-| FND-07 | Phase 1 | Pending |
-| FND-08 | Phase 1 | Pending |
-| FND-09 | Phase 1 | Pending |
-| FND-10 | Phase 1 | Pending |
-| HOME-01 | Phase 1 | Pending |
-| HOME-02 | Phase 1 | Pending |
-| HOME-03 | Phase 1 | Pending |
-| HOME-04 | Phase 1 | Pending |
-| HOME-05 | Phase 1 | Pending |
-| HOME-06 | Phase 1 | Pending |
-| HOME-07 | Phase 1 | Pending |
-| HOME-08 | Phase 1 | Pending |
-| HOME-09 | Phase 1 | Pending |
-| HOME-10 | Phase 1 | Pending |
-| HOME-11 | Phase 1 | Pending |
+| FND-01 | Phase 1 | Complete |
+| FND-02 | Phase 1 | Complete |
+| FND-03 | Phase 1 | Complete |
+| FND-04 | Phase 1 | Complete |
+| FND-05 | Phase 1 | Complete |
+| FND-06 | Phase 1 | Complete |
+| FND-07 | Phase 1 | Complete |
+| FND-08 | Phase 1 | Complete |
+| FND-09 | Phase 1 | Complete |
+| FND-10 | Phase 1 | Complete |
+| HOME-01 | Phase 1 | Complete |
+| HOME-02 | Phase 1 | Complete |
+| HOME-03 | Phase 1 | Complete |
+| HOME-04 | Phase 1 | Complete |
+| HOME-05 | Phase 1 | Complete |
+| HOME-06 | Phase 1 | Complete |
+| HOME-07 | Phase 1 | Complete |
+| HOME-08 | Phase 1 | Complete |
+| HOME-09 | Phase 1 | Complete |
+| HOME-10 | Phase 1 | Complete |
+| HOME-11 | Phase 1 | Complete |
 
 **Coverage:**
+
 - v1 requirements: 21 total
 - Mapped to phases: 21
 - Unmapped: 0 ✓

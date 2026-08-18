@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 1
+current_phase: 2 — Supporting Pages & Lead-Gen Forms
 status: in_progress
-stopped_at: "Phase 1 Plan 06 — homepage assembled + audit complete; awaiting human-verify checkpoint (responsive visual quality)"
-last_updated: "2026-08-18T18:41:00Z"
+stopped_at: "Plan 01-06 — Tasks 1+2 complete; at checkpoint:human-verify (Task 3) — responsive visual quality requires human review"
+last_updated: "2026-08-18T17:12:06.138Z"
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 6
   completed_plans: 6
-current_phase_name: Foundation, Design System & Dutch Homepage
+current_phase_name: Supporting Pages & Lead-Gen Forms
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 ## Status
 
 - **Milestone:** v1 — Dutch homepage MVP
-- **Current phase:** 1
+- **Current phase:** 2 — Supporting Pages & Lead-Gen Forms
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
 - **Plans completed:** 6/6 (Plan 01 — Walking Skeleton; Plan 02 — Global chrome + UI kit; Plan 03 — PressStrip + Samenwerken; Plan 04 — RevealOnScroll + Testimonials + Story; Plan 05 — Newsletter + Articles; Plan 06 — Assembly + Audit)
 - **Last action:** Executed Plan 01-06 — assembled all 7 sections in docx order into index.astro, ran automated audit (all gates pass, Lighthouse Performance 98 / A11y 97 / SEO 100 / LCP 1.7s). Awaiting human-verify checkpoint for responsive/visual quality.
