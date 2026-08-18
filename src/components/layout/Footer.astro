@@ -31,11 +31,12 @@ import {
 
 // Footer nav items — Phase 2: coaching + spreker enabled; others remain disabled placeholders
 // mijnVerhaal: stays disabled here — enabled in Plan 03
+// Phase 2 Plan 03: mijnVerhaal enabled — /mijn-verhaal page now exists; nieuwsbrief/boek still disabled
 const navItems = [
   { label: nl.nav.coaching,    href: `${import.meta.env.BASE_URL}coaching` },
   { label: nl.nav.spreker,     href: `${import.meta.env.BASE_URL}spreker` },
   { label: nl.nav.nieuwsbrief, reason: 'Nieuwsbrief pagina volgt in fase 3' },
-  { label: nl.nav.mijnVerhaal, reason: 'Mijn verhaal pagina volgt in fase 2, plan 3' },
+  { label: nl.nav.mijnVerhaal, href: `${import.meta.env.BASE_URL}mijn-verhaal` },
   { label: nl.nav.boek,        reason: 'Boek pagina volgt in fase 5' },
 ];
 ---
