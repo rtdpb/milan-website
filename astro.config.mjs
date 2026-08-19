@@ -19,18 +19,21 @@ export default defineConfig({
 
   i18n: {
     defaultLocale: 'nl',
-    locales: ['nl'],
-    // Phase 4 — EN locale addition (one-time refactor):
-    // locales: ['nl', 'en'],
-    // prefixDefaultLocale: true,
-    // When enabled: NL moves to /nl/*, EN lives at /en/*
+    locales: ['nl', 'en'],
+    // D-05: routing.prefixDefaultLocale defaults to false — NL stays at root,
+    // EN lives under /en/*. No routing block needed (false is the Astro default).
+    // The old commented plan (prefixDefaultLocale: true) would have moved NL to
+    // /nl/* — deliberately NOT done here; NL URLs stay at root (D-05).
   },
 
   integrations: [
     sitemap({
       i18n: {
         defaultLocale: 'nl',
-        locales: { nl: 'nl-NL' },
+        locales: {
+          nl: 'nl-NL',
+          en: 'en',    // D-04: hreflang code 'en' (not 'en-US' — international English)
+        },
       },
     }),
   ],
