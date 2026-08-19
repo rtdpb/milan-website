@@ -51,11 +51,12 @@ const switchHref     = getRelativeLocaleUrl(oppositeLocale, oppositeSlug);
 // Phase 3 Plan 03: nieuwsbrief enabled — /nieuwsbrief page now exists; boek still disabled
 const currentPath = Astro.url.pathname;
 
-// WR-04: exact-match active detection with trailing-slash normalization.
-// Prevents /coaching matching /coaching-tips if such a path existed, and
-// handles the common Astro trailing-slash convention correctly.
-const isActive = (href: string) =>
-  currentPath === href || currentPath === href.replace(/\/$/, '') + '/';
+// WR-04: normalize BOTH sides before comparing so trailing-slash differences
+// between currentPath (which may have a trailing slash under some Astro configs)
+// and href (which getRelativeLocaleUrl may or may not append) never produce a
+// false negative for the active indicator.
+const normalize = (p: string) => p.replace(/\/$/, '');
+const isActive = (href: string) => normalize(currentPath) === normalize(href);
 
 // ── navItems — locale-branched (Phase 4) ─────────────────────────────────
 // EN: use getRelativeLocaleUrl so base path is handled automatically (Pitfall 5).
@@ -283,7 +284,7 @@ const navItems = isEn
     // baked into the button at build time (see template above). Fall back to
     // Dutch so NL behaviour is identical to before this fix.
     const labelOpen  = (t as HTMLButtonElement).dataset.labelOpen  || 'Menu openen';
-    const labelClose = (t as HTMLButtonElement).dataset.labelClose || 'Menu sluiten';;
+    const labelClose = (t as HTMLButtonElement).dataset.labelClose || 'Menu sluiten';
 
     // ── Scroll-aware header background ─────────────────────────────────────
     // Transparent at top; --color-bg + shadow after ~60px scroll.
