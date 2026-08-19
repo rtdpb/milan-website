@@ -24,6 +24,7 @@ import { getStrings } from '../../i18n/utils';
 
 // Phase 4: locale-parameterized strings (I18N-02)
 const t = getStrings(Astro.currentLocale);
+const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 ---
 
 <!-- PressStrip: slim credibility band, directly below the hero (D-06) -->
@@ -35,7 +36,8 @@ const t = getStrings(Astro.currentLocale);
     </p>
 
     <!-- Logo chips row — horizontal scroll on mobile if overflow -->
-    <div class="press-strip__logos" role="list" aria-label="Media-uitingen van Milan van der Meulen">
+    <!-- WR-03: aria-label is locale-resolved so EN screen-reader users don't hear Dutch -->
+    <div class="press-strip__logos" role="list" aria-label={isEn ? 'Media coverage of Milan van der Meulen' : 'Media-uitingen van Milan van der Meulen'}>
       {t.pressStrip.logos.map((outlet) => (
         <div
           class="press-strip__chip"
