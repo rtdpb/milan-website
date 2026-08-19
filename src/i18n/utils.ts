@@ -80,7 +80,21 @@ export const nlToEn: Record<string, string> = {
 /**
  * EN slug → NL slug mapping (reverse of nlToEn).
  * Used by Nav.astro when on an EN page to find the equivalent NL page.
+ *
+ * WR-01: Guard against duplicate EN slugs. If two NL slugs ever map to the
+ * same EN slug, the inversion silently drops one entry — the language switch
+ * would break for one locale. This assertion catches the mistake at module
+ * evaluation time (build + SSR) rather than silently at runtime.
  */
+const _nlValues = Object.values(nlToEn);
+const _uniqueNlValues = new Set(_nlValues);
+if (_uniqueNlValues.size !== _nlValues.length) {
+  throw new Error(
+    '[i18n] nlToEn has duplicate EN slugs — enToNl inversion would be lossy. ' +
+    'Check nlToEn in src/i18n/utils.ts.'
+  );
+}
+
 export const enToNl: Record<string, string> = Object.fromEntries(
   Object.entries(nlToEn).map(([n, e]) => [e, n])
 );
