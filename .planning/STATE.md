@@ -4,12 +4,12 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 4
 status: in_progress
-stopped_at: Phase 5 context gathered
-last_updated: "2026-08-19T13:48:16.776Z"
+stopped_at: Phase 5 UI-SPEC approved
+last_updated: "2026-08-19T14:21:12.944Z"
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 14
+  total_plans: 17
   completed_plans: 14
 current_phase_name: Internationalization & English Content
 ---
@@ -141,6 +141,6 @@ Phase 4 Plan 01 complete. Bilingual i18n tracer delivered: NL root / EN under /e
 
 ## Session
 
-**Last session:** 2026-08-19T13:48:16.765Z
-**Stopped at:** Phase 5 context gathered
-**Resume file:** .planning/phases/05-book-pre-order-future-growth/05-CONTEXT.md
+**Last session:** 2026-08-19T14:07:40.843Z
+**Stopped at:** Phase 5 UI-SPEC approved
+**Resume file:** .planning/phases/05-book-pre-order-future-growth/05-UI-SPEC.md
