@@ -31,7 +31,10 @@ import { TODO_BOOK_CHECKOUT_URL, TODO_SUBSTACK_URL } from '../../config';
 const t = getStrings(Astro.currentLocale);
 const IS_CHECKOUT_SENTINEL = TODO_BOOK_CHECKOUT_URL === 'TODO_BOOK_CHECKOUT_URL';
 const IS_SUBSTACK_SENTINEL  = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
-const subscribeUrl = `${TODO_SUBSTACK_URL}/subscribe`;
+// CR-02: strip trailing slash before appending /subscribe — guards against double-slash URL
+// if the supplied Substack URL ends with '/'. The config comment instructs this but has no
+// runtime guard; defensive normalisation is applied at every usage site.
+const subscribeUrl = `${TODO_SUBSTACK_URL.replace(/\/$/, '')}/subscribe`;
 ---
 
 <BaseLayout

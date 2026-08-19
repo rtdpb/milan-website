@@ -29,7 +29,9 @@ import { TODO_SUBSTACK_URL } from '../../config';
 // Phase 4: locale-parameterized strings (I18N-02, D-02)
 const t = getStrings(Astro.currentLocale);
 const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
-const subscribeUrl = `${TODO_SUBSTACK_URL}/subscribe`;
+// CR-02: strip trailing slash before appending /subscribe — guards against double-slash URL
+// if the supplied Substack URL ends with '/'. Defensive normalisation at every usage site.
+const subscribeUrl = `${TODO_SUBSTACK_URL.replace(/\/$/, '')}/subscribe`;
 
 const { heading, subtext, labelEmail, cta, disclaimer } = t.newsletter;
 ---
