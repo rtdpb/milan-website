@@ -138,5 +138,11 @@ Plans:
 2. Analytics and at least one conversion optimization are in place.
 3. A CMS/editable-content approach is evaluated and, if adopted, integrated without destabilizing existing pages.
 
+**Plans:** 3 plans
+Plans:
+- [ ] 05-01-PLAN.md — Book/pre-order page tracer (BOOK-01): bilingual /boek + /en/book, dual interest capture, nav/footer enablement, checkout seam [Wave 1]
+- [ ] 05-02-PLAN.md — Analytics + conversion optimization (GROW-01): production-gated Plausible, 4 conversion goals, sticky CTA [Wave 2]
+- [ ] 05-03-PLAN.md — CMS evaluation (GROW-02): reasoned DEFER doc, content-collections migration named as prerequisite [Wave 1]
+
 ---
-*Last updated: 2026-08-18 after initialization*
+*Last updated: 2026-08-19 after Phase 5 planning*
