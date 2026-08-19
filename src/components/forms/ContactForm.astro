@@ -155,11 +155,12 @@ const {
       ></textarea>
     </div>
 
-    <!-- Submit button -->
+    <!-- Submit button — aria-describedby ties to result region for a11y (mirrors BookInterestForm) -->
     <button
       type="submit"
       id="contact-submit"
       class="btn btn--primary contact-submit"
+      aria-describedby="contact-result"
     >
       {ctaSubmit}
     </button>
@@ -250,7 +251,7 @@ const {
         return;
       }
 
-      // State 5: Submitting — disable button, change label text, dim opacity
+      // State 4: Submitting — disable button, change label text, dim opacity
       s.disabled = true;
       s.textContent = copySubmitting;
       (s as HTMLElement).style.opacity = '0.7';
