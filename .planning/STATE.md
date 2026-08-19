@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 4
+current_phase: 5
 status: in_progress
-stopped_at: Phase 5 UI-SPEC approved
-last_updated: "2026-08-19T14:21:12.944Z"
+stopped_at: "Completed Phase 05 Plan 01 — /boek + /en/book pages, BookInterestForm, Boek nav/footer enabled"
+last_updated: "2026-08-19T16:32:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 17
-  completed_plans: 14
-current_phase_name: Internationalization & English Content
+  completed_plans: 15
+current_phase_name: Book / Pre-order & Future Growth
 ---
 
 # Project State
@@ -21,12 +21,12 @@ current_phase_name: Internationalization & English Content
 See: `.planning/PROJECT.md` (updated 2026-08-18)
 
 **Core value:** Make Milan feel like a credible, experienced, and honest founder so the right entrepreneurs reach out for coaching/speaking and subscribe to the newsletter.
-**Current focus:** Phase 4 — Internationalization & English Content
+**Current focus:** Phase 5 — Book / Pre-order & Future Growth
 
 ## Status
 
 - **Milestone:** v1 — Dutch homepage MVP
-- **Current phase:** 4
+- **Current phase:** 5
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
 - **Plans completed:** 6/6 Phase 1 + 3/3 Phase 2 (all PAGE-01..05 delivered)
 - **Last action:** Executed Plan 03-02 — /nieuwsbrief editorial landing page + Newsletter.astro email-only Substack redirect rewire; 6 pages built, 0 errors.
@@ -108,6 +108,10 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Phase 4-01: Newsletter + Story hardcoded Dutch strings made locale-conditional with isEn ternary — aria-labels, placeholder, sentinel notes, signature role
 - [Phase ?]: Footer EN nav uses getRelativeLocaleUrl to translated slugs — same pattern as Nav.astro from Plan 01
 - [Phase ?]: ContactForm Web3Forms action/honeypot/?type= option values unchanged by locale refactor — only label strings localized
+- Phase 5-01: HTML comments inside Astro {} ternary expressions cause CompilerError — must be placed outside {} blocks, not inside ternary branches
+- Phase 5-01: IS_CHECKOUT_SENTINEL true → checkout block OMITTED entirely (D-03 honesty rule); never a disabled Pre-order span
+- Phase 5-01: en/book.astro unused getRelativeLocaleUrl import removed — book page uses config constants for external URLs (Substack, checkout), not internal locale routes
+- Phase 5-01: nl.ts boek block uses double-quoted strings for any string containing apostrophes (consistent with arc4Body pattern)
 
 ## Performance Metrics
 
@@ -125,6 +129,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 03 | 01 | ~10 min | 3/3 | 2 created, 4 modified |
 | 03 | 02 | ~12 min | 3/3 | 1 created, 2 modified |
 | 04 | 01 | ~12 min | 3/3 | 4 created, 12 modified |
+| 05 | 01 | ~8 min | 3/3 | 3 created, 7 modified |
 **Per-Plan Metrics:**
 
 | Plan | Duration | Tasks | Files |
@@ -134,7 +139,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 
 ## Next Step
 
-Phase 4 Plan 01 complete. Bilingual i18n tracer delivered: NL root / EN under /en/*, functional Nav switch, hreflang alternates, 7 section components locale-aware, smoke I18N_SMOKE_OK. I18N-01/I18N-02 requirements satisfied. Next: Phase 4 Plan 02 (supporting EN pages — /en/about, /en/coaching, /en/speaking, /en/newsletter, /en/contact) or milestone review.
+Phase 5 Plan 01 complete. Book page tracer delivered: bilingual /boek + /en/book, BookInterestForm (2-field, 7-state, XSS-safe), dual interest capture (IS_SENTINEL-gated Substack + Web3Forms notify), Boek nav/footer enabled both locales, hreflang cross-linked, BOOK-01 requirement satisfied. Next: Phase 5 Plan 02 (analytics + sticky CTA — Plausible install, PlausibleScript.astro, StickyCTA.astro, 4 goal events, GROW-01).
 
 ---
 *Last updated: 2026-08-19 after Plan 04-01 execution*
