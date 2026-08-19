@@ -12,15 +12,18 @@
  * to both sighted users and developers reading the source.
  */
 
-import { nl } from '../../i18n/nl';
+import { getStrings } from '../../i18n/utils';
+
+// Phase 4: locale-parameterized placeholder label
+const t = getStrings(Astro.currentLocale);
 
 interface Props {
-  /** Override the default label text. Default: "[Placeholder]" from nl.ts. */
+  /** Override the default label text. Default: "[Placeholder]" from locale strings. */
   label?: string;
   class?: string;
 }
 
-const { label = nl.common.placeholderLabel, class: extraClass } = Astro.props;
+const { label = t.common.placeholderLabel, class: extraClass } = Astro.props;
 const classes = ['placeholder-badge', extraClass].filter(Boolean).join(' ');
 ---
 

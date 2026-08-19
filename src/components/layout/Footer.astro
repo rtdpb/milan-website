@@ -19,21 +19,32 @@
  * NEVER href="#" or href="".
  */
 
-import { nl } from '../../i18n/nl';
+import { getStrings } from '../../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import {
   SITE_NAME,
   DISABLED_TOOLTIP,
-  COPYRIGHT_YEAR,
 } from '../../config';
 
-// Phase 3 Plan 03: nieuwsbrief enabled — /nieuwsbrief page now exists; boek still disabled
-const navItems = [
-  { label: nl.nav.coaching,    href: `${import.meta.env.BASE_URL}coaching` },
-  { label: nl.nav.spreker,     href: `${import.meta.env.BASE_URL}spreker` },
-  { label: nl.nav.nieuwsbrief, href: `${import.meta.env.BASE_URL}nieuwsbrief` },
-  { label: nl.nav.mijnVerhaal, href: `${import.meta.env.BASE_URL}mijn-verhaal` },
-  { label: nl.nav.boek,        reason: 'Boek pagina volgt in fase 5' },
-];
+// Phase 4: locale-parameterized footer strings
+const t = getStrings(Astro.currentLocale);
+const isEn = Astro.currentLocale === 'en';
+
+const navItems = isEn
+  ? [
+      { label: t.nav.coaching,    href: getRelativeLocaleUrl('en', 'coaching') },
+      { label: t.nav.spreker,     href: getRelativeLocaleUrl('en', 'speaking') },
+      { label: t.nav.nieuwsbrief, href: getRelativeLocaleUrl('en', 'newsletter') },
+      { label: t.nav.mijnVerhaal, href: getRelativeLocaleUrl('en', 'about') },
+      { label: t.nav.boek,        reason: 'Book page follows in phase 5' },
+    ]
+  : [
+      { label: t.nav.coaching,    href: `${import.meta.env.BASE_URL}coaching` },
+      { label: t.nav.spreker,     href: `${import.meta.env.BASE_URL}spreker` },
+      { label: t.nav.nieuwsbrief, href: `${import.meta.env.BASE_URL}nieuwsbrief` },
+      { label: t.nav.mijnVerhaal, href: `${import.meta.env.BASE_URL}mijn-verhaal` },
+      { label: t.nav.boek,        reason: 'Boek pagina volgt in fase 5' },
+    ];
 ---
 
 <footer class="site-footer">
@@ -41,15 +52,15 @@ const navItems = [
 
     <!-- Column 1: Wordmark + tagline -->
     <div class="site-footer__brand">
-      <a href={import.meta.env.BASE_URL} class="site-footer__wordmark" aria-label={`${SITE_NAME} — naar startpagina`}>
+      <a href={import.meta.env.BASE_URL} class="site-footer__wordmark" aria-label={`${SITE_NAME} — ${isEn ? 'go to homepage' : 'naar startpagina'}`}>
         {SITE_NAME}
       </a>
-      <p class="site-footer__tagline">{nl.footer.tagline}</p>
+      <p class="site-footer__tagline">{t.footer.tagline}</p>
     </div>
 
     <!-- Column 2: Nav links -->
     <nav class="site-footer__nav" aria-label="Footer navigatie">
-      <p class="site-footer__nav-heading">{nl.footer.navHeading}</p>
+      <p class="site-footer__nav-heading">{t.footer.navHeading}</p>
       <ul class="site-footer__nav-list" role="list">
         {navItems.map((item) => (
           <li>
@@ -86,7 +97,7 @@ const navItems = [
         class="site-footer__linkedin"
         role="link"
         aria-disabled="true"
-        aria-label={`${nl.nav.linkedin} — ${DISABLED_TOOLTIP}`}
+        aria-label={`${t.nav.linkedin} — ${DISABLED_TOOLTIP}`}
         tabindex="-1"
         title={DISABLED_TOOLTIP}
       >
@@ -101,7 +112,7 @@ const navItems = [
         >
           <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
         </svg>
-        <span class="sr-only">{nl.nav.linkedin}</span>
+        <span class="sr-only">{t.nav.linkedin}</span>
       </span>
 
       <!-- Legal links: disabled placeholder (pages not yet built) -->
@@ -116,7 +127,7 @@ const navItems = [
           tabindex="-1"
           title={DISABLED_TOOLTIP}
         >
-          {nl.footer.privacy}
+          {t.footer.privacy}
         </span>
         <span class="site-footer__legal-sep" aria-hidden="true">·</span>
         <span
@@ -126,13 +137,13 @@ const navItems = [
           tabindex="-1"
           title={DISABLED_TOOLTIP}
         >
-          {nl.footer.terms}
+          {t.footer.terms}
         </span>
       </div>
 
       <!-- Copyright -->
       <p class="site-footer__copyright">
-        &copy; {COPYRIGHT_YEAR} {SITE_NAME}. Alle rechten voorbehouden.
+        {t.footer.copyright}
       </p>
     </div>
 

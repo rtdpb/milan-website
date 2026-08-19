@@ -31,8 +31,10 @@
  */
 
 import { TODO_WEB3FORMS_ACCESS_KEY } from '../../config';
-import { nl } from '../../i18n/nl';
+import { getStrings } from '../../i18n/utils';
 
+// Phase 4: locale-parameterized contact strings
+const t = getStrings(Astro.currentLocale);
 const {
   labelOnderwerp,
   optionAlgemeen,
@@ -46,7 +48,7 @@ const {
   successMsg,
   errorMsg,
   errorNetwork,
-} = nl.contact;
+} = t.contact;
 ---
 
 <!-- ContactForm: Web3Forms progressive-enhancement form (02-01 Task 2) -->
