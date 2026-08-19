@@ -43,7 +43,11 @@ jobs:
         # withastro/action installs Node.js, runs `astro build`, and uploads the
         # dist/ artifact to GitHub Pages. The build-time fetch() in Articles.astro
         # runs here — this is what makes the RSS feed refresh "automatic" (D-02).
+        # node-version pinned to 22.x: Astro 7 requires Node >=22.12 (the action
+        # defaults to Node 20, which fails the build).
         uses: withastro/action@v3
+        with:
+          node-version: 22.12.0
 
   deploy:
     needs: build
