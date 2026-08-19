@@ -87,14 +87,18 @@ const {
       aria-hidden="true"
     />
 
-    <!-- Onderwerp (subject/type) select — pre-selectable via ?type= query param (D-08) -->
+    <!-- Topic (subject/type) select — pre-selectable via ?type= query param (D-08) -->
+    <!-- WR-04: field name changed from Dutch "onderwerp" to English "topic" so Web3Forms
+         emails show self-explanatory field labels for both NL and EN submissions.
+         Option *values* remain Dutch constants (algemeen/lezing/coaching) because the
+         ?type= allowlist and pre-selection logic depend on them (see JS island below). -->
     <div class="form-group">
       <label for="contact-onderwerp" class="form-label">
         {labelOnderwerp}
       </label>
       <select
         id="contact-onderwerp"
-        name="onderwerp"
+        name="topic"
         class="form-input"
       >
         <option value="algemeen" selected>{optionAlgemeen}</option>
@@ -103,7 +107,8 @@ const {
       </select>
     </div>
 
-    <!-- Naam — required -->
+    <!-- Name — required -->
+    <!-- WR-04: field name changed from Dutch "naam" to English "name" -->
     <div class="form-group">
       <label for="contact-naam" class="form-label">
         {labelNaam}<span aria-hidden="true"> *</span>
@@ -111,7 +116,7 @@ const {
       <input
         id="contact-naam"
         type="text"
-        name="naam"
+        name="name"
         required
         aria-required="true"
         autocomplete="name"
@@ -119,7 +124,7 @@ const {
       />
     </div>
 
-    <!-- Mailadres — required -->
+    <!-- Email address — required -->
     <div class="form-group">
       <label for="contact-email" class="form-label">
         {labelEmail}<span aria-hidden="true"> *</span>
@@ -135,14 +140,15 @@ const {
       />
     </div>
 
-    <!-- Bericht — required -->
+    <!-- Message — required -->
+    <!-- WR-04: field name changed from Dutch "bericht" to English "message" -->
     <div class="form-group">
       <label for="contact-bericht" class="form-label">
         {labelBericht}<span aria-hidden="true"> *</span>
       </label>
       <textarea
         id="contact-bericht"
-        name="bericht"
+        name="message"
         rows="5"
         required
         aria-required="true"
