@@ -63,7 +63,6 @@ const {
     data-success={successMsg}
     data-error={errorMsg}
     data-network={errorNetwork}
-    data-key={TODO_WEB3FORMS_ACCESS_KEY}
   >
     <!-- Hidden: Web3Forms access key — public client-side identifier (T-05-02) -->
     <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
@@ -160,7 +159,10 @@ const {
     const copySuccess    = f.dataset.success    || '';
     const copyError      = f.dataset.error      || '';
     const copyNetwork    = f.dataset.network    || '';
-    const accessKey      = f.dataset.key        || '';
+    // CR-01: read key from hidden input[name="access_key"] — single source of truth,
+    // avoids duplicating the value in a redundant data-key DOM attribute.
+    const accessKeyInput = f.querySelector('input[name="access_key"]') as HTMLInputElement | null;
+    const accessKey      = accessKeyInput ? accessKeyInput.value : '';
 
     // ── Placeholder key detection ─────────────────────────────────────────
     if (accessKey === 'TODO_WEB3FORMS_ACCESS_KEY') {
