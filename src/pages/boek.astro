@@ -26,6 +26,7 @@ import SectionWrapper from '../components/ui/SectionWrapper.astro';
 import Button from '../components/ui/Button.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
 import BookInterestForm from '../components/forms/BookInterestForm.astro';
+import StickyCTA from '../components/ui/StickyCTA.astro';
 import { getStrings } from '../i18n/utils';
 import {
   TODO_BOOK_CHECKOUT_URL,
@@ -143,6 +144,19 @@ const subscribeUrl = `${TODO_SUBSTACK_URL}/subscribe`;
 
   <!-- Newsletter section reused at the bottom -->
   <Newsletter />
+
+  <!--
+    StickyCTA — appears when the book hero CTA (#boek-hero-cta) scrolls out of view.
+    targetId "boek-hero-cta" is set on the Substack CTA anchor in the hero section above.
+    Fires 'Sticky CTA: Click' Plausible goal on click. D-07 / GROW-01.
+    Note: when IS_SUBSTACK_SENTINEL is true, #boek-hero-cta is a disabled <span>
+    (not an <a>); the observer still watches it and the sticky CTA still shows.
+  -->
+  <StickyCTA
+    label={t.boek.stickyCta}
+    href={`${import.meta.env.BASE_URL}contact`}
+    targetId="boek-hero-cta"
+  />
 
 </BaseLayout>
 

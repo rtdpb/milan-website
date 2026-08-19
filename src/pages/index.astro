@@ -26,6 +26,9 @@ import Testimonials from '../components/sections/Testimonials.astro';
 import Story from '../components/sections/Story.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
 import Articles from '../components/sections/Articles.astro';
+import StickyCTA from '../components/ui/StickyCTA.astro';
+import { getStrings } from '../i18n/utils';
+const t = getStrings(Astro.currentLocale);
 ---
 
 <BaseLayout
@@ -79,4 +82,15 @@ import Articles from '../components/sections/Articles.astro';
     Real articles arrive Phase 3 (Substack integration).
   -->
   <Articles />
+
+  <!--
+    StickyCTA — appears when the hero primary CTA (#hero-cta) scrolls out of view.
+    Fires 'Sticky CTA: Click' Plausible goal on click. D-07 / GROW-01.
+    targetId matches the id="hero-cta" on the Hero.astro primary CTA anchor.
+  -->
+  <StickyCTA
+    label={t.hero.ctaPrimary}
+    href={`${import.meta.env.BASE_URL}contact`}
+    targetId="hero-cta"
+  />
 </BaseLayout>

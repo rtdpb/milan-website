@@ -1,0 +1,156 @@
+---
+/**
+ * StickyCTA.astro
+ * Sticky bottom conversion CTA bar — D-07 conversion optimization (GROW-01, Phase 5).
+ *
+ * Appears when the hero/page primary CTA scrolls out of view (IntersectionObserver).
+ * Hides when the primary CTA re-enters the viewport.
+ * Fires a Plausible goal on click.
+ *
+ * Source: 05-RESEARCH.md §Pattern 6, §Common Pitfalls 4, Example 4
+ *         05-UI-SPEC.md §3 Sticky CTA, §Accessibility Contract
+ *         05-PATTERNS.md §StickyCTA.astro
+ *
+ * Props:
+ *   label        — button text (localized from t.hero.ctaPrimary or t.boek.stickyCta)
+ *   href         — destination URL (contact page; BASE_URL-safe or getRelativeLocaleUrl)
+ *   targetId     — id of the hero CTA element to observe
+ *                   homepage: 'hero-cta'  (Hero.astro primary anchor)
+ *                   book page: 'boek-hero-cta' (boek.astro / en/book.astro hero CTA)
+ *   plausibleGoal — Plausible event name on click (default: 'Sticky CTA: Click')
+ *
+ * Z-index: 90 — below nav header (100) and mobile nav panel (200).
+ * Bar background: --color-bg (NOT yellow — accent stays on the button only).
+ *
+ * Accessibility:
+ *   - Initial state: hidden attribute + aria-hidden="true" (invisible, not in tab order)
+ *   - Visible state: hidden removed, aria-hidden="false"
+ *   - Reduced motion: no slide transition — bar appears/disappears instantly
+ */
+
+interface Props {
+  label: string;
+  href: string;
+  targetId: string;
+  plausibleGoal?: string;
+}
+
+const { label, href, targetId, plausibleGoal = 'Sticky CTA: Click' } = Astro.props;
+---
+
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true" hidden>
+  <div class="sticky-cta__inner">
+    <a href={href} class="btn btn--primary sticky-cta__btn" id="sticky-cta-btn">
+      {label}
+    </a>
+  </div>
+</div>
+
+<!-- IntersectionObserver island — watches targetId hero element.
+     define:vars passes props into the client-side script (Astro island pattern).
+     Source: RevealOnScroll.astro IIFE pattern, 05-RESEARCH.md §Pattern 6 -->
+<script define:vars={{ targetId, plausibleGoal }}>
+(function () {
+  'use strict';
+
+  var banner = document.getElementById('sticky-cta');
+  var btn    = document.getElementById('sticky-cta-btn');
+  var hero   = document.getElementById(targetId);
+
+  // Bail if any required element is missing — prevents silent failures
+  if (!banner || !btn || !hero) return;
+
+  // Respect prefers-reduced-motion: no slide animation for users who prefer it
+  // Source: RevealOnScroll.astro lines 58–59, 05-UI-SPEC.md §Accessibility Contract
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // IntersectionObserver: threshold 0 — fires as soon as any pixel of hero exits viewport
+  // show = !isIntersecting: show sticky when hero CTA is NOT visible
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var show = !entry.isIntersecting;
+
+      // Toggle hidden attribute and aria-hidden (accessibility: out of tab order when hidden)
+      banner.hidden = !show;
+      banner.setAttribute('aria-hidden', show ? 'false' : 'true');
+
+      // Only toggle the slide-in class when motion is allowed
+      if (!prefersReduced) {
+        if (show) {
+          banner.classList.add('sticky-cta--visible');
+        } else {
+          banner.classList.remove('sticky-cta--visible');
+        }
+      }
+    });
+  }, { threshold: 0 });
+
+  observer.observe(hero);
+
+  // Plausible goal on click — typeof guard (belt-and-suspenders alongside queue guard)
+  // Source: 05-PATTERNS.md §Shared Patterns → Plausible event firing
+  btn.addEventListener('click', function () {
+    if (typeof window.plausible === 'function') {
+      window.plausible(plausibleGoal);
+    }
+  });
+})();
+</script>
+
+<style>
+  /* ── Sticky bar layout ───────────────────────────────────────────────────── */
+  .sticky-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 90; /* below nav header (100) and mobile nav panel (200) */
+    background-color: var(--color-bg); /* NOT yellow — matches page background */
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-md);
+    /* Default: translated offscreen (bar is hidden initially via `hidden` attr) */
+    transform: translateY(100%);
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  /* Slide in when the .sticky-cta--visible class is added (motion-ok users only) */
+  .sticky-cta--visible {
+    transform: translateY(0);
+  }
+
+  /* No slide transition when reduced motion is preferred */
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta {
+      transition: none;
+    }
+  }
+
+  /* ── Inner container — centred, max-width constrained ────────────────────── */
+  .sticky-cta__inner {
+    max-width: var(--max-width);
+    margin-inline: auto;
+    padding-inline: var(--space-lg); /* 24px on mobile */
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .sticky-cta__inner {
+      padding-inline: var(--space-3xl); /* 64px on desktop */
+    }
+  }
+
+  /* ── Button — near-full-width on mobile, auto-width centred on desktop ────── */
+  /* Mobile (<768px): near-full-width button (max 360px), centred */
+  .sticky-cta__btn {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  /* Desktop (>=768px): auto-width centred button */
+  @media (min-width: 768px) {
+    .sticky-cta__btn {
+      width: auto;
+    }
+  }
+</style>

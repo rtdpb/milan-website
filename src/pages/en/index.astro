@@ -28,6 +28,10 @@ import Testimonials from '../../components/sections/Testimonials.astro';
 import Story from '../../components/sections/Story.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
 import Articles from '../../components/sections/Articles.astro';
+import StickyCTA from '../../components/ui/StickyCTA.astro';
+import { getStrings } from '../../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+const t = getStrings(Astro.currentLocale);
 ---
 
 <BaseLayout
@@ -76,4 +80,15 @@ import Articles from '../../components/sections/Articles.astro';
     D-02: en.articles.heading includes "(written in Dutch)" note.
   -->
   <Articles />
+
+  <!--
+    StickyCTA — appears when the hero primary CTA (#hero-cta) scrolls out of view.
+    EN: href uses getRelativeLocaleUrl (never manual concatenation, I18N-02).
+    Fires 'Sticky CTA: Click' Plausible goal on click. D-07 / GROW-01.
+  -->
+  <StickyCTA
+    label={t.hero.ctaPrimary}
+    href={getRelativeLocaleUrl('en', 'contact')}
+    targetId="hero-cta"
+  />
 </BaseLayout>

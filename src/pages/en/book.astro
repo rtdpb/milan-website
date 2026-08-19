@@ -22,7 +22,9 @@ import SectionWrapper from '../../components/ui/SectionWrapper.astro';
 import Button from '../../components/ui/Button.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
 import BookInterestForm from '../../components/forms/BookInterestForm.astro';
+import StickyCTA from '../../components/ui/StickyCTA.astro';
 import { getStrings } from '../../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { TODO_BOOK_CHECKOUT_URL, TODO_SUBSTACK_URL } from '../../config';
 
 // Astro.currentLocale is 'en' automatically for /en/* pages at build time.
@@ -137,6 +139,17 @@ const subscribeUrl = `${TODO_SUBSTACK_URL}/subscribe`;
 
   <!-- Newsletter section reused at the bottom -->
   <Newsletter />
+
+  <!--
+    StickyCTA — appears when the book hero CTA (#boek-hero-cta) scrolls out of view.
+    EN: href uses getRelativeLocaleUrl (I18N-02).
+    Fires 'Sticky CTA: Click' Plausible goal on click. D-07 / GROW-01.
+  -->
+  <StickyCTA
+    label={t.boek.stickyCta}
+    href={getRelativeLocaleUrl('en', 'contact')}
+    targetId="boek-hero-cta"
+  />
 
 </BaseLayout>
 
