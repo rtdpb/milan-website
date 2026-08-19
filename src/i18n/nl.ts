@@ -191,6 +191,7 @@ export const nl = {
     successMsg:     'Bedankt! Ik neem snel contact met je op.',
     errorMsg:       'Er is iets misgegaan. Probeer het opnieuw of mail me direct.',
     errorNetwork:   'Geen verbinding. Controleer je internetverbinding en probeer opnieuw.',
+    emailSubject:   'Nieuw bericht via milanvandermeulen.nl',
   },
 
   // ── Coaching Page (PAGE-01) ──────────────────────────────────────────────

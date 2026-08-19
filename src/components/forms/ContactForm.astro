@@ -48,6 +48,7 @@ const {
   successMsg,
   errorMsg,
   errorNetwork,
+  emailSubject,
 } = t.contact;
 ---
 
@@ -71,8 +72,8 @@ const {
     <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
     <input type="hidden" name="access_key" value={TODO_WEB3FORMS_ACCESS_KEY} />
 
-    <!-- Hidden: fixed Dutch subject line for Web3Forms email subject -->
-    <input type="hidden" name="subject" value="Nieuw bericht via milanvandermeulen.nl" />
+    <!-- Hidden: locale-resolved subject line for Web3Forms email subject (CR-01) -->
+    <input type="hidden" name="subject" value={emailSubject} />
 
     <!-- Hidden: redirect for no-JS path (Web3Forms default thank-you page) -->
     <input type="hidden" name="redirect" value="https://web3forms.com/success" />

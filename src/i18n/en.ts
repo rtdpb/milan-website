@@ -199,6 +199,7 @@ export const en = {
     successMsg:     "Thank you! I'll be in touch soon.",
     errorMsg:       'Something went wrong. Please try again or email me directly.',
     errorNetwork:   'No connection. Check your internet and try again.',
+    emailSubject:   'New message via milanvandermeulen.nl',
   },
 
   // ── Coaching Page ─────────────────────────────────────────────────────────
