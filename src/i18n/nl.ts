@@ -338,6 +338,33 @@ export const nl = {
     ],
   },
 
+  // ── Book / Pre-order Page (BOOK-01, Phase 5) ──────────────────────────────
+  boek: {
+    pageTitle:     'Boek — Milan van der Meulen',
+    pageDesc:      'Het boek dat Milan schrijft over schalen zonder jezelf te verliezen. Schrijf je in voor updates.',
+    eyebrow:       'Binnenkort',
+    heading:       'Een boek over schalen zonder jezelf te verliezen',
+    body:          [
+      'Ik schrijf een boek. Over wat ik heb geleerd in tien jaar bouwen, groeien en uiteindelijk failliet gaan.',
+      'Geen succesverhaal — een eerlijk verslag van wat er werkelijk gebeurt als je een bedrijf opschaalt.',
+    ] as const,
+    subtext:       'Schrijf je in voor updates en ontvang het nieuws als eerste.',
+    ctaSubstack:   'Schrijf je in voor updates',
+    ctaNotify:     'Stuur mij een seintje',
+    formHeading:   'Houd me op de hoogte',
+    labelNaam:     'Naam',
+    labelEmail:    'Mailadres',
+    ctaSubmit:     'Stuur mij een seintje',
+    ctaSubmitting: 'Versturen…',
+    successMsg:    'Bedankt! Je hoort het als het boek er is.',
+    errorMsg:      'Er is iets misgegaan. Probeer het opnieuw.',
+    errorNetwork:  'Geen verbinding. Controleer je internetverbinding.',
+    emailSubject:  'Boek interesse via milanvandermeulen.nl',
+    checkoutCta:   'Pre-order',
+    stickyCta:     'Plan kennismaking',
+    orSeparator:   'of',
+  },
+
   // ── Common / Shared ──────────────────────────────────────────────────────
   common: {
     /** Visible marker pill on placeholder cards (UI-SPEC §Copywriting Contract) */

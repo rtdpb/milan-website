@@ -346,6 +346,33 @@ export const en = {
     ],
   },
 
+  // ── Book / Pre-order Page (BOOK-01, Phase 5) ──────────────────────────────
+  boek: {
+    pageTitle:     'Book — Milan van der Meulen',
+    pageDesc:      'The book Milan is writing about scaling without losing yourself. Sign up for updates.',
+    eyebrow:       'Coming Soon',
+    heading:       'A book about scaling without losing yourself',
+    body:          [
+      "I'm writing a book. About what I learned in ten years of building, growing, and ultimately failing.",
+      'Not a success story — an honest account of what really happens when you scale a company.',
+    ] as const,
+    subtext:       'Sign up for updates and be the first to hear the news.',
+    ctaSubstack:   'Subscribe for updates',
+    ctaNotify:     'Notify me',
+    formHeading:   'Keep me posted',
+    labelNaam:     'Name',
+    labelEmail:    'Email address',
+    ctaSubmit:     'Notify me',
+    ctaSubmitting: 'Sending…',
+    successMsg:    "Thanks! You'll hear from us when the book is ready.",
+    errorMsg:      'Something went wrong. Please try again.',
+    errorNetwork:  'No connection. Check your internet connection.',
+    emailSubject:  'Book interest via milanvandermeulen.nl',
+    checkoutCta:   'Pre-order',
+    stickyCta:     'Book a call',
+    orSeparator:   'or',
+  },
+
   // ── Common / Shared ──────────────────────────────────────────────────────
   common: {
     /** Visible marker pill on placeholder cards */

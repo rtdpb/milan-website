@@ -78,6 +78,25 @@ export const TODO_PRIVACY_URL = 'TODO_PRIVACY_URL';
  */
 export const TODO_TERMS_URL = 'TODO_TERMS_URL';
 
+/**
+ * External pre-order / purchase URL for the book.
+ * TODO Phase 5+: replace when a real pre-order link is chosen
+ * (Gumroad / Bol.com / publisher / Stripe Payment Link).
+ * Until supplied: NO purchase button is shown (honesty rule, D-03, HOME-10).
+ * Sentinel check: TODO_BOOK_CHECKOUT_URL === 'TODO_BOOK_CHECKOUT_URL'
+ * Used in: src/pages/boek.astro, src/pages/en/book.astro
+ */
+export const TODO_BOOK_CHECKOUT_URL = 'TODO_BOOK_CHECKOUT_URL';
+
+/**
+ * Plausible Analytics domain — must match the domain registered in Plausible dashboard.
+ * TODO Phase 5: replace with real domain once Plausible account and domain are confirmed
+ * (e.g. 'milanvandermeulen.nl' — NOT the GitHub Pages URL).
+ * Sentinel check: TODO_PLAUSIBLE_DOMAIN === 'TODO_PLAUSIBLE_DOMAIN' → analytics inert.
+ * Used in: src/components/analytics/PlausibleScript.astro
+ */
+export const TODO_PLAUSIBLE_DOMAIN = 'TODO_PLAUSIBLE_DOMAIN';
+
 // ── Disabled CTA Tooltip ────────────────────────────────────────────────────
 
 /**
