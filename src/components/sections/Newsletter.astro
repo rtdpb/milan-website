@@ -33,7 +33,7 @@ const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
 // if the supplied Substack URL ends with '/'. Defensive normalisation at every usage site.
 const subscribeUrl = `${TODO_SUBSTACK_URL.replace(/\/$/, '')}/subscribe`;
 
-const { heading, subtext, labelEmail, cta, disclaimer } = t.newsletter;
+const { heading, subtext, cta, disclaimer } = t.newsletter;
 ---
 
 <SectionWrapper id="nieuwsbrief" labelledBy="newsletter-heading" variant="default">
@@ -49,49 +49,23 @@ const { heading, subtext, labelEmail, cta, disclaimer } = t.newsletter;
       </p>
     </div>
 
-    <!-- ── Signup form ───────────────────────────────────────────────────── -->
+    <!-- ── CTA: conditional sentinel vs live redirect ──────────────────────── -->
     <!--
+      WR-06: the email field collected a value that was silently discarded (onsubmit="return false;"
+      and the redirect anchor ignored the entered email — a false affordance). Fix: remove the
+      email input entirely and replace the form with a direct CTA block. The redirect is honest —
+      no field implies no email is being captured here; subscription happens on Substack's page.
+
       REDIRECT STATE (D-05, NEWS-02):
       IS_SENTINEL = true  → disabled aria-disabled span (no URL yet)
       IS_SENTINEL = false → <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
       No on-site success state. No ?email= prefill. No JS submit handler.
-      onsubmit="return false;" stays — form is never submitted on-site.
       Security note (T-01-04): rel="noopener noreferrer" on any target=_blank redirect.
     -->
-    <form
-      class="newsletter__form"
-      aria-label={(Astro.currentLocale ?? 'nl') === 'en'
-        ? 'Newsletter signup — submitting opens Substack in a new tab'
-        : 'Nieuwsbrief aanmelden — versturen opent Substack in een nieuw tabblad'}
-      novalidate
-      onsubmit="return false;"
-    >
-      <!-- Single email field, centered (D-05: naam removed, single-field layout) -->
-      <div class="newsletter__fields newsletter__fields--single">
-
-        <!-- Email field — explicit label (FND-06, a11y) -->
-        <div class="newsletter__field-group">
-          <label for="nl-email" class="newsletter__label">
-            {labelEmail}
-          </label>
-          <input
-            id="nl-email"
-            type="email"
-            name="email"
-            autocomplete="email"
-            placeholder={(Astro.currentLocale ?? 'nl') === 'en' ? 'your@email.com' : 'jouw@email.nl'}
-            required
-            class="newsletter__input"
-          />
-        </div>
-
-      </div>
-      <!-- End field row -->
-
-      <!-- Submit: conditional sentinel vs live redirect (D-05, NEWS-02)
-           Sentinel state: aria-disabled span — same visual as Phase 1, honestly non-functional.
+    <div class="newsletter__cta-block">
+      <!-- Submit: conditional sentinel vs live redirect (D-05, NEWS-02, WR-06)
+           Sentinel state: aria-disabled span — no URL yet, honestly non-functional.
            Live state:     <a> redirect to Substack — new tab, rel="noopener noreferrer" (T-01-04).
-           No ?email= prefill (RESEARCH A1/Pitfall 6 unconfirmed — plain redirect is the honest default).
            Security note (T-01-04): rel="noopener noreferrer" required on target="_blank" (tab-napping).
       -->
       {IS_SENTINEL ? (
@@ -119,7 +93,7 @@ const { heading, subtext, labelEmail, cta, disclaimer } = t.newsletter;
         </a>
       )}
 
-      <!-- Screen-reader note: conditional on sentinel state (CR-03).
+      <!-- Screen-reader note: conditional on sentinel state.
            Sentinel state: "coming soon" with aria-live (correct — no action possible yet).
            Live state: redirect info without aria-live (link is functional, no announcement needed). -->
       {IS_SENTINEL ? (
@@ -135,8 +109,7 @@ const { heading, subtext, labelEmail, cta, disclaimer } = t.newsletter;
             : 'Je wordt doorgestuurd naar Substack om je in te schrijven.'}
         </p>
       )}
-
-    </form>
+    </div>
 
     <!-- Disclaimer -->
     <p class="newsletter__disclaimer">
@@ -212,77 +185,14 @@ const { heading, subtext, labelEmail, cta, disclaimer } = t.newsletter;
     max-width: 560px;
   }
 
-  /* ── Form container ───────────────────────────────────────────────────────── */
-  .newsletter__form {
+  /* ── CTA block: replaces the form+email-field layout (WR-06) ────────────── */
+  /* Centered flex column matching the old form layout. */
+  .newsletter__cta-block {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-lg);
     width: 100%;
-  }
-
-  /* ── Fields row: single field, centered (D-05: naam removed) ─────────────── */
-  .newsletter__fields {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    width: 100%;
-  }
-
-  /* Single-field layout: constrained width + centered (UI-SPEC §Surface 1) */
-  .newsletter__fields--single {
-    max-width: 480px;
-    margin-inline: auto;
-  }
-
-  /* ── Individual field group (label + input) ──────────────────────────────── */
-  .newsletter__field-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-    flex: 1;
-    text-align: left;
-  }
-
-  /* ── Label ────────────────────────────────────────────────────────────────── */
-  .newsletter__label {
-    font-family: var(--font-body);
-    font-size: var(--text-sm);   /* 14–16px label size */
-    font-weight: 600;
-    color: var(--color-text);
-    letter-spacing: 0.01em;
-  }
-
-  /* ── Input fields (UI-SPEC §NewsletterSection, FND-06) ───────────────────── */
-  .newsletter__input {
-    /* UI-SPEC: border 1px --color-border, border-radius 8px, height 48px,
-       --space-md horizontal padding, font-size 16px (iOS zoom prevention) */
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);  /* 8px */
-    height: 48px;
-    padding-inline: var(--space-md);  /* 16px */
-    font-family: var(--font-body);
-    font-size: 1rem;                  /* 16px FIXED — prevents iOS zoom (FND-06) */
-    font-weight: 400;
-    color: var(--color-text);
-    background-color: var(--color-bg);
-    width: 100%;
-    box-sizing: border-box;
-    outline: none;
-    transition:
-      border-color var(--duration-fast) var(--ease-out),
-      box-shadow   var(--duration-fast) var(--ease-out);
-  }
-
-  .newsletter__input::placeholder {
-    color: var(--color-text-secondary);
-  }
-
-  /* Focus ring: 2px --color-accent with 2px offset (UI-SPEC §Form Input Focus States, FND-06) */
-  .newsletter__input:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-    border-color: var(--color-accent);
   }
 
   /* ── Submit — shared base styles ─────────────────────────────────────────── */
