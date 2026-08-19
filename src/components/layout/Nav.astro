@@ -166,6 +166,9 @@ const navItems = isEn
       </span>
 
       <!-- Hamburger toggle (mobile only — aria-expanded managed by JS island below) -->
+      <!-- CR-04: data-label-* carry locale strings so the JS island can read them
+           instead of hardcoding Dutch. The JS island overwrites aria-label on
+           open/close — without these attributes it always wrote Dutch strings. -->
       <button
         class="hamburger"
         id="nav-toggle"
@@ -173,6 +176,8 @@ const navItems = isEn
         aria-expanded="false"
         aria-controls="mobile-nav-panel"
         aria-label={t.nav.openMenu}
+        data-label-open={t.nav.openMenu}
+        data-label-close={t.nav.closeMenu}
       >
         <!-- Three-line hamburger icon -->
         <span class="hamburger__line" aria-hidden="true"></span>
@@ -274,6 +279,12 @@ const navItems = isEn
     const c = closeBtn!;
     const b = backdrop!;
 
+    // CR-04: read locale-resolved aria-label strings from data-* attributes
+    // baked into the button at build time (see template above). Fall back to
+    // Dutch so NL behaviour is identical to before this fix.
+    const labelOpen  = (t as HTMLButtonElement).dataset.labelOpen  || 'Menu openen';
+    const labelClose = (t as HTMLButtonElement).dataset.labelClose || 'Menu sluiten';;
+
     // ── Scroll-aware header background ─────────────────────────────────────
     // Transparent at top; --color-bg + shadow after ~60px scroll.
     // Uses requestAnimationFrame for smooth, non-jank class toggling.
@@ -306,7 +317,7 @@ const navItems = isEn
       p.hidden = false;
       b.hidden = false;
       t.setAttribute('aria-expanded', 'true');
-      t.setAttribute('aria-label', 'Menu sluiten');
+      t.setAttribute('aria-label', labelClose);
       document.body.style.overflow = 'hidden'; // prevent background scroll
 
       // Move focus into the panel (a11y — focus trap start)
@@ -327,7 +338,7 @@ const navItems = isEn
 
     function closeNav() {
       t.setAttribute('aria-expanded', 'false');
-      t.setAttribute('aria-label', 'Menu openen');
+      t.setAttribute('aria-label', labelOpen);
       document.body.style.overflow = '';
 
       if (!prefersReducedMotion()) {
