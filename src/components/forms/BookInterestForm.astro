@@ -51,7 +51,9 @@ const {
 <!-- BookInterestForm: Web3Forms 2-field notify form (BOOK-01, Phase 5) -->
 <div class="book-form-wrap">
   <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
-  <h2 class="book-form__heading">{formHeading}</h2>
+  <!-- WR-03: demoted to h3 — the containing page section provides the h2 heading.
+       Using h2 here produced two identical consecutive h2s on boek.astro/en/book.astro. -->
+  <h3 class="book-form__heading">{formHeading}</h3>
   <form
     id="book-interest-form"
     method="POST"
