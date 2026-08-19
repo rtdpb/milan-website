@@ -35,14 +35,14 @@ const navItems = isEn
       { label: t.nav.spreker,     href: getRelativeLocaleUrl('en', 'speaking') },
       { label: t.nav.nieuwsbrief, href: getRelativeLocaleUrl('en', 'newsletter') },
       { label: t.nav.mijnVerhaal, href: getRelativeLocaleUrl('en', 'about') },
-      { label: t.nav.boek,        reason: 'Book page follows in phase 5' },
+      { label: t.nav.boek,        href: getRelativeLocaleUrl('en', 'book') },
     ]
   : [
       { label: t.nav.coaching,    href: `${import.meta.env.BASE_URL}coaching` },
       { label: t.nav.spreker,     href: `${import.meta.env.BASE_URL}spreker` },
       { label: t.nav.nieuwsbrief, href: `${import.meta.env.BASE_URL}nieuwsbrief` },
       { label: t.nav.mijnVerhaal, href: `${import.meta.env.BASE_URL}mijn-verhaal` },
-      { label: t.nav.boek,        reason: 'Boek pagina volgt in fase 5' },
+      { label: t.nav.boek,        href: `${import.meta.env.BASE_URL}boek` },
     ];
 ---
 

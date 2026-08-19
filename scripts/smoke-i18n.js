@@ -118,5 +118,15 @@ if (!sitemapContent.includes('/en/')) {
   process.exit(1);
 }
 
+// ── (e) Phase 5 BOOK-01: /boek and /en/book pages must exist ─────────────
+// Asserts that the bilingual book page pair built correctly (BOOK-01 acceptance gate)
+const nlBoekPath = path.join(distDir, 'boek', 'index.html');
+const enBookPath = path.join(distDir, 'en', 'book', 'index.html');
+
+readFile(nlBoekPath, 'dist/boek/index.html');    // exits 1 if missing
+readFile(enBookPath, 'dist/en/book/index.html'); // exits 1 if missing
+
+console.log('[smoke-i18n] /boek + /en/book page presence: OK');
+
 // ── All checks passed ─────────────────────────────────────────────────────
 console.log('I18N_SMOKE_OK');
