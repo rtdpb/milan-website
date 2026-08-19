@@ -54,8 +54,8 @@ Deferred to later phases — tracked, not in the first milestone.
 
 ### Internationalization (Phase 4)
 
-- **I18N-01**: Functional NL/EN language switch
-- **I18N-02**: English translations of homepage and pages
+- [x] **I18N-01**: Functional NL/EN language switch — delivered in 04-01 (Nav switch, getRelativeLocaleUrl, slug maps)
+- [x] **I18N-02**: English translations of homepage and pages — homepage EN slice delivered in 04-01; supporting pages planned in 04-02
 
 ### Book & Growth (Phase 5)
 

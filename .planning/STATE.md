@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 3
+current_phase: 4
 status: in_progress
 stopped_at: Phase 4 context gathered
-last_updated: "2026-08-19T10:17:32.590Z"
+last_updated: "2026-08-19T10:19:00.833Z"
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 14
   completed_plans: 12
-current_phase_name: Newsletter & Substack Integration
+current_phase_name: Internationalization & English Content
 ---
 
 # Project State
@@ -21,12 +21,12 @@ current_phase_name: Newsletter & Substack Integration
 See: `.planning/PROJECT.md` (updated 2026-08-18)
 
 **Core value:** Make Milan feel like a credible, experienced, and honest founder so the right entrepreneurs reach out for coaching/speaking and subscribe to the newsletter.
-**Current focus:** Phase 3 — Newsletter & Substack Integration
+**Current focus:** Phase 4 — Internationalization & English Content
 
 ## Status
 
 - **Milestone:** v1 — Dutch homepage MVP
-- **Current phase:** 3
+- **Current phase:** 4
 - **Phases total:** 5 (Phase 1 = current milestone; Phases 2–5 = planned growth)
 - **Plans completed:** 6/6 Phase 1 + 3/3 Phase 2 (all PAGE-01..05 delivered)
 - **Last action:** Executed Plan 03-02 — /nieuwsbrief editorial landing page + Newsletter.astro email-only Substack redirect rewire; 6 pages built, 0 errors.
@@ -69,6 +69,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - **NEW: Nav + Footer mijnVerhaal enabled** — real <a> links with active-state; Nieuwsbrief + Boek remain only disabled placeholders — COMPLETE
 - **NEW (Phase 3-01): RSS pipeline tracer** — fast-xml-parser@5.11.0 installed; src/lib/rss.ts (fetchSubstackFeed + ArticleCard/PlaceholderCard); Articles.astro rewired behind IS_SENTINEL guard (D-04: placeholder state honest, D-02: build-time fetch, D-06: fallback); .github/workflows/deploy.yml with push+cron+dispatch+concurrency — COMPLETE
 - **NEW (Phase 3-02): /nieuwsbrief page + Newsletter rewire** — src/pages/nieuwsbrief.astro (hero/value-prop/signup/10-item archive), Newsletter.astro email-only Substack redirect (naam field removed D-05), nl.nieuwsbrief copy block added; NEWS-01/NEWS-02 delivered — COMPLETE
+- **NEW (Phase 4-01): Bilingual i18n tracer** — Astro i18n activated (NL root / EN under /en/*), `src/i18n/en.ts` (15 keys, D-01/D-02/D-03), `src/i18n/utils.ts` (getStrings helper + DeepWiden<T> shape guard + nlToEn/enToNl slug maps), `scripts/smoke-i18n.js` (post-build ES module smoke check), `astro.config.mjs` updated (locales: ['nl','en'], sitemap en:'en'), BaseLayout locale-wired (lang attr), BaseHead hreflang alternates (nl/en/x-default + dynamic og:locale), Nav functional NL↔EN switch (getRelativeLocaleUrl + slug map), 7 homepage section components refactored to getStrings(), `src/pages/en/index.astro` EN homepage — smoke passes I18N_SMOKE_OK; I18N-01/I18N-02 delivered — COMPLETE
 
 ## Decisions Made
 
@@ -101,6 +102,10 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Phase 3-02 social proof omitted: no newsletter-specific quote exists; fabricating or repurposing coaching/speaking quotes prohibited (HOME-11, UI-SPEC §2e)
 - [Phase ?]: Nieuwsbrief nav/footer: single-entry navItems change; existing item.href conditional handles active-state render — no markup change required
 - [Phase ?]: Samenwerken Nieuwsbrief card: no external prop (internal link to /nieuwsbrief, not Substack redirect); variant field added to ladderCards
+- Phase 4-01: DeepWiden<T> utility type used instead of bare satisfies Record<Locale, typeof nl> — nl.ts as const literal types make en values incompatible; DeepWiden widens leaf types to base enabling key+depth shape check without literal mismatch
+- Phase 4-01: smoke-i18n.js converted from CJS require() to ES import — package.json type:module requires ES syntax; __dirname derived via fileURLToPath(import.meta.url)
+- Phase 4-01: Story.astro isMijnVerhaalPage guard extended to /about (EN slug) to prevent circular self-link on EN story page
+- Phase 4-01: Newsletter + Story hardcoded Dutch strings made locale-conditional with isEn ternary — aria-labels, placeholder, sentinel notes, signature role
 
 ## Performance Metrics
 
@@ -117,6 +122,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 02 | 03 | ~15 min | 3/3 | 1 created, 6 modified |
 | 03 | 01 | ~10 min | 3/3 | 2 created, 4 modified |
 | 03 | 02 | ~12 min | 3/3 | 1 created, 2 modified |
+| 04 | 01 | ~12 min | 3/3 | 4 created, 12 modified |
 **Per-Plan Metrics:**
 
 | Plan | Duration | Tasks | Files |
@@ -125,13 +131,13 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 
 ## Next Step
 
-Phase 3 Plan 03 complete and human-verified. All three Nieuwsbrief entry points (Nav desktop+mobile, Footer, Samenwerken card) now link to /nieuwsbrief. Phase 3 (all 3 plans) done — NEWS-01 delivered; NEWS-02/NEWS-03 ship integration-ready behind the TODO_SUBSTACK_URL sentinel (one grep-replace flips the whole newsletter integration live). Next: Phase 4 (Internationalization — NL/EN switch) or milestone review.
+Phase 4 Plan 01 complete. Bilingual i18n tracer delivered: NL root / EN under /en/*, functional Nav switch, hreflang alternates, 7 section components locale-aware, smoke I18N_SMOKE_OK. I18N-01/I18N-02 requirements satisfied. Next: Phase 4 Plan 02 (supporting EN pages — /en/about, /en/coaching, /en/speaking, /en/newsletter, /en/contact) or milestone review.
 
 ---
-*Last updated: 2026-08-19 after Plan 03-03 execution*
+*Last updated: 2026-08-19 after Plan 04-01 execution*
 
 ## Session
 
-**Last session:** 2026-08-19T09:50:14.891Z
-**Stopped at:** Phase 4 context gathered
-**Resume file:** .planning/phases/04-internationalization-english-content/04-CONTEXT.md
+**Last session:** 2026-08-19T00:00:00.000Z
+**Stopped at:** Completed 04-01-PLAN.md — Wave-0 i18n tracer (en.ts + utils.ts + smoke + /en/ homepage), 3 tasks, 3 commits, smoke I18N_SMOKE_OK
+**Resume file:** .planning/phases/04-internationalization-english-content/04-02-PLAN.md
