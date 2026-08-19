@@ -26,10 +26,12 @@ import RevealOnScroll from '../components/ui/RevealOnScroll.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
 import { Picture } from 'astro:assets';
 import networkingSrc from '../assets/photos/milan-networking.jpg';
-import { nl } from '../i18n/nl';
+import { getStrings } from '../i18n/utils';
 
-const { pageTitle, pageDesc, eyebrow, heading, body, offerHeading, offerEyebrow, offerCards, testimonialEyebrow, ctaHeading, ctaPrimary, ctaSecondary, networkingAlt } = nl.coaching;
-const testimonial = nl.testimonials.items[0]; // Yang Soo Kloosterhof — coaching-relevant (D-07)
+// Phase 4: locale-parameterized strings (Astro.currentLocale is 'nl' at root)
+const t = getStrings(Astro.currentLocale);
+const { pageTitle, pageDesc, eyebrow, heading, body, offerHeading, offerEyebrow, offerCards, testimonialEyebrow, ctaHeading, ctaPrimary, ctaSecondary, networkingAlt } = t.coaching;
+const testimonial = t.testimonials.items[0]; // Yang Soo Kloosterhof — coaching-relevant (D-07)
 ---
 
 <BaseLayout title={pageTitle} description={pageDesc}>

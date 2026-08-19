@@ -20,9 +20,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionWrapper from '../components/ui/SectionWrapper.astro';
 import ContactForm from '../components/forms/ContactForm.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
-import { nl } from '../i18n/nl';
+import { getStrings } from '../i18n/utils';
 
-const { pageTitle, pageDesc, heading, subtext } = nl.contact;
+// Phase 4: locale-parameterized strings (Astro.currentLocale is 'nl' at root)
+const t = getStrings(Astro.currentLocale);
+const { pageTitle, pageDesc, heading, subtext } = t.contact;
 ---
 
 <BaseLayout title={pageTitle} description={pageDesc}>

@@ -31,14 +31,18 @@ import Story from '../components/sections/Story.astro';
 import SectionWrapper from '../components/ui/SectionWrapper.astro';
 import Button from '../components/ui/Button.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
-import { nl } from '../i18n/nl';
+import { getStrings } from '../i18n/utils';
 
-const mv = nl.mijnVerhaal;
+// Phase 4: locale-parameterized strings (Astro.currentLocale is 'nl' at root)
+const t = getStrings(Astro.currentLocale);
+const mv = t.mijnVerhaal;
 ---
 
 <BaseLayout
   title={mv.pageTitle}
   description={mv.pageDesc}
+  nlSlug="mijn-verhaal"
+  enSlug="about"
 >
 
   <!--
