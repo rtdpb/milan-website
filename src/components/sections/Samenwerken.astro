@@ -38,6 +38,12 @@ const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 const newsletterHref = isEn
   ? getRelativeLocaleUrl('en', 'newsletter')
   : `${import.meta.env.BASE_URL}nieuwsbrief`;
+// WR-06: ?type= values (lezing, coaching, algemeen) are implementation constants,
+// not user-visible strings — they drive ContactForm's pre-selection logic.
+// EN CTAs intentionally keep Dutch option values because the ContactForm allowlist
+// and select option values are defined once for both locales. The visible label
+// ("Book a talk") is locale-resolved in ContactForm; only the posted value is Dutch.
+// If EN aliases are ever needed, add them to ALLOWED_TYPES in ContactForm.astro.
 const contactLezingHref = isEn
   ? `${getRelativeLocaleUrl('en', 'contact')}?type=lezing`
   : `${import.meta.env.BASE_URL}contact?type=lezing`;
