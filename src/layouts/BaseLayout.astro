@@ -2,35 +2,54 @@
 /**
  * BaseLayout.astro
  * Page shell for all pages. Imports global CSS (tokens + reset), renders
- * <html lang="nl">, BaseHead, skip-link, Nav (sticky header), main content,
+ * <html lang={lang}>, BaseHead, skip-link, Nav (sticky header), main content,
  * and Footer.
  *
  * Source: RESEARCH §Architecture Patterns, §Accessibility Baseline; D-17
  * Plan 02: Nav + Footer wired in this edit.
+ * Phase 4: locale-parameterized lang attr, skip-link text, BaseHead locale prop.
  */
 import BaseHead from '../components/layout/BaseHead.astro';
 import Nav from '../components/layout/Nav.astro';
 import Footer from '../components/layout/Footer.astro';
 import '../styles/global.css'; // Global token CSS applied to every component
+import { getStrings } from '../i18n/utils';
 
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** NL slug for hreflang cross-linking (needed when EN slug differs from NL slug) */
+  nlSlug?: string;
+  /** EN slug for hreflang cross-linking (needed when NL slug differs from EN slug) */
+  enSlug?: string;
 }
+
+// Phase 4: resolve locale from Astro.currentLocale (undefined on 404 → fallback 'nl')
+const lang = Astro.currentLocale ?? 'nl';
+const t = getStrings(lang);
 
 const {
   // Defaults sourced from UI-SPEC §SEO / Metadata Contract
   title = 'Milan van der Meulen — Founder Coach & Spreker',
   description = 'Milan van der Meulen is een ervaren ondernemer, founder coach en spreker. Hij hielp Soly groeien naar 9 landen en 180 medewerkers. Nu helpt hij andere founders schalen zonder zichzelf te verliezen.',
   ogImage,
+  nlSlug,
+  enSlug,
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="nl">
+<html lang={lang}>
   <head>
-    <BaseHead title={title} description={description} ogImage={ogImage} />
+    <BaseHead
+      title={title}
+      description={description}
+      ogImage={ogImage}
+      locale={lang}
+      nlSlug={nlSlug}
+      enSlug={enSlug}
+    />
   </head>
   <body>
     <!--
@@ -39,8 +58,9 @@ const {
       to bypass navigation and jump to main content directly.
       Styled in global.css (.skip-link).
       MUST precede Nav so keyboard users can bypass it.
+      Phase 4: text is locale-resolved from common.skipToContent.
     -->
-    <a href="#main-content" class="skip-link">Ga naar inhoud</a>
+    <a href="#main-content" class="skip-link">{t.common.skipToContent}</a>
 
     <!-- Site header — sticky, scroll-aware, with honest disabled nav/CTAs (Plan 02) -->
     <Nav />

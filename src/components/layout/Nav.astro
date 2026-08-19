@@ -23,8 +23,30 @@
  * Nav/footer background: NOT yellow (D-02, D-03).
  */
 
-import { nl } from '../../i18n/nl';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getStrings, nlToEn, enToNl } from '../../i18n/utils';
 import { SITE_NAME, DISABLED_TOOLTIP } from '../../config';
+
+// Phase 4: locale-parameterized strings + functional NL↔EN switch (D-07, I18N-01)
+const t = getStrings(Astro.currentLocale);
+
+const currentLocale = Astro.currentLocale ?? 'nl';
+const isEn = currentLocale === 'en';
+
+// ── Language switch href (D-07) ────────────────────────────────────────────
+// Strip base path + locale prefix to derive the current bare slug.
+// RESEARCH §Pattern 5, §Common Pitfall 5: use getRelativeLocaleUrl — never
+// manual concatenation — so base path (/milan-website/) is applied automatically.
+const base = import.meta.env.BASE_URL; // '/milan-website/'
+let rawSlug = Astro.url.pathname.startsWith(base)
+  ? Astro.url.pathname.slice(base.length)
+  : Astro.url.pathname.slice(1);
+rawSlug = rawSlug.replace(/\/$/, ''); // strip trailing slash
+const currentSlug = isEn ? rawSlug.replace(/^en\/?/, '') : rawSlug;
+
+const oppositeLocale = isEn ? 'nl' : 'en';
+const oppositeSlug   = isEn ? (enToNl[currentSlug] ?? '') : (nlToEn[currentSlug] ?? '');
+const switchHref     = getRelativeLocaleUrl(oppositeLocale, oppositeSlug);
 
 // Phase 3 Plan 03: nieuwsbrief enabled — /nieuwsbrief page now exists; boek still disabled
 const currentPath = Astro.url.pathname;
@@ -35,13 +57,24 @@ const currentPath = Astro.url.pathname;
 const isActive = (href: string) =>
   currentPath === href || currentPath === href.replace(/\/$/, '') + '/';
 
-const navItems = [
-  { label: nl.nav.coaching,    href: `${import.meta.env.BASE_URL}coaching` },
-  { label: nl.nav.spreker,     href: `${import.meta.env.BASE_URL}spreker` },
-  { label: nl.nav.nieuwsbrief, href: `${import.meta.env.BASE_URL}nieuwsbrief` },
-  { label: nl.nav.mijnVerhaal, href: `${import.meta.env.BASE_URL}mijn-verhaal` },
-  { label: nl.nav.boek,        reason: 'Boek pagina volgt in fase 5' },
-];
+// ── navItems — locale-branched (Phase 4) ─────────────────────────────────
+// EN: use getRelativeLocaleUrl so base path is handled automatically (Pitfall 5).
+// NL: keep existing BASE_URL-prefixed slugs for backward compatibility.
+const navItems = isEn
+  ? [
+      { label: t.nav.coaching,    href: getRelativeLocaleUrl('en', 'coaching') },
+      { label: t.nav.spreker,     href: getRelativeLocaleUrl('en', 'speaking') },
+      { label: t.nav.nieuwsbrief, href: getRelativeLocaleUrl('en', 'newsletter') },
+      { label: t.nav.mijnVerhaal, href: getRelativeLocaleUrl('en', 'about') },
+      { label: t.nav.boek,        reason: 'Book page follows in phase 5' },
+    ]
+  : [
+      { label: t.nav.coaching,    href: `${base}coaching` },
+      { label: t.nav.spreker,     href: `${base}spreker` },
+      { label: t.nav.nieuwsbrief, href: `${base}nieuwsbrief` },
+      { label: t.nav.mijnVerhaal, href: `${base}mijn-verhaal` },
+      { label: t.nav.boek,        reason: 'Boek pagina volgt in fase 5' },
+    ];
 ---
 
 <!-- TODO Plan 02 — Nav wired into BaseLayout -->
@@ -54,7 +87,7 @@ const navItems = [
     </a>
 
     <!-- Desktop Navigation -->
-    <nav class="site-header__nav" aria-label={nl.nav.navLabel}>
+    <nav class="site-header__nav" aria-label={t.nav.navLabel}>
       <ul class="nav-list" role="list">
         {navItems.map((item) => (
           <li>
@@ -87,22 +120,22 @@ const navItems = [
 
       <!-- Contact CTA: primary button — enabled in Phase 2 (D-11) -->
       <a
-        href={`${import.meta.env.BASE_URL}contact`}
+        href={isEn ? getRelativeLocaleUrl('en', 'contact') : `${base}contact`}
         class="btn btn--primary nav-cta"
       >
-        {nl.nav.contact}
+        {t.nav.contact}
       </a>
 
-      <!-- NL|EN switch: disabled affordance — Phase 4 wires real switching (D-16) -->
-      <span
+      <!-- NL|EN switch: functional language switch (Phase 4 — D-07, I18N-01) -->
+      <!-- Shows the OTHER locale label (clicking "EN" takes you to EN, etc.) -->
+      <!-- BRAND RULE (D-02/D-03): not yellow — matches existing affordance style -->
+      <a
+        href={switchHref}
         class="lang-switch"
-        aria-disabled="true"
-        aria-label="Taalselectie — beschikbaar in een toekomstige versie"
-        title="Engelstalige versie volgt in fase 4"
-        tabindex="-1"
+        aria-label={isEn ? 'Schakel naar Nederlands' : 'Switch to English'}
       >
-        {nl.common.nlEnSwitch}
-      </span>
+        {isEn ? 'NL' : 'EN'}
+      </a>
 
       <!-- LinkedIn icon: disabled — TODO_LINKEDIN_URL in config.ts -->
       <!--
@@ -114,7 +147,7 @@ const navItems = [
         class="linkedin-icon"
         role="link"
         aria-disabled="true"
-        aria-label={`${nl.nav.linkedin} — ${DISABLED_TOOLTIP}`}
+        aria-label={`${t.nav.linkedin} — ${DISABLED_TOOLTIP}`}
         tabindex="-1"
         title={DISABLED_TOOLTIP}
       >
@@ -139,7 +172,7 @@ const navItems = [
         type="button"
         aria-expanded="false"
         aria-controls="mobile-nav-panel"
-        aria-label={nl.nav.openMenu}
+        aria-label={t.nav.openMenu}
       >
         <!-- Three-line hamburger icon -->
         <span class="hamburger__line" aria-hidden="true"></span>
@@ -156,7 +189,7 @@ const navItems = [
   id="mobile-nav-panel"
   role="dialog"
   aria-modal="true"
-  aria-label={nl.nav.navLabel}
+  aria-label={t.nav.navLabel}
   hidden
 >
   <div class="mobile-nav__inner">
@@ -166,7 +199,7 @@ const navItems = [
         class="mobile-nav__close"
         id="nav-close"
         type="button"
-        aria-label={nl.nav.closeMenu}
+        aria-label={t.nav.closeMenu}
       >
         <!-- Close icon (×) -->
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -176,7 +209,7 @@ const navItems = [
       </button>
     </div>
 
-    <nav aria-label={nl.nav.navLabel}>
+    <nav aria-label={t.nav.navLabel}>
       <ul class="mobile-nav__list" role="list">
         {navItems.map((item) => (
           <li>
@@ -207,10 +240,10 @@ const navItems = [
     <!-- Mobile Contact CTA — enabled in Phase 2 (D-11) -->
     <div class="mobile-nav__cta">
       <a
-        href={`${import.meta.env.BASE_URL}contact`}
+        href={isEn ? getRelativeLocaleUrl('en', 'contact') : `${base}contact`}
         class="btn btn--primary"
       >
-        {nl.nav.contact}
+        {t.nav.contact}
       </a>
     </div>
   </div>
@@ -530,7 +563,8 @@ const navItems = [
     }
   }
 
-  /* ── NL|EN Switch (disabled affordance) ──────────────────────────────── */
+  /* ── NL|EN Switch — functional language switch (Phase 4, D-07) ──────── */
+  /* BRAND RULE: not yellow (D-02/D-03) — uses secondary text colour */
   .lang-switch {
     display: none; /* hidden on mobile (space) */
   }
@@ -544,10 +578,20 @@ const navItems = [
       font-weight: 600;
       letter-spacing: 0.04em;
       color: var(--color-text-secondary);
-      opacity: 0.4;                /* clearly inactive affordance */
-      cursor: not-allowed;
+      text-decoration: none;
       white-space: nowrap;
-      user-select: none;
+      cursor: pointer;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+
+    .lang-switch:hover {
+      color: var(--color-text);
+    }
+
+    .lang-switch:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
     }
   }
 

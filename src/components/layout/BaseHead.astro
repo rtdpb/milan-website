@@ -5,11 +5,20 @@
  * Source: RESEARCH §Pattern 4 (SEO BaseHead), §SEO/Metadata Checklist
  * Emits: charset, viewport, title, description, canonical, OG, Twitter,
  *        JSON-LD Person schema, font preloads, favicon.
+ * Phase 4: hreflang alternates, locale-correct og:locale, dynamic locale props.
  */
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+
 interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  /** Active locale — 'nl' | 'en'; defaults to 'nl' */
+  locale?: string;
+  /** NL slug override for hreflang (e.g. 'spreker' when on /en/speaking) */
+  nlSlug?: string;
+  /** EN slug override for hreflang (e.g. 'speaking' when on /spreker) */
+  enSlug?: string;
 }
 
 // Base path (import.meta.env.BASE_URL) — '/' locally, '/milan-website/' on
@@ -21,11 +30,40 @@ const {
   title,
   description,
   ogImage = `${base}og-image.jpg`,
+  locale = 'nl',
+  nlSlug,
+  enSlug,
 } = Astro.props;
 
 // Canonical URL — requires `site` set in astro.config.mjs (RESEARCH Pitfall 3).
 // Astro.url.pathname already includes the base at build time.
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// ── hreflang / og:locale (Phase 4) ───────────────────────────────────────────
+// Strip base path + locale prefix to derive the bare page slug for hreflang.
+// RESEARCH §Pattern 6, §Common Pitfall 3: always use getAbsoluteLocaleUrl, never
+// manually concatenate — the helper applies site + base + locale prefix correctly.
+let rawPath = Astro.url.pathname.startsWith(base)
+  ? Astro.url.pathname.slice(base.length)
+  : Astro.url.pathname.slice(1);
+rawPath = rawPath.replace(/\/$/, ''); // strip trailing slash
+
+// For pages where NL and EN slugs are identical (coaching, contact, homepage),
+// no explicit override is needed — strip the 'en/' prefix to get the bare slug.
+// For translated-slug pages (spreker ↔ speaking etc.), the caller passes explicit
+// nlSlug/enSlug props to BaseLayout which are forwarded here.
+const effectiveNlSlug = nlSlug ?? rawPath.replace(/^en\/?/, '');
+const effectiveEnSlug = enSlug ?? rawPath.replace(/^en\/?/, '');
+
+// getAbsoluteLocaleUrl returns a full URL including site + base + locale prefix
+// (e.g. https://rtdpb.github.io/milan-website/en/speaking).
+// RESEARCH §Common Pitfall 3: never call with the full pathname — slug only.
+const nlAbsUrl = getAbsoluteLocaleUrl('nl', effectiveNlSlug);
+const enAbsUrl = getAbsoluteLocaleUrl('en', effectiveEnSlug);
+
+// og:locale: 'en_US' for international English (D-04 / RESEARCH A6), 'nl_NL' otherwise.
+const ogLocale    = locale === 'en' ? 'en_US' : 'nl_NL';
+const ogLocaleAlt = locale === 'en' ? 'nl_NL' : 'en_US';
 
 // OG image absolute URL
 const ogImageURL = new URL(ogImage, Astro.site);
@@ -75,6 +113,12 @@ const personSchema = {
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
 
+<!-- hreflang alternates (Phase 4: I18N-01, D-04, D-05) -->
+<!-- RESEARCH §Common Pitfall 3: use getAbsoluteLocaleUrl — never manual concatenation -->
+<link rel="alternate" hreflang="nl"        href={nlAbsUrl} />
+<link rel="alternate" hreflang="en"        href={enAbsUrl} />
+<link rel="alternate" hreflang="x-default" href={nlAbsUrl} />
+
 <!-- Favicon (interim SVG — replace with brand favicon when supplied) -->
 <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 
@@ -108,7 +152,8 @@ const personSchema = {
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImageURL} />
-<meta property="og:locale" content="nl_NL" />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:locale:alternate" content={ogLocaleAlt} />
 <meta property="og:site_name" content="Milan van der Meulen" />
 
 <!-- Twitter Card -->
