@@ -118,15 +118,36 @@ if (!sitemapContent.includes('/en/')) {
   process.exit(1);
 }
 
-// ── (e) Phase 5 BOOK-01: /boek and /en/book pages must exist ─────────────
-// Asserts that the bilingual book page pair built correctly (BOOK-01 acceptance gate)
+// ── (e) Phase 5 BOOK-01: /boek and /en/book pages exist + content assertions ─
+// CR-04 + IN-03: assert existence AND content properties of both book pages.
+// Existence-only checks silently pass even if both pages render in the wrong locale.
 const nlBoekPath = path.join(distDir, 'boek', 'index.html');
 const enBookPath = path.join(distDir, 'en', 'book', 'index.html');
 
-readFile(nlBoekPath, 'dist/boek/index.html');    // exits 1 if missing
-readFile(enBookPath, 'dist/en/book/index.html'); // exits 1 if missing
+const nlBoekContent = readFile(nlBoekPath, 'dist/boek/index.html');
+const enBookContent = readFile(enBookPath, 'dist/en/book/index.html');
 
-console.log('[smoke-i18n] /boek + /en/book page presence: OK');
+// Assert lang attributes (guards locale misconfiguration)
+assertContains(nlBoekContent, 'lang="nl"', 'dist/boek/index.html must contain lang="nl"');
+assertContains(enBookContent, 'lang="en"', 'dist/en/book/index.html must contain lang="en"');
+
+// Assert NL page uses NL copy (eyebrow "Binnenkort" — guards locale fallback regression)
+assertContains(nlBoekContent, 'Binnenkort', 'dist/boek/index.html must contain NL eyebrow "Binnenkort"');
+
+// Assert EN page uses EN copy — no Dutch leak on EN book page (D-04)
+assertContains(enBookContent, 'Coming Soon', 'dist/en/book/index.html must contain EN eyebrow "Coming Soon"');
+
+// Assert hreflang alternates on NL book page (IN-03: guards BaseLayout nlSlug/enSlug)
+assertContains(nlBoekContent, 'hreflang="nl"', 'dist/boek/index.html must have hreflang="nl"');
+assertContains(nlBoekContent, 'hreflang="en"', 'dist/boek/index.html must have hreflang="en"');
+assertContains(nlBoekContent, '/en/book',       'dist/boek/index.html hreflang must reference /en/book');
+
+// Assert hreflang alternates on EN book page (IN-03)
+assertContains(enBookContent, 'hreflang="nl"', 'dist/en/book/index.html must have hreflang="nl"');
+assertContains(enBookContent, 'hreflang="en"', 'dist/en/book/index.html must have hreflang="en"');
+assertContains(enBookContent, '/boek',          'dist/en/book/index.html hreflang must reference /boek');
+
+console.log('[smoke-i18n] /boek + /en/book page content assertions: OK');
 
 // ── All checks passed ─────────────────────────────────────────────────────
 console.log('I18N_SMOKE_OK');
