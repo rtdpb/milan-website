@@ -20,20 +20,23 @@
 
 import SectionWrapper from '../ui/SectionWrapper.astro';
 import PlaceholderBadge from '../ui/PlaceholderBadge.astro';
-import { nl } from '../../i18n/nl';
+import { getStrings } from '../../i18n/utils';
+
+// Phase 4: locale-parameterized strings (I18N-02)
+const t = getStrings(Astro.currentLocale);
 ---
 
 <!-- PressStrip: slim credibility band, directly below the hero (D-06) -->
 <SectionWrapper id="bekend-van" variant="surface" labelledBy="press-strip-eyebrow" class="press-strip-wrapper">
   <div class="press-strip">
-    <!-- Eyebrow label: "Bekend van" (UI-SPEC §<PressStrip>) -->
+    <!-- Eyebrow label: "Bekend van" / "Featured in" (locale-resolved) -->
     <p id="press-strip-eyebrow" class="press-strip__eyebrow">
-      {nl.pressStrip.eyebrow}
+      {t.pressStrip.eyebrow}
     </p>
 
     <!-- Logo chips row — horizontal scroll on mobile if overflow -->
     <div class="press-strip__logos" role="list" aria-label="Media-uitingen van Milan van der Meulen">
-      {nl.pressStrip.logos.map((outlet) => (
+      {t.pressStrip.logos.map((outlet) => (
         <div
           class="press-strip__chip"
           role="listitem"

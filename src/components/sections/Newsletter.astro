@@ -23,13 +23,15 @@
  */
 
 import SectionWrapper from '../ui/SectionWrapper.astro';
-import { nl } from '../../i18n/nl';
+import { getStrings } from '../../i18n/utils';
 import { TODO_SUBSTACK_URL } from '../../config';
 
+// Phase 4: locale-parameterized strings (I18N-02, D-02)
+const t = getStrings(Astro.currentLocale);
 const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
 const subscribeUrl = `${TODO_SUBSTACK_URL}/subscribe`;
 
-const { heading, subtext, labelEmail, cta, disclaimer } = nl.newsletter;
+const { heading, subtext, labelEmail, cta, disclaimer } = t.newsletter;
 ---
 
 <SectionWrapper id="nieuwsbrief" labelledBy="newsletter-heading" variant="default">
@@ -56,14 +58,16 @@ const { heading, subtext, labelEmail, cta, disclaimer } = nl.newsletter;
     -->
     <form
       class="newsletter__form"
-      aria-label="Nieuwsbrief aanmelden — versturen opent Substack in een nieuw tabblad"
+      aria-label={(Astro.currentLocale ?? 'nl') === 'en'
+        ? 'Newsletter signup — submitting opens Substack in a new tab'
+        : 'Nieuwsbrief aanmelden — versturen opent Substack in een nieuw tabblad'}
       novalidate
       onsubmit="return false;"
     >
       <!-- Single email field, centered (D-05: naam removed, single-field layout) -->
       <div class="newsletter__fields newsletter__fields--single">
 
-        <!-- Mailadres field — explicit label (FND-06, a11y) -->
+        <!-- Email field — explicit label (FND-06, a11y) -->
         <div class="newsletter__field-group">
           <label for="nl-email" class="newsletter__label">
             {labelEmail}
@@ -73,7 +77,7 @@ const { heading, subtext, labelEmail, cta, disclaimer } = nl.newsletter;
             type="email"
             name="email"
             autocomplete="email"
-            placeholder="jouw@email.nl"
+            placeholder={(Astro.currentLocale ?? 'nl') === 'en' ? 'your@email.com' : 'jouw@email.nl'}
             required
             class="newsletter__input"
           />
@@ -94,7 +98,9 @@ const { heading, subtext, labelEmail, cta, disclaimer } = nl.newsletter;
           role="button"
           aria-disabled="true"
           tabindex="-1"
-          title="Link volgt zodra Substack-URL bekend is"
+          title={(Astro.currentLocale ?? 'nl') === 'en'
+            ? 'Link follows once the Substack URL is known'
+            : 'Link volgt zodra Substack-URL bekend is'}
           aria-describedby="newsletter-submit-note"
         >
           {cta}
@@ -116,11 +122,15 @@ const { heading, subtext, labelEmail, cta, disclaimer } = nl.newsletter;
            Live state: redirect info without aria-live (link is functional, no announcement needed). -->
       {IS_SENTINEL ? (
         <p id="newsletter-submit-note" class="newsletter__submit-note" aria-live="polite">
-          Aanmelden is binnenkort beschikbaar via Substack.
+          {(Astro.currentLocale ?? 'nl') === 'en'
+            ? 'Signup will be available via Substack shortly.'
+            : 'Aanmelden is binnenkort beschikbaar via Substack.'}
         </p>
       ) : (
         <p id="newsletter-submit-note" class="newsletter__submit-note">
-          Je wordt doorgestuurd naar Substack om je in te schrijven.
+          {(Astro.currentLocale ?? 'nl') === 'en'
+            ? 'You will be redirected to Substack to subscribe.'
+            : 'Je wordt doorgestuurd naar Substack om je in te schrijven.'}
         </p>
       )}
 

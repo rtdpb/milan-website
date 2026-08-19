@@ -1,0 +1,83 @@
+---
+/**
+ * src/pages/en/index.astro — English Homepage (EN locale, route: /en/)
+ *
+ * Thin wrapper mirroring src/pages/index.astro's component tree.
+ * Astro.currentLocale resolves to 'en' automatically for all /en/* pages
+ * at build time — so all section components call getStrings('en') internally
+ * with no prop-drilling required (RESEARCH §Pattern 2, §Pattern 3).
+ *
+ * Section order matches the NL homepage canonical order:
+ *   BaseLayout (provides Header/Nav + Footer)
+ *   └─ Hero           — LCP image, H1, CTAs, USPs
+ *   └─ PressStrip     — "Featured in" slim credibility band
+ *   └─ Samenwerken    — 3-card commitment ladder
+ *   └─ Testimonials   — mixed-size mosaic, 3 quotes (D-01: translated names verbatim)
+ *   └─ Story          — dark band personal story, id="verhaal"
+ *   └─ Newsletter     — Substack signup (D-02: "written in Dutch" note in en.newsletter.subtext)
+ *   └─ Articles       — placeholder/RSS article cards (D-02: heading includes "written in Dutch")
+ *
+ * Phase 4: I18N-01, I18N-02
+ * Because homepage slug is identical NL/EN (''), no nlSlug/enSlug override is needed.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/sections/Hero.astro';
+import PressStrip from '../../components/sections/PressStrip.astro';
+import Samenwerken from '../../components/sections/Samenwerken.astro';
+import Testimonials from '../../components/sections/Testimonials.astro';
+import Story from '../../components/sections/Story.astro';
+import Newsletter from '../../components/sections/Newsletter.astro';
+import Articles from '../../components/sections/Articles.astro';
+import { getStrings } from '../../i18n/utils';
+
+// Astro.currentLocale is 'en' automatically for /en/* pages at build time.
+const t = getStrings(Astro.currentLocale);
+---
+
+<BaseLayout
+  title="Milan van der Meulen — Founder Coach & Speaker"
+  description={t.hero.subtext}
+>
+  <!--
+    Hero section — LCP image, H1, CTAs, USPs.
+    Above-the-fold. Eager + fetchpriority=high for LCP (FND-07, HOME-02).
+    EN: h1 = t.hero.h1, usps use verbatim numbers (D-03).
+  -->
+  <Hero />
+
+  <!--
+    PressStrip — "Featured in" slim credibility band.
+    Logos (wordmarks) stay in the same order as the NL page (D-03).
+  -->
+  <PressStrip />
+
+  <!--
+    Samenwerken — 3-card commitment ladder.
+    EN CTAs route to /en/newsletter, /en/contact (getRelativeLocaleUrl inside component).
+  -->
+  <Samenwerken />
+
+  <!--
+    Testimonials — mixed-size mosaic, 3 quotes.
+    D-01: testimonial names/roles are verbatim; quotes are faithful English translations.
+  -->
+  <Testimonials />
+
+  <!--
+    Story — full-width dark personal story band, id="verhaal".
+    "Verhaal" anchor preserved so the hero secondary CTA still works on the EN page.
+  -->
+  <Story />
+
+  <!--
+    Newsletter — Substack signup.
+    D-02: en.newsletter.subtext contains "The newsletter is written in Dutch."
+  -->
+  <Newsletter />
+
+  <!--
+    Articles — placeholder/RSS article cards.
+    D-02: en.articles.heading includes "(written in Dutch)" note.
+  -->
+  <Articles />
+</BaseLayout>

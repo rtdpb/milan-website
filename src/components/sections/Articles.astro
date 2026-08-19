@@ -27,9 +27,12 @@
 import SectionWrapper from '../ui/SectionWrapper.astro';
 import Card from '../ui/Card.astro';
 import PlaceholderBadge from '../ui/PlaceholderBadge.astro';
-import { nl } from '../../i18n/nl';
+import { getStrings } from '../../i18n/utils';
 import { TODO_SUBSTACK_URL } from '../../config';
 import { fetchSubstackFeed, type ArticleCard, type PlaceholderCard } from '../../lib/rss';
+
+// Phase 4: locale-parameterized strings (I18N-02, D-02)
+const t = getStrings(Astro.currentLocale);
 
 // ── Sentinel guard — decides placeholder vs live feed ───────────────────────
 const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
@@ -39,8 +42,8 @@ let articles: ArticleCard[] | PlaceholderCard[];
 
 if (IS_SENTINEL) {
   // D-04: honest placeholder state while Substack URL not yet supplied.
-  // Renders the same 3 fictional founder-topic cards from Phase 1 (HOME-11).
-  articles = nl.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
+  // Renders the locale-appropriate 3 fictional founder-topic cards (HOME-11).
+  articles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
 } else {
   // D-02: build-time RSS fetch — runs once at `astro build`, not in the browser.
   const feedUrl = `${TODO_SUBSTACK_URL}/feed`;
@@ -49,13 +52,13 @@ if (IS_SENTINEL) {
     // D-06: feed failure or empty feed → honest placeholder + build-log warning.
     // Build must never fail on Substack errors (T-3-04).
     console.warn('[Phase 3] Substack feed returned 0 items — rendering placeholder cards.');
-    articles = nl.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
+    articles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
   } else {
     articles = fetched;
   }
 }
 
-const { heading, seeAll } = nl.articles;
+const { heading, seeAll } = t.articles;
 ---
 
 <SectionWrapper id="artikelen" labelledBy="articles-heading" variant="default">
@@ -112,10 +115,10 @@ const { heading, seeAll } = nl.articles;
                 role="link"
                 aria-disabled="true"
                 tabindex="-1"
-                title="Binnenkort beschikbaar"
-                aria-label={`Lees "${article.title}" — binnenkort beschikbaar`}
+                title={t.common.disabledTooltip}
+                aria-label={`${t.common.readMore.replace(' →', '')} "${article.title}" — ${t.common.disabledTooltip}`}
               >
-                {nl.common.readMore}
+                {t.common.readMore}
               </span>
             ) : (
               <a
@@ -125,7 +128,7 @@ const { heading, seeAll } = nl.articles;
                 class="articles__read-more articles__read-more--enabled"
                 aria-label={`Lees "${article.title}" op Substack`}
               >
-                {nl.common.readMore}
+                {t.common.readMore}
               </a>
             )}
 
@@ -145,7 +148,7 @@ const { heading, seeAll } = nl.articles;
           role="link"
           aria-disabled="true"
           tabindex="-1"
-          title="Binnenkort beschikbaar"
+          title={t.common.disabledTooltip}
         >
           {seeAll}
           <span class="articles__see-all-arrow" aria-hidden="true">→</span>

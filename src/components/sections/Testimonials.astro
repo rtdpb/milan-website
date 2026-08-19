@@ -26,9 +26,11 @@
 
 import SectionWrapper from '../ui/SectionWrapper.astro';
 import RevealOnScroll from '../ui/RevealOnScroll.astro';
-import { nl } from '../../i18n/nl';
+import { getStrings } from '../../i18n/utils';
 
-const { heading, items } = nl.testimonials;
+// Phase 4: locale-parameterized strings (I18N-02)
+const t = getStrings(Astro.currentLocale);
+const { heading, items } = t.testimonials;
 
 // Fixed card order: large dark card first (Yang Soo Kloosterhof),
 // then two light cards stacked in the right column.

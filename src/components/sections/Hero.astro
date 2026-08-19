@@ -14,8 +14,19 @@
  * - Secondary "Mijn verhaal": in-page anchor to #verhaal (story section in Plan 04).
  *   This is a legitimate on-page anchor per D-12.
  */
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Picture } from 'astro:assets';
 import heroImage from '../../assets/photos/milan-hero-stage.jpg';
+import { getStrings } from '../../i18n/utils';
+
+// Phase 4: locale-parameterized strings (I18N-02)
+const t = getStrings(Astro.currentLocale);
+const { eyebrow, h1, subtext, ctaPrimary, ctaSecondary, usp1, usp2, usp3 } = t.hero;
+
+const isEn = (Astro.currentLocale ?? 'nl') === 'en';
+const contactHref = isEn
+  ? getRelativeLocaleUrl('en', 'contact')
+  : `${import.meta.env.BASE_URL}contact`;
 ---
 
 <section class="hero" aria-labelledby="hero-heading">
@@ -23,54 +34,52 @@ import heroImage from '../../assets/photos/milan-hero-stage.jpg';
     <!-- ── Left column: Text content ─────────────────────────────────────── -->
     <div class="hero__text">
       <!-- Eyebrow label — establishes Milan's roles at a glance -->
-      <p class="hero__eyebrow eyebrow">Founder · Coach · Spreker</p>
+      <p class="hero__eyebrow eyebrow">{eyebrow}</p>
 
       <!--
         Page heading (a11y: exactly one heading level 1 per page).
-        "Je bedrijf schalen, zonder jezelf te verliezen" — copy preserved from docx (D-17 / HOME-11).
+        Copy from locale strings — preserved from docx for NL (D-17 / HOME-11).
         Display size serif: --font-display + --text-5xl fluid scale.
       -->
       <h1 id="hero-heading" class="hero__title">
-        Je bedrijf schalen, zonder jezelf te verliezen
+        {h1}
       </h1>
 
-      <!-- Subtext body copy — supplied docx hero subtekst, preserved verbatim (D-17 / HOME-11). -->
+      <!-- Subtext body copy — locale-resolved (Phase 4) -->
       <p class="hero__subtext">
-        Ik help ondernemers met lef hun bedrijf schalen. Niet vanuit abstracte theorie, maar
-        vanuit doorleefde ervaring.
+        {subtext}
       </p>
 
       <!-- CTA row -->
-      <div class="hero__ctas" role="group" aria-label="Acties">
+      <div class="hero__ctas" role="group" aria-label={isEn ? 'Actions' : 'Acties'}>
         <!--
           Primary CTA: Contact — enabled in Phase 2 Plan 03 (D-11).
-          Real <a> link to /contact (BASE_URL prefixed — Pitfall 2).
-          No aria-disabled; no tabindex=-1; no data-placeholder.
+          Real <a> link to /contact — locale-aware href (Phase 4).
         -->
         <a
-          href={`${import.meta.env.BASE_URL}contact`}
+          href={contactHref}
           class="hero__cta-primary btn btn--primary"
         >
-          Contact
+          {ctaPrimary}
         </a>
 
         <!--
-          Secondary CTA: Mijn verhaal
+          Secondary CTA: My story / Mijn verhaal
           In-page anchor to #verhaal (StorySection, Plan 04).
           Legitimate on-page anchor per D-12.
         -->
         <a href="#verhaal" class="hero__cta-secondary btn btn--secondary">
-          Mijn verhaal
+          {ctaSecondary}
         </a>
       </div>
 
-      <!-- USP row: three proof points separated by a bullet (UI-SPEC §<HeroSection>) -->
-      <div class="hero__usps" role="list" aria-label="Resultaten">
-        <span class="hero__usp" role="listitem">12+ jaar</span>
+      <!-- USP row: three proof points (numbers verbatim D-03) -->
+      <div class="hero__usps" role="list" aria-label={isEn ? 'Results' : 'Resultaten'}>
+        <span class="hero__usp" role="listitem">{usp1}</span>
         <span class="hero__usp-sep" aria-hidden="true">·</span>
-        <span class="hero__usp" role="listitem">180 medewerkers</span>
+        <span class="hero__usp" role="listitem">{usp2}</span>
         <span class="hero__usp-sep" aria-hidden="true">·</span>
-        <span class="hero__usp" role="listitem">9 markten</span>
+        <span class="hero__usp" role="listitem">{usp3}</span>
       </div>
     </div>
 

@@ -24,51 +24,61 @@
  * NO FABRICATED STATS (D-08): no "trusted by N clients" or invented numbers.
  */
 
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import SectionWrapper from '../ui/SectionWrapper.astro';
 import Card from '../ui/Card.astro';
 import Button from '../ui/Button.astro';
-import { nl } from '../../i18n/nl';
+import { getStrings } from '../../i18n/utils';
+
+// Phase 4: locale-parameterized strings (I18N-02)
+const t = getStrings(Astro.currentLocale);
+const isEn = (Astro.currentLocale ?? 'nl') === 'en';
+
+// Locale-aware hrefs for the commitment ladder CTAs
+const newsletterHref = isEn
+  ? getRelativeLocaleUrl('en', 'newsletter')
+  : `${import.meta.env.BASE_URL}nieuwsbrief`;
+const contactLezingHref = isEn
+  ? `${getRelativeLocaleUrl('en', 'contact')}?type=lezing`
+  : `${import.meta.env.BASE_URL}contact?type=lezing`;
+const contactCoachingHref = isEn
+  ? `${getRelativeLocaleUrl('en', 'contact')}?type=coaching`
+  : `${import.meta.env.BASE_URL}contact?type=coaching`;
 
 /*
- * Commitment ladder data — structured from nl.samenwerken.
- * Eyebrow labels (Dutch, adapted from the reference "01/02/03" concept — D-07):
- *   01 — Begin hier gratis
- *   02 — Ga dieper
- *   03 — Werk met mij
+ * Commitment ladder data — structured from locale strings.
+ * Eyebrow labels (adapted from the reference "01/02/03" concept — D-07):
  */
 const ladderCards = [
   {
-    eyebrow:           nl.samenwerken.ladderEyebrow1,  // "01 — Begin hier gratis"
-    title:             nl.samenwerken.cards[0].title,   // "Nieuwsbrief"
-    description:       nl.samenwerken.cards[0].description,
-    cta:               nl.samenwerken.cards[0].cta,     // "Schrijf je gratis in"
-    disabled:          false,                            // Phase 3 Plan 03: enabled — /nieuwsbrief page exists
+    eyebrow:           t.samenwerken.ladderEyebrow1,
+    title:             t.samenwerken.cards[0].title,
+    description:       t.samenwerken.cards[0].description,
+    cta:               t.samenwerken.cards[0].cta,
+    disabled:          false,
     placeholderReason: undefined,
-    href:              `${import.meta.env.BASE_URL}nieuwsbrief`,  // internal link (no external prop)
-    variant:           'primary' as const,               // yellow CTA — UI-SPEC §Surface 4 (one yellow per card)
+    href:              newsletterHref,
+    variant:           'primary' as const,
     ariaId:            'samenwerken-card-1',
   },
   {
-    eyebrow:           nl.samenwerken.ladderEyebrow2,  // "02 — Ga dieper"
-    title:             nl.samenwerken.cards[1].title,   // "Presentatie / Lezing"
-    description:       nl.samenwerken.cards[1].description,
-    cta:               nl.samenwerken.cards[1].cta,     // "Boek lezing"
+    eyebrow:           t.samenwerken.ladderEyebrow2,
+    title:             t.samenwerken.cards[1].title,
+    description:       t.samenwerken.cards[1].description,
+    cta:               t.samenwerken.cards[1].cta,
     disabled:          false,
-    // Enabled: /contact?type=lezing pre-selects the Onderwerp select (D-08, Plan 02-01 T-2-04)
-    href:              `${import.meta.env.BASE_URL}contact?type=lezing`,
+    href:              contactLezingHref,
     placeholderReason: undefined,
     variant:           'secondary' as const,
     ariaId:            'samenwerken-card-2',
   },
   {
-    eyebrow:           nl.samenwerken.ladderEyebrow3,  // "03 — Werk met mij"
-    title:             nl.samenwerken.cards[2].title,   // "1:1 Coaching"
-    description:       nl.samenwerken.cards[2].description,
-    cta:               nl.samenwerken.cards[2].cta,     // "Plan kennismaking"
+    eyebrow:           t.samenwerken.ladderEyebrow3,
+    title:             t.samenwerken.cards[2].title,
+    description:       t.samenwerken.cards[2].description,
+    cta:               t.samenwerken.cards[2].cta,
     disabled:          false,
-    // Enabled: /contact?type=coaching pre-selects the Onderwerp select (D-08, Plan 02-01 T-2-04)
-    // Calendly seam: when TODO_CALENDLY_URL is supplied, swap href to TODO_CALENDLY_URL (D-09)
-    href:              `${import.meta.env.BASE_URL}contact?type=coaching`,
+    href:              contactCoachingHref,
     placeholderReason: undefined,
     variant:           'secondary' as const,
     ariaId:            'samenwerken-card-3',
@@ -81,7 +91,7 @@ const ladderCards = [
   <div class="samenwerken">
     <!-- Section heading -->
     <h2 id="samenwerken-heading" class="samenwerken__heading">
-      {nl.samenwerken.heading}
+      {t.samenwerken.heading}
     </h2>
 
     <!-- 3-card grid — equal height; desktop row / mobile stack -->

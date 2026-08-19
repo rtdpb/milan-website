@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * scripts/smoke-i18n.js
- * Post-build i18n smoke check — zero dependencies, Node 18+.
+ * Post-build i18n smoke check — zero dependencies, Node 18+ (ES module).
  *
  * Run after `npm run build`:
  *   node scripts/smoke-i18n.js
@@ -19,10 +19,11 @@
  * Phase 4: I18N-01, I18N-02
  */
 
-'use strict';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const fs = require('fs');
-const path = require('path');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ── Locate dist/ relative to the repo root ────────────────────────────────
 const repoRoot = path.resolve(__dirname, '..');

@@ -25,21 +25,26 @@
 
 import { Picture } from 'astro:assets';
 import SectionWrapper from '../ui/SectionWrapper.astro';
-import { nl } from '../../i18n/nl';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getStrings } from '../../i18n/utils';
 
 // Import portrait photo via astro:assets for optimization pipeline
 import portraitSrc from '../../assets/photos/milan-story-portrait.jpg';
 import missionSrc from '../../assets/photos/milan-energy-mission.jpg';
 
-const { eyebrow, heading, body, signature, imageAlt } = nl.story;
+// Phase 4: locale-parameterized strings (I18N-02)
+const t = getStrings(Astro.currentLocale);
+const isEn = (Astro.currentLocale ?? 'nl') === 'en';
+const { eyebrow, heading, body, signature, imageAlt } = t.story;
 
-// Show the "Lees mijn hele verhaal" teaser link only on pages OTHER than /mijn-verhaal.
-// On /mijn-verhaal the Story component is the opening band — a self-link would be circular.
-// Checked at build time (baked into static HTML per page via Astro.url.pathname).
-// Internal href uses BASE_URL template literal (Pitfall 2: no leading slash after BASE_URL).
+// Show the teaser link only on pages OTHER than the story page itself.
+// On /mijn-verhaal (NL) or /en/about (EN) the Story component is the opening
+// band — a self-link would be circular.
 const currentPath = Astro.url.pathname;
-const isMijnVerhaalPage = currentPath.includes('mijn-verhaal');
-const teaserLink = `${import.meta.env.BASE_URL}mijn-verhaal`;
+const isMijnVerhaalPage = currentPath.includes('mijn-verhaal') || currentPath.includes('/about');
+const teaserLink = isEn
+  ? getRelativeLocaleUrl('en', 'about')
+  : `${import.meta.env.BASE_URL}mijn-verhaal`;
 ---
 
 <SectionWrapper id="verhaal" labelledBy="story-heading" variant="dark">
@@ -91,7 +96,7 @@ const teaserLink = `${import.meta.env.BASE_URL}mijn-verhaal`;
           {signature}
         </p>
         <p class="story__signature-role">
-          Founder, Coach &amp; Spreker
+          {isEn ? 'Founder, Coach & Speaker' : 'Founder, Coach & Spreker'}
         </p>
       </div>
 
@@ -103,7 +108,7 @@ const teaserLink = `${import.meta.env.BASE_URL}mijn-verhaal`;
       -->
       {!isMijnVerhaalPage && (
         <a href={teaserLink} class="story__teaser-link">
-          {nl.mijnVerhaal.teaserLink}
+          {t.mijnVerhaal.teaserLink}
         </a>
       )}
 
