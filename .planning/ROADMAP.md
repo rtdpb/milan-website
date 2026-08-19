@@ -109,7 +109,7 @@ Plans:
 **Goal:** Turn the i18n-ready structure into a working bilingual site with a real NL/EN switch and English content.
 **Mode:** mvp
 **Requirements:** I18N-01, I18N-02
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans executed
 
 Plans:
 
@@ -119,7 +119,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 04-02-PLAN.md — Expansion: remaining component refactor + five EN pages at translated slugs (`/en/coaching`, `/en/speaking`, `/en/about`, `/en/newsletter`, `/en/contact`) + hreflang slug overrides + D-02 honest labels [I18N-01, I18N-02]
+- [x] 04-02-PLAN.md — Expansion: remaining component refactor + five EN pages at translated slugs (`/en/coaching`, `/en/speaking`, `/en/about`, `/en/newsletter`, `/en/contact`) + hreflang slug overrides + D-02 honest labels [I18N-01, I18N-02]
 
 **Success Criteria:**
 

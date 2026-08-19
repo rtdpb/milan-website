@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 4
 status: in_progress
-stopped_at: Phase 4 context gathered
-last_updated: "2026-08-19T10:19:00.833Z"
+stopped_at: Completed 04-02-PLAN.md — fully bilingual 6-page site with smoke-green
+last_updated: "2026-08-19T10:49:04.744Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 14
-  completed_plans: 12
+  completed_plans: 14
 current_phase_name: Internationalization & English Content
 ---
 
@@ -106,6 +106,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Phase 4-01: smoke-i18n.js converted from CJS require() to ES import — package.json type:module requires ES syntax; __dirname derived via fileURLToPath(import.meta.url)
 - Phase 4-01: Story.astro isMijnVerhaalPage guard extended to /about (EN slug) to prevent circular self-link on EN story page
 - Phase 4-01: Newsletter + Story hardcoded Dutch strings made locale-conditional with isEn ternary — aria-labels, placeholder, sentinel notes, signature role
+- [Phase ?]: Footer EN nav uses getRelativeLocaleUrl to translated slugs — same pattern as Nav.astro from Plan 01
+- [Phase ?]: ContactForm Web3Forms action/honeypot/?type= option values unchanged by locale refactor — only label strings localized
 
 ## Performance Metrics
 
@@ -128,6 +130,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 03 P03 | ~2 min | 2 tasks | 3 files |
+| Phase 04 P02 | 8 | 3 tasks | 13 files |
 
 ## Next Step
 
@@ -138,6 +141,6 @@ Phase 4 Plan 01 complete. Bilingual i18n tracer delivered: NL root / EN under /e
 
 ## Session
 
-**Last session:** 2026-08-19T00:00:00.000Z
-**Stopped at:** Completed 04-01-PLAN.md — Wave-0 i18n tracer (en.ts + utils.ts + smoke + /en/ homepage), 3 tasks, 3 commits, smoke I18N_SMOKE_OK
-**Resume file:** .planning/phases/04-internationalization-english-content/04-02-PLAN.md
+**Last session:** 2026-08-19T10:49:04.733Z
+**Stopped at:** Completed 04-02-PLAN.md — fully bilingual 6-page site with smoke-green
+**Resume file:** None
