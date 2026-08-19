@@ -109,6 +109,18 @@ Plans:
 **Goal:** Turn the i18n-ready structure into a working bilingual site with a real NL/EN switch and English content.
 **Mode:** mvp
 **Requirements:** I18N-01, I18N-02
+**Plans:** 2 plans
+
+Plans:
+
+**Wave 1**
+
+- [ ] 04-01-PLAN.md — Tracer: Wave-0 infra (`en.ts`, `utils.ts`, `scripts/smoke-i18n.js`) + config activation + locale-wired layout/BaseHead/Nav switch + homepage end-to-end bilingual (`/` NL + `/en/` EN) [I18N-01, I18N-02]
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 04-02-PLAN.md — Expansion: remaining component refactor + five EN pages at translated slugs (`/en/coaching`, `/en/speaking`, `/en/about`, `/en/newsletter`, `/en/contact`) + hreflang slug overrides + D-02 honest labels [I18N-01, I18N-02]
+
 **Success Criteria:**
 
 1. The NL/EN switch changes language and persists across navigation.
