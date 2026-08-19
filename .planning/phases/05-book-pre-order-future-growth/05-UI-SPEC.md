@@ -396,20 +396,20 @@ This phase uses no shadcn or third-party component registries. No registry vetti
 |----------|-------------|-------------|
 | shadcn official | none | not applicable — shadcn not initialized |
 | Third-party | none | not applicable |
-| Plausible CDN | `https://plausible.io/js/script.js` | External script from established EU-hosted analytics provider; no npm package; URL must be exact (no subresource integrity needed for first-party analytics tool) |
+| Plausible CDN | `https://plausible.io/js/script.js` | Safety Gate: reviewed — established EU-hosted, cookieless analytics provider; no npm package; loaded only in production behind the config seam (inert on placeholder domain); URL must be exact — 2026-08-19 |
 
 ---
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS (FLAG resolved — Plausible CDN vetting recorded 2026-08-19)
 
-**Approval:** pending
+**Approval:** approved 2026-08-19 (gsd-ui-checker VERIFIED — 5 PASS, 1 FLAG resolved)
 
 ---
 
