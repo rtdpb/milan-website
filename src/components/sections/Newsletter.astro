@@ -144,6 +144,26 @@ const { heading, subtext, labelEmail, cta, disclaimer } = t.newsletter;
   </div>
 </SectionWrapper>
 
+<!-- Plausible goal: Newsletter: Subscribe — fires on click of the live Substack redirect anchor.
+     Only wires the listener when the anchor is live (not the disabled span).
+     The :not(.newsletter__submit--disabled) selector guards against firing on the sentinel state.
+     Source: 05-RESEARCH.md §Pattern 3, 05-PATTERNS.md §Shared Patterns → Plausible event firing.
+     GROW-01 / D-05. -->
+<script>
+  (function () {
+    'use strict';
+    // Target the live redirect anchor only — exclude the disabled sentinel span
+    var subscribeAnchor = document.querySelector('.newsletter__submit:not(.newsletter__submit--disabled)');
+    if (!subscribeAnchor) return; // IS_SENTINEL = true → disabled span rendered → no-op
+    subscribeAnchor.addEventListener('click', function () {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (typeof (window as any).plausible === 'function') {
+        (window as any).plausible('Newsletter: Subscribe');
+      }
+    });
+  })();
+</script>
+
 <style>
   /* ── Section layout ────────────────────────────────────────────────────────── */
   .newsletter {

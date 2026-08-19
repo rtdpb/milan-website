@@ -218,8 +218,12 @@ const {
         const json = await response.json();
 
         if (json && json.success === true) {
-          // TODO Plan 02: add window.plausible('Book: Interest') Plausible goal here
-          // (Plan 02 wires analytics; guard: typeof window.plausible === 'function')
+          // Fire Plausible 'Book: Interest' goal (GROW-01, D-05)
+          // Guard: typeof check is belt-and-suspenders alongside the queue guard
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          if (typeof (window as any).plausible === 'function') {
+            (window as any).plausible('Book: Interest');
+          }
 
           // State 5: Success — hide form, show STATIC success message
           // NEVER echo json.message or any user input into the DOM (T-05-01, DOM XSS safety)

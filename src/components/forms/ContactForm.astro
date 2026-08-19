@@ -271,6 +271,13 @@ const {
         const json = await response.json();
 
         if (json && json.success === true) {
+          // Fire Plausible 'Contact: Submit' goal (GROW-01, D-05)
+          // Guard: typeof check is belt-and-suspenders alongside the queue guard
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          if (typeof (window as any).plausible === 'function') {
+            (window as any).plausible('Contact: Submit');
+          }
+
           // State 6: Success — hide form, show STATIC success message
           // NEVER echo json.message or any user input into the DOM (T-2-02)
           (f as HTMLElement).hidden = true;
