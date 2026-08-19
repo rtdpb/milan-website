@@ -28,6 +28,7 @@ import Newsletter from '../components/sections/Newsletter.astro';
 import BookInterestForm from '../components/forms/BookInterestForm.astro';
 import StickyCTA from '../components/ui/StickyCTA.astro';
 import { getStrings } from '../i18n/utils';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import {
   TODO_BOOK_CHECKOUT_URL,
   TODO_SUBSTACK_URL,
@@ -155,9 +156,11 @@ const subscribeUrl = `${TODO_SUBSTACK_URL.replace(/\/$/, '')}/subscribe`;
     Note: when IS_SUBSTACK_SENTINEL is true, #boek-hero-cta is a disabled <span>
     (not an <a>); the observer still watches it and the sticky CTA still shows.
   -->
+  <!-- CR-03: use getRelativeLocaleUrl (same as EN page) instead of manual BASE_URL concat
+       so the href stays base-safe regardless of trailing-slash config. -->
   <StickyCTA
     label={t.boek.stickyCta}
-    href={`${import.meta.env.BASE_URL}contact`}
+    href={getRelativeLocaleUrl('nl', 'contact')}
     targetId="boek-hero-cta"
   />
 
