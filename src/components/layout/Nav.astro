@@ -25,7 +25,7 @@
 
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { getStrings, nlToEn, enToNl } from '../../i18n/utils';
-import { SITE_NAME, DISABLED_TOOLTIP } from '../../config';
+import { SITE_NAME } from '../../config';
 
 // Phase 4: locale-parameterized strings + functional NL↔EN switch (D-07, I18N-01)
 const t = getStrings(Astro.currentLocale);
@@ -82,7 +82,7 @@ const navItems = isEn
   <div class="site-header__inner">
 
     <!-- Wordmark (left) -->
-    <a href={import.meta.env.BASE_URL} class="site-header__wordmark" aria-label={`${SITE_NAME} — naar startpagina`}>
+    <a href={import.meta.env.BASE_URL} class="site-header__wordmark" aria-label={`${SITE_NAME} — ${t.nav.homeAria}`}>
       {SITE_NAME}
     </a>
 
@@ -105,7 +105,7 @@ const navItems = isEn
                 role="link"
                 aria-disabled="true"
                 tabindex="-1"
-                title={DISABLED_TOOLTIP}
+                title={t.common.disabledTooltip}
               >
                 {item.label}
               </span>
@@ -147,9 +147,9 @@ const navItems = isEn
         class="linkedin-icon"
         role="link"
         aria-disabled="true"
-        aria-label={`${t.nav.linkedin} — ${DISABLED_TOOLTIP}`}
+        aria-label={`${t.nav.linkedin} — ${t.common.disabledTooltip}`}
         tabindex="-1"
-        title={DISABLED_TOOLTIP}
+        title={t.common.disabledTooltip}
       >
         <!-- LinkedIn inline SVG (authorised static markup, T-01-06 accepted) -->
         <svg
@@ -232,7 +232,7 @@ const navItems = isEn
                 role="link"
                 aria-disabled="true"
                 tabindex="-1"
-                title={DISABLED_TOOLTIP}
+                title={t.common.disabledTooltip}
               >
                 {item.label}
               </span>

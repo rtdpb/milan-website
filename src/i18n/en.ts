@@ -40,6 +40,8 @@ export const en = {
     closeMenu:   'Close menu',
     /** aria-label for the nav landmark */
     navLabel:    'Main navigation',
+    /** aria-label for the wordmark home link */
+    homeAria:    'to homepage',
   },
 
   // ── Hero Section ─────────────────────────────────────────────────────────
@@ -57,6 +59,12 @@ export const en = {
   // ── Press Strip ──────────────────────────────────────────────────────────
   pressStrip: {
     eyebrow: 'Featured in',
+    /** title attribute on individual logo placeholder chips */
+    logoPlaceholderTitle: 'Logo coming soon',
+    /** aria-label suffix on individual logo placeholder chips ("{outlet} — {suffix}") */
+    logoPlaceholderSuffix: 'logo coming soon',
+    /** label for the PlaceholderBadge below the chip row */
+    badgeLabel: 'Logos coming soon',
     logos: [
       'MT Sprout',
       'Quote',
@@ -70,6 +78,8 @@ export const en = {
   // ── Samenwerken / Services Section ───────────────────────────────────────
   samenwerken: {
     heading: 'Work with me',
+    /** aria-label for the collaboration options grid */
+    ariaLabel: 'Collaboration options',
     ladderEyebrow1: '01 — Start here for free',
     ladderEyebrow2: '02 — Go deeper',
     ladderEyebrow3: '03 — Work with me directly',
@@ -340,6 +350,8 @@ export const en = {
   common: {
     /** Visible marker pill on placeholder cards */
     placeholderLabel: '[Placeholder]',
+    /** aria-label for PlaceholderBadge elements */
+    placeholderAriaLabel: 'Placeholder content — will be replaced with real content',
     /** Tooltip on all aria-disabled placeholder elements */
     disabledTooltip:  'Coming soon',
     /** NL|EN language switch label */

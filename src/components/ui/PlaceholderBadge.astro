@@ -27,7 +27,7 @@ const { label = t.common.placeholderLabel, class: extraClass } = Astro.props;
 const classes = ['placeholder-badge', extraClass].filter(Boolean).join(' ');
 ---
 
-<span class={classes} aria-label="Placeholder inhoud — wordt vervangen door echte content">
+<span class={classes} aria-label={t.common.placeholderAriaLabel}>
   {label}
 </span>
 

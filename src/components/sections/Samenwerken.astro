@@ -101,7 +101,7 @@ const ladderCards = [
     </h2>
 
     <!-- 3-card grid — equal height; desktop row / mobile stack -->
-    <div class="samenwerken__grid" role="list" aria-label="Samenwerkingsopties">
+    <div class="samenwerken__grid" role="list" aria-label={t.samenwerken.ariaLabel}>
       {ladderCards.map((card) => (
         <div class="samenwerken__card-wrap" role="listitem">
           <Card variant="default" class="samenwerken__card">

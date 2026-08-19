@@ -42,8 +42,8 @@ const isEn = (Astro.currentLocale ?? 'nl') === 'en';
         <div
           class="press-strip__chip"
           role="listitem"
-          title="Logo volgt"
-          aria-label={`${outlet} — logo volgt`}
+          title={t.pressStrip.logoPlaceholderTitle}
+          aria-label={`${outlet} — ${t.pressStrip.logoPlaceholderSuffix}`}
         >
           <!-- Wordmark text — NOT a real logo image (D-11) -->
           <span class="press-strip__wordmark">{outlet}</span>
@@ -53,7 +53,7 @@ const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 
     <!-- Visible placeholder marker — signals this row is not final (D-11) -->
     <div class="press-strip__badge-row" aria-hidden="true">
-      <PlaceholderBadge label="Logo's volgen" />
+      <PlaceholderBadge label={t.pressStrip.badgeLabel} />
     </div>
   </div>
 </SectionWrapper>

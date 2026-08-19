@@ -34,6 +34,8 @@ export const nl = {
     closeMenu:   'Menu sluiten',
     /** aria-label for the nav landmark */
     navLabel:    'Hoofdnavigatie',
+    /** aria-label for the wordmark home link */
+    homeAria:    'naar startpagina',
   },
 
   // ── Hero Section (HOME-02) ───────────────────────────────────────────────
@@ -51,6 +53,12 @@ export const nl = {
   // ── Press Strip (HOME-03) ────────────────────────────────────────────────
   pressStrip: {
     eyebrow: 'Bekend van',
+    /** title attribute on individual logo placeholder chips */
+    logoPlaceholderTitle: 'Logo volgt',
+    /** aria-label suffix on individual logo placeholder chips ("{outlet} — {suffix}") */
+    logoPlaceholderSuffix: 'logo volgt',
+    /** label for the PlaceholderBadge below the chip row */
+    badgeLabel: "Logo's volgen",
     logos: [
       'MT Sprout',
       'Quote',
@@ -64,6 +72,8 @@ export const nl = {
   // ── Samenwerken / Services Section (HOME-04) ─────────────────────────────
   samenwerken: {
     heading: 'Samenwerken',
+    /** aria-label for the collaboration options grid */
+    ariaLabel: 'Samenwerkingsopties',
     /** Commitment ladder eyebrow labels (D-07, UI-SPEC §SamenwerkSection) */
     ladderEyebrow1: '01 — Begin hier gratis',
     ladderEyebrow2: '02 — Ga dieper',
@@ -332,6 +342,8 @@ export const nl = {
   common: {
     /** Visible marker pill on placeholder cards (UI-SPEC §Copywriting Contract) */
     placeholderLabel: '[Placeholder]',
+    /** aria-label for PlaceholderBadge elements */
+    placeholderAriaLabel: 'Placeholder inhoud — wordt vervangen door echte content',
     /** Tooltip on all aria-disabled placeholder elements (HOME-10) */
     disabledTooltip:  'Binnenkort beschikbaar',
     /** NL|EN language switch label (non-functional, Phase 4) */
