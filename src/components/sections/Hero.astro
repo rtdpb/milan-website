@@ -1,18 +1,17 @@
 ---
 /**
- * Hero.astro — Contained editorial hero panel (HOME-02) · v2.0 redesign
- * Source: Input homepage Milan.docx (Sevora composition references), 05→v2.0 brief.
+ * Hero.astro — Magazine-cover hero (HOME-02) · v2.1
+ * The photograph is the dominant, near-page-wide visual plane. The authentic
+ * yellow stage backdrop is the art direction: kept generous, echoed in the
+ * primary CTA + accent line. Headline and stats sit over the open yellow/blue
+ * area on the LEFT so Milan (right) is never covered by text, nav or buttons.
  *
- * ONE cohesive rounded panel (not text + photo floating in empty space):
- *  - subtle surface contrast + hairline border, internal 2-column grid
- *  - large integrated photograph bleeding to the panel edges, visually equal
- *    to the headline (embraces the authentic yellow stage backdrop = signature yellow)
- *  - primary + secondary CTAs and big proof-point stats integrated into the composition
- *  - one restrained overlapping CTA card (truthful existing coaching content, D-01/HOME-10)
- *  - compact vertical rhythm — no accidental dead zone above/inside/below the hero
+ * Desktop: content overlays the full-bleed image (cover composition).
+ * Mobile: large image with the character-crop around Milan (yellow kept),
+ *         headline/CTAs/stats stacked below on cream for legibility.
  *
  * Preserves: locale strings (I18N), LCP eager photo (FND-10), a11y landmarks,
- * reduced-motion (no entrance animation here), honest hrefs (base-safe).
+ * reduced-motion, honest base-safe hrefs.
  */
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { Picture } from 'astro:assets';
@@ -20,135 +19,113 @@ import heroImage from '../../assets/photos/milan-hero-stage.jpg';
 import { getStrings } from '../../i18n/utils';
 
 const t = getStrings(Astro.currentLocale);
-const { eyebrow, h1, subtext, ctaPrimary, ctaSecondary, stats, card } = t.hero;
+const { eyebrow, h1, subtext, ctaPrimary, ctaSecondary, stats } = t.hero;
 
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 const contactHref = isEn
   ? getRelativeLocaleUrl('en', 'contact')
   : `${import.meta.env.BASE_URL}contact`;
-// Overlapping card routes to the coaching intake (truthful existing destination).
-const coachingHref = `${contactHref}?type=coaching`;
 ---
 
 <section class="hero" aria-labelledby="hero-heading">
-  <div class="container">
-    <div class="hero__panel">
-      <!-- ── Content ─────────────────────────────────────────────────────── -->
-      <div class="hero__content">
-        <p class="hero__eyebrow eyebrow">{eyebrow}</p>
+  <div class="hero__inner">
+    <div class="hero__media">
+      <Picture
+        src={heroImage}
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        widths={[640, 1024, 1440, 1920, 2400]}
+        sizes="100vw"
+        alt={isEn
+          ? 'Milan van der Meulen speaking on stage against a yellow and blue backdrop.'
+          : 'Milan van der Meulen spreekt op het podium met geel en blauw decor.'}
+        priority
+        class="hero__photo"
+      />
+    </div>
 
-        <h1 id="hero-heading" class="hero__title">{h1}</h1>
-
-        <p class="hero__subtext">{subtext}</p>
-
-        <div class="hero__ctas" role="group" aria-label={isEn ? 'Actions' : 'Acties'}>
-          <a id="hero-cta" href={contactHref} class="hero__cta-primary btn btn--primary">
-            {ctaPrimary}
-          </a>
-          <a href="#verhaal" class="hero__cta-secondary btn btn--secondary">
-            {ctaSecondary}
-          </a>
-        </div>
-
-        <!-- Proof-point stats, integrated at the base of the composition -->
-        <dl class="hero__stats" aria-label={isEn ? 'Track record' : 'Trackrecord'}>
-          {stats.map((s) => (
-            <div class="hero__stat">
-              <dt class="hero__stat-value">{s.value}</dt>
-              <dd class="hero__stat-label">{s.label}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-
-      <!-- ── Media: integrated photograph + overlapping card ─────────────── -->
-      <div class="hero__media">
-        <Picture
-          src={heroImage}
-          formats={['avif', 'webp']}
-          fallbackFormat="webp"
-          widths={[420, 720, 1040, 1440]}
-          sizes="(max-width: 767px) 100vw, 46vw"
-          alt={isEn
-            ? 'Milan van der Meulen speaking on stage against a yellow and blue backdrop.'
-            : 'Milan van der Meulen spreekt op het podium met geel en blauw decor.'}
-          priority
-          class="hero__photo"
-        />
-
-        <!-- Restrained overlapping CTA card (existing coaching offer, honest link) -->
-        <a class="hero__card" href={coachingHref}>
-          <div class="hero__card-body">
-            <span class="hero__card-eyebrow">{card.eyebrow}</span>
-            <span class="hero__card-title">{card.title}</span>
-            <span class="hero__card-sub">{card.sub}</span>
-          </div>
-          <span class="hero__card-arrow" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M7 17 17 7M9 7h8v8"/>
-            </svg>
-          </span>
-        </a>
+    <div class="hero__lead">
+      <p class="hero__eyebrow eyebrow">{eyebrow}</p>
+      <h1 id="hero-heading" class="hero__title">{h1}</h1>
+      <p class="hero__subtext">{subtext}</p>
+      <div class="hero__ctas" role="group" aria-label={isEn ? 'Actions' : 'Acties'}>
+        <a id="hero-cta" href={contactHref} class="hero__cta-primary btn btn--primary">{ctaPrimary}</a>
+        <a href="#verhaal" class="hero__cta-secondary btn btn--secondary">{ctaSecondary}</a>
       </div>
     </div>
+
+    <dl class="hero__stats" aria-label={isEn ? 'Track record' : 'Trackrecord'}>
+      {stats.map((s) => (
+        <div class="hero__stat">
+          <dt class="hero__stat-value">{s.value}</dt>
+          <dd class="hero__stat-label">{s.label}</dd>
+        </div>
+      ))}
+    </dl>
   </div>
 </section>
 
 <style>
   .hero {
-    /* Compact: the panel sits close under the nav and fills the opening view. */
-    padding-block: clamp(var(--space-md), 2.5vw, var(--space-xl))
-                   clamp(var(--space-2xl), 5vw, var(--space-4xl));
+    padding-block: clamp(var(--space-sm), 1.6vw, var(--space-lg)) clamp(var(--space-2xl), 5vw, var(--space-4xl));
     background-color: var(--color-bg);
   }
 
-  /* ── The one contained hero object ──────────────────────────────────────── */
-  .hero__panel {
-    position: relative;
+  /* Near-page-wide stage. ~94vw on desktop (breaks out of the content container),
+     capped so it stays composed on ultra-wide screens. The photo and the
+     overlay content share one grid cell so text layers reliably over the image. */
+  .hero__inner {
+    width: min(1680px, 94vw);
+    margin-inline: auto;
     display: grid;
-    grid-template-columns: 1fr;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 28px;
+    grid-template-areas: 'stack';
+  }
+  .hero__media, .hero__lead, .hero__stats { grid-area: stack; }
+
+  /* ── Dominant photo plane ─────────────────────────────────────────────── */
+  .hero__media {
+    position: relative;
+    width: 100%;
+    border-radius: clamp(20px, 2vw, 34px);
     overflow: hidden;
-    isolation: isolate;
+    background-color: var(--color-accent); /* yellow shows through before load */
+    height: clamp(560px, 78vh, 780px);
+    z-index: 0;
+  }
+  .hero__media :global(picture) { display: block; width: 100%; height: 100%; }
+  .hero__media :global(img.hero__photo) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Keep Milan (right) + the generous yellow in frame, not cropped tight. */
+    object-position: 52% 24%;
+    display: block;
   }
 
-  @media (min-width: 900px) {
-    .hero__panel {
-      grid-template-columns: 1.06fr 0.94fr;
-      min-height: clamp(540px, 44vw, 620px);
-      align-items: stretch;
-    }
-  }
-
-  /* ── Content column ─────────────────────────────────────────────────────── */
-  .hero__content {
+  /* ── Lead (eyebrow, headline, intro, CTAs) — overlays the open left area ── */
+  .hero__lead {
+    align-self: start;
+    justify-self: start;
+    z-index: 2;
+    margin: clamp(var(--space-lg), 3vw, var(--space-3xl));
+    max-width: min(46%, 560px);
     display: flex;
     flex-direction: column;
-    gap: clamp(var(--space-md), 1.6vw, var(--space-lg));
-    padding: clamp(var(--space-xl), 3.4vw, 56px);
-    order: 2; /* below the photo on mobile */
+    gap: clamp(var(--space-sm), 1.2vw, var(--space-md));
+    color: var(--color-text); /* near-black on the bright yellow — brand contrast */
+    pointer-events: none;
   }
-
-  @media (min-width: 900px) {
-    .hero__content {
-      order: 1;
-      justify-content: center;
-      padding-right: clamp(var(--space-lg), 2.4vw, var(--space-3xl));
-    }
-  }
-
-  .hero__eyebrow { margin: 0; color: var(--color-text-secondary); }
+  .hero__lead > * { pointer-events: auto; }
+  .hero__eyebrow { margin: 0; color: var(--color-text); opacity: 0.72; }
 
   .hero__title {
     font-family: var(--font-display);
-    font-weight: 560;
-    font-size: clamp(2.55rem, 1.1rem + 4.1vw, 3.9rem); /* ~41–62px */
-    line-height: 1.02;
-    letter-spacing: -0.025em;
+    font-weight: 400;
+    font-size: clamp(2.6rem, 1rem + 4.6vw, 4.6rem);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
     color: var(--color-text);
-    max-width: 15ch;         /* forces a controlled ≤3-line break at 1440 */
+    max-width: 11ch;   /* keep the headline clear of Milan (right of frame) */
     text-wrap: balance;
     margin: 0;
   }
@@ -156,14 +133,14 @@ const coachingHref = `${contactHref}?type=coaching`;
   .hero__subtext {
     font-family: var(--font-body);
     font-size: var(--text-base);
-    font-weight: 400;
-    line-height: 1.55;
-    color: var(--color-text-secondary);
-    max-width: 42ch;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--color-text);
+    opacity: 0.82;
+    max-width: 34ch;
     margin: 0;
   }
 
-  /* ── CTA row ─────────────────────────────────────────────────────────────── */
   .hero__ctas {
     display: flex;
     flex-wrap: wrap;
@@ -171,167 +148,70 @@ const coachingHref = `${contactHref}?type=coaching`;
     align-items: center;
     margin-top: var(--space-xs);
   }
-
   .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-    padding: 0 var(--space-lg);
-    border-radius: 10px;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.005em;
-    line-height: 1;
-    text-decoration: none;
-    cursor: pointer;
-    transition:
-      background-color var(--duration-fast) var(--ease-out),
-      color var(--duration-fast) var(--ease-out),
-      border-color var(--duration-fast) var(--ease-out),
-      transform var(--duration-fast) var(--ease-out);
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 50px; padding: 0 var(--space-lg); border-radius: 10px;
+    font-family: var(--font-body); font-size: 15px; font-weight: 600;
+    letter-spacing: 0.005em; line-height: 1; text-decoration: none; cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-out),
+                color var(--duration-fast) var(--ease-out),
+                border-color var(--duration-fast) var(--ease-out),
+                transform var(--duration-fast) var(--ease-out);
   }
+  /* Primary CTA carries the photo's signature yellow. */
+  .btn--primary { background-color: var(--color-accent); color: var(--color-text); border: 1px solid var(--color-accent); }
+  .btn--primary:hover { background-color: var(--color-accent-dark); border-color: var(--color-accent-dark); transform: translateY(-1px); }
+  /* Secondary reads on the bright backdrop: solid near-black. */
+  .btn--secondary { background-color: var(--color-text); color: var(--color-bg); border: 1px solid var(--color-text); }
+  .btn--secondary:hover { background-color: #000; transform: translateY(-1px); }
 
-  /* Primary — near-black (mature/premium); yellow is reserved for the photo moment. */
-  .btn--primary {
-    background-color: var(--color-text);
-    color: var(--color-bg);
-    border: 1px solid var(--color-text);
-  }
-  .btn--primary:hover {
-    background-color: #000;
-    transform: translateY(-1px);
-  }
-
-  .btn--secondary {
-    background-color: transparent;
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-  }
-  .btn--secondary:hover {
-    border-color: var(--color-text);
-    transform: translateY(-1px);
-  }
-
-  /* ── Integrated proof-point stats ──────────────────────────────────────── */
+  /* ── Stats — over the open lower-left of the image ─────────────────────── */
   .hero__stats {
+    align-self: end;
+    justify-self: start;
+    z-index: 2;
     display: flex;
     flex-wrap: wrap;
-    gap: clamp(var(--space-lg), 3vw, var(--space-3xl));
-    margin: var(--space-sm) 0 0;
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--color-border);
+    gap: clamp(var(--space-lg), 2.4vw, var(--space-2xl));
+    margin: clamp(var(--space-lg), 3vw, var(--space-3xl));
+    padding-top: var(--space-sm);
+    border-top: 2px solid var(--color-text);
   }
-  .hero__stat { display: flex; flex-direction: column; gap: 2px; }
+  .hero__stat { display: flex; flex-direction: column; gap: 0; }
   .hero__stat-value {
-    font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-variation-settings: 'SOFT' 0, 'WONK' 0;
-    font-weight: 560;
-    font-size: clamp(1.75rem, 1rem + 1.6vw, 2.5rem);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--color-text);
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(1.6rem, 1rem + 1.5vw, 2.4rem); line-height: 1;
+    letter-spacing: -0.02em; color: var(--color-text);
   }
   .hero__stat-label {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: var(--color-text-secondary);
+    margin: 0; font-family: var(--font-body); font-size: var(--text-xs);
+    font-weight: 600; letter-spacing: 0.02em; color: var(--color-text); opacity: 0.72;
   }
 
-  /* ── Media column: photo bleeds to the panel edges ─────────────────────── */
-  .hero__media {
-    position: relative;
-    order: 1;
-    min-height: 340px;
-    background-color: var(--color-dark-band);
+  /* ── Mobile: big character-cropped photo, content stacked below on cream ── */
+  @media (max-width: 767px) {
+    /* Unstack the grid: big character-cropped photo, then content below on cream. */
+    .hero__inner { display: block; }
+    .hero__media {
+      height: clamp(440px, 68vh, 600px);
+    }
+    .hero__media :global(img.hero__photo) {
+      object-position: 60% 16%; /* crop around Milan, keep the yellow behind him */
+    }
+    .hero__lead {
+      max-width: none;
+      margin: var(--space-lg) var(--space-xs) 0;
+    }
+    .hero__title { font-size: clamp(2.4rem, 1rem + 8vw, 3.2rem); max-width: 18ch; }
+    .hero__subtext { opacity: 0.7; color: var(--color-text-secondary); }
+    .hero__stats {
+      margin: var(--space-lg) var(--space-xs) 0;
+      border-top: none;
+      gap: var(--space-xl);
+    }
   }
-  @media (min-width: 900px) {
-    .hero__media { order: 2; min-height: 100%; }
-  }
-
-  .hero__media :global(picture) { display: block; width: 100%; height: 100%; }
-  .hero__media :global(img.hero__photo) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 44% 22%; /* keeps face + expression in frame; yellow visible */
-    display: block;
-  }
-  @media (max-width: 899px) {
-    .hero__media :global(img.hero__photo) { aspect-ratio: 4 / 3; height: auto; }
-  }
-
-  /* ── Overlapping card (frosted, restrained) ────────────────────────────── */
-  .hero__card {
-    position: absolute;
-    left: clamp(12px, 2vw, 20px);
-    bottom: clamp(12px, 2vw, 20px);
-    right: clamp(12px, 2vw, 20px);
-    max-width: 300px;
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md);
-    border-radius: 16px;
-    background: rgba(20, 20, 18, 0.62);
-    backdrop-filter: blur(14px) saturate(1.1);
-    -webkit-backdrop-filter: blur(14px) saturate(1.1);
-    border: 1px solid rgba(245, 242, 236, 0.14);
-    color: var(--color-dark-text);
-    text-decoration: none;
-    transition: transform var(--duration-base) var(--ease-out),
-                background-color var(--duration-base) var(--ease-out);
-  }
-  @media (min-width: 900px) {
-    .hero__card { right: auto; }
-  }
-  .hero__card:hover {
-    transform: translateY(-2px);
-    background: rgba(20, 20, 18, 0.72);
-  }
-  .hero__card-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-  .hero__card-eyebrow {
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-  }
-  .hero__card-title {
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    line-height: 1.2;
-    color: var(--color-dark-text);
-  }
-  .hero__card-sub {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 400;
-    line-height: 1.35;
-    color: rgba(245, 242, 236, 0.72);
-  }
-  .hero__card-arrow {
-    flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 999px;
-    background: var(--color-dark-text);
-    color: var(--color-text);
-    transition: background-color var(--duration-fast) var(--ease-out);
-  }
-  .hero__card:hover .hero__card-arrow { background: var(--color-accent); }
 
   @media (prefers-reduced-motion: reduce) {
-    .btn, .hero__card, .hero__card-arrow { transition: none; }
+    .btn { transition: none; }
   }
 </style>
