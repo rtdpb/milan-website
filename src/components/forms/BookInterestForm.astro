@@ -1,0 +1,358 @@
+---
+/**
+ * BookInterestForm.astro
+ * Web3Forms "notify me about the book" form (BOOK-01, D-02, Phase 5).
+ *
+ * Two visible fields only: name (text) + email (email).
+ * No topic select, no message textarea — simpler than ContactForm.
+ *
+ * SECURITY RULES (T-05-01, T-05-02):
+ * - Result strings are ONLY from t.boek.* — NEVER echoed from API response or user input.
+ * - Honeypot botcheck checkbox present (display:none, tabindex=-1, aria-hidden).
+ * - type=boek-interesse distinguishes book-interest emails in inbox.
+ *
+ * ACCESSIBILITY:
+ * - Every field has a visible <label for>.
+ * - aria-live="polite" on result region for screen reader announcements.
+ * - aria-required="true" on required fields + native required attribute.
+ * - aria-describedby on submit button pointing to error/result region.
+ * - Autocomplete attributes on name and email fields.
+ *
+ * 7-STATE MACHINE (mirrors ContactForm.astro):
+ *   1 idle        — fields enabled, submit = t.boek.ctaSubmit
+ *   2 key warn    — placeholder key logged to console, form functional
+ *   3 focused     — field focus ring (CSS)
+ *   4 submitting  — submit disabled + t.boek.ctaSubmitting, fields remain enabled
+ *   5 success     — form hidden, static t.boek.successMsg shown (API response never echoed)
+ *   6 server err  — static t.boek.errorMsg shown, form remains editable
+ *   7 network err — static t.boek.errorNetwork shown, form remains editable
+ *
+ * Source: 05-PATTERNS.md §BookInterestForm.astro, 05-UI-SPEC.md §2b,
+ *         PLAN 05-01 Task 2, ContactForm.astro (analog)
+ */
+
+import { TODO_WEB3FORMS_ACCESS_KEY } from '../../config';
+import { getStrings } from '../../i18n/utils';
+
+const t = getStrings(Astro.currentLocale);
+const {
+  formHeading,
+  labelNaam,
+  labelEmail,
+  ctaSubmit,
+  ctaSubmitting,
+  successMsg,
+  errorMsg,
+  errorNetwork,
+  emailSubject,
+} = t.boek;
+---
+
+<!-- BookInterestForm: Web3Forms 2-field notify form (BOOK-01, Phase 5) -->
+<div class="book-form-wrap">
+  <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
+  <h2 class="book-form__heading">{formHeading}</h2>
+  <form
+    id="book-interest-form"
+    method="POST"
+    action="https://api.web3forms.com/submit"
+    novalidate
+    class="book-form"
+    data-submit={ctaSubmit}
+    data-submitting={ctaSubmitting}
+    data-success={successMsg}
+    data-error={errorMsg}
+    data-network={errorNetwork}
+    data-key={TODO_WEB3FORMS_ACCESS_KEY}
+  >
+    <!-- Hidden: Web3Forms access key — public client-side identifier (T-05-02) -->
+    <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
+    <input type="hidden" name="access_key" value={TODO_WEB3FORMS_ACCESS_KEY} />
+
+    <!-- Hidden: locale-resolved subject line for Web3Forms email subject -->
+    <input type="hidden" name="subject" value={emailSubject} />
+
+    <!-- Hidden: redirect for no-JS path (Web3Forms default thank-you page) -->
+    <input type="hidden" name="redirect" value="https://web3forms.com/success" />
+
+    <!-- Type identifier: distinguishes book-interest emails from contact form emails in inbox -->
+    <input type="hidden" name="type" value="boek-interesse" />
+
+    <!-- Honeypot: botcheck checkbox (must be checkbox for Web3Forms — T-05-02) -->
+    <input
+      type="checkbox"
+      name="botcheck"
+      style="display:none"
+      tabindex="-1"
+      aria-hidden="true"
+    />
+
+    <!-- Name — required -->
+    <div class="form-group">
+      <label for="book-naam" class="form-label">
+        {labelNaam}<span aria-hidden="true"> *</span>
+      </label>
+      <input
+        id="book-naam"
+        type="text"
+        name="name"
+        required
+        aria-required="true"
+        autocomplete="name"
+        class="form-input"
+      />
+    </div>
+
+    <!-- Email address — required, font-size 16px prevents iOS zoom -->
+    <div class="form-group">
+      <label for="book-email" class="form-label">
+        {labelEmail}<span aria-hidden="true"> *</span>
+      </label>
+      <input
+        id="book-email"
+        type="email"
+        name="email"
+        required
+        aria-required="true"
+        autocomplete="email"
+        class="form-input"
+        style="font-size: 16px;"
+      />
+    </div>
+
+    <!-- Submit button — aria-describedby ties to result region for a11y -->
+    <button
+      type="submit"
+      id="book-submit"
+      class="btn btn--primary book-submit"
+      aria-describedby="book-result"
+    >
+      {ctaSubmit}
+    </button>
+  </form>
+
+  <!-- Result region: hidden until JS resolves success or error (aria-live for AT) -->
+  <div id="book-result" aria-live="polite" hidden></div>
+</div>
+
+<!-- JS island: fetch submit handler (BOOK-01, D-02) -->
+<!-- Follows Nav.astro / ContactForm.astro IIFE pattern -->
+<script>
+  (function () {
+    'use strict';
+
+    // ── Element refs + null guards ──────────────────────────────────────────
+    const form      = document.getElementById('book-interest-form') as HTMLFormElement | null;
+    const submitBtn = document.getElementById('book-submit') as HTMLButtonElement | null;
+    const resultEl  = document.getElementById('book-result') as HTMLElement | null;
+
+    if (!form || !submitBtn || !resultEl) return;
+
+    // After null checks, use non-null refs inside closures
+    const f = form!;
+    const s = submitBtn!;
+    const r = resultEl!;
+
+    // ── Read copy from data-* attributes on the form element ──────────────
+    // Strings come from t.boek.* (set in template above) — XSS-safe, static only.
+    const copySubmit     = f.dataset.submit     || 'Stuur mij een seintje';
+    const copySubmitting = f.dataset.submitting || 'Versturen…';
+    const copySuccess    = f.dataset.success    || '';
+    const copyError      = f.dataset.error      || '';
+    const copyNetwork    = f.dataset.network    || '';
+    const accessKey      = f.dataset.key        || '';
+
+    // ── Placeholder key detection ─────────────────────────────────────────
+    if (accessKey === 'TODO_WEB3FORMS_ACCESS_KEY') {
+      console.warn(
+        '[BookInterestForm] Web3Forms access key is a placeholder — form will not deliver email. ' +
+        'Replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts.'
+      );
+    }
+
+    // ── Helper: show error in result region, re-enable button ──────────────
+    function showError(message: string) {
+      const errorP = document.createElement('p');
+      errorP.className = 'form-error';
+      errorP.textContent = message;
+      r.innerHTML = '';
+      r.appendChild(errorP);
+      r.hidden = false;
+
+      // Re-enable submit button and restore label
+      s.disabled = false;
+      s.textContent = copySubmit;
+      (s as HTMLElement).style.opacity = '';
+    }
+
+    // ── Fetch submit handler ────────────────────────────────────────────────
+    f.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // Validate required fields — form carries novalidate so JS must run checkValidity
+      if (!f.checkValidity()) {
+        f.reportValidity();
+        return;
+      }
+
+      // State 4: Submitting — disable button, change label, dim opacity
+      s.disabled = true;
+      s.textContent = copySubmitting;
+      (s as HTMLElement).style.opacity = '0.7';
+
+      // Clear any previous result
+      r.hidden = true;
+      r.innerHTML = '';
+
+      try {
+        const data = Object.fromEntries(new FormData(f));
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const json = await response.json();
+
+        if (json && json.success === true) {
+          // TODO Plan 02: add window.plausible('Book: Interest') Plausible goal here
+          // (Plan 02 wires analytics; guard: typeof window.plausible === 'function')
+
+          // State 5: Success — hide form, show STATIC success message
+          // NEVER echo json.message or any user input into the DOM (T-05-01, DOM XSS safety)
+          (f as HTMLElement).hidden = true;
+          const successP = document.createElement('p');
+          successP.className = 'form-success';
+          successP.textContent = copySuccess;
+          r.appendChild(successP);
+          r.hidden = false;
+        } else {
+          // State 6: API error (invalid key, rate limit, etc.)
+          showError(copyError);
+        }
+      } catch (_err) {
+        // State 7: Network error (no connection, CORS, etc.)
+        showError(copyNetwork);
+      }
+    });
+  })();
+</script>
+
+<style>
+  /* ── Book form wrapper — max-width 480px centred (UI-SPEC §BookInterestForm) ── */
+  .book-form-wrap {
+    width: 100%;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+
+  .book-form__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--color-text);
+    text-wrap: balance;
+    margin: 0 0 var(--space-xl);
+  }
+
+  /* ── Form layout ────────────────────────────────────────────────────────── */
+  .book-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Form group: label + input container ──────────────────────────────── */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);       /* 8px between label and input */
+    margin-bottom: var(--space-lg); /* 24px between groups */
+  }
+
+  /* ── Label ───────────────────────────────────────────────────────────────── */
+  .form-label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);    /* 14–16px label size */
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: 0.01em;
+    display: block;
+  }
+
+  /* ── Input ──────────────────────────────────────────────────────────────── */
+  /* Height 48px, font-size 1rem (iOS zoom prevention), background --color-bg */
+  .form-input {
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);    /* 8px */
+    height: 48px;
+    padding-inline: var(--space-md);   /* 16px */
+    font-family: var(--font-body);
+    font-size: 1rem;                   /* 16px FIXED — prevents iOS zoom */
+    font-weight: 400;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow   var(--duration-fast) var(--ease-out);
+    /* Reset browser defaults */
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  /* Focus ring: 2px --color-accent with 2px offset (UI-SPEC §Form Input Focus States) */
+  .form-input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-color: var(--color-text);
+  }
+
+  /* Placeholder text */
+  .form-input::placeholder {
+    color: var(--color-text-secondary);
+  }
+
+  /* ── Submit button ────────────────────────────────────────────────────────── */
+  /* 48px height min, padding-inline --space-lg, border-radius --radius-md */
+  .book-submit {
+    align-self: flex-start;
+    margin-top: var(--space-sm);
+    cursor: pointer;
+    border: none;
+  }
+
+  .book-submit:disabled {
+    cursor: not-allowed;
+  }
+
+  /* ── Result region ────────────────────────────────────────────────────────── */
+  /* Success: neutral --color-text (not yellow — UI-SPEC State 5) */
+  .form-success {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 400;
+    color: var(--color-text);
+    line-height: 1.5;
+    margin: 0;
+    /* Contained within max-width 480px wrapper — prevents overflow at 320px (backstop) */
+    word-wrap: break-word;
+  }
+
+  /* Error: --color-destructive (#C0392B) — not yellow */
+  .form-error {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--color-destructive);
+    line-height: 1.5;
+    margin: 0;
+    /* Contained within max-width 480px wrapper — prevents overflow at 320px (backstop) */
+    word-wrap: break-word;
+  }
+</style>
