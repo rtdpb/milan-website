@@ -59,7 +59,8 @@ const navItems = isEn
     </div>
 
     <!-- Column 2: Nav links -->
-    <nav class="site-footer__nav" aria-label="Footer navigatie">
+    <!-- WR-05: aria-label locale-resolved so EN screen-reader users don't hear Dutch -->
+    <nav class="site-footer__nav" aria-label={isEn ? 'Footer navigation' : 'Footer navigatie'}>
       <p class="site-footer__nav-heading">{t.footer.navHeading}</p>
       <ul class="site-footer__nav-list" role="list">
         {navItems.map((item) => (
