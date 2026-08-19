@@ -16,6 +16,11 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: 1.6;
+  /* Crisp, premium rendering for the grotesque body face (Geist). */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.006em;
 }
 
 /* ── Heading Font ───────────────────────────────────────────────────────── */
@@ -27,11 +32,17 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  line-height: 1.2;
+  line-height: 1.15;
+  /* Editorial, controlled Fraunces: remove the soft/wonky quirk, let optical
+     sizing track the rendered size (high contrast at display, calmer at text). */
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 0, 'WONK' 0;
+  letter-spacing: -0.015em;
 }
 
 h1 {
-  line-height: 1.1; /* Tighter at display size — hero H1 */
+  line-height: 1.06; /* Tighter at display size — hero H1 */
+  letter-spacing: -0.022em;
 }
 
 /* ── Typography Utilities ────────────────────────────────────────────────── */

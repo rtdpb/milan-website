@@ -1,5 +1,5 @@
 # .github/workflows/deploy.yml
-# Deploys Milan van der Meulen's website to GitHub Pages on push to main,
+# Deploys Milan van der Meulen's website to GitHub Pages on push to master,
 # and rebuilds daily to refresh the Substack RSS feed (NEWS-03 / D-02).
 #
 # Source: Phase 3 PLAN 03-01 Task 2, RESEARCH §Pattern 4, PATTERNS §deploy.yml
@@ -9,7 +9,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   schedule:
     # Daily at 06:00 UTC — triggers `astro build` which re-fetches the Substack RSS feed,
     # keeping the homepage "Recente artikelen" section automatically fresh (NEWS-03 / D-02).

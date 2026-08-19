@@ -73,17 +73,31 @@ const ogImageURL = new URL(ogImage, Astro.site);
 // Self-hosted WOFF2 in public/fonts/. Vite leaves is:inline styles untouched.
 const fontFaceCss = `
 @font-face {
-  font-family: 'Fraunces';
-  src: url('${base}fonts/Fraunces-subset.woff2') format('woff2');
-  font-weight: 100 900;
+  /* Instrument Serif — refined high-contrast editorial display serif (v2.0).
+     Replaces Fraunces (too quirky/rustic). Swap to Naste display via
+     --font-display when licensed. */
+  font-family: 'Instrument Serif';
+  src: url('${base}fonts/InstrumentSerif-latin.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0020-007E, U+00A0-00FF;
 }
 @font-face {
-  font-family: 'DM Sans';
-  src: url('${base}fonts/DMSans-subset.woff2') format('woff2');
-  font-weight: 300 700;
+  font-family: 'Instrument Serif';
+  src: url('${base}fonts/InstrumentSerif-latin-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+@font-face {
+  /* Geist Variable — crisp editorial grotesque (interim Naste stand-in for
+     body/nav/UI). Replaces the softer DM Sans. Swap to Naste sans via
+     --font-body when the licensed files arrive. */
+  font-family: 'Geist';
+  src: url('${base}fonts/Geist-latin.woff2') format('woff2');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
   unicode-range: U+0020-007E, U+00A0-00FF;
@@ -137,14 +151,14 @@ const personSchema = {
 -->
 <link
   rel="preload"
-  href={`${base}fonts/Fraunces-subset.woff2`}
+  href={`${base}fonts/InstrumentSerif-latin.woff2`}
   as="font"
   type="font/woff2"
   crossorigin
 />
 <link
   rel="preload"
-  href={`${base}fonts/DMSans-subset.woff2`}
+  href={`${base}fonts/Geist-latin.woff2`}
   as="font"
   type="font/woff2"
   crossorigin

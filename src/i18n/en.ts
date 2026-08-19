@@ -54,6 +54,18 @@ export const en = {
     usp1: '12+ years',       // D-03: verbatim number, only unit translated
     usp2: '180 employees',   // D-03: verbatim number
     usp3: '9 markets',       // D-03: verbatim number
+    /** Proof points, integrated into the hero panel (numbers verbatim, D-03). */
+    stats: [
+      { value: '12+', label: 'years' },
+      { value: '180', label: 'employees' },
+      { value: '9',   label: 'markets' },
+    ],
+    /** Overlapping hero card — truthful CTA drawn from the existing coaching offer. */
+    card: {
+      eyebrow: '1:1 Coaching',
+      title:   'Book an intro call',
+      sub:     'A sparring partner who built what you want to reach.',
+    },
   },
 
   // ── Press Strip ──────────────────────────────────────────────────────────

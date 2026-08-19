@@ -48,6 +48,18 @@ export const nl = {
     usp1: '12+ jaar',
     usp2: '180 medewerkers',
     usp3: '9 markten',
+    /** Proof points, integrated into the hero panel (numbers verbatim, D-03). */
+    stats: [
+      { value: '12+', label: 'jaar' },
+      { value: '180', label: 'medewerkers' },
+      { value: '9',   label: 'markten' },
+    ],
+    /** Overlapping hero card — truthful CTA drawn from the existing coaching offer. */
+    card: {
+      eyebrow: '1:1 Coaching',
+      title:   'Plan een kennismaking',
+      sub:     'Sparringpartner die zelf bouwde wat jij wilt bereiken.',
+    },
   },
 
   // ── Press Strip (HOME-03) ────────────────────────────────────────────────

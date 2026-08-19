@@ -47,8 +47,9 @@
   /* ── Typography — Font Stacks ────────────────────────────────────────── */
   /* D-13: single swappable variables */
   /* TODO Naste swap: change --font-display value to 'Naste', Georgia, serif */
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  /* Interim body/UI face: Geist — crisp editorial grotesque (Naste-ready swap). */
+  --font-body:    'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* ── Fluid Type Scale (clamp: min vp, preferred, max vp) ─────────────── */
   /* Source: UI-SPEC §Typography Type Scale + RESEARCH §Pattern 1 */
@@ -82,7 +83,8 @@
   /* ── Layout ──────────────────────────────────────────────────────────── */
   --max-width:        1280px;  /* Max content width (wide: extra whitespace beyond) */
   --content-width:    1024px;  /* Standard content container */
-  --section-padding-y: clamp(var(--space-xl), 6vw, var(--space-5xl));
+  /* v2.0: tighter editorial rhythm (was up to 128px — felt sparse). */
+  --section-padding-y: clamp(var(--space-xl), 4.5vw, var(--space-4xl));
 
   /* ── Border Radii ────────────────────────────────────────────────────── */
   --radius-sm:   4px;

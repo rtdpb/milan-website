@@ -1,99 +1,66 @@
 ---
 /**
- * PressStrip.astro — "Bekend van" credibility band (HOME-03)
- * Source: PLAN 01-03 Task 1, UI-SPEC §<PressStrip>, CONTEXT.md D-06, D-11
+ * PressStrip.astro — "Bekend van" credibility band (HOME-03) · v2.0 redesign
  *
- * Sits directly under the hero — a slim, visually adjacent band that signals
- * third-party media credibility at a glance.
+ * Clean, credible wordmark strip (replaces the placeholder pills). The outlet
+ * names are REAL media that featured Milan (MT Sprout, Quote, NOS, EenVandaag,
+ * Telegraaf, De Ondernemer) — rendered as understated wordmarks, not chips.
  *
- * HONESTY RULE (D-11):
- * All 6 logo chips are WORDMARK TEXT PLACEHOLDERS — not real logo images.
- * Each chip carries title="Logo volgt" and is styled greyscale/muted to signal
- * "placeholder". The PlaceholderBadge provides the visible [Placeholder] marker.
- *
- * TODO (D-11): Swap each text chip for a real SVG/PNG logo when assets are supplied.
- * Source outlets: MT Sprout, Quote, NOS, EenVandaag, Telegraaf, De Ondernemer.
- *
- * Mobile overflow: horizontal scroll with scroll-snap so the 6 chips never clip
- * or overflow the page on a 375px viewport (UI-SPEC §UI Considerations backstop).
+ * INTERNAL NOTE (not shown to visitors, per v2.0 brief): these are text
+ * wordmarks pending real vector logos. Swap each <span> for the outlet's SVG
+ * when the assets are supplied. No public "logo volgt" marker is displayed.
  */
-
 import SectionWrapper from '../ui/SectionWrapper.astro';
-import PlaceholderBadge from '../ui/PlaceholderBadge.astro';
 import { getStrings } from '../../i18n/utils';
 
-// Phase 4: locale-parameterized strings (I18N-02)
 const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 ---
 
-<!-- PressStrip: slim credibility band, directly below the hero (D-06) -->
 <SectionWrapper id="bekend-van" variant="surface" labelledBy="press-strip-eyebrow" class="press-strip-wrapper">
   <div class="press-strip">
-    <!-- Eyebrow label: "Bekend van" / "Featured in" (locale-resolved) -->
-    <p id="press-strip-eyebrow" class="press-strip__eyebrow">
-      {t.pressStrip.eyebrow}
-    </p>
+    <p id="press-strip-eyebrow" class="press-strip__eyebrow">{t.pressStrip.eyebrow}</p>
 
-    <!-- Logo chips row — horizontal scroll on mobile if overflow -->
-    <!-- WR-03: aria-label is locale-resolved so EN screen-reader users don't hear Dutch -->
-    <div class="press-strip__logos" role="list" aria-label={isEn ? 'Media coverage of Milan van der Meulen' : 'Media-uitingen van Milan van der Meulen'}>
+    <ul
+      class="press-strip__logos"
+      aria-label={isEn ? 'Media coverage of Milan van der Meulen' : 'Media-uitingen van Milan van der Meulen'}
+    >
       {t.pressStrip.logos.map((outlet) => (
-        <div
-          class="press-strip__chip"
-          role="listitem"
-          title={t.pressStrip.logoPlaceholderTitle}
-          aria-label={`${outlet} — ${t.pressStrip.logoPlaceholderSuffix}`}
-        >
-          <!-- Wordmark text — NOT a real logo image (D-11) -->
+        <li class="press-strip__item">
           <span class="press-strip__wordmark">{outlet}</span>
-        </div>
+        </li>
       ))}
-    </div>
-
-    <!-- Visible placeholder marker — signals this row is not final (D-11) -->
-    <div class="press-strip__badge-row" aria-hidden="true">
-      <PlaceholderBadge label={t.pressStrip.badgeLabel} />
-    </div>
+    </ul>
   </div>
 </SectionWrapper>
 
 <style>
-  /*
-   * Override the SectionWrapper's default --section-padding-y with the
-   * slim press-strip variant (20px top + bottom — UI-SPEC §Spacing Exceptions).
-   */
   :global(.press-strip-wrapper) {
-    --section-padding-y: var(--space-press-strip-y); /* 20px */
-    border-top: 1px solid var(--color-border);
+    --section-padding-y: clamp(var(--space-lg), 3vw, var(--space-2xl));
     border-bottom: 1px solid var(--color-border);
   }
-
-  /* ── Press strip inner layout ─────────────────────────────────────────── */
 
   .press-strip {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-md); /* 16px between eyebrow, chips, badge */
+    gap: var(--space-md);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 900px) {
     .press-strip {
       flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: var(--space-lg); /* 24px on tablet+ */
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2xl);
     }
   }
 
-  /* ── Eyebrow label ────────────────────────────────────────────────────── */
-
   .press-strip__eyebrow {
     font-family: var(--font-body);
-    font-size: var(--text-xs);   /* 12–14px label size */
+    font-size: var(--text-xs);
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-text-secondary);
     white-space: nowrap;
@@ -101,68 +68,33 @@ const isEn = (Astro.currentLocale ?? 'nl') === 'en';
     margin: 0;
   }
 
-  /* ── Logo chips scroll container ──────────────────────────────────────── */
-
   .press-strip__logos {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: var(--space-sm); /* 8px between chips */
-
-    /*
-     * Mobile: horizontal scroll if chips overflow (UI-SPEC §UI Considerations backstop).
-     * Scroll-snap keeps the experience deliberate on touch devices.
-     */
+    gap: clamp(var(--space-lg), 3vw, var(--space-3xl));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Mobile overflow: quiet horizontal scroll rather than clipping. */
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-
-    /* Hide scrollbar visually but keep it functional */
-    scrollbar-width: none;           /* Firefox */
-    -ms-overflow-style: none;        /* IE/Edge */
+    max-width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+  .press-strip__logos::-webkit-scrollbar { display: none; }
 
-  .press-strip__logos::-webkit-scrollbar {
-    display: none;                   /* Chrome/Safari */
-  }
-
-  /* ── Individual logo chip ──────────────────────────────────────────────── */
-
-  .press-strip__chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 36px;
-    padding-inline: var(--space-md);  /* 16px */
-    border: 1px solid var(--color-border);
-    border-radius: 9999px;            /* pill shape */
-    background-color: var(--color-bg);
-    flex-shrink: 0;
-    scroll-snap-align: start;
-
-    /* Greyscale/muted — signals "placeholder, not final logo" (D-11) */
-    opacity: 0.75;
-    filter: grayscale(1);
-    cursor: default;
-  }
-
-  /* ── Wordmark text inside each chip ──────────────────────────────────── */
+  .press-strip__item { flex-shrink: 0; }
 
   .press-strip__wordmark {
     font-family: var(--font-body);
-    font-size: 0.875rem;           /* ~14px — UI-SPEC */
+    font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.1rem);
     font-weight: 600;
-    font-style: italic;            /* Italic = clearly placeholder styling (D-11) */
-    color: var(--color-text-secondary);
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    opacity: 0.55;
     white-space: nowrap;
     line-height: 1;
-    letter-spacing: 0.01em;
+    transition: opacity var(--duration-fast) var(--ease-out);
   }
-
-  /* ── Placeholder badge row ────────────────────────────────────────────── */
-
-  .press-strip__badge-row {
-    flex-shrink: 0;
-    /* Visible on all viewports — confirms this row is placeholder (D-11) */
-  }
+  .press-strip__wordmark:hover { opacity: 0.9; }
 </style>
