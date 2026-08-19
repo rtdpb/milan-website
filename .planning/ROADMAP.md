@@ -138,7 +138,7 @@ Plans:
 2. Analytics and at least one conversion optimization are in place.
 3. A CMS/editable-content approach is evaluated and, if adopted, integrated without destabilizing existing pages.
 
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans executed
 Plans:
 **Wave 1**
 
@@ -147,7 +147,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 05-02-PLAN.md — Analytics + conversion optimization (GROW-01): production-gated Plausible, 4 conversion goals, sticky CTA [Wave 2]
+- [x] 05-02-PLAN.md — Analytics + conversion optimization (GROW-01): production-gated Plausible, 4 conversion goals, sticky CTA [Wave 2]
 
 ---
 *Last updated: 2026-08-19 after Phase 5 planning*

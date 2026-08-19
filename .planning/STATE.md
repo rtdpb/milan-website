@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 5
 status: in_progress
-stopped_at: "Completed Phase 05 Plan 03 — CMS evaluation (GROW-02, D-08): written DEFER evaluation in 05-CMS-EVALUATION.md, no source changes"
-last_updated: "2026-08-19T14:36:34.753Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-08-19T14:45:52.140Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 17
-  completed_plans: 16
+  completed_plans: 17
 current_phase_name: Book / Pre-order & Future Growth
 ---
 
@@ -113,6 +113,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 - Phase 5-01: en/book.astro unused getRelativeLocaleUrl import removed — book page uses config constants for external URLs (Substack, checkout), not internal locale routes
 - Phase 5-01: nl.ts boek block uses double-quoted strings for any string containing apostrophes (consistent with arc4Body pattern)
 - [Phase ?]: D-08 confirmed DEFER: all git-based CMSes (Decap/Sveltia/TinaCMS/Pages CMS) incompatible with current nl.ts/en.ts TypeScript const shape — adoption requires content-collections migration as prerequisite; GROW-02 satisfied via documented evaluation (05-CMS-EVALUATION.md)
+- [Phase ?]: window.plausible typed as (window as any).plausible — TS strict mode has no Plausible type; avoids global.d.ts for a single third-party shim
 
 ## Performance Metrics
 
@@ -138,6 +139,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | Phase 03 P03 | ~2 min | 2 tasks | 3 files |
 | Phase 04 P02 | 8 | 3 tasks | 13 files |
 | Phase 05 P03 | 5 | 1 tasks | 1 files |
+| Phase 05 P02 | 8 | 3 tasks | 11 files |
 
 ## Next Step
 
@@ -148,6 +150,6 @@ Phase 5 Plan 01 complete. Book page tracer delivered: bilingual /boek + /en/book
 
 ## Session
 
-**Last session:** 2026-08-19T14:36:34.742Z
-**Stopped at:** Completed Phase 05 Plan 03 — CMS evaluation (GROW-02, D-08): written DEFER evaluation in 05-CMS-EVALUATION.md, no source changes
+**Last session:** 2026-08-19T14:45:52.129Z
+**Stopped at:** Completed 05-02-PLAN.md
 **Resume file:** None
