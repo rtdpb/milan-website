@@ -40,8 +40,14 @@ const { eyebrow, heading, body, signature, imageAlt } = t.story;
 // Show the teaser link only on pages OTHER than the story page itself.
 // On /mijn-verhaal (NL) or /en/about (EN) the Story component is the opening
 // band — a self-link would be circular.
+// WR-02: use exact-match with trailing-slash normalization instead of
+// substring .includes() so paths like /en/about-us won't false-match.
 const currentPath = Astro.url.pathname;
-const isMijnVerhaalPage = currentPath.includes('mijn-verhaal') || currentPath.includes('/about');
+const base = import.meta.env.BASE_URL;
+const norm = (p: string) => p.replace(/\/$/, '');
+const isMijnVerhaalPage =
+  norm(currentPath) === norm(`${base}mijn-verhaal`) ||
+  norm(currentPath) === norm(`${base}en/about`);
 const teaserLink = isEn
   ? getRelativeLocaleUrl('en', 'about')
   : `${import.meta.env.BASE_URL}mijn-verhaal`;
