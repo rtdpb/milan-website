@@ -29,10 +29,20 @@ interface Props {
 const lang = Astro.currentLocale ?? 'nl';
 const t = getStrings(lang);
 
+// Locale-correct defaults (CR-03): EN pages get English fallbacks, NL pages get Dutch.
+// This prevents any future EN page that omits title/description from silently
+// receiving Dutch SEO metadata.
+const defaultTitle = lang === 'en'
+  ? 'Milan van der Meulen — Founder Coach & Speaker'
+  : 'Milan van der Meulen — Founder Coach & Spreker';
+const defaultDescription = lang === 'en'
+  ? 'Milan van der Meulen is an experienced entrepreneur, founder coach and speaker. He scaled Soly to 9 countries and 180 employees. Now he helps other founders scale without losing themselves.'
+  : 'Milan van der Meulen is een ervaren ondernemer, founder coach en spreker. Hij hielp Soly groeien naar 9 landen en 180 medewerkers. Nu helpt hij andere founders schalen zonder zichzelf te verliezen.';
+
 const {
   // Defaults sourced from UI-SPEC §SEO / Metadata Contract
-  title = 'Milan van der Meulen — Founder Coach & Spreker',
-  description = 'Milan van der Meulen is een ervaren ondernemer, founder coach en spreker. Hij hielp Soly groeien naar 9 landen en 180 medewerkers. Nu helpt hij andere founders schalen zonder zichzelf te verliezen.',
+  title = defaultTitle,
+  description = defaultDescription,
   ogImage,
   nlSlug,
   enSlug,
