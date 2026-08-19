@@ -28,15 +28,11 @@ import Testimonials from '../../components/sections/Testimonials.astro';
 import Story from '../../components/sections/Story.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
 import Articles from '../../components/sections/Articles.astro';
-import { getStrings } from '../../i18n/utils';
-
-// Astro.currentLocale is 'en' automatically for /en/* pages at build time.
-const t = getStrings(Astro.currentLocale);
 ---
 
 <BaseLayout
   title="Milan van der Meulen — Founder Coach & Speaker"
-  description={t.hero.subtext}
+  description="Milan van der Meulen is an experienced entrepreneur, founder coach and speaker. He scaled Soly to 9 countries and 180 employees. Now he helps other founders scale without losing themselves."
 >
   <!--
     Hero section — LCP image, H1, CTAs, USPs.
