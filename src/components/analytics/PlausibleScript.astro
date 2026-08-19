@@ -1,0 +1,62 @@
+---
+/**
+ * PlausibleScript.astro
+ * Production-gated, domain-sentinel-gated Plausible Analytics script injector.
+ *
+ * Source: 05-RESEARCH.md §Pattern 1, 05-PATTERNS.md §PlausibleScript.astro,
+ *         05-CONTEXT.md D-04 (no consent banner), D-06 (config seam)
+ *
+ * Injection rules:
+ *   Gate 1 — isProd:          only in production builds (import.meta.env.PROD)
+ *   Gate 2 — !IS_PLACEHOLDER: only when TODO_PLAUSIBLE_DOMAIN has been replaced
+ *                              with a real domain (IS_PLACEHOLDER sentinel guard)
+ *
+ * When shouldInject = false (dev build OR placeholder domain):
+ *   → Renders NOTHING — zero analytics footprint.
+ *
+ * When shouldInject = true (prod build + real domain):
+ *   → Renders two tags:
+ *       1. <script defer data-domain="..." src="https://plausible.io/js/script.js">
+ *          — absolute URL, NEVER BASE_URL-prefixed (CDN is external, not subpath-relative)
+ *       2. <script is:inline> queue-guard shim
+ *          — defines window.plausible as a buffering function so early event calls
+ *            are safely enqueued until the Plausible script loads.
+ *
+ * Privacy: Plausible is cookieless by design (D-04). No consent banner needed.
+ * CDN vetting: https://plausible.io/js/script.js — established EU-hosted provider.
+ *   Verified in 05-UI-SPEC.md §Registry Safety 2026-08-19.
+ *
+ * Used in: src/components/layout/BaseHead.astro
+ */
+
+import { TODO_PLAUSIBLE_DOMAIN } from '../../config';
+
+// Gate 1: Only inject in production builds (false during `astro dev`)
+const isProd = import.meta.env.PROD;
+
+// Gate 2: Only inject when a real domain has been supplied (D-06)
+// IS_PLACEHOLDER = true → domain is still the sentinel string → analytics inert
+const IS_PLACEHOLDER = TODO_PLAUSIBLE_DOMAIN === 'TODO_PLAUSIBLE_DOMAIN';
+
+const shouldInject = isProd && !IS_PLACEHOLDER;
+---
+
+{shouldInject && (
+  <>
+    {/* Plausible pageview tracking — NEVER prefix src with BASE_URL (CDN is absolute) */}
+    <script
+      defer
+      data-domain={TODO_PLAUSIBLE_DOMAIN}
+      src="https://plausible.io/js/script.js"
+    ></script>
+    {/* Queue guard: buffers window.plausible() calls fired before the script loads.
+        Must be is:inline so Astro does not bundle/defer it — it must execute
+        synchronously after the deferred script tag so the queue exists immediately.
+        Source: 05-RESEARCH.md §Pattern 1, §Common Pitfalls 5 */}
+    <script is:inline>
+      window.plausible = window.plausible || function() {
+        (window.plausible.q = window.plausible.q || []).push(arguments);
+      };
+    </script>
+  </>
+)}
