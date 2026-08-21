@@ -31,9 +31,7 @@ import Articles from '../../components/sections/Articles.astro';
 import StickyCTA from '../../components/ui/StickyCTA.astro';
 import { getStrings } from '../../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { TODO_SUBSTACK_URL } from '../../config';
 const t = getStrings(Astro.currentLocale);
-const HAS_REAL_ARTICLES = TODO_SUBSTACK_URL !== 'TODO_SUBSTACK_URL';
 ---
 
 <BaseLayout
@@ -81,7 +79,7 @@ const HAS_REAL_ARTICLES = TODO_SUBSTACK_URL !== 'TODO_SUBSTACK_URL';
     Articles — placeholder/RSS article cards.
     D-02: en.articles.heading includes "(written in Dutch)" note.
   -->
-  {HAS_REAL_ARTICLES && <Articles />}
+  <Articles />
 
   <!--
     StickyCTA — appears when the hero primary CTA (#hero-cta) scrolls out of view.

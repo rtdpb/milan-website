@@ -28,12 +28,7 @@ import Newsletter from '../components/sections/Newsletter.astro';
 import Articles from '../components/sections/Articles.astro';
 import StickyCTA from '../components/ui/StickyCTA.astro';
 import { getStrings } from '../i18n/utils';
-import { TODO_SUBSTACK_URL } from '../config';
 const t = getStrings(Astro.currentLocale);
-// Source-lock: the docx only asks whether the section CAN show real LinkedIn/Substack
-// posts — there are no supplied articles. Until a real Substack feed exists, HIDE the
-// section entirely rather than show fabricated concepts (content integrity).
-const HAS_REAL_ARTICLES = TODO_SUBSTACK_URL !== 'TODO_SUBSTACK_URL';
 ---
 
 <BaseLayout
@@ -82,11 +77,11 @@ const HAS_REAL_ARTICLES = TODO_SUBSTACK_URL !== 'TODO_SUBSTACK_URL';
   <Newsletter />
 
   <!--
-    Articles — hidden until a real Substack/LinkedIn feed exists (source-lock:
-    no fabricated articles/dates/read-times). Auto-appears once TODO_SUBSTACK_URL
-    is set and the RSS feed returns real posts.
+    Articles — custom-cover cards. Until a real Substack/LinkedIn feed exists the
+    section shows a clearly-labelled "Voorbeeld" concept (no fabricated dates/
+    read-times). Real posts + dates appear automatically once the feed is live.
   -->
-  {HAS_REAL_ARTICLES && <Articles />}
+  <Articles />
 
   <!--
     StickyCTA — appears when the hero primary CTA (#hero-cta) scrolls out of view.
