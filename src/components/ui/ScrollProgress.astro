@@ -1,0 +1,92 @@
+---
+/**
+ * ScrollProgress.astro
+ * Thin fixed scroll-progress indicator at the very top of the viewport.
+ * Fills left→right (transform: scaleX) as the user scrolls the page.
+ *
+ * Mounted once in BaseLayout.astro as the FIRST child of <body> so it
+ * overlays everything and appears on every page including the homepage.
+ *
+ * Design rules (260821-m2d):
+ *   - Height: var(--progress-height) = 3px (token)
+ *   - Fill colour: var(--color-accent) (#FFDD11) — sparing: only the
+ *     moving fill carries the yellow, the track is transparent.
+ *   - z-index: 300 — above Nav (100) and mobile panel (200).
+ *   - Motion: transform: scaleX(0→1), transform-origin left — zero CLS,
+ *     zero layout cost, composited-only.
+ *   - Reduced-motion: island returns early; bar stays scaleX(0) which
+ *     renders as an invisible hairline — acceptable static state.
+ *   - Passive scroll listener + requestAnimationFrame throttle (ticking
+ *     flag) — at most one style write per frame.
+ *   - Divide-by-zero guard: when page is not scrollable, does nothing.
+ *   - Decorative only: aria-hidden, role="presentation" — out of a11y tree.
+ */
+---
+
+<div class="scroll-progress" role="presentation" aria-hidden="true">
+  <span class="scroll-progress__fill"></span>
+</div>
+
+<style>
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--progress-height);
+    z-index: 300; /* above Nav (100) and mobile panel (200) */
+    pointer-events: none;
+    /* Track: transparent — accent stays only on the moving fill */
+    background: transparent;
+  }
+
+  .scroll-progress__fill {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    will-change: transform;
+  }
+</style>
+
+<script>
+  (function () {
+    'use strict';
+
+    /* Reduced-motion guard — under prefers-reduced-motion, leave the fill
+       at scaleX(0) (invisible hairline). No animation runs. */
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var fill = document.querySelector('.scroll-progress__fill') as HTMLElement | null;
+    if (!fill) return;
+
+    var ticking = false;
+
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var denom = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      /* Divide-by-zero guard: page not scrollable */
+      if (denom <= 0) {
+        fill!.style.transform = 'scaleX(0)';
+        ticking = false;
+        return;
+      }
+      var p = Math.min(Math.max(scrollTop / denom, 0), 1);
+      fill!.style.transform = 'scaleX(' + p + ')';
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    /* Initialise immediately so it's correct on first render */
+    update();
+  })();
+</script>
