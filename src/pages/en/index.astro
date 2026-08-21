@@ -26,6 +26,7 @@ import PressStrip from '../../components/sections/PressStrip.astro';
 import Samenwerken from '../../components/sections/Samenwerken.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import Story from '../../components/sections/Story.astro';
+import Timeline from '../../components/sections/Timeline.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
 import Articles from '../../components/sections/Articles.astro';
 import StickyCTA from '../../components/ui/StickyCTA.astro';
@@ -68,6 +69,9 @@ const t = getStrings(Astro.currentLocale);
     "Verhaal" anchor preserved so the hero secondary CTA still works on the EN page.
   -->
   <Story />
+
+  <!-- Timeline — Soly journey as visual credibility (v4.0). -->
+  <Timeline />
 
   <!--
     Newsletter — Substack signup.

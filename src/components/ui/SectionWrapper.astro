@@ -22,7 +22,7 @@ interface Props {
   labelledBy?: string;
   /** Extra id to apply to the section element (for scroll/anchor targets). */
   id?: string;
-  variant?: 'default' | 'dark' | 'surface';
+  variant?: 'default' | 'dark' | 'surface' | 'warm' | 'navy' | 'ink' | 'yellow' | 'blue';
   class?: string;
 }
 
@@ -68,15 +68,40 @@ const sectionClasses = ['section-wrapper', `section-wrapper--${variant}`, extraC
     background-color: var(--color-bg);
   }
 
-  /* ── Dark band: full-bleed near-black (story section, D-01) ─────────── */
-  .section-wrapper--dark {
-    background-color: var(--color-dark-band);  /* #111110 */
-    color: var(--color-dark-text);             /* #F5F2EC */
+  /* ── Dark / ink band ─────────────────────────────────────────────────── */
+  .section-wrapper--dark,
+  .section-wrapper--ink {
+    background-color: var(--color-ink);
+    color: var(--color-dark-text);
+  }
+
+  /* ── Navy documentary band ───────────────────────────────────────────── */
+  .section-wrapper--navy {
+    background-color: var(--color-navy);
+    color: var(--color-dark-text);
+  }
+
+  /* ── Blue energy band ────────────────────────────────────────────────── */
+  .section-wrapper--blue {
+    background-color: var(--color-blue);
+    color: var(--color-dark-text);
+  }
+
+  /* ── Yellow signature band ───────────────────────────────────────────── */
+  .section-wrapper--yellow {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+
+  /* ── Warm editorial band ─────────────────────────────────────────────── */
+  .section-wrapper--warm {
+    background-color: var(--color-bg-warm);
+    color: var(--color-text);
   }
 
   /* ── Surface: secondary card-surface tint ────────────────────────────── */
   .section-wrapper--surface {
-    background-color: var(--color-surface);  /* #F0EDE7 */
+    background-color: var(--color-surface);
     color: var(--color-text);
   }
 </style>

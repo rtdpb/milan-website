@@ -1,105 +1,108 @@
 /*
  * src/styles/tokens.css
- * Milan van der Meulen — Design Tokens
- * All design system values as CSS custom properties at :root.
+ * Milan van der Meulen — Design Tokens · v4.0 "Professional Editorial"
  *
- * FONTS: Interim pairing — Fraunces (display serif) + DM Sans (grotesque sans).
- * Both licensed SIL Open Font License 1.1 [ASSUMED — OFL confirmed via Google Fonts].
- * Self-hosted WOFF2 files in public/fonts/. No Google Fonts CDN links.
+ * Authoritative, magazine-grade system: a single modern sans (Geist) leads 90%
+ * of the interface; a restrained editorial serif (Instrument Serif) is reserved
+ * for short accent lines only. Warm paper base, deep ink + navy for authority,
+ * a spare bright yellow signature, a confident blue, and a warm coral support
+ * tone. Colour structures the page section by section.
  *
- * SWAP to Naste when files arrive:
- *   1. Add @font-face for Naste in this file (below existing @font-face blocks)
- *   2. Change --font-display value to: 'Naste', Georgia, 'Times New Roman', serif
- *   That single variable change propagates across all components.
+ * FONTS: @font-face lives in BaseHead.astro (base-aware src URLs).
+ * Swap to Naste later by pointing --font-sans at it.
  */
-
-/* ── @font-face: Self-hosted Interim Fonts ──────────────────────────────── */
-/*
- * @font-face declarations live in BaseHead.astro as a base-aware inline
- * <style> block, because the font src URLs must be prefixed with Astro's
- * `base` (import.meta.env.BASE_URL) so they resolve under the GitHub Pages
- * project subpath (/milan-website/fonts/...). CSS files cannot read the base,
- * and Vite leaves absolute url(/...) untouched — so they are authored where
- * the base value is available. Fonts remain self-hosted in public/fonts/.
- *
- * SWAP to Naste when files arrive: drop Naste-Regular.woff2 in public/fonts/,
- * add its @font-face to the BaseHead block, then change --font-display below.
- */
-
-/* ── :root — All Design Tokens ─────────────────────────────────────────── */
 
 :root {
-  /* ── Color Tokens ───────────────────────────────────────────────────── */
-  /* Source: UI-SPEC §Color palette; D-01, D-02, D-03 */
+  /* ── Colour — warm paper, cool ink/navy, bright signatures ───────────────── */
+  --color-bg:             #F5F2EA;  /* Warm off-white paper — page ground */
+  --color-bg-warm:        #F1ECE0;  /* Warmer paper — editorial story mood */
+  --color-surface:        #EBE5D7;  /* Raised warm surface — cards, chips */
+  --color-soft:           #D9D6CE;  /* Soft neutral — quiet fills, hairfills */
 
-  --color-bg:             #FAF8F4;  /* Off-white/cream — page background (60%) */
-  --color-surface:        #F0EDE7;  /* Card + secondary surface backgrounds (30%) */
-  --color-text:           #1A1A18;  /* Near-black — primary text */
-  --color-text-secondary: #5A5A52;  /* Mid-grey — captions, placeholders */
-  --color-border:         #E2DDD6;  /* Cream-grey dividers and card borders */
-  --color-accent:         #FFDD11;  /* Yellow — single accent (10%), signature moments only */
-  --color-accent-dark:    #C9AC00;  /* Yellow darkened 20% — hover on accent elements */
-  --color-dark-band:      #111110;  /* Near-black — full-width dark section backgrounds */
-  --color-dark-text:      #F5F2EC;  /* Off-white — text on dark bands */
-  --color-dark-surface:   #222220;  /* Dark card background (testimonial accent) */
-  --color-destructive:    #C0392B;  /* Error/destructive — form validation only */
+  --color-text:           #16181D;  /* Primary ink */
+  --color-text-secondary: #5C6069;  /* Secondary copy, captions, meta */
+  --color-text-tertiary:  #9A9AA0;  /* Faint labels / numerals */
+  --color-border:         #DCD6C8;  /* Warm hairline dividers / card edges */
 
-  /* ── Typography — Font Stacks ────────────────────────────────────────── */
-  /* D-13: single swappable variables */
-  /* TODO Naste swap: change --font-display value to 'Naste', Georgia, serif */
-  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-  /* Interim body/UI face: Geist — crisp editorial grotesque (Naste-ready swap). */
-  --font-body:    'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-accent:         #FFDD11;  /* Signature yellow — spare, high energy */
+  --color-accent-dark:    #E7C300;  /* Yellow, darkened — hover on accent */
+  --color-accent-ink:     #14140A;  /* Ink on yellow (contrast-safe) */
 
-  /* ── Fluid Type Scale (clamp: min vp, preferred, max vp) ─────────────── */
-  /* Source: UI-SPEC §Typography Type Scale + RESEARCH §Pattern 1 */
-  /* Corresponds to: xs=12-14px, sm=14-16px, base=16-18px, lg=18-22px,
-     xl=20-28px, 2xl=24-36px, 3xl=30-48px, 4xl=36-64px, 5xl=48-88px */
-  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem); /* 12–14px — meta/caption */
-  --text-sm:   clamp(0.875rem, 0.85rem + 0.25vw, 1rem);     /* 14–16px — label/eyebrow */
-  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem); /* 16–18px — body */
-  --text-lg:   clamp(1.125rem, 1rem    + 0.5vw,  1.375rem); /* 18–22px — subheading sm */
-  --text-xl:   clamp(1.25rem,  1rem    + 0.75vw, 1.75rem);  /* 20–28px — subheading */
-  --text-2xl:  clamp(1.5rem,   1.1rem  + 1vw,    2.25rem);  /* 24–36px — section heading */
-  --text-3xl:  clamp(1.875rem, 1.2rem  + 1.5vw,  3rem);     /* 30–48px — large heading */
-  --text-4xl:  clamp(2.25rem,  1.3rem  + 2vw,    4rem);     /* 36–64px — display small */
-  --text-5xl:  clamp(3rem,     1.5rem  + 3vw,    5.5rem);   /* 48–88px — hero H1 display */
+  --color-blue:           #3157FF;  /* Confident blue — energy, links, one section */
+  --color-blue-dark:      #2444D8;  /* Blue hover */
+  --color-warm:           #E86A4A;  /* Warm coral/terracotta — sparing support accent */
 
-  /* ── Spacing Scale (4-pt base; multiples per UI-SPEC §Spacing Scale) ─── */
-  --space-xs:   4px;    /* Icon-to-label gaps, badge padding */
-  --space-sm:   8px;    /* Button padding vertical, list row gaps */
-  --space-md:   16px;   /* Card inner padding, paragraph gap */
-  --space-lg:   24px;   /* Card vertical padding, component margin-bottom */
-  --space-xl:   32px;   /* Section inner padding mobile */
-  --space-2xl:  48px;   /* Section padding tablet */
-  --space-3xl:  64px;   /* Section padding desktop, hero gap */
-  --space-4xl:  96px;   /* Major section breaks */
-  --space-5xl:  128px;  /* Hero / dark-band vertical padding desktop */
+  /* Dark families */
+  --color-ink:            #111318;  /* Deepest near-black — testimonials, footer */
+  --color-ink-2:          #1B1E25;  /* Raised surface on ink */
+  --color-navy:           #101D3A;  /* Deep navy — documentary timeline band */
+  --color-navy-2:         #182747;  /* Raised surface on navy */
+  --color-dark-text:      #F4F1E9;  /* Warm off-white text on dark */
+  --color-dark-text-soft: #A7ADBA;  /* Muted text on dark */
 
-  /* Section exceptions (UI-SPEC §Spacing Scale — Exceptions) */
-  --space-press-strip-y: 20px; /* Press strip slim vertical padding */
-  --space-usps-gap:      12px; /* USP row column gap in hero */
+  --color-destructive:    #C0392B;  /* Form validation only */
 
-  /* ── Layout ──────────────────────────────────────────────────────────── */
-  --max-width:        1280px;  /* Max content width (wide: extra whitespace beyond) */
-  --content-width:    1024px;  /* Standard content container */
-  /* v2.0: tighter editorial rhythm (was up to 128px — felt sparse). */
-  --section-padding-y: clamp(var(--space-xl), 4.5vw, var(--space-4xl));
+  /* Hairlines — translucent, read on any ground */
+  --line-on-light:        rgba(20, 22, 29, 0.12);
+  --line-on-light-strong: rgba(20, 22, 29, 0.26);
+  --line-on-dark:         rgba(244, 241, 233, 0.15);
+  --line-on-dark-strong:  rgba(244, 241, 233, 0.32);
 
-  /* ── Border Radii ────────────────────────────────────────────────────── */
-  --radius-sm:   4px;
-  --radius-md:   8px;
+  /* ── Typography — one sans leads; serif for short accents only ───────────── */
+  --font-sans:  'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  /* Aliases kept for existing consumers — both now resolve to the sans. */
+  --font-display: var(--font-sans);
+  --font-body:    var(--font-sans);
+
+  /* ── Fluid type scale — professional, controlled (body ≥17/16) ───────────── */
+  --text-xs:   clamp(0.75rem,   0.72rem + 0.10vw, 0.8125rem); /* 12–13 micro-label */
+  --text-sm:   clamp(0.875rem,  0.84rem + 0.15vw, 0.9375rem); /* 14–15 label / meta */
+  --text-base: clamp(1.0625rem, 1.02rem + 0.22vw, 1.1875rem); /* 17–19 body */
+  --text-lg:   clamp(1.1875rem, 1.05rem + 0.60vw, 1.5rem);    /* 19–24 lead */
+  --text-xl:   clamp(1.375rem,  1.15rem + 1.00vw, 2rem);      /* 22–32 subheading */
+  --text-2xl:  clamp(1.75rem,   1.30rem + 2.00vw, 2.75rem);   /* 28–44 section heading */
+  --text-3xl:  clamp(2.125rem,  1.50rem + 2.80vw, 3.5rem);    /* 34–56 large heading */
+  --text-4xl:  clamp(2.5rem,    1.60rem + 4.00vw, 4.5rem);    /* 40–72 display */
+  --text-5xl:  clamp(2.75rem,   1.60rem + 4.90vw, 5.25rem);   /* 44–84 hero display */
+
+  /* ── Spacing (4-pt base) ──────────────────────────────────────────────────── */
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   16px;
+  --space-lg:   24px;
+  --space-xl:   32px;
+  --space-2xl:  48px;
+  --space-3xl:  64px;
+  --space-4xl:  96px;
+  --space-5xl:  128px;
+  --space-6xl:  168px;
+
+  /* ── Layout ───────────────────────────────────────────────────────────────── */
+  --max-width:      1280px;
+  --content-width:  1040px;
+  --measure:        66ch;
+  --section-padding-y: clamp(var(--space-3xl), 7vw, var(--space-5xl));
+  --gutter:         clamp(var(--space-lg), 5vw, var(--space-4xl));
+
+  /* ── Radii ────────────────────────────────────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
   --radius-lg:   16px;
   --radius-xl:   24px;
-  --radius-card: 20px;  /* Sevora-style rounded photo/content cards */
+  --radius-2xl:  32px;
+  --radius-pill: 999px;
+  --radius-card: 20px;
 
-  /* ── Shadows ─────────────────────────────────────────────────────────── */
-  --shadow-card: 0 2px 16px rgba(26, 26, 24, 0.08), 0 1px 4px rgba(26, 26, 24, 0.04);
+  /* ── Elevation ────────────────────────────────────────────────────────────── */
+  --shadow-sm:   0 1px 2px rgba(20, 22, 29, 0.06);
+  --shadow-card: 0 20px 48px -30px rgba(20, 22, 29, 0.36), 0 2px 8px rgba(20, 22, 29, 0.05);
+  --shadow-float:0 26px 70px -34px rgba(0, 0, 0, 0.5);
 
-  /* ── Motion Tokens ───────────────────────────────────────────────────── */
-  /* Source: RESEARCH §Animations; D-15 — subtle, purposeful */
-  --duration-fast:  150ms;
-  --duration-base:  300ms;
-  --duration-slow:  500ms;
+  /* ── Motion ───────────────────────────────────────────────────────────────── */
+  --duration-fast:  160ms;
+  --duration-base:  340ms;
+  --duration-slow:  760ms;
   --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:    cubic-bezier(0.65, 0, 0.35, 1);
 }

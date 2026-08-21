@@ -1,89 +1,92 @@
 /*
  * src/styles/global.css
- * Milan van der Meulen — Global Styles
- * Imports reset + tokens, applies base body styles and layout utilities.
- * Imported once in BaseLayout.astro so tokens apply to every component.
+ * Milan van der Meulen — Global Styles · v4.0 "Professional Editorial"
+ * Imports reset + tokens; sets base typography, utilities, and a small,
+ * reduced-motion-safe animation system (fade-rise + clip reveal + count-up).
  */
 
 @import './reset.css';
 @import './tokens.css';
 
-/* ── Body Base Styles ───────────────────────────────────────────────────── */
-
+/* ── Body base ──────────────────────────────────────────────────────────────── */
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-size: var(--text-base);
-  line-height: 1.6;
-  /* Crisp, premium rendering for the grotesque body face (Geist). */
+  line-height: 1.62;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  letter-spacing: -0.006em;
+  letter-spacing: -0.008em;
+  overflow-x: clip; /* guard against any decorative bleed causing scroll */
 }
 
-/* ── Heading Font ───────────────────────────────────────────────────────── */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-display);
-  line-height: 1.15;
-  /* Editorial, controlled Fraunces: remove the soft/wonky quirk, let optical
-     sizing track the rendered size (high contrast at display, calmer at text). */
-  font-optical-sizing: auto;
-  font-variation-settings: 'SOFT' 0, 'WONK' 0;
-  letter-spacing: -0.015em;
-}
-
-h1 {
-  line-height: 1.06; /* Tighter at display size — hero H1 */
+/* ── Headings — modern sans, weight-driven hierarchy ────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 680;
+  line-height: 1.08;
   letter-spacing: -0.022em;
+  text-wrap: balance;
+  color: var(--color-text);
 }
+h1 { letter-spacing: -0.03em; line-height: 1.02; }
 
-/* ── Typography Utilities ────────────────────────────────────────────────── */
+/* ── Typographic utilities ──────────────────────────────────────────────────── */
+.prose { max-width: var(--measure); }
 
-/* Readable column measure for long-form prose (story section, etc.) */
-.prose {
-  max-width: 680px; /* optimal reading measure per UI-SPEC §Typography */
-}
-
-/* Eyebrow / label text style */
-.eyebrow {
-  font-family: var(--font-body);
+/* Compact uppercase label — the connective tissue of the system. */
+.eyebrow, .label {
+  font-family: var(--font-sans);
   font-size: var(--text-xs);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-text-secondary);
 }
 
-/* ── Layout Utilities ───────────────────────────────────────────────────── */
+/* Label paired with a hairline rule (editorial). */
+.rule-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.rule-label::after { content: ''; flex: 1; height: 1px; background: var(--line-on-light); }
 
-/* Max-width content container — centered horizontally */
+/* Reserved serif accent — short lines only. */
+.serif { font-family: var(--font-serif); font-weight: 400; letter-spacing: 0; }
+
+/* Highlighted word inside a headline (yellow underline). */
+.hl {
+  background-image: linear-gradient(var(--color-accent), var(--color-accent));
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 100% 0.24em;
+  padding-inline: 0.04em;
+}
+.hl--blue {
+  color: var(--color-blue);
+  background: none;
+  padding: 0;
+}
+
+/* ── Layout utilities ───────────────────────────────────────────────────────── */
 .container {
   width: 100%;
   max-width: var(--max-width);
   margin-inline: auto;
-  padding-inline: var(--space-lg);
+  padding-inline: var(--gutter);
 }
 
-@media (min-width: 768px) {
-  .container {
-    padding-inline: var(--space-3xl);
-  }
-}
-
-/* ── Skip-to-Content Link (a11y — FND-06) ───────────────────────────────── */
-/*
- * Visually hidden until focused via keyboard. Allows keyboard/screen-reader
- * users to bypass navigation and jump directly to main content.
- * Wired to #main-content in BaseLayout.astro.
- */
+/* ── Skip link (a11y) ───────────────────────────────────────────────────────── */
 .skip-link {
   position: absolute;
   top: -100%;
@@ -91,43 +94,61 @@ h1 {
   z-index: 9999;
   padding: var(--space-sm) var(--space-md);
   background-color: var(--color-accent);
-  color: var(--color-text);
-  font-family: var(--font-body);
+  color: var(--color-accent-ink);
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: 600;
   text-decoration: none;
   border-radius: 0 0 var(--radius-md) 0;
   transition: top var(--duration-fast) var(--ease-out);
 }
+.skip-link:focus-visible { top: 0; }
 
-.skip-link:focus-visible {
-  top: 0;
-}
-
-/* ── Visually Hidden Utility ────────────────────────────────────────────── */
-/* Hides elements visually while keeping them accessible to screen readers */
+/* ── Visually hidden ────────────────────────────────────────────────────────── */
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
 }
 
-/* ── Section Defaults ───────────────────────────────────────────────────── */
+/* ── Section defaults ───────────────────────────────────────────────────────── */
+section:not(.section-wrapper) { padding-block: var(--section-padding-y); }
 
-/* SectionWrapper owns its own padding-block; exclude it to avoid double padding (WR-01). */
-section:not(.section-wrapper) {
-  padding-block: var(--section-padding-y);
+/* ── Links ──────────────────────────────────────────────────────────────────── */
+a { color: inherit; text-decoration-skip-ink: auto; }
+
+/* ── Animation system (reduced-motion safe) ────────────────────────────────────
+ * Elements opt in with data-anim. A single IntersectionObserver in BaseLayout
+ * adds .is-in when they enter the viewport. Under prefers-reduced-motion the
+ * initial hidden state is neutralised so content is ALWAYS visible even without JS.
+ */
+[data-anim] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out),
+              clip-path var(--duration-slow) var(--ease-out);
+  will-change: opacity, transform;
 }
+[data-anim].is-in { opacity: 1; transform: none; }
 
-/* ── Link Defaults ──────────────────────────────────────────────────────── */
+/* Clip-path image reveal (wipe up). */
+[data-anim='clip'] {
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  opacity: 1;
+}
+[data-anim='clip'].is-in { clip-path: inset(0 0 0 0); }
 
-a {
-  color: inherit;
-  text-decoration-skip-ink: auto;
+/* Staggered children via inline --i (delay = i * 90ms). */
+[data-anim][style*='--i'] { transition-delay: calc(var(--i, 0) * 90ms); }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anim],
+  [data-anim='clip'] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
 }

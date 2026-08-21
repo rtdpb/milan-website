@@ -1,259 +1,202 @@
 ---
 /**
- * Samenwerken.astro — 3-card commitment ladder (HOME-04)
- * Source: PLAN 01-03 Task 2, UI-SPEC §<SamenwerkSection>, CONTEXT.md D-07, D-09, D-12
+ * Samenwerken.astro — Three routes, one system · v4.0
  *
- * Three equal-height cards ordered as a commitment ladder:
- *   1. Nieuwsbrief (gratis, laagdrempelig — "Begin hier gratis")
- *   2. Presentatie / Lezing (verdieping — "Ga dieper")
- *   3. 1:1 Coaching (intensief traject — "Werk met mij")
+ * A controlled 12-column grid with three distinct moods (never identical cards):
+ *   01 Nieuwsbrief — energetic yellow block with a small custom SVG visual (free entry)
+ *   02 Lezing      — large podium photo under a navy scrim (the entrepreneur's story)
+ *   03 Coaching    — calm, premium ink panel with a portrait + "max 8 founders" (exclusive)
  *
- * HONESTY RULE (HOME-10, D-12):
- * Phase 3 Plan 03: all three CTAs are now enabled:
- *   - Nieuwsbrief CTA → /nieuwsbrief (enabled, primary yellow Button, internal link)
- *   - Lezing CTA → /contact?type=lezing (enabled, D-08)
- *   - Coaching CTA → /contact?type=coaching (enabled, D-08; Calendly seam D-09)
- * No href="#" on any CTA (HOME-10, D-12).
- *
- * PHOTOS (optional per ASSETS.md):
- * milan-speaking-graph.jpg (Lezing card) and milan-networking.jpg (Coaching card)
- * were not extracted from the fotos zip at plan-03 time. Cards render without
- * photos. TODO Plan 01-06 or later: extract photos and add <Picture> elements
- * to the Lezing and Coaching cards when present.
- *
- * NO FABRICATED STATS (D-08): no "trusted by N clients" or invented numbers.
+ * Routes/links preserved:
+ *   Nieuwsbrief → /nieuwsbrief · Lezing → /contact?type=lezing · Coaching → /contact?type=coaching
+ * No text overlaps a photo except over a strong legible scrim (the Lezing card).
  */
-
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Picture } from 'astro:assets';
 import SectionWrapper from '../ui/SectionWrapper.astro';
-import Card from '../ui/Card.astro';
-import Button from '../ui/Button.astro';
 import { getStrings } from '../../i18n/utils';
+import speakingImg from '../../assets/photos/milan-speaking-graph.jpg';
+import networkingImg from '../../assets/photos/milan-networking.jpg';
 
-// Phase 4: locale-parameterized strings (I18N-02)
 const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
+const s = t.samenwerken;
 
-// Locale-aware hrefs for the commitment ladder CTAs
-const newsletterHref = isEn
-  ? getRelativeLocaleUrl('en', 'newsletter')
-  : `${import.meta.env.BASE_URL}nieuwsbrief`;
-// WR-06: ?type= values (lezing, coaching, algemeen) are implementation constants,
-// not user-visible strings — they drive ContactForm's pre-selection logic.
-// EN CTAs intentionally keep Dutch option values because the ContactForm allowlist
-// and select option values are defined once for both locales. The visible label
-// ("Book a talk") is locale-resolved in ContactForm; only the posted value is Dutch.
-// If EN aliases are ever needed, add them to ALLOWED_TYPES in ContactForm.astro.
-const contactLezingHref = isEn
-  ? `${getRelativeLocaleUrl('en', 'contact')}?type=lezing`
-  : `${import.meta.env.BASE_URL}contact?type=lezing`;
-const contactCoachingHref = isEn
-  ? `${getRelativeLocaleUrl('en', 'contact')}?type=coaching`
-  : `${import.meta.env.BASE_URL}contact?type=coaching`;
+const newsletterHref = isEn ? getRelativeLocaleUrl('en', 'newsletter') : `${import.meta.env.BASE_URL}nieuwsbrief`;
+const lezingHref = isEn ? `${getRelativeLocaleUrl('en', 'contact')}?type=lezing` : `${import.meta.env.BASE_URL}contact?type=lezing`;
+const coachingHref = isEn ? `${getRelativeLocaleUrl('en', 'contact')}?type=coaching` : `${import.meta.env.BASE_URL}contact?type=coaching`;
 
-/*
- * Commitment ladder data — structured from locale strings.
- * Eyebrow labels (adapted from the reference "01/02/03" concept — D-07):
- */
-const ladderCards = [
-  {
-    eyebrow:           t.samenwerken.ladderEyebrow1,
-    title:             t.samenwerken.cards[0].title,
-    description:       t.samenwerken.cards[0].description,
-    cta:               t.samenwerken.cards[0].cta,
-    disabled:          false,
-    placeholderReason: undefined,
-    href:              newsletterHref,
-    variant:           'primary' as const,
-    ariaId:            'samenwerken-card-1',
-  },
-  {
-    eyebrow:           t.samenwerken.ladderEyebrow2,
-    title:             t.samenwerken.cards[1].title,
-    description:       t.samenwerken.cards[1].description,
-    cta:               t.samenwerken.cards[1].cta,
-    disabled:          false,
-    href:              contactLezingHref,
-    placeholderReason: undefined,
-    variant:           'secondary' as const,
-    ariaId:            'samenwerken-card-2',
-  },
-  {
-    eyebrow:           t.samenwerken.ladderEyebrow3,
-    title:             t.samenwerken.cards[2].title,
-    description:       t.samenwerken.cards[2].description,
-    cta:               t.samenwerken.cards[2].cta,
-    disabled:          false,
-    href:              contactCoachingHref,
-    placeholderReason: undefined,
-    variant:           'secondary' as const,
-    ariaId:            'samenwerken-card-3',
-  },
-];
+const phrase = (e: string) => e.replace(/^\d+\s*[—-]\s*/, '');
+const arrow = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
 ---
 
-<!-- Samenwerken: 3-card commitment ladder (HOME-04, D-07) -->
 <SectionWrapper id="samenwerken" variant="default" labelledBy="samenwerken-heading">
-  <div class="samenwerken">
-    <!-- Section heading -->
-    <h2 id="samenwerken-heading" class="samenwerken__heading">
-      {t.samenwerken.heading}
-    </h2>
+  <div class="sw">
+    <header class="sw__head" data-anim>
+      <p class="sw__eyebrow rule-label">{s.eyebrow}</p>
+      <h2 id="samenwerken-heading" class="sw__heading">{s.heading}</h2>
+      <p class="sw__intro">{s.intro}</p>
+    </header>
 
-    <!-- 3-card grid — equal height; desktop row / mobile stack -->
-    <div class="samenwerken__grid" role="list" aria-label={t.samenwerken.ariaLabel}>
-      {ladderCards.map((card) => (
-        <div class="samenwerken__card-wrap" role="listitem">
-          <Card variant="default" class="samenwerken__card">
-            <!-- Numbered Dutch eyebrow label (D-07, UI-SPEC §SamenwerkSection) -->
-            <p class="samenwerken__eyebrow eyebrow" id={card.ariaId}>
-              {card.eyebrow}
-            </p>
+    <div class="sw__grid" role="list" aria-label={s.ariaLabel}>
 
-            <!-- Card subheading title (22px serif/medium — UI-SPEC §Typography Subheading) -->
-            <h3 class="samenwerken__card-title">
-              {card.title}
-            </h3>
-
-            <!-- Body description (17px/400/1.6 — UI-SPEC §Typography Body) -->
-            <p class="samenwerken__card-desc">
-              {card.description}
-            </p>
-
-            <!--
-              CTA — enabled per card (Phase 3 Plan 03: all three CTAs now enabled):
-              - Nieuwsbrief: primary yellow Button → /nieuwsbrief (internal link, no external prop)
-              - Lezing: secondary → /contact?type=lezing (D-08)
-              - Coaching: secondary → /contact?type=coaching (D-08, D-09 Calendly seam)
-              No href="#" on any CTA (HOME-10, D-12).
-            -->
-            <div class="samenwerken__cta-wrap">
-              <Button
-                variant={card.variant ?? 'secondary'}
-                disabled={card.disabled}
-                href={card.href}
-                placeholderReason={card.placeholderReason}
-              >
-                {card.cta}
-              </Button>
-            </div>
-          </Card>
+      <!-- 01 Nieuwsbrief — yellow -->
+      <a href={newsletterHref} class="sw__card sw__card--news" role="listitem" data-anim>
+        <div class="sw__news-visual" aria-hidden="true">
+          <svg viewBox="0 0 120 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="10" width="104" height="66" rx="8" fill="#14140A" opacity="0.08"/>
+            <rect x="2" y="4" width="104" height="66" rx="8" fill="#14140A"/>
+            <rect x="14" y="16" width="46" height="6" rx="3" fill="#FFDD11"/>
+            <rect x="14" y="30" width="80" height="4" rx="2" fill="#F4F1E9" opacity="0.9"/>
+            <rect x="14" y="40" width="80" height="4" rx="2" fill="#F4F1E9" opacity="0.55"/>
+            <rect x="14" y="50" width="60" height="4" rx="2" fill="#F4F1E9" opacity="0.55"/>
+          </svg>
         </div>
-      ))}
+        <div class="sw__card-body">
+          <span class="sw__index">01</span>
+          <span class="sw__label sw__label--ink">{phrase(s.ladderEyebrow1)}</span>
+          <h3 class="sw__card-title sw__card-title--ink">{s.cards[0].title}</h3>
+          <p class="sw__card-desc sw__card-desc--ink">{s.cards[0].description}</p>
+          <span class="sw__cta sw__cta--ink">{s.cards[0].cta}<Fragment set:html={arrow} /></span>
+        </div>
+      </a>
+
+      <!-- 02 Lezing — navy card, photo on top, text below (no text over photo) -->
+      <a href={lezingHref} class="sw__card sw__card--talk" role="listitem" data-anim>
+        <div class="sw__talk-media">
+          <Picture
+            src={speakingImg}
+            formats={['avif', 'webp']}
+            widths={[500, 800, 1100]}
+            sizes="(max-width: 760px) 92vw, 56vw"
+            alt={isEn ? 'Milan presenting on stage.' : 'Milan geeft een presentatie op het podium.'}
+            loading="lazy"
+            class="sw__talk-img"
+          />
+        </div>
+        <div class="sw__card-body">
+          <span class="sw__index sw__index--light">02</span>
+          <span class="sw__label sw__label--light">{phrase(s.ladderEyebrow2)}</span>
+          <h3 class="sw__card-title sw__card-title--light">{s.cards[1].title}</h3>
+          <p class="sw__card-desc sw__card-desc--light">{s.cards[1].description}</p>
+          <span class="sw__cta sw__cta--light">{s.cards[1].cta}<Fragment set:html={arrow} /></span>
+        </div>
+      </a>
+
+      <!-- 03 Coaching — premium ink, portrait + exclusivity -->
+      <a href={coachingHref} class="sw__card sw__card--coach" role="listitem" data-anim>
+        <div class="sw__coach-media">
+          <Picture
+            src={networkingImg}
+            formats={['avif', 'webp']}
+            widths={[400, 700, 900]}
+            sizes="(max-width: 900px) 92vw, 40vw"
+            alt={isEn ? 'Milan in conversation with entrepreneurs.' : 'Milan in gesprek met ondernemers.'}
+            loading="lazy"
+            class="sw__coach-img"
+          />
+        </div>
+        <div class="sw__coach-content">
+          <div class="sw__coach-top">
+            <span class="sw__index sw__index--light">03</span>
+            <span class="sw__scarcity"><span class="sw__scarcity-dot" aria-hidden="true"></span>{s.exclusiveLabel}</span>
+          </div>
+          <span class="sw__label sw__label--accent">{phrase(s.ladderEyebrow3)}</span>
+          <h3 class="sw__card-title sw__card-title--light sw__coach-title">{s.cards[2].title}</h3>
+          <p class="sw__card-desc sw__card-desc--light">{s.cards[2].description}</p>
+          <span class="sw__cta-btn">{s.cards[2].cta}<Fragment set:html={arrow} /></span>
+        </div>
+      </a>
+
     </div>
   </div>
 </SectionWrapper>
 
 <style>
-  /* ── Samenwerken section layout ────────────────────────────────────────── */
+  .sw { display: flex; flex-direction: column; gap: clamp(var(--space-2xl), 5vw, var(--space-4xl)); }
+  .sw__head { display: flex; flex-direction: column; gap: var(--space-md); max-width: 46ch; }
+  .sw__eyebrow { margin: 0; }
+  .sw__heading { font-size: var(--text-3xl); margin: 0; }
+  .sw__intro { font-size: var(--text-lg); line-height: 1.55; color: var(--color-text-secondary); margin: 0; }
 
-  .samenwerken {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3xl); /* 64px between heading and card grid */
+  /* ── Grid ─────────────────────────────────────────────────────────────── */
+  .sw__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
+  @media (min-width: 760px) {
+    .sw__grid { grid-template-columns: 5fr 7fr; grid-auto-rows: minmax(0, auto); }
+    .sw__card--news { grid-column: 1; }
+    .sw__card--talk { grid-column: 2; }
+    .sw__card--coach { grid-column: 1 / -1; }
   }
 
-  /* ── Section heading ────────────────────────────────────────────────────── */
-
-  .samenwerken__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-2xl);        /* 24–36px fluid — UI-SPEC §Typography Heading */
-    font-weight: 600;
-    line-height: 1.2;
-    color: var(--color-text);
-    text-wrap: balance;
-    margin: 0;
+  /* ── Shared card bits ─────────────────────────────────────────────────── */
+  .sw__card {
+    position: relative; display: flex; flex-direction: column;
+    border-radius: var(--radius-card); overflow: hidden; text-decoration: none;
+    min-height: 300px;
+    transition: transform var(--duration-base) var(--ease-out);
   }
+  .sw__card:hover { transform: translateY(-4px); }
+  .sw__card-body { display: flex; flex-direction: column; gap: var(--space-sm); padding: clamp(var(--space-lg), 2.4vw, var(--space-2xl)); }
+  .sw__index { font-size: var(--text-xl); font-weight: 720; letter-spacing: -0.02em; color: var(--color-text-tertiary); }
+  .sw__index--light { color: rgba(244,241,233,0.6); }
+  .sw__label { font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+  .sw__label--ink { color: var(--color-accent-ink); opacity: 0.7; }
+  .sw__label--light { color: var(--color-dark-text-soft); }
+  .sw__label--accent { color: var(--color-accent); }
+  .sw__card-title { font-size: var(--text-xl); line-height: 1.08; margin: 0; }
+  .sw__card-title--ink { color: var(--color-accent-ink); }
+  .sw__card-title--light { color: var(--color-dark-text); }
+  .sw__card-desc { font-size: var(--text-base); line-height: 1.55; margin: 0; }
+  .sw__card-desc--ink { color: rgba(20,20,10,0.72); }
+  .sw__card-desc--light { color: var(--color-dark-text-soft); }
+  .sw__cta { display: inline-flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-sm); font-size: var(--text-sm); font-weight: 600; }
+  .sw__cta--ink { color: var(--color-accent-ink); }
+  .sw__cta--light { color: var(--color-dark-text); }
+  .sw__cta :global(svg), .sw__cta-btn :global(svg) { transition: transform var(--duration-fast) var(--ease-out); }
+  .sw__card:hover .sw__cta :global(svg) { transform: translateX(4px); }
 
-  /* ── 3-card grid ────────────────────────────────────────────────────────── */
+  /* ── 01 Newsletter (yellow) ───────────────────────────────────────────── */
+  .sw__card--news { background: var(--color-accent); }
+  .sw__news-visual { padding: clamp(var(--space-lg), 2.4vw, var(--space-2xl)) clamp(var(--space-lg), 2.4vw, var(--space-2xl)) 0; }
+  .sw__news-visual svg { width: min(160px, 60%); height: auto; display: block; }
+  .sw__card--news .sw__card-body { flex: 1; }
 
-  .samenwerken__grid {
-    display: grid;
-    grid-template-columns: 1fr;      /* Mobile: stacked */
-    gap: var(--space-lg);             /* 24px between cards */
-    align-items: stretch;             /* Equal-height cards across the row */
+  /* ── 02 Lezing (navy card: photo on top, text below — no overlap) ─────── */
+  .sw__card--talk { background: var(--color-navy); }
+  .sw__talk-media { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: var(--color-navy-2); }
+  .sw__talk-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; }
+  .sw__card--talk .sw__card-body { flex: 1; }
+
+  /* ── 03 Coaching (ink premium) ────────────────────────────────────────── */
+  .sw__card--coach {
+    background: var(--color-ink);
+    display: grid; grid-template-columns: 1fr; min-height: 0;
   }
-
-  @media (min-width: 768px) {
-    .samenwerken__grid {
-      grid-template-columns: 1fr 1fr; /* Tablet: 2 columns */
-      gap: var(--space-lg);
-    }
+  @media (min-width: 900px) {
+    .sw__card--coach { grid-template-columns: 5fr 7fr; align-items: stretch; }
   }
-
-  @media (min-width: 1200px) {
-    .samenwerken__grid {
-      grid-template-columns: 1fr 1fr 1fr; /* Desktop: 3 equal columns */
-      gap: var(--space-xl);               /* 32px on desktop */
-    }
+  .sw__coach-media { position: relative; min-height: 260px; }
+  .sw__coach-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+  .sw__coach-content { display: flex; flex-direction: column; gap: var(--space-md); padding: clamp(var(--space-xl), 3vw, var(--space-3xl)); }
+  .sw__coach-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
+  .sw__coach-title { font-size: var(--text-2xl); max-width: 18ch; }
+  .sw__scarcity {
+    display: inline-flex; align-items: center; gap: var(--space-sm);
+    padding: 6px 14px; border: 1px solid var(--line-on-dark-strong); border-radius: var(--radius-pill);
+    font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-dark-text);
   }
-
-  /* ── Card wrapper: stretch to fill grid cell for equal height ──────────── */
-
-  .samenwerken__card-wrap {
-    display: flex;
+  .sw__scarcity-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); }
+  .sw__cta-btn {
+    display: inline-flex; align-items: center; gap: var(--space-sm); align-self: flex-start;
+    margin-top: var(--space-sm); height: 52px; padding-inline: var(--space-lg);
+    background: var(--color-accent); color: var(--color-accent-ink); border-radius: var(--radius-pill);
+    font-size: var(--text-sm); font-weight: 600;
+    transition: background-color var(--duration-fast) var(--ease-out);
   }
+  .sw__card--coach:hover .sw__cta-btn { background: var(--color-accent-dark); }
+  .sw__card--coach:hover .sw__cta-btn :global(svg) { transform: translateX(4px); }
 
-  /*
-   * Override Card.astro padding/display to ensure the card stretches
-   * and the CTA aligns at the bottom of each card (ladder feel).
-   */
-  :global(.samenwerken__card) {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    gap: var(--space-md) !important;  /* 16px between card elements */
-  }
-
-  /* ── Card eyebrow (numbered ladder label) ──────────────────────────────── */
-
-  .samenwerken__eyebrow {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);         /* 12–14px — UI-SPEC §Typography Label */
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  /* ── Card subheading title ─────────────────────────────────────────────── */
-
-  .samenwerken__card-title {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);         /* 20–28px — UI-SPEC §Typography Subheading */
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--color-text);
-    margin: 0;
-  }
-
-  /* ── Card description (body copy) ──────────────────────────────────────── */
-
-  .samenwerken__card-desc {
-    font-family: var(--font-body);
-    font-size: var(--text-base);       /* 16–18px — UI-SPEC §Typography Body */
-    font-weight: 400;
-    line-height: 1.6;
-    color: var(--color-text-secondary);
-    margin: 0;
-    /* Allow text to grow and push CTA to bottom */
-    flex: 1;
-  }
-
-  /* ── CTA wrapper — pushes the button to the card bottom ──────────────── */
-
-  .samenwerken__cta-wrap {
-    margin-top: auto;                  /* Pins CTA to bottom of card */
-    padding-top: var(--space-sm);      /* 8px breathing room above button */
-  }
-
-  /*
-   * Ensure the disabled Button fills the card width on narrow viewports
-   * without breaking the inline-flex Button.astro layout.
-   */
-  :global(.samenwerken__cta-wrap .btn) {
-    width: 100%;
-    justify-content: center;
+  @media (prefers-reduced-motion: reduce) {
+    .sw__card, .sw__cta :global(svg), .sw__cta-btn, .sw__cta-btn :global(svg) { transition: none; }
   }
 </style>

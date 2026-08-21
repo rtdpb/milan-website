@@ -1,368 +1,157 @@
 ---
 /**
- * Articles.astro
- * "Recente artikelen" section — Sectie 6 (HOME-08).
+ * Articles.astro — Editorial article cards with custom covers · v4.0
  *
- * Source: PLAN 01-05 Task 2, UI-SPEC §ArticlesSection, CONTEXT D-10, D-12,
- *         HOME-08, HOME-10, HOME-11, FND-04
- *         Phase 3 PLAN 03-01: RSS-fed via src/lib/rss.ts behind TODO_SUBSTACK_URL sentinel
+ * A featured lead + two supporting cards. No article imagery is supplied, so each
+ * card gets a custom colourful "cover" (accent field + a rising-line motif) that
+ * doubles as an easy swap point for real thumbnails later. Clear category / date /
+ * read-time hierarchy and hover states. No visible placeholder markers.
  *
- * Design decisions:
- * - D-02: Build-time RSS fetch (static HTML, zero runtime JS, no CORS proxy).
- *   Refreshed daily by scheduled GitHub Actions cron rebuild.
- * - D-04: While TODO_SUBSTACK_URL is the sentinel, renders existing 3 placeholder
- *   cards with PlaceholderBadge (honest current state). One grep-replace flips live.
- * - D-06: Feed failure / empty feed → honest placeholder + build-log warning; build
- *   always succeeds (never fails on network error from Substack).
- * - D-07: Homepage shows latest 3 posts. "Lees verder" → real post URL (target=_blank
- *   rel=noopener). "Alle artikelen" → Substack publication home.
- * - D-12: "Lees verder" and "Alle artikelen" are honest disabled placeholders when
- *   IS_SENTINEL is true (no href, no href="#"). aria-disabled="true" + tabindex="-1".
- * - T-3-01: All external anchors carry rel="noopener noreferrer" with target="_blank".
- * - T-3-02: NEVER set:html on RSS content. Excerpts from description (stripped only).
- *
- * ArticleCard type is imported from src/lib/rss.ts (Phase 3 — replaces comment block).
+ * FEED SEAM (D-02/D-04): while TODO_SUBSTACK_URL is the sentinel, the static cards
+ * render as plain editorial content (no dead links). When the real URL is set,
+ * fetchSubstackFeed() supplies live posts and each card becomes an external link.
  */
-
 import SectionWrapper from '../ui/SectionWrapper.astro';
-import Card from '../ui/Card.astro';
-import PlaceholderBadge from '../ui/PlaceholderBadge.astro';
 import { getStrings } from '../../i18n/utils';
 import { TODO_SUBSTACK_URL } from '../../config';
 import { fetchSubstackFeed, type ArticleCard, type PlaceholderCard } from '../../lib/rss';
 
-// Phase 4: locale-parameterized strings (I18N-02, D-02)
 const t = getStrings(Astro.currentLocale);
-
-// ── Sentinel guard — decides placeholder vs live feed ───────────────────────
+const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
 const substackPublicationUrl = TODO_SUBSTACK_URL;
 
 let articles: ArticleCard[] | PlaceholderCard[];
-
 if (IS_SENTINEL) {
-  // D-04: honest placeholder state while Substack URL not yet supplied.
-  // Renders the locale-appropriate 3 fictional founder-topic cards (HOME-11).
   articles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
 } else {
-  // D-02: build-time RSS fetch — runs once at `astro build`, not in the browser.
-  const feedUrl = `${TODO_SUBSTACK_URL}/feed`;
-  const fetched = await fetchSubstackFeed(feedUrl, 3);
+  const fetched = await fetchSubstackFeed(`${TODO_SUBSTACK_URL}/feed`, 3);
   if (fetched.length === 0) {
-    // D-06: feed failure or empty feed → honest placeholder + build-log warning.
-    // Build must never fail on Substack errors (T-3-04).
     console.warn('[Phase 3] Substack feed returned 0 items — rendering placeholder cards.');
     articles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
-  } else {
-    articles = fetched;
-  }
+  } else { articles = fetched; }
 }
 
 const { heading, seeAll } = t.articles;
+const hrefOf = (a: ArticleCard | PlaceholderCard) => (a.isPlaceholder ? undefined : (a as ArticleCard).href);
+
+// Cover palette per position (blue / yellow / coral).
+const covers = ['cov--blue', 'cov--yellow', 'cov--coral'];
+const [lead, ...rest] = articles;
+const leadHref = hrefOf(lead);
+const LeadTag = leadHref ? 'a' : 'article';
+const leadAttrs = leadHref ? { href: leadHref, target: '_blank', rel: 'noopener noreferrer' } : {};
+const motif = `<svg class="art__motif" viewBox="0 0 200 120" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polyline points="0,104 34,84 64,92 100,52 132,64 168,26 200,40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 ---
 
 <SectionWrapper id="artikelen" labelledBy="articles-heading" variant="default">
-  <div class="articles">
-
-    <!-- ── Section heading ─────────────────────────────────────────────────── -->
-    <h2 id="articles-heading" class="articles__heading">
-      {heading}
-    </h2>
-
-    <!-- ── Article cards grid ─────────────────────────────────────────────── -->
-    <div class="articles__grid" role="list">
-
-      {articles.map((article) => (
-        <div class="articles__card-wrapper" role="listitem">
-          <Card class="articles__card">
-
-            <!-- Placeholder badge — top-right corner of card (D-10) -->
-            <!-- Only shown when IS_SENTINEL or feed returned 0 items (D-04, D-06) -->
-            {article.isPlaceholder && (
-              <div class="articles__badge-row">
-                <PlaceholderBadge />
-              </div>
-            )}
-
-            <!-- Eyebrow category -->
-            <p class="articles__category">
-              {article.category}
-            </p>
-
-            <!-- Article title — fictional founder-topic copy when placeholder (HOME-11)
-                 When real RSS: exact title from Substack feed. -->
-            <h3 class="articles__title">
-              {article.title}
-            </h3>
-
-            <!-- One-sentence excerpt -->
-            <p class="articles__excerpt">
-              {article.excerpt}
-            </p>
-
-            <!-- Meta row: date + read time -->
-            <div class="articles__meta">
-              <span class="articles__date">{article.date}</span>
-              <span class="articles__separator" aria-hidden="true">·</span>
-              <span class="articles__read-time">{article.readTime}</span>
-            </div>
-
-            <!-- "Lees verder" — disabled when placeholder (D-12, HOME-10),
-                 real external link when live (T-3-01: rel="noopener noreferrer") -->
-            {article.isPlaceholder ? (
-              <span
-                class="articles__read-more"
-                role="link"
-                aria-disabled="true"
-                tabindex="-1"
-                title={t.common.disabledTooltip}
-                aria-label={`${t.common.readMore.replace(' →', '')} "${article.title}" — ${t.common.disabledTooltip}`}
-              >
-                {t.common.readMore}
-              </span>
-            ) : (
-              <a
-                href={(article as ArticleCard).href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="articles__read-more articles__read-more--enabled"
-                aria-label={`Lees "${article.title}" op Substack`}
-              >
-                {t.common.readMore}
-              </a>
-            )}
-
-          </Card>
-        </div>
-      ))}
-
-    </div>
-    <!-- End article cards grid -->
-
-    <!-- "Alle artikelen" — disabled when IS_SENTINEL (D-12, HOME-10),
-         real external link to Substack publication home when live (D-07, T-3-01) -->
-    <div class="articles__see-all-row">
-      {IS_SENTINEL ? (
-        <span
-          class="articles__see-all"
-          role="link"
-          aria-disabled="true"
-          tabindex="-1"
-          title={t.common.disabledTooltip}
-        >
+  <div class="art">
+    <header class="art__head" data-anim>
+      <div class="art__head-text">
+        <p class="art__eyebrow rule-label">{isEn ? 'Writing' : 'Schrijven'}</p>
+        <h2 id="articles-heading" class="art__heading">{heading}</h2>
+      </div>
+      {!IS_SENTINEL && (
+        <a href={substackPublicationUrl} target="_blank" rel="noopener noreferrer" class="art__seeall">
           {seeAll}
-          <span class="articles__see-all-arrow" aria-hidden="true">→</span>
-        </span>
-      ) : (
-        <a
-          href={substackPublicationUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="articles__see-all articles__see-all--enabled"
-        >
-          {seeAll}
-          <span class="articles__see-all-arrow" aria-hidden="true">→</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       )}
-    </div>
+    </header>
 
+    <div class="art__grid">
+      <!-- Featured -->
+      <LeadTag class={`art__card art__card--lead${leadHref ? ' art__card--link' : ''}`} data-anim {...leadAttrs}>
+        <div class={`art__cover ${covers[0]}`}>
+          <Fragment set:html={motif} />
+          <span class="art__cover-cat">{lead.category}</span>
+        </div>
+        <div class="art__body">
+          <h3 class="art__title art__title--lead">{lead.title}</h3>
+          <p class="art__excerpt">{lead.excerpt}</p>
+          <div class="art__meta">
+            <span>{lead.date}</span><span class="art__dot" aria-hidden="true"></span><span>{lead.readTime}</span>
+            {leadHref && <span class="art__more">{t.common.readMore}</span>}
+          </div>
+        </div>
+      </LeadTag>
+
+      <!-- Supporting -->
+      <div class="art__col">
+        {rest.map((a, i) => {
+          const href = hrefOf(a);
+          const Tag = href ? 'a' : 'article';
+          return (
+            <Tag class={`art__card art__card--sm${href ? ' art__card--link' : ''}`} data-anim style={`--i: ${i + 1}`} {...(href ? { href, target: '_blank', rel: 'noopener noreferrer' } : {})}>
+              <div class={`art__cover art__cover--sm ${covers[(i + 1) % covers.length]}`}>
+                <Fragment set:html={motif} />
+                <span class="art__cover-cat">{a.category}</span>
+              </div>
+              <div class="art__body">
+                <h3 class="art__title">{a.title}</h3>
+                <div class="art__meta">
+                  <span>{a.date}</span><span class="art__dot" aria-hidden="true"></span><span>{a.readTime}</span>
+                  {href && <span class="art__more">{t.common.readMore}</span>}
+                </div>
+              </div>
+            </Tag>
+          );
+        })}
+      </div>
+    </div>
   </div>
 </SectionWrapper>
 
 <style>
-  /* ── Section layout ────────────────────────────────────────────────────────── */
-  .articles {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2xl);
-  }
+  .art { display: flex; flex-direction: column; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); }
+  .art__head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-lg); flex-wrap: wrap; }
+  .art__head-text { display: flex; flex-direction: column; gap: var(--space-md); max-width: 40ch; }
+  .art__eyebrow { margin: 0; }
+  .art__heading { font-size: var(--text-3xl); margin: 0; }
+  .art__seeall { display: inline-flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm); font-weight: 600; color: var(--color-text); text-decoration: none; }
+  .art__seeall svg { transition: transform var(--duration-fast) var(--ease-out); }
+  .art__seeall:hover svg { transform: translateX(4px); }
 
-  /* ── Section heading ──────────────────────────────────────────────────────── */
-  .articles__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-2xl);   /* 24–36px — section heading (UI-SPEC) */
-    font-weight: 600;
-    line-height: 1.2;
-    color: var(--color-text);
-    margin: 0;
-    text-wrap: balance;
-  }
+  .art__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
+  @media (min-width: 900px) { .art__grid { grid-template-columns: 1.1fr 0.9fr; align-items: start; } }
+  .art__col { display: flex; flex-direction: column; gap: var(--space-lg); }
 
-  @media (min-width: 1024px) {
-    .articles__heading {
-      font-size: var(--text-3xl);
-    }
+  .art__card {
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--color-bg); border: 1px solid var(--color-border);
+    border-radius: var(--radius-card); text-decoration: none; color: var(--color-text);
   }
+  .art__card--sm { flex-direction: row; }
+  .art__card--link { transition: transform var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out); }
+  .art__card--link:hover { transform: translateY(-4px); border-color: var(--line-on-light-strong); box-shadow: var(--shadow-card); }
 
-  /* ── Cards grid: 1 column mobile → 2 col tablet → 3 col desktop (FND-04) ── */
-  .articles__grid {
-    display: grid;
-    grid-template-columns: 1fr;         /* Mobile: stacked */
-    gap: var(--space-lg);
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  /* Cover */
+  .art__cover { position: relative; overflow: hidden; aspect-ratio: 16 / 9; display: flex; align-items: flex-end; padding: var(--space-md); }
+  .art__cover--sm { aspect-ratio: auto; width: 38%; min-width: 116px; flex-shrink: 0; }
+  .cov--blue { background: var(--color-blue); color: rgba(244,241,233,0.55); }
+  .cov--yellow { background: var(--color-accent); color: rgba(20,20,10,0.4); }
+  .cov--coral { background: var(--color-warm); color: rgba(244,241,233,0.6); }
+  :global(.art__motif) { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.9; }
+  .art__cover-cat {
+    position: relative; z-index: 1;
+    font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
   }
+  .cov--blue .art__cover-cat, .cov--coral .art__cover-cat { color: var(--color-dark-text); }
+  .cov--yellow .art__cover-cat { color: var(--color-accent-ink); }
 
-  @media (min-width: 600px) {
-    .articles__grid {
-      grid-template-columns: repeat(2, 1fr); /* Tablet: 2 col */
-    }
-  }
+  .art__body { display: flex; flex-direction: column; gap: var(--space-sm); padding: clamp(var(--space-md), 2vw, var(--space-lg)); flex: 1; }
+  .art__card--lead .art__body { padding: clamp(var(--space-lg), 2.4vw, var(--space-xl)); gap: var(--space-md); }
+  .art__title { font-size: var(--text-lg); line-height: 1.15; margin: 0; color: var(--color-text); }
+  .art__title--lead { font-size: var(--text-2xl); line-height: 1.08; max-width: 18ch; }
+  .art__card--link:hover .art__title { text-decoration: underline; text-underline-offset: 3px; }
+  .art__excerpt { font-size: var(--text-base); line-height: 1.55; color: var(--color-text-secondary); margin: 0; max-width: 46ch; flex: 1; }
+  .art__meta { display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-xs); color: var(--color-text-secondary); margin-top: auto; }
+  .art__dot { width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+  .art__more { margin-left: auto; color: var(--color-text); font-weight: 600; }
 
-  @media (min-width: 1024px) {
-    .articles__grid {
-      grid-template-columns: repeat(3, 1fr); /* Desktop: 3 col */
-      gap: var(--space-xl);
-    }
+  @media (max-width: 520px) {
+    .art__card--sm { flex-direction: column; }
+    .art__cover--sm { width: 100%; aspect-ratio: 16 / 7; }
   }
-
-  /* ── Card wrapper (full height) ───────────────────────────────────────────── */
-  .articles__card-wrapper {
-    height: 100%;
-  }
-
-  /* ── Article card inner layout ────────────────────────────────────────────── */
-  /* Override Card.astro padding via :global to add flex layout for bottom-aligned "Lees verder" */
-  :global(.articles__card) {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    height: 100%;
-    position: relative;  /* For badge positioning */
-  }
-
-  /* ── Placeholder badge row ────────────────────────────────────────────────── */
-  .articles__badge-row {
-    display: flex;
-    justify-content: flex-end;   /* Top-right corner (UI-SPEC §ArticlesSection) */
-    margin-bottom: calc(-1 * var(--space-xs)); /* Tighten gap above category */
-  }
-
-  /* ── Category eyebrow ────────────────────────────────────────────────────── */
-  .articles__category {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);   /* 12–14px — label/eyebrow */
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  /* ── Article title (Subheading: 22px/medium) ────────────────────────────── */
-  .articles__title {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);   /* 20–28px — subheading (UI-SPEC) */
-    font-weight: 600;            /* 600 — collapsed from medium per UI-SPEC note */
-    line-height: 1.25;
-    color: var(--color-text);
-    margin: 0;
-    text-wrap: balance;
-  }
-
-  /* ── Excerpt (Body: 17px/400) ────────────────────────────────────────────── */
-  .articles__excerpt {
-    font-family: var(--font-body);
-    font-size: var(--text-base);  /* 16–18px body */
-    font-weight: 400;
-    line-height: 1.6;
-    color: var(--color-text-secondary);
-    margin: 0;
-    flex: 1;  /* Pushes meta + read-more to bottom of card */
-  }
-
-  /* ── Meta row ────────────────────────────────────────────────────────────── */
-  .articles__meta {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    font-family: var(--font-body);
-    font-size: var(--text-xs);   /* 12–14px — Meta/Caption (UI-SPEC) */
-    font-weight: 400;
-    color: var(--color-text-secondary);
-  }
-
-  .articles__separator {
-    opacity: 0.5;
-  }
-
-  /* ── "Lees verder" — base styles shared by disabled + enabled states ──────── */
-  .articles__read-more {
-    display: inline-flex;
-    align-items: center;
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-text);
-    text-decoration: none;
-    letter-spacing: 0.01em;
-    /* Minimum 44px touch target height (WCAG 2.5.5) */
-    min-height: 44px;
-    align-self: flex-start;
-    padding-block: var(--space-sm);
-    /* Disabled state (span): honest not-allowed cursor, muted opacity */
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* Enabled "Lees verder" link — overrides disabled defaults */
-  .articles__read-more--enabled {
-    opacity: 1;
-    cursor: pointer;
-  }
-
-  .articles__read-more--enabled:hover {
-    text-decoration: underline;
-  }
-
-  .articles__read-more--enabled:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-  }
-
-  /* ── "Alle artikelen" row ────────────────────────────────────────────────── */
-  .articles__see-all-row {
-    display: flex;
-    justify-content: center;
-    padding-top: var(--space-md);
-  }
-
-  /* "Alle artikelen" — base styles shared by disabled + enabled states */
-  .articles__see-all {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    font-family: var(--font-body);
-    font-size: var(--text-base);
-    font-weight: 600;
-    color: var(--color-text);
-    text-decoration: none;
-    letter-spacing: 0.01em;
-    /* Minimum 44px touch target height (WCAG 2.5.5) */
-    min-height: 44px;
-    padding-block: var(--space-sm);
-    /* Disabled state (span): honest not-allowed cursor, muted opacity */
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* Enabled "Alle artikelen" link — overrides disabled defaults */
-  .articles__see-all--enabled {
-    opacity: 1;
-    cursor: pointer;
-  }
-
-  .articles__see-all--enabled:hover .articles__see-all-arrow {
-    transform: translateX(4px);
-  }
-
-  .articles__see-all--enabled:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-  }
-
-  .articles__see-all-arrow {
-    transition: transform var(--duration-fast) var(--ease-out);
-  }
+  @media (prefers-reduced-motion: reduce) { .art__card--link, .art__seeall svg { transition: none; } }
 </style>

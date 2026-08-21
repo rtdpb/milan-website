@@ -86,5 +86,62 @@ const {
 
     <!-- Site footer — light bg, disabled nav links, copyright/legal (Plan 02) -->
     <Footer />
+
+    <!--
+      Global motion island (v4.0): reveals [data-anim] elements on scroll,
+      runs count-up on [data-countup], and honours prefers-reduced-motion.
+      Content is authored fully visible/valued so no-JS + reduced-motion users
+      never see hidden or zeroed content.
+    -->
+    <script>
+      (function () {
+        'use strict';
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // ── Reveal on scroll (fade-rise + clip) ─────────────────────────────
+        var animEls = Array.prototype.slice.call(document.querySelectorAll('[data-anim]'));
+        if (!reduce && 'IntersectionObserver' in window && animEls.length) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            });
+          }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+          animEls.forEach(function (el) { io.observe(el); });
+        } else {
+          animEls.forEach(function (el) { el.classList.add('is-in'); });
+        }
+
+        // ── Count-up numerals ───────────────────────────────────────────────
+        var nums = Array.prototype.slice.call(document.querySelectorAll('[data-countup]'));
+        function runCount(el: HTMLElement) {
+          var target = parseFloat(el.getAttribute('data-countup') || '0') || 0;
+          var suffix = el.getAttribute('data-suffix') || '';
+          var dur = 1200;
+          var start: number | null = null;
+          function step(ts: number) {
+            if (start === null) start = ts;
+            var p = Math.min((ts - start) / dur, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(eased * target) + suffix;
+            if (p < 1) requestAnimationFrame(step);
+            else el.textContent = target + suffix;
+          }
+          requestAnimationFrame(step);
+        }
+        if (!reduce && 'IntersectionObserver' in window && nums.length) {
+          var io2 = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              runCount(e.target as HTMLElement);
+              io2.unobserve(e.target);
+            });
+          }, { threshold: 0.6 });
+          nums.forEach(function (el) { io2.observe(el); });
+        }
+        // (reduced-motion / no-JS: the final value is already in the markup)
+      })();
+    </script>
   </body>
 </html>

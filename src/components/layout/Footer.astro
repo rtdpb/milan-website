@@ -1,33 +1,24 @@
 ---
 /**
- * Footer.astro
- * Site footer — light background, three-column desktop layout.
+ * Footer.astro — Dark editorial close · v3.0 redesign
  *
- * Source: UI-SPEC §Component Inventory <SiteFooter> (HOME-09),
- *         UI-SPEC §Copywriting Contract; PLAN 01-02 Task 3; D-01, D-12
+ * Supersedes the prior light footer (v1 D-01). A deep-ink footer band gives the
+ * page a confident editorial bookend: a large serif wordmark + a contact CTA on
+ * top, then navigation, legal, and social below.
  *
- * DESIGN RULES:
- * - Background: --color-bg (light) — dark band is RESERVED for the story
- *   section (D-01). Footer is NEVER a dark band.
- * - Yellow (#FFDD11): NOT used here (D-02, D-03). Footer is neutral.
- * - No invented content (HOME-11) — all strings from nl.ts.
- *
- * HONESTY RULE (HOME-10, D-12):
- * All nav links whose destinations are unknown are aria-disabled.
- * Privacy / terms links are also disabled (pages not yet built).
- * LinkedIn icon disabled (TODO_LINKEDIN_URL pending).
- * NEVER href="#" or href="".
+ * HONESTY (HOME-10, D-12): unresolved destinations are never href="#". Nav links
+ * point at real pages; privacy/terms are quiet non-interactive text (pages not
+ * built yet); LinkedIn is an aria-disabled affordance pending TODO_LINKEDIN_URL.
  */
-
 import { getStrings } from '../../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import {
-  SITE_NAME,
-} from '../../config';
+import { SITE_NAME } from '../../config';
 
-// Phase 4: locale-parameterized footer strings
 const t = getStrings(Astro.currentLocale);
 const isEn = Astro.currentLocale === 'en';
+const base = import.meta.env.BASE_URL;
+
+const contactHref = isEn ? getRelativeLocaleUrl('en', 'contact') : `${base}contact`;
 
 const navItems = isEn
   ? [
@@ -38,268 +29,168 @@ const navItems = isEn
       { label: t.nav.boek,        href: getRelativeLocaleUrl('en', 'book') },
     ]
   : [
-      { label: t.nav.coaching,    href: `${import.meta.env.BASE_URL}coaching` },
-      { label: t.nav.spreker,     href: `${import.meta.env.BASE_URL}spreker` },
-      { label: t.nav.nieuwsbrief, href: `${import.meta.env.BASE_URL}nieuwsbrief` },
-      { label: t.nav.mijnVerhaal, href: `${import.meta.env.BASE_URL}mijn-verhaal` },
-      { label: t.nav.boek,        href: `${import.meta.env.BASE_URL}boek` },
+      { label: t.nav.coaching,    href: `${base}coaching` },
+      { label: t.nav.spreker,     href: `${base}spreker` },
+      { label: t.nav.nieuwsbrief, href: `${base}nieuwsbrief` },
+      { label: t.nav.mijnVerhaal, href: `${base}mijn-verhaal` },
+      { label: t.nav.boek,        href: `${base}boek` },
     ];
 ---
 
-<footer class="site-footer">
-  <div class="site-footer__inner">
+<footer class="ft">
+  <div class="ft__inner">
 
-    <!-- Column 1: Wordmark + tagline -->
-    <div class="site-footer__brand">
-      <a href={import.meta.env.BASE_URL} class="site-footer__wordmark" aria-label={`${SITE_NAME} — ${t.nav.homeAria}`}>
-        {SITE_NAME}
+    <!-- Top: brand statement + contact CTA -->
+    <div class="ft__top">
+      <div class="ft__brand">
+        <a href={base} class="ft__wordmark" aria-label={`${SITE_NAME} — ${t.nav.homeAria}`}>{SITE_NAME}</a>
+        <p class="ft__tagline">{t.footer.tagline}</p>
+      </div>
+      <a href={contactHref} class="ft__cta">
+        {isEn ? 'Get in touch' : 'Neem contact op'}
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
-      <p class="site-footer__tagline">{t.footer.tagline}</p>
     </div>
 
-    <!-- Column 2: Nav links -->
-    <!-- WR-05: aria-label locale-resolved so EN screen-reader users don't hear Dutch -->
-    <nav class="site-footer__nav" aria-label={isEn ? 'Footer navigation' : 'Footer navigatie'}>
-      <p class="site-footer__nav-heading">{t.footer.navHeading}</p>
-      <ul class="site-footer__nav-list" role="list">
-        {navItems.map((item) => (
+    <div class="ft__rule"></div>
+
+    <!-- Columns: nav · legal · social -->
+    <div class="ft__cols">
+      <nav class="ft__col" aria-label={isEn ? 'Footer navigation' : 'Footer navigatie'}>
+        <p class="ft__col-heading">{t.footer.navHeading}</p>
+        <ul class="ft__list" role="list">
+          {navItems.map((item) => (
+            <li><a href={item.href} class="ft__link">{item.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="ft__col">
+        <p class="ft__col-heading">{t.footer.legalHeading}</p>
+        <ul class="ft__list" role="list">
           <li>
-            {item.href ? (
-              <a href={item.href} class="site-footer__nav-link">
-                {item.label}
-              </a>
-            ) : (
-              <span
-                class="site-footer__nav-link site-footer__nav-link--disabled"
-                role="link"
-                aria-disabled="true"
-                tabindex="-1"
-                title={t.common.disabledTooltip}
-              >
-                {item.label}
-              </span>
-            )}
+            <span class="ft__muted" role="link" aria-disabled="true" tabindex="-1" title={t.common.disabledTooltip}>{t.footer.privacy}</span>
           </li>
-        ))}
-      </ul>
-    </nav>
-
-    <!-- Column 3: Social + legal -->
-    <div class="site-footer__legal-col">
-
-      <!-- LinkedIn icon: disabled (TODO_LINKEDIN_URL pending) -->
-      <!--
-        TODO: wire href to real LinkedIn URL (TODO_LINKEDIN_URL in config.ts).
-        When wired: add target="_blank" rel="noopener noreferrer" (T-01-04).
-        Current: aria-disabled span — no navigation.
-      -->
-      <span
-        class="site-footer__linkedin"
-        role="link"
-        aria-disabled="true"
-        aria-label={`${t.nav.linkedin} — ${t.common.disabledTooltip}`}
-        tabindex="-1"
-        title={t.common.disabledTooltip}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-        <span class="sr-only">{t.nav.linkedin}</span>
-      </span>
-
-      <!-- Legal links: disabled placeholder (pages not yet built) -->
-      <div class="site-footer__legal-links">
-        <!--
-          TODO Phase 2+: wire to real pages (TODO_PRIVACY_URL, TODO_TERMS_URL in config.ts).
-        -->
-        <span
-          class="site-footer__legal-link site-footer__legal-link--disabled"
-          role="link"
-          aria-disabled="true"
-          tabindex="-1"
-          title={t.common.disabledTooltip}
-        >
-          {t.footer.privacy}
-        </span>
-        <span class="site-footer__legal-sep" aria-hidden="true">·</span>
-        <span
-          class="site-footer__legal-link site-footer__legal-link--disabled"
-          role="link"
-          aria-disabled="true"
-          tabindex="-1"
-          title={t.common.disabledTooltip}
-        >
-          {t.footer.terms}
-        </span>
+          <li>
+            <span class="ft__muted" role="link" aria-disabled="true" tabindex="-1" title={t.common.disabledTooltip}>{t.footer.terms}</span>
+          </li>
+        </ul>
       </div>
 
-      <!-- Copyright -->
-      <p class="site-footer__copyright">
-        {t.footer.copyright}
-      </p>
+      <div class="ft__col">
+        <p class="ft__col-heading">{isEn ? 'Connect' : 'Volgen'}</p>
+        <span
+          class="ft__linkedin"
+          role="link"
+          aria-disabled="true"
+          aria-label={`${t.nav.linkedin} — ${t.common.disabledTooltip}`}
+          tabindex="-1"
+          title={t.common.disabledTooltip}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          <span class="sr-only">{t.nav.linkedin}</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Base: copyright -->
+    <div class="ft__base">
+      <p class="ft__copyright">{t.footer.copyright}</p>
     </div>
 
   </div>
 </footer>
 
 <style>
-  /* ── Footer Shell — LIGHT background (D-01: dark band reserved for story) ── */
-  .site-footer {
-    background-color: var(--color-bg);
-    border-top: 1px solid var(--color-border);
-    padding-block: var(--space-3xl);  /* 64px top/bottom */
+  .ft {
+    background-color: var(--color-ink);
+    color: var(--color-dark-text);
+    padding-block: clamp(var(--space-3xl), 6vw, var(--space-5xl));
   }
-
-  /* ── Inner container ──────────────────────────────────────────────────── */
-  .site-footer__inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-2xl);   /* 48px between columns on mobile (stacked) */
+  .ft__inner {
     max-width: var(--max-width);
     margin-inline: auto;
-    padding-inline: var(--space-lg);
+    padding-inline: var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(var(--space-xl), 4vw, var(--space-3xl));
   }
 
+  /* ── Top ──────────────────────────────────────────────────────────────── */
+  .ft__top {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    align-items: flex-start;
+  }
   @media (min-width: 768px) {
-    .site-footer__inner {
-      padding-inline: var(--space-3xl);
-    }
+    .ft__top { flex-direction: row; align-items: flex-end; justify-content: space-between; }
   }
-
-  /* Three-column layout on desktop */
-  @media (min-width: 960px) {
-    .site-footer__inner {
-      grid-template-columns: 2fr 1fr 1fr;
-      align-items: start;
-    }
-  }
-
-  /* ── Column 1: Brand ─────────────────────────────────────────────────── */
-  .site-footer__wordmark {
+  .ft__wordmark {
     display: inline-block;
     font-family: var(--font-display);
-    font-size: 1.125rem;  /* 18px */
-    font-weight: 600;
-    color: var(--color-text);
+    font-size: var(--text-3xl);
+    line-height: 1;
+    color: var(--color-dark-text);
     text-decoration: none;
-    margin-bottom: var(--space-sm);
+  }
+  .ft__wordmark:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; border-radius: var(--radius-sm); }
+  .ft__tagline { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-dark-text-soft); margin: var(--space-sm) 0 0; }
+
+  .ft__cta {
+    display: inline-flex; align-items: center; gap: var(--space-sm);
+    height: 54px; padding-inline: var(--space-lg);
+    border: 1px solid var(--line-on-dark-strong);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body); font-size: var(--text-sm); font-weight: 600;
+    color: var(--color-dark-text); text-decoration: none;
+    transition: background-color var(--duration-fast) var(--ease-out),
+                color var(--duration-fast) var(--ease-out),
+                border-color var(--duration-fast) var(--ease-out);
+  }
+  .ft__cta:hover { background-color: var(--color-accent); color: var(--color-accent-ink); border-color: var(--color-accent); }
+  .ft__cta svg { transition: transform var(--duration-fast) var(--ease-out); }
+  .ft__cta:hover svg { transform: translateX(4px); }
+
+  .ft__rule { height: 1px; background: var(--line-on-dark); }
+
+  /* ── Columns ──────────────────────────────────────────────────────────── */
+  .ft__cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl) var(--space-lg);
+  }
+  @media (min-width: 768px) {
+    .ft__cols { grid-template-columns: 2fr 1fr 1fr; }
+  }
+  .ft__col-heading {
+    font-family: var(--font-body); font-size: var(--text-xs); font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-dark-text-soft);
+    margin: 0 0 var(--space-md);
+  }
+  .ft__list { display: flex; flex-direction: column; gap: var(--space-sm); margin: 0; padding: 0; list-style: none; }
+  .ft__link {
+    font-family: var(--font-body); font-size: var(--text-base);
+    color: var(--color-dark-text); text-decoration: none; line-height: 1.4;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+  .ft__link:hover { color: var(--color-accent); }
+  .ft__muted { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-dark-text-soft); line-height: 1.4; cursor: default; }
+
+  .ft__linkedin {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 46px; height: 46px; border-radius: 50%;
+    border: 1px solid var(--line-on-dark-strong);
+    color: var(--color-dark-text-soft); cursor: not-allowed;
   }
 
-  .site-footer__wordmark:hover {
-    color: var(--color-text);
-  }
+  /* ── Base ─────────────────────────────────────────────────────────────── */
+  .ft__base { padding-top: var(--space-lg); border-top: 1px solid var(--line-on-dark); }
+  .ft__copyright { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-dark-text-soft); margin: 0; }
 
-  .site-footer__wordmark:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 4px;
-    border-radius: var(--radius-sm);
-  }
-
-  .site-footer__tagline {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);     /* 13px label size */
-    color: var(--color-text-secondary);
-    line-height: 1.4;
-    margin: 0;
-    max-width: 240px;
-  }
-
-  /* ── Column 2: Nav links ─────────────────────────────────────────────── */
-  .site-footer__nav-heading {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-    margin: 0 0 var(--space-md) 0;
-  }
-
-  .site-footer__nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);  /* 8px between links */
-  }
-
-  .site-footer__nav-link {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);  /* 13px — footer label size (UI-SPEC) */
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    display: block;
-    line-height: 1.4;
-  }
-
-  .site-footer__nav-link--disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* ── Column 3: Legal / social ────────────────────────────────────────── */
-  .site-footer__legal-col {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);  /* 16px */
-  }
-
-  /* LinkedIn icon */
-  .site-footer__linkedin {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
-    color: var(--color-text-secondary);  /* grey — NOT yellow (D-02) */
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* Legal links row */
-  .site-footer__legal-links {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);  /* 8px */
-    flex-wrap: wrap;
-  }
-
-  .site-footer__legal-link {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    line-height: 1.4;
-  }
-
-  .site-footer__legal-link--disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .site-footer__legal-sep {
-    color: var(--color-text-secondary);
-    font-size: var(--text-xs);
-    opacity: 0.5;
-  }
-
-  /* Copyright */
-  .site-footer__copyright {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    color: var(--color-text-secondary);
-    opacity: 0.6;
-    margin: 0;
-    line-height: 1.4;
+  @media (prefers-reduced-motion: reduce) {
+    .ft__cta, .ft__cta svg, .ft__link { transition: none; }
   }
 </style>

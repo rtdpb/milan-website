@@ -90,6 +90,12 @@ export const en = {
   // ── Samenwerken / Services Section ───────────────────────────────────────
   samenwerken: {
     heading: 'Work with me',
+    /** Small section eyebrow (v3.0 redesign) */
+    eyebrow: 'Three routes',
+    /** One-line section intro (v3.0 redesign) */
+    intro: 'From low-threshold to intensive. Pick the route that fits where you are right now.',
+    /** Scarcity / exclusivity line on the coaching route (v3.0 — user-authored) */
+    exclusiveLabel: 'Max. 8 founders at a time',
     /** aria-label for the collaboration options grid */
     ariaLabel: 'Collaboration options',
     ladderEyebrow1: '01 — Start here for free',
@@ -150,11 +156,33 @@ export const en = {
     ],
     signature: 'Milan van der Meulen',  // D-03: name verbatim
     imageAlt:  'Milan van der Meulen on stage.',
+    /** Closing pull-statement for the redesigned story spread (v3.0 — user-authored) */
+    closing:   'I help you scale your business without losing yourself.',
+    /** Accent phrase highlighted within the closing statement */
+    closingAccent: 'without losing yourself',
+  },
+
+  // ── Timeline (v4.0) — Milan's journey as visual credibility ──────────────
+  timeline: {
+    eyebrow: 'The story in numbers',
+    heading: 'From idea to 9 countries — and starting over',
+    intro:   'Twelve years of building, growing, losing, and rising again. The route in short.',
+    marketsLabel: '9 markets across Europe',
+    items: [
+      { kicker: 'The start',  stat: '',    statLabel: '',          title: 'Founding Soly',                              text: 'Started from the conviction that clean energy had to be accessible to everyone.' },
+      { kicker: 'Expansion',  stat: '9',   statLabel: 'markets',   title: 'Scaling internationally',                    text: 'From one market to nine countries — each with its own team, pace and culture.' },
+      { kicker: 'Growth',     stat: '180', statLabel: 'employees', title: 'A company that no longer fits in your head', text: 'Leadership at scale: delegating, trusting, and learning to let go.' },
+      { kicker: 'The limit',  stat: '',    statLabel: '',          title: 'Burnout',                                    text: 'The point where the way I was working was no longer sustainable.' },
+      { kicker: 'The end',    stat: '',    statLabel: '',          title: 'The bankruptcy',                             text: 'The company I had given everything to fell apart. No romance — but clarity.' },
+      { kicker: 'Today',      stat: '',    statLabel: '',          title: 'Coach & speaker',                            text: 'I pass on what those years taught me to founders who want to learn it sooner than I did.' },
+    ],
   },
 
   // ── Newsletter Section ────────────────────────────────────────────────────
   newsletter: {
     heading:     'Stay informed',
+    /** Bold statement headline for the redesigned dark newsletter section (v3.0 — user-authored) */
+    statement:   '5 minutes of reading that could save you 5 years',
     // D-02: explicit "written in Dutch" statement
     subtext:     'A monthly honest update on entrepreneurship, scaling, and the lessons I learn along the way. The newsletter is written in Dutch.',
     labelEmail:  'Email address',

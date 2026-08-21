@@ -105,8 +105,10 @@ const { label, href, targetId, plausibleGoal = 'Sticky CTA: Click' } = Astro.pro
     left: 0;
     right: 0;
     z-index: 90; /* below nav header (100) and mobile nav panel (200) */
-    background-color: var(--color-bg); /* NOT yellow — matches page background */
-    border-top: 1px solid var(--color-border);
+    background-color: rgba(244, 239, 230, 0.86);
+    -webkit-backdrop-filter: saturate(1.2) blur(14px);
+            backdrop-filter: saturate(1.2) blur(14px);
+    border-top: 1px solid var(--line-on-light);
     padding-block: var(--space-md);
     /* Default: translated offscreen (bar is hidden initially via `hidden` attr) */
     transform: translateY(100%);
@@ -140,17 +142,32 @@ const { label, href, targetId, plausibleGoal = 'Sticky CTA: Click' } = Astro.pro
     }
   }
 
-  /* ── Button — near-full-width on mobile, auto-width centred on desktop ────── */
-  /* Mobile (<768px): near-full-width button (max 360px), centred */
+  /* ── Button — self-contained pill (Button.astro styles are scoped) ───────── */
   .sticky-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     max-width: 360px;
+    height: 52px;
+    padding-inline: var(--space-xl);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color var(--duration-fast) var(--ease-out);
   }
+  .sticky-cta__btn:hover { background-color: var(--color-accent-dark); }
 
   /* Desktop (>=768px): auto-width centred button */
   @media (min-width: 768px) {
-    .sticky-cta__btn {
-      width: auto;
-    }
+    .sticky-cta__btn { width: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta__btn { transition: none; }
   }
 </style>

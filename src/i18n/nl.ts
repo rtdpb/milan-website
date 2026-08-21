@@ -84,6 +84,12 @@ export const nl = {
   // ── Samenwerken / Services Section (HOME-04) ─────────────────────────────
   samenwerken: {
     heading: 'Samenwerken',
+    /** Small section eyebrow (v3.0 redesign) */
+    eyebrow: 'Drie routes',
+    /** One-line section intro (v3.0 redesign) */
+    intro: 'Van laagdrempelig tot intensief. Kies de route die past bij waar jij nu staat.',
+    /** Scarcity / exclusivity line on the coaching route (v3.0 — user-authored) */
+    exclusiveLabel: 'Max. 8 founders tegelijk',
     /** aria-label for the collaboration options grid */
     ariaLabel: 'Samenwerkingsopties',
     /** Commitment ladder eyebrow labels (D-07, UI-SPEC §SamenwerkSection) */
@@ -142,11 +148,34 @@ export const nl = {
     ],
     signature: 'Milan van der Meulen',
     imageAlt:  'Milan van der Meulen op het podium.',
+    /** Closing pull-statement for the redesigned story spread (v3.0 — user-authored) */
+    closing:   'Ik help je bedrijf te schalen zonder jezelf te verliezen.',
+    /** Accent phrase highlighted within the closing statement */
+    closingAccent: 'zonder jezelf te verliezen',
+  },
+
+  // ── Timeline (v4.0) — Milan's journey as visual credibility ──────────────
+  // Narrative beats; numeric markers kept to verified facts (9 markten, 180 medewerkers).
+  timeline: {
+    eyebrow: 'Het verhaal in cijfers',
+    heading: 'Van idee tot 9 landen — en opnieuw beginnen',
+    intro:   'Twaalf jaar bouwen, groeien, verliezen en weer opstaan. De route in het kort.',
+    marketsLabel: '9 markten in Europa',
+    items: [
+      { kicker: 'De start',  stat: '',    statLabel: '',            title: 'De oprichting van Soly',                    text: 'Begonnen vanuit de overtuiging dat schone energie voor iedereen bereikbaar moest zijn.' },
+      { kicker: 'Expansie',  stat: '9',   statLabel: 'markten',     title: 'Internationaal opschalen',                  text: 'Van één markt naar negen landen — elk met een eigen team, tempo en cultuur.' },
+      { kicker: 'Groei',     stat: '180', statLabel: 'medewerkers', title: 'Een bedrijf dat niet meer in je hoofd past', text: 'Leiderschap op schaal: delegeren, vertrouwen, en leren loslaten.' },
+      { kicker: 'De grens',  stat: '',    statLabel: '',            title: 'Burn-out',                                  text: 'Het punt waarop de manier waarop ik werkte niet langer houdbaar was.' },
+      { kicker: 'Het einde', stat: '',    statLabel: '',            title: 'Het faillissement',                         text: 'Het bedrijf waar ik alles in had gestoken, viel om. Geen romantiek — wel helderheid.' },
+      { kicker: 'Vandaag',   stat: '',    statLabel: '',            title: 'Coach & spreker',                           text: 'Ik geef door wat die jaren me leerden, aan founders die het eerder willen weten dan ik.' },
+    ],
   },
 
   // ── Newsletter Section (HOME-07) ─────────────────────────────────────────
   newsletter: {
     heading:     'Blijf op de hoogte',
+    /** Bold statement headline for the redesigned dark newsletter section (v3.0 — user-authored) */
+    statement:   '5 minuten leestijd die je 5 jaar kan besparen',
     subtext:     'Elke maand een eerlijke update over ondernemen, schalen en de lessen die ik onderweg leer. Geen spam, geen tips die je al kent — alleen wat echt het verschil maakt.',
     // labelNaam removed (D-05): the Substack redirect cannot honestly carry a name field — Phase 3
     labelEmail:  'Mailadres',
