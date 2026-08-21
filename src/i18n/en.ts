@@ -167,6 +167,11 @@ export const en = {
     heading: 'From idea to 9 countries — and starting over',
     intro:   'Twelve years of building, growing, losing, and rising again. The route in short.',
     marketsLabel: '9 markets across Europe',
+    /** Third headline stat — verbatim number from CLAUDE.md + en.story.body ("nearly one million solar panels") */
+    solarPanelsValue: '~1M',
+    solarPanelsLabel: 'solar panels',
+    /** aria-label for the GrowthCurve SVG */
+    growthCurveAriaLabel: "Soly's growth curve",
     items: [
       { kicker: 'The start',  stat: '',    statLabel: '',          title: 'Founding Soly',                              text: 'Started from the conviction that clean energy had to be accessible to everyone.' },
       { kicker: 'Expansion',  stat: '9',   statLabel: 'markets',   title: 'Scaling internationally',                    text: 'From one market to nine countries — each with its own team, pace and culture.' },

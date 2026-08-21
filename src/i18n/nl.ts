@@ -160,12 +160,17 @@ export const nl = {
   },
 
   // ── Timeline (v4.0) — Milan's journey as visual credibility ──────────────
-  // Narrative beats; numeric markers kept to verified facts (9 markten, 180 medewerkers).
+  // Narrative beats; numeric markers kept to verified facts (9 markten, 180 medewerkers, ~1M zonnepanelen).
   timeline: {
     eyebrow: 'Het verhaal in cijfers',
     heading: 'Van idee tot 9 landen — en opnieuw beginnen',
     intro:   'Twaalf jaar bouwen, groeien, verliezen en weer opstaan. De route in het kort.',
     marketsLabel: '9 markten in Europa',
+    /** Third headline stat — verbatim from CLAUDE.md + story.body ("bijna één miljoen geplaatste zonnepanelen") */
+    solarPanelsValue: '~1M',
+    solarPanelsLabel: 'zonnepanelen',
+    /** aria-label for the GrowthCurve SVG */
+    growthCurveAriaLabel: 'Groeicurve van Soly',
     items: [
       { kicker: 'De start',  stat: '',    statLabel: '',            title: 'De oprichting van Soly',                    text: 'Begonnen vanuit de overtuiging dat schone energie voor iedereen bereikbaar moest zijn.' },
       { kicker: 'Expansie',  stat: '9',   statLabel: 'markten',     title: 'Internationaal opschalen',                  text: 'Van één markt naar negen landen — elk met een eigen team, tempo en cultuur.' },

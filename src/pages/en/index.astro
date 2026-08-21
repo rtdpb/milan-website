@@ -7,13 +7,14 @@
  * at build time — so all section components call getStrings('en') internally
  * with no prop-drilling required (RESEARCH §Pattern 2, §Pattern 3).
  *
- * Section order matches the NL homepage canonical order:
+ * Section order matches the NL homepage canonical order (260821-m2d: Timeline added):
  *   BaseLayout (provides Header/Nav + Footer)
  *   └─ Hero           — LCP image, H1, CTAs, USPs
  *   └─ PressStrip     — "Featured in" slim credibility band
  *   └─ Samenwerken    — 3-card commitment ladder
  *   └─ Testimonials   — mixed-size mosaic, 3 quotes (D-01: translated names verbatim)
  *   └─ Story          — dark band personal story, id="verhaal"
+ *   └─ Timeline       — "The story in numbers" navy stats band (260821-m2d)
  *   └─ Newsletter     — Substack signup (D-02: "written in Dutch" note in en.newsletter.subtext)
  *   └─ Articles       — placeholder/RSS article cards (D-02: heading includes "written in Dutch")
  *
@@ -26,6 +27,7 @@ import PressStrip from '../../components/sections/PressStrip.astro';
 import Samenwerken from '../../components/sections/Samenwerken.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import Story from '../../components/sections/Story.astro';
+import Timeline from '../../components/sections/Timeline.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
 import Articles from '../../components/sections/Articles.astro';
 import StickyCTA from '../../components/ui/StickyCTA.astro';
@@ -68,6 +70,14 @@ const t = getStrings(Astro.currentLocale);
     "Verhaal" anchor preserved so the hero secondary CTA still works on the EN page.
   -->
   <Story />
+
+  <!--
+    Timeline — "The story in numbers" navy stats band (260821-m2d).
+    Placed directly after Story as a "story → story in numbers" narrative beat.
+    Three building counters: 9 markets, ~180 employees, ~1M solar panels.
+    GrowthCurve SVG draws on scroll via stroke-dashoffset.
+  -->
+  <Timeline />
 
   <!--
     Newsletter — Substack signup.

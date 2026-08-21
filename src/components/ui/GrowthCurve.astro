@@ -1,0 +1,114 @@
+---
+/**
+ * GrowthCurve.astro
+ * Self-drawing editorial line-art growth curve — draws via stroke-dashoffset
+ * when scrolled into view. (260821-m2d)
+ *
+ * Draw mechanic: the parent wrapper carries data-anim. When the existing
+ * [data-anim] IntersectionObserver in BaseLayout adds .is-in, global.css
+ * transitions .growth-curve__path stroke-dashoffset from its full offset
+ * to 0 — no new observer required.
+ *
+ * Stroke design:
+ *   - Main line: currentColor (inherits the navy band's warm off-white text)
+ *   - Single yellow accent: a small end-dot at the curve's peak (sparing-accent rule)
+ *   - stroke-width 2, stroke-linecap round — thin, editorial
+ *
+ * Reduced-motion: global.css reduced-motion block sets stroke-dashoffset: 0
+ * with !important so the curve is always shown fully drawn. The existing
+ * BaseLayout else-branch also adds .is-in to all [data-anim] elements
+ * when IntersectionObserver is absent or prefers-reduced-motion is true —
+ * belt-and-suspenders: curve is drawn regardless.
+ *
+ * No CLS: viewBox + CSS width fix the box at build time; height is auto.
+ *
+ * Props:
+ *   ariaLabel — localized accessible name for the figure
+ */
+interface Props {
+  ariaLabel: string;
+}
+const { ariaLabel } = Astro.props;
+
+/*
+ * Path: a gently accelerating growth curve from bottom-left to top-right.
+ * The cubic Bézier control points create a soft acceleration — flat start,
+ * then a confident upward arc. Stroke length ~560px; dasharray/offset set
+ * to 600 (slight over) so the draw is clean and the start invisible.
+ */
+---
+
+<figure class="growth-curve" aria-label={ariaLabel} role="img">
+  <svg
+    class="growth-curve__svg"
+    viewBox="0 0 320 180"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <!-- Main growth line: bottom-left → top-right, gentle acceleration -->
+    <path
+      class="growth-curve__path"
+      d="M 12 160 C 60 158, 110 140, 160 100 C 210 60, 260 28, 308 14"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Single yellow accent dot at the curve peak — sparing-accent rule:
+         one small marker, not the whole line yellow. -->
+    <circle class="growth-curve__dot" cx="308" cy="14" r="5" fill="var(--color-accent)" />
+
+    <!-- Small ghost trail on the line — decorative, very faint -->
+    <circle cx="12" cy="160" r="3" fill="currentColor" opacity="0.35" />
+  </svg>
+</figure>
+
+<style>
+  .growth-curve {
+    margin: var(--space-lg) 0 0;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .growth-curve__svg {
+    width: min(260px, 72%);
+    height: auto;
+    display: block;
+    /* Color inherits from the navy band's dark-text for the main stroke */
+    color: rgba(244, 241, 233, 0.5); /* --color-dark-text at 50% — editorial ghost line */
+  }
+
+  /* Draw start state: path is invisible (full dashoffset = dasharray).
+     Transition to 0 is triggered by .is-in added to the parent [data-anim] wrapper —
+     see global.css: [data-anim].is-in .growth-curve__path rule. */
+  .growth-curve__path {
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    /* No transition here — transition lives in global.css triggered by .is-in */
+  }
+
+  /* The yellow end-dot: opacity 0 until drawn, then fades in.
+     Tied to the parent [data-anim].is-in so it appears as the line completes. */
+  .growth-curve__dot {
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-out);
+    transition-delay: calc(var(--duration-draw) * 0.8);
+  }
+  :global([data-anim].is-in) .growth-curve__dot {
+    opacity: 1;
+  }
+
+  /* Reduced-motion: dot immediately visible */
+  @media (prefers-reduced-motion: reduce) {
+    .growth-curve__path {
+      stroke-dashoffset: 0 !important;
+      transition: none !important;
+    }
+    .growth-curve__dot {
+      opacity: 1 !important;
+      transition: none !important;
+    }
+  }
+</style>
