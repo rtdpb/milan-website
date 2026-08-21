@@ -134,11 +134,57 @@ a { color: inherit; text-decoration-skip-ink: auto; }
 /* Staggered children via inline --i (delay = i * 90ms). */
 [data-anim][style*='--i'] { transition-delay: calc(var(--i, 0) * 90ms); }
 
+/* ── Directional / scale reveal variants (260821-m2d) ──────────────────────
+ * Add data-anim-variant="left|right|scale" to any [data-anim] element.
+ * The base [data-anim] (no variant) keeps its original fade+rise unchanged.
+ * All variants share the same transition duration/easing as the base so
+ * timing stays consistent and editorial.
+ * Stagger (--i) continues to work because variants are additional attrs
+ * on the same [data-anim] node — the transition-delay rule above still applies.
+ */
+[data-anim][data-anim-variant='left']  { transform: translateX(-28px); }
+[data-anim][data-anim-variant='right'] { transform: translateX(28px); }
+[data-anim][data-anim-variant='scale'] { transform: scale(0.94); opacity: 0; }
+
+[data-anim][data-anim-variant='left'].is-in,
+[data-anim][data-anim-variant='right'].is-in,
+[data-anim][data-anim-variant='scale'].is-in {
+  transform: none;
+  opacity: 1;
+}
+
+/* ── Growth-curve draw-on-scroll (260821-m2d) ─────────────────────────────
+ * When [data-anim].is-in is added by the existing IntersectionObserver,
+ * the growth curve path transitions from dashoffset (hidden) to 0 (drawn).
+ * No new observer — reuses the same .is-in toggle.
+ */
+[data-anim].is-in .growth-curve__path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--duration-draw) var(--ease-draw);
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-anim] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
     will-change: auto;
+  }
+  /* Ensure variant initial transforms are neutralised (same [data-anim] selector
+     already covers them, but explicit belt-and-suspenders). */
+  [data-anim][data-anim-variant='left'],
+  [data-anim][data-anim-variant='right'],
+  [data-anim][data-anim-variant='scale'] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  /* Parallax: pin elements to natural position — parallax is purely decorative. */
+  [data-parallax] {
+    transform: none !important;
+  }
+  /* Growth curve: show fully drawn with no transition. */
+  .growth-curve__path {
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
   }
 }

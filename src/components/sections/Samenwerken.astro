@@ -39,7 +39,7 @@ const [news, talk, coach] = s.cards;
     <div class="sw__grid" role="list" aria-label={s.ariaLabel}>
 
       <!-- 01 Nieuwsbrief — cream card, yellow details only -->
-      <a href={newsletterHref} class="sw__card sw__card--news" role="listitem" data-anim>
+      <a href={newsletterHref} class="sw__card sw__card--news" role="listitem" data-anim data-anim-variant="scale">
         <div class="sw__news-visual" aria-hidden="true">
           <svg viewBox="0 0 120 84" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="8" y="10" width="104" height="66" rx="8" fill="#16181D" opacity="0.06"/>
@@ -62,7 +62,7 @@ const [news, talk, coach] = s.cards;
       </a>
 
       <!-- 02 Presentatie — navy card, photo on top, text below -->
-      <a href={lezingHref} class="sw__card sw__card--talk" role="listitem" data-anim>
+      <a href={lezingHref} class="sw__card sw__card--talk" role="listitem" data-anim data-anim-variant="scale">
         <div class="sw__talk-media">
           <Picture src={speakingImg} formats={['avif', 'webp']} widths={[500, 800, 1100]}
             sizes="(max-width: 760px) 92vw, 56vw"
@@ -78,7 +78,7 @@ const [news, talk, coach] = s.cards;
       </a>
 
       <!-- 03 1:1 Coaching — premium ink, portrait + exclusivity -->
-      <a href={coachingHref} class="sw__card sw__card--coach" role="listitem" data-anim>
+      <a href={coachingHref} class="sw__card sw__card--coach" role="listitem" data-anim data-anim-variant="scale">
         <div class="sw__coach-media">
           <Picture src={networkingImg} formats={['avif', 'webp']} widths={[400, 700, 900]}
             sizes="(max-width: 900px) 92vw, 40vw"

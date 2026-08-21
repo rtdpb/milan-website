@@ -97,17 +97,19 @@ const {
     <Footer />
 
     <!--
-      Global motion island (v4.0): reveals [data-anim] elements on scroll,
-      runs count-up on [data-countup], and honours prefers-reduced-motion.
+      Global motion island (v4.1): reveals [data-anim] elements on scroll,
+      runs count-up on [data-countup] (with optional prefix/suffix),
+      drives subtle parallax on [data-parallax], and honours prefers-reduced-motion.
       Content is authored fully visible/valued so no-JS + reduced-motion users
       never see hidden or zeroed content.
+      Extended in 260821-m2d: prefix seam + parallax pass.
     -->
     <script>
       (function () {
         'use strict';
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // ── Reveal on scroll (fade-rise + clip) ─────────────────────────────
+        // ── Reveal on scroll (fade-rise + directional/scale variants) ────────
         var animEls = Array.prototype.slice.call(document.querySelectorAll('[data-anim]'));
         if (!reduce && 'IntersectionObserver' in window && animEls.length) {
           var io = new IntersectionObserver(function (entries) {
@@ -122,10 +124,14 @@ const {
           animEls.forEach(function (el) { el.classList.add('is-in'); });
         }
 
-        // ── Count-up numerals ───────────────────────────────────────────────
+        // ── Count-up numerals (additive prefix seam — 260821-m2d) ────────────
+        // data-countup: numeric target (e.g. 1, 180, 9)
+        // data-countup-prefix: optional prefix string (e.g. "~")
+        // data-suffix: optional suffix string (e.g. "M", " markten") [existing]
         var nums = Array.prototype.slice.call(document.querySelectorAll('[data-countup]'));
         function runCount(el: HTMLElement) {
           var target = parseFloat(el.getAttribute('data-countup') || '0') || 0;
+          var prefix = el.getAttribute('data-countup-prefix') || '';
           var suffix = el.getAttribute('data-suffix') || '';
           var dur = 1200;
           var start: number | null = null;
@@ -133,9 +139,9 @@ const {
             if (start === null) start = ts;
             var p = Math.min((ts - start) / dur, 1);
             var eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = Math.round(eased * target) + suffix;
+            el.textContent = prefix + Math.round(eased * target) + suffix;
             if (p < 1) requestAnimationFrame(step);
-            else el.textContent = target + suffix;
+            else el.textContent = prefix + target + suffix;
           }
           requestAnimationFrame(step);
         }
@@ -150,6 +156,43 @@ const {
           nums.forEach(function (el) { io2.observe(el); });
         }
         // (reduced-motion / no-JS: the final value is already in the markup)
+
+        // ── Subtle parallax (260821-m2d) ─────────────────────────────────────
+        // Elements opt in with data-parallax (e.g. data-parallax="0.05").
+        // Purely decorative translateY offset — natural position IS the final state,
+        // so no CSS "shown state" is needed; the reduced-motion block in global.css
+        // pins these to transform:none via !important as belt-and-suspenders.
+        // IMPORTANT: do NOT use data-parallax on the same node as data-anim —
+        // they both write transform and would fight.
+        if (!reduce) {
+          var parallaxEls = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]')) as HTMLElement[];
+          if (parallaxEls.length) {
+            var pticking = false;
+            function runParallax() {
+              var viewportH = window.innerHeight;
+              parallaxEls.forEach(function (el) {
+                var rect = el.getBoundingClientRect();
+                // Skip elements fully off-screen to save work
+                if (rect.bottom < -viewportH || rect.top > viewportH * 2) return;
+                var strength = parseFloat(el.getAttribute('data-parallax') || '0.06');
+                var mid = rect.top + rect.height / 2;
+                var offset = (mid - viewportH / 2) * strength;
+                // Clamp to ±24px — SUBTLE, never a big drifting move
+                offset = Math.max(-24, Math.min(24, offset));
+                el.style.transform = 'translate3d(0,' + offset + 'px,0)';
+              });
+              pticking = false;
+            }
+            function onScrollParallax() {
+              if (pticking) return;
+              pticking = true;
+              requestAnimationFrame(runParallax);
+            }
+            window.addEventListener('scroll', onScrollParallax, { passive: true });
+            window.addEventListener('resize', onScrollParallax, { passive: true });
+            runParallax();
+          }
+        }
       })();
     </script>
   </body>

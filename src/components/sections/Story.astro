@@ -32,8 +32,8 @@ const teaserLink = isEn ? getRelativeLocaleUrl('en', 'about') : `${base}mijn-ver
 <SectionWrapper id="verhaal" labelledBy="story-heading" variant="warm">
   <div class="story">
     <div class="story__grid">
-      <!-- Portrait — always visible (no reveal clip) -->
-      <figure class="story__portrait">
+      <!-- Portrait — always visible (no reveal clip); data-parallax for subtle lift on scroll (260821-m2d) -->
+      <figure class="story__portrait" data-parallax="0.05">
         <Picture
           src={portraitSrc}
           formats={['avif', 'webp']}
@@ -46,7 +46,7 @@ const teaserLink = isEn ? getRelativeLocaleUrl('en', 'about') : `${base}mijn-ver
       </figure>
 
       <!-- Reading column -->
-      <div class="story__text" data-anim>
+      <div class="story__text" data-anim data-anim-variant="right">
         <p class="story__eyebrow">{eyebrow}</p>
         <h2 id="story-heading" class="story__heading">{heading}</h2>
         <div class="story__body">

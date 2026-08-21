@@ -24,7 +24,7 @@ const [feature, ...supporting] = allItems;
       <h2 id="testimonials-heading" class="tst__heading">{heading}</h2>
     </header>
 
-    <figure class="tst__feature" data-anim>
+    <figure class="tst__feature" data-anim data-anim-variant="scale">
       <span class="tst__mark" aria-hidden="true">&ldquo;</span>
       <blockquote class="tst__feature-quote"><p>{feature.quote}</p></blockquote>
       <figcaption class="tst__attr tst__attr--dark">
@@ -35,7 +35,7 @@ const [feature, ...supporting] = allItems;
 
     <div class="tst__row">
       {supporting.map((c, i) => (
-        <figure class={`tst__support ${i === 0 ? 'tst__support--card' : 'tst__support--rule'}`} data-anim style={`--i: ${i + 1}`}>
+        <figure class={`tst__support ${i === 0 ? 'tst__support--card' : 'tst__support--rule'}`} data-anim data-anim-variant={i === 0 ? 'left' : 'right'} style={`--i: ${i + 1}`}>
           <blockquote class="tst__support-quote"><p>{c.quote}</p></blockquote>
           <figcaption class="tst__attr">
             <cite class="tst__name">{c.name}</cite>
