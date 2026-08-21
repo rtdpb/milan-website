@@ -50,7 +50,7 @@ export const nl = {
     usp3: '9 markten',
     /** Proof points, integrated into the hero panel (numbers verbatim, D-03). */
     stats: [
-      { value: '12+', label: 'jaar' },
+      { value: '12+', label: 'jaar ervaring' },
       { value: '180', label: 'medewerkers' },
       { value: '9',   label: 'markten' },
     ],
@@ -82,76 +82,79 @@ export const nl = {
   },
 
   // ── Samenwerken / Services Section (HOME-04) ─────────────────────────────
+  // Copy restored verbatim from Input homepage Milan.docx §Sectie 2 (source-locked).
+  // Obvious punctuation/case fixes only: leading capital + trailing period on subtext.
   samenwerken: {
     heading: 'Samenwerken',
-    /** Small section eyebrow (v3.0 redesign) */
-    eyebrow: 'Drie routes',
-    /** One-line section intro (v3.0 redesign) */
-    intro: 'Van laagdrempelig tot intensief. Kies de route die past bij waar jij nu staat.',
-    /** Scarcity / exclusivity line on the coaching route (v3.0 — user-authored) */
-    exclusiveLabel: 'Max. 8 founders tegelijk',
+    subtext: 'Laat je inspireren via mijn nieuwsbrief of persoonlijke lezing. Of zet de volgende stap in de groei van je bedrijf met exclusieve coaching.',
     /** aria-label for the collaboration options grid */
     ariaLabel: 'Samenwerkingsopties',
-    /** Commitment ladder eyebrow labels (D-07, UI-SPEC §SamenwerkSection) */
-    ladderEyebrow1: '01 — Begin hier gratis',
-    ladderEyebrow2: '02 — Ga dieper',
-    ladderEyebrow3: '03 — Werk met mij',
+    /** Scarcity line — derived directly from the docx coaching body ("maximaal 8 founders"). */
+    exclusiveLabel: 'Maximaal 8 founders',
     cards: [
       {
-        title:       'Nieuwsbrief',
-        description: 'Elke maand eerlijke lessen uit mijn journey als founder. Geen theorie, geen hypes — alleen wat echt werkt voor ondernemers die willen groeien zonder zichzelf te verliezen.',
+        label:       'Nieuwsbrief',
+        tag:         'Gratis',
+        title:       'Een dosis inspiratie',
+        description: 'Elke maand deel ik een les over het bouwen van een bedrijf van aan de keukentafel tot in 9 landen. Persoonlijke ervaringen over leiderschap, funding, stress, identiteit, burnout en het leven na de ondernemersreis.',
         cta:         'Schrijf je gratis in',
       },
       {
-        title:       'Presentatie / Lezing',
-        description: 'Milan spreekt voor teams, events en conferences over ondernemerschap, schalen en het bouwen van een bedrijf dat bij je past. Scherp, eerlijk en direct uit de praktijk.',
+        label:       'Presentatie',
+        tag:         '',
+        title:       'Een uniek ondernemersverhaal',
+        description: 'Boek een lezing waarin ik een volledige inkijk geef in het unieke ondernemersverhaal van Soly. Eerlijk en indringend. Over de rauwe startup-fase, een afgeketste overname over botsende belangen, over trots, schuld en de lessen die ik heb geleerd.',
         cta:         'Boek lezing',
       },
       {
-        title:       '1:1 Coaching',
-        description: 'Intensief traject voor founders die klaar zijn voor de volgende stap. Sparringpartner die zelf heeft gebouwd wat jij wilt bereiken.',
+        label:       '1:1 Coaching',
+        tag:         '',
+        title:       'Exclusieve ondersteuning',
+        description: 'Ik begeleid maximaal 8 founders 1-op-1. Met persoonlijke coaching groei je slimmer, trek je de juiste investeerders aan en voorkom je fouten die de groei van je bedrijf vertragen. Geen langdurige trajecten, maar direct opzegbaar wanneer jij denkt dat mijn waarde ophoudt.',
         cta:         'Plan kennismaking',
       },
     ],
   },
 
   // ── Testimonials Section (HOME-05) ──────────────────────────────────────
+  // Testimonials restored VERBATIM from Input homepage Milan.docx §Sectie 3 (source-locked).
+  // Quotes, names and roles are exactly as supplied — no paraphrasing.
   testimonials: {
-    heading: 'Wat anderen zeggen',
+    eyebrow: 'Testimonials',
+    heading: 'Feedback van de mensen waar het om draait',
     items: [
       {
-        quote:       'Milan heeft een bijzondere gave om complexe vraagstukken simpel te maken en tegelijk de menselijke kant van het ondernemen centraal te stellen. Zijn coaching heeft mij geholpen beter te delegeren en meer te vertrouwen op mijn team.',
+        quote:       'Milan heeft ons bedrijf de commerciële richting gegeven die nodig is om schaalbaar te kunnen groeien',
         name:        'Yang Soo Kloosterhof',
+        role:        'CEO Powerchainger',
+      },
+      {
+        quote:       'Milan heeft unieke inzichten voor ondernemers, investeerders en bestuurders',
+        name:        'Ruud Koornstra',
         role:        'Ondernemer',
       },
       {
-        quote:       'Milan weet als geen ander hoe je een bedrijf bouwt dat echt bij je past. Zijn directe en eerlijke aanpak heeft mij enorm geholpen in mijn groeifase.',
-        name:        'Ruud Koornstra',
-        role:        'Founder & Ondernemer',
-      },
-      {
-        quote:       'De lezing van Milan was een eyeopener voor onze leden. Zijn verhaal over internationaal schalen en de lessons learned sprak iedereen aan. Echt een aanrader voor elke ondernemersorganisatie.',
+        quote:       'Niet alleen de successen werden gedeeld, maar vooral ook de valkuilen en weer opstaan. Een indrukwekkend ondernemersverhaal van dromen en doorzetten naar internationaal succes.',
         name:        'Oranjewoud Export Academy',
-        role:        'Ondernemersorganisatie',
+        role:        '',
       },
     ],
   },
 
   // ── Personal Story Section (HOME-06) ────────────────────────────────────
+  // Story restored VERBATIM from Input homepage Milan.docx §Sectie 4 (source-locked).
+  // Only fix: docx typo "ondernemershap" → "ondernemerschap" (obvious spelling error).
   story: {
     eyebrow:  'Mijn verhaal',
     heading:  'Waarom ik nu mijn lessen deel',
     body: [
-      'Ik begon Soly met de overtuiging dat schone energie voor iedereen bereikbaar moest zijn. Wat volgde waren tien jaar van keihard werken, internationale expansie naar 9 landen, 180 medewerkers en uiteindelijk het faillissement van het bedrijf waar ik alles in had gestoken.',
-      'Die periode leerde mij meer dan welke MBA ook had kunnen doen. Over leiderschap, over delegeren, over de momenten waarop je jezelf verliest in je bedrijf — en hoe je dat voorkomt. Lessen die ik heb geleerd op de harde manier, en die ik nu deel zodat anderen dat niet hoeven.',
-      'Vandaag help ik founders die op een kruispunt staan. Die weten dat ze groter kunnen worden, maar ook voelen dat de manier waarop ze nu werken niet duurzaam is. Ik ben geen consultant met een framework — ik ben iemand die zelf heeft gebouwd, verloren en weer opgestaan.',
+      'Mijn ondernemerschap begon niet met een businessplan, maar met een overtuiging: dat ondernemerschap een wezenlijke rol speelt in het oplossen van grote vraagstukken. Op mijn negentiende besloot ik om mijn energie te steken in de energietransitie en richtte samen met mijn broer Soly op. Wat begon als een idealistisch initiatief groeide in ruim tien jaar uit tot een internationaal opererend bedrijf in negen landen, met bijna één miljoen geplaatste zonnepanelen. We bouwden eigen technologie, ontwikkelden schaalbare commerciële structuren en creëerden een cultuur waarin mensen, impact en prestaties samenkwamen.',
+      'Maar mijn verhaal is geen glad succesverhaal. Naast groei, erkenning en impact leerde ik ook de harde kanten van ondernemerschap kennen. We maakten keuzes onder druk, werkten met investeerders, groeiden sneller dan soms comfortabel was, en zagen uiteindelijk hoe een construct dat vooral gericht is op snelheid en rendement zelfs sterke impactbedrijven kan breken.',
+      'Ik verloor mijzelf in een burnout. En niet veel later het bedrijf. Het faillissement van Soly werd een kantelpunt: pijnlijk, confronterend en tegelijkertijd vormend. Juist die ervaring heeft mijn visie aangescherpt. Ik heb aan den lijve ondervonden wat werkt — en wat niet — bij het opschalen van een onderneming met een sterke missie. Ik weet hoe belangrijk strategie, cultuur, focus en de juiste vorm van kapitaal zijn. En ik weet hoe funest verkeerde prikkels kunnen zijn.',
+      'Nu breng ik alles wat ik heb geleerd samen. Niet als consultant, niet als traditionele investeerder, maar als meewerkende partner. Met mijn ervaring sta ik naast jou als founder. Ik help je bedrijf te schalen zonder jezelf te verliezen.',
     ],
     signature: 'Milan van der Meulen',
     imageAlt:  'Milan van der Meulen op het podium.',
-    /** Closing pull-statement for the redesigned story spread (v3.0 — user-authored) */
-    closing:   'Ik help je bedrijf te schalen zonder jezelf te verliezen.',
-    /** Accent phrase highlighted within the closing statement */
-    closingAccent: 'zonder jezelf te verliezen',
   },
 
   // ── Timeline (v4.0) — Milan's journey as visual credibility ──────────────
@@ -172,12 +175,15 @@ export const nl = {
   },
 
   // ── Newsletter Section (HOME-07) ─────────────────────────────────────────
+  // Statement + subtext restored VERBATIM from Input homepage Milan.docx §Sectie 5.
+  // NOTE / SPEC DEVIATION (documented): the docx specifies a "naam" + "Mailadres"
+  // form. The site uses an honest Substack redirect (no backend on static hosting;
+  // Substack subscribe cannot reliably carry a name). Approved: keep the redirect
+  // CTA, never a fake form. See .planning §Newsletter-conflict.
   newsletter: {
     heading:     'Blijf op de hoogte',
-    /** Bold statement headline for the redesigned dark newsletter section (v3.0 — user-authored) */
-    statement:   '5 minuten leestijd die je 5 jaar kan besparen',
-    subtext:     'Elke maand een eerlijke update over ondernemen, schalen en de lessen die ik onderweg leer. Geen spam, geen tips die je al kent — alleen wat echt het verschil maakt.',
-    // labelNaam removed (D-05): the Substack redirect cannot honestly carry a name field — Phase 3
+    statement:   '5-minuten leestijd, die jou 5 jaar tijd kan besparen',
+    subtext:     'Schrijf je in voor mijn maandelijkse nieuwsbrief en ontvang persoonlijke lessen over hoe je een bedrijf bouwt van de keukentafel tot in 9 landen.',
     labelEmail:  'Mailadres',
     cta:         'Schrijf je in',
     disclaimer:  'Geen spam. Afmelden wanneer je wilt.',

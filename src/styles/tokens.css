@@ -82,7 +82,8 @@
   --max-width:      1280px;
   --content-width:  1040px;
   --measure:        66ch;
-  --section-padding-y: clamp(var(--space-3xl), 7vw, var(--space-5xl));
+  /* Tightened rhythm (correction pass — reduce excessive vertical spacing). */
+  --section-padding-y: clamp(var(--space-2xl), 5vw, var(--space-4xl));
   --gutter:         clamp(var(--space-lg), 5vw, var(--space-4xl));
 
   /* ── Radii ────────────────────────────────────────────────────────────────── */

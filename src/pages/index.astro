@@ -24,12 +24,16 @@ import PressStrip from '../components/sections/PressStrip.astro';
 import Samenwerken from '../components/sections/Samenwerken.astro';
 import Testimonials from '../components/sections/Testimonials.astro';
 import Story from '../components/sections/Story.astro';
-import Timeline from '../components/sections/Timeline.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
 import Articles from '../components/sections/Articles.astro';
 import StickyCTA from '../components/ui/StickyCTA.astro';
 import { getStrings } from '../i18n/utils';
+import { TODO_SUBSTACK_URL } from '../config';
 const t = getStrings(Astro.currentLocale);
+// Source-lock: the docx only asks whether the section CAN show real LinkedIn/Substack
+// posts — there are no supplied articles. Until a real Substack feed exists, HIDE the
+// section entirely rather than show fabricated concepts (content integrity).
+const HAS_REAL_ARTICLES = TODO_SUBSTACK_URL !== 'TODO_SUBSTACK_URL';
 ---
 
 <BaseLayout
@@ -71,12 +75,6 @@ const t = getStrings(Astro.currentLocale);
   <Story />
 
   <!--
-    Timeline — Milan's Soly journey as visual credibility (v4.0).
-    Navy documentary band; supports the story with milestones + count-up numbers.
-  -->
-  <Timeline />
-
-  <!--
     Newsletter — honest Substack signup section (HOME-07, D-09).
     naam + mailadres form; submit is disabled pending TODO_SUBSTACK_URL (Phase 3).
     No fake success state (HOME-10).
@@ -84,11 +82,11 @@ const t = getStrings(Astro.currentLocale);
   <Newsletter />
 
   <!--
-    Articles — 3 placeholder article cards (HOME-08, D-10).
-    PlaceholderBadge visible on each card. "Alle artikelen" disabled (HOME-10).
-    Real articles arrive Phase 3 (Substack integration).
+    Articles — hidden until a real Substack/LinkedIn feed exists (source-lock:
+    no fabricated articles/dates/read-times). Auto-appears once TODO_SUBSTACK_URL
+    is set and the RSS feed returns real posts.
   -->
-  <Articles />
+  {HAS_REAL_ARTICLES && <Articles />}
 
   <!--
     StickyCTA — appears when the hero primary CTA (#hero-cta) scrolls out of view.

@@ -21,6 +21,7 @@
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Story from '../../components/sections/Story.astro';
+import Timeline from '../../components/sections/Timeline.astro';
 import SectionWrapper from '../../components/ui/SectionWrapper.astro';
 import Button from '../../components/ui/Button.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
@@ -46,6 +47,9 @@ const mv = t.mijnVerhaal;
     (Story.astro guard extended to match /about in Plan 01).
   -->
   <Story />
+
+  <!-- Timeline — Soly journey (moved here from the homepage). -->
+  <Timeline />
 
   <!-- ── Arc 1: The beginning ──────────────────────────────────────────── -->
   <SectionWrapper id="verhaal-start" labelledBy="verhaal-start-heading" variant="default">

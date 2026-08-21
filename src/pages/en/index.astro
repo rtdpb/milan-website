@@ -26,13 +26,14 @@ import PressStrip from '../../components/sections/PressStrip.astro';
 import Samenwerken from '../../components/sections/Samenwerken.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
 import Story from '../../components/sections/Story.astro';
-import Timeline from '../../components/sections/Timeline.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
 import Articles from '../../components/sections/Articles.astro';
 import StickyCTA from '../../components/ui/StickyCTA.astro';
 import { getStrings } from '../../i18n/utils';
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { TODO_SUBSTACK_URL } from '../../config';
 const t = getStrings(Astro.currentLocale);
+const HAS_REAL_ARTICLES = TODO_SUBSTACK_URL !== 'TODO_SUBSTACK_URL';
 ---
 
 <BaseLayout
@@ -70,9 +71,6 @@ const t = getStrings(Astro.currentLocale);
   -->
   <Story />
 
-  <!-- Timeline — Soly journey as visual credibility (v4.0). -->
-  <Timeline />
-
   <!--
     Newsletter — Substack signup.
     D-02: en.newsletter.subtext contains "The newsletter is written in Dutch."
@@ -83,7 +81,7 @@ const t = getStrings(Astro.currentLocale);
     Articles — placeholder/RSS article cards.
     D-02: en.articles.heading includes "(written in Dutch)" note.
   -->
-  <Articles />
+  {HAS_REAL_ARTICLES && <Articles />}
 
   <!--
     StickyCTA — appears when the hero primary CTA (#hero-cta) scrolls out of view.

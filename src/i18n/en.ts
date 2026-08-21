@@ -56,7 +56,7 @@ export const en = {
     usp3: '9 markets',       // D-03: verbatim number
     /** Proof points, integrated into the hero panel (numbers verbatim, D-03). */
     stats: [
-      { value: '12+', label: 'years' },
+      { value: '12+', label: 'years experience' },
       { value: '180', label: 'employees' },
       { value: '9',   label: 'markets' },
     ],
@@ -88,59 +88,58 @@ export const en = {
   },
 
   // ── Samenwerken / Services Section ───────────────────────────────────────
+  // Faithful translation of Input homepage Milan.docx §Sectie 2 (source-locked).
+  // Card 1 keeps the approved "Written in Dutch." note (D-02).
   samenwerken: {
     heading: 'Work with me',
-    /** Small section eyebrow (v3.0 redesign) */
-    eyebrow: 'Three routes',
-    /** One-line section intro (v3.0 redesign) */
-    intro: 'From low-threshold to intensive. Pick the route that fits where you are right now.',
-    /** Scarcity / exclusivity line on the coaching route (v3.0 — user-authored) */
-    exclusiveLabel: 'Max. 8 founders at a time',
-    /** aria-label for the collaboration options grid */
+    subtext: 'Get inspired through my newsletter or a personal talk. Or take the next step in growing your business with exclusive coaching.',
     ariaLabel: 'Collaboration options',
-    ladderEyebrow1: '01 — Start here for free',
-    ladderEyebrow2: '02 — Go deeper',
-    ladderEyebrow3: '03 — Work with me directly',
+    exclusiveLabel: 'Maximum of 8 founders',
     cards: [
       {
-        title:       'Newsletter',
-        description: "Every month, honest lessons from my journey as a founder. No theory, no hype — only what actually works for entrepreneurs who want to grow without losing themselves. Written in Dutch.",
+        label:       'Newsletter',
+        tag:         'Free',
+        title:       'A dose of inspiration',
+        description: 'Every month I share a lesson about building a company — from the kitchen table to nine countries. Personal experiences on leadership, funding, stress, identity, burnout, and life after the entrepreneurial journey. Written in Dutch.',
         cta:         'Subscribe for free',
       },
       {
-        title:       'Talk / Keynote',
-        description: 'Milan speaks for teams, events and conferences on entrepreneurship, scaling, and building a business that fits who you are. Sharp, honest, and straight from the field.',
+        label:       'Talk',
+        tag:         '',
+        title:       'A unique entrepreneurial story',
+        description: 'Book a talk in which I give full insight into the unique entrepreneurial story of Soly. Honest and intense. About the raw startup phase, a failed acquisition over conflicting interests, about pride, guilt, and the lessons I learned.',
         cta:         'Book a talk',
       },
       {
-        title:       '1:1 Coaching',
-        description: 'An intensive trajectory for founders ready for the next step. A sparring partner who has built what you are aiming for.',
+        label:       '1:1 Coaching',
+        tag:         '',
+        title:       'Exclusive support',
+        description: 'I guide a maximum of 8 founders one-on-one. With personal coaching you grow smarter, attract the right investors, and avoid mistakes that slow your growth. No lengthy programmes — cancellable the moment you feel my value ends.',
         cta:         'Schedule intro call',
       },
     ],
   },
 
   // ── Testimonials Section ─────────────────────────────────────────────────
+  // Faithful translation of the VERBATIM docx testimonials; names + roles verbatim.
   testimonials: {
-    heading: 'What others say',
+    eyebrow: 'Testimonials',
+    heading: 'Feedback from the people who matter most',
     items: [
       {
-        // D-01: name and role verbatim; quote faithfully translated
-        quote: 'Milan has a rare ability to simplify complex challenges while keeping the human side of entrepreneurship at the centre. His coaching helped me delegate better and trust my team more.',
+        quote: 'Milan gave our company the commercial direction it needs to grow in a scalable way',
         name:  'Yang Soo Kloosterhof',
+        role:  'CEO Powerchainger',
+      },
+      {
+        quote: 'Milan has unique insights for entrepreneurs, investors and directors',
+        name:  'Ruud Koornstra',
         role:  'Entrepreneur',
       },
       {
-        // D-01: name and role verbatim; quote faithfully translated
-        quote: 'Milan understands better than anyone how to build a business that truly fits you. His direct, honest approach helped me enormously during my growth phase.',
-        name:  'Ruud Koornstra',
-        role:  'Founder & Entrepreneur',
-      },
-      {
-        // D-01: name and role verbatim; quote faithfully translated
-        quote: "Milan's talk was an eye-opener for our members. His story of international scaling and the lessons learned resonated with everyone. A real recommendation for any entrepreneurship organisation.",
+        quote: "It wasn't only the successes that were shared, but above all the pitfalls and getting back up. An impressive entrepreneurial story of dreams and perseverance into international success.",
         name:  'Oranjewoud Export Academy',
-        role:  'Entrepreneurship organisation',
+        role:  '',
       },
     ],
   },
@@ -149,17 +148,15 @@ export const en = {
   story: {
     eyebrow:  'My story',
     heading:  'Why I now share what I have learned',
+    // Faithful translation of the VERBATIM 4-paragraph docx story (§Sectie 4).
     body: [
-      'I founded Soly with the conviction that clean energy had to be accessible to everyone. What followed were ten years of hard work, international expansion into 9 countries, 180 employees, and ultimately the bankruptcy of the company I had given everything to.',
-      'That period taught me more than any MBA could have. About leadership, about delegation, about the moments when you lose yourself in your own company — and how to prevent that. Lessons learned the hard way, which I now share so others do not have to.',
-      'Today I help founders at a crossroads. Those who know they can grow bigger, but also sense that the way they are working now is not sustainable. I am not a consultant with a framework — I am someone who has built, lost, and risen again.',
+      "My entrepreneurship didn't begin with a business plan, but with a conviction: that entrepreneurship plays an essential role in solving big challenges. At nineteen I decided to put my energy into the energy transition and, together with my brother, founded Soly. What began as an idealistic initiative grew, over more than ten years, into an internationally operating company in nine countries, with nearly one million solar panels installed. We built our own technology, developed scalable commercial structures, and created a culture where people, impact and performance came together.",
+      'But my story is not a smooth success story. Alongside growth, recognition and impact, I also came to know the hard sides of entrepreneurship. We made choices under pressure, worked with investors, grew faster than was sometimes comfortable, and ultimately saw how a construct focused above all on speed and returns can break even strong impact-driven companies.',
+      'I lost myself in a burnout. And not long after, the company. The bankruptcy of Soly became a turning point: painful, confronting, and at the same time formative. That experience sharpened my vision. I have experienced first-hand what works — and what does not — when scaling a company with a strong mission. I know how important strategy, culture, focus and the right kind of capital are. And I know how damaging the wrong incentives can be.',
+      'Now I bring together everything I have learned. Not as a consultant, not as a traditional investor, but as a hands-on partner. With my experience I stand beside you as a founder. I help you scale your business without losing yourself.',
     ],
-    signature: 'Milan van der Meulen',  // D-03: name verbatim
+    signature: 'Milan van der Meulen',
     imageAlt:  'Milan van der Meulen on stage.',
-    /** Closing pull-statement for the redesigned story spread (v3.0 — user-authored) */
-    closing:   'I help you scale your business without losing yourself.',
-    /** Accent phrase highlighted within the closing statement */
-    closingAccent: 'without losing yourself',
   },
 
   // ── Timeline (v4.0) — Milan's journey as visual credibility ──────────────
@@ -179,12 +176,11 @@ export const en = {
   },
 
   // ── Newsletter Section ────────────────────────────────────────────────────
+  // Faithful translation of docx §Sectie 5. Honest Substack redirect (see nl note).
   newsletter: {
     heading:     'Stay informed',
-    /** Bold statement headline for the redesigned dark newsletter section (v3.0 — user-authored) */
-    statement:   '5 minutes of reading that could save you 5 years',
-    // D-02: explicit "written in Dutch" statement
-    subtext:     'A monthly honest update on entrepreneurship, scaling, and the lessons I learn along the way. The newsletter is written in Dutch.',
+    statement:   '5-minute read that can save you 5 years',
+    subtext:     'Subscribe to my monthly newsletter and receive personal lessons on how to build a company — from the kitchen table to nine countries. Written in Dutch.',
     labelEmail:  'Email address',
     cta:         'Subscribe',
     disclaimer:  'No spam. Unsubscribe whenever you want.',

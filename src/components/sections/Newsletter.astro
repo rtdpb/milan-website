@@ -18,7 +18,7 @@ const subscribeUrl = `${TODO_SUBSTACK_URL.replace(/\/$/, '')}/subscribe`;
 const { statement, subtext, cta, disclaimer } = t.newsletter;
 ---
 
-<SectionWrapper id="nieuwsbrief" labelledBy="newsletter-heading" variant="yellow">
+<SectionWrapper id="nieuwsbrief" labelledBy="newsletter-heading" variant="surface">
   <div class="nl">
     <div class="nl__text" data-anim>
       <p class="nl__eyebrow">{t.nav.nieuwsbrief}</p>
@@ -71,28 +71,34 @@ const { statement, subtext, cta, disclaimer } = t.newsletter;
   .nl { display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); align-items: end; }
   @media (min-width: 900px) { .nl { grid-template-columns: 1.4fr 0.6fr; } }
 
-  .nl__text { display: flex; flex-direction: column; gap: var(--space-lg); }
-  .nl__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-ink); opacity: 0.72; margin: 0; }
-  .nl__statement { font-size: var(--text-4xl); line-height: 1.0; letter-spacing: -0.025em; color: var(--color-accent-ink); margin: 0; max-width: 18ch; }
-  .nl__subtext { font-size: var(--text-lg); line-height: 1.5; color: var(--color-accent-ink); opacity: 0.82; margin: 0; max-width: 48ch; }
+  .nl__text { display: flex; flex-direction: column; gap: var(--space-md); }
+  .nl__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0; }
+  /* Yellow used only as a small underline detail on the statement. */
+  .nl__statement {
+    font-size: var(--text-3xl); line-height: 1.04; letter-spacing: -0.02em; color: var(--color-text); margin: 0; max-width: 20ch;
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-repeat: no-repeat; background-position: 0 100%; background-size: 100% 0;
+    padding-bottom: 2px;
+  }
+  .nl__subtext { font-size: var(--text-lg); line-height: 1.5; color: var(--color-text-secondary); margin: 0; max-width: 48ch; }
 
   .nl__action { display: flex; flex-direction: column; gap: var(--space-md); align-items: flex-start; }
   .nl__cta {
     display: inline-flex; align-items: center; gap: var(--space-sm);
     height: 58px; padding-inline: var(--space-xl);
-    background: var(--color-accent-ink); color: var(--color-accent);
+    background: var(--color-accent); color: var(--color-accent-ink);
     border: none; border-radius: var(--radius-pill);
     font-size: var(--text-base); font-weight: 600; text-decoration: none; cursor: pointer; white-space: nowrap;
     transition: transform var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
   }
-  .nl__cta:not(.nl__cta--disabled):hover { transform: translateY(-2px); background: #000; }
+  .nl__cta:not(.nl__cta--disabled):hover { transform: translateY(-2px); background: var(--color-accent-dark); }
   .nl__cta svg { transition: transform var(--duration-fast) var(--ease-out); }
   .nl__cta:not(.nl__cta--disabled):hover svg { transform: translateX(3px); }
   .nl__cta:focus-visible { outline: 2px solid var(--color-accent-ink); outline-offset: 3px; }
   .nl__cta--disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
 
-  .nl__note { font-size: var(--text-xs); color: var(--color-accent-ink); opacity: 0.72; margin: 0; }
-  .nl__disclaimer { font-size: var(--text-xs); color: var(--color-accent-ink); opacity: 0.6; margin: 0; }
+  .nl__note { font-size: var(--text-xs); color: var(--color-text-secondary); margin: 0; }
+  .nl__disclaimer { font-size: var(--text-xs); color: var(--color-text-secondary); opacity: 0.8; margin: 0; }
 
   @media (prefers-reduced-motion: reduce) { .nl__cta, .nl__cta svg { transition: none; } }
 </style>

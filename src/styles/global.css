@@ -131,23 +131,13 @@ a { color: inherit; text-decoration-skip-ink: auto; }
 }
 [data-anim].is-in { opacity: 1; transform: none; }
 
-/* Clip-path image reveal (wipe up). */
-[data-anim='clip'] {
-  transform: none;
-  clip-path: inset(0 0 100% 0);
-  opacity: 1;
-}
-[data-anim='clip'].is-in { clip-path: inset(0 0 0 0); }
-
 /* Staggered children via inline --i (delay = i * 90ms). */
 [data-anim][style*='--i'] { transition-delay: calc(var(--i, 0) * 90ms); }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-anim],
-  [data-anim='clip'] {
+  [data-anim] {
     opacity: 1 !important;
     transform: none !important;
-    clip-path: none !important;
     transition: none !important;
     will-change: auto;
   }

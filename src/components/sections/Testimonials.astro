@@ -11,17 +11,16 @@ import SectionWrapper from '../ui/SectionWrapper.astro';
 import { getStrings } from '../../i18n/utils';
 
 const t = getStrings(Astro.currentLocale);
-const { heading, items } = t.testimonials;
+const { eyebrow, heading, items } = t.testimonials;
 type TestimonialItem = { quote: string; name: string; role: string };
 const allItems = items as unknown as TestimonialItem[];
 const [feature, ...supporting] = allItems;
-const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 ---
 
 <SectionWrapper id="getuigenissen" labelledBy="testimonials-heading" variant="ink">
   <div class="tst">
     <header class="tst__head" data-anim>
-      <p class="tst__eyebrow">{isEn ? 'In their words' : 'In hun woorden'}</p>
+      <p class="tst__eyebrow">{eyebrow}</p>
       <h2 id="testimonials-heading" class="tst__heading">{heading}</h2>
     </header>
 
@@ -60,18 +59,18 @@ const isEn = (Astro.currentLocale ?? 'nl') === 'en';
     background: var(--color-ink-2);
     border: 1px solid var(--line-on-dark);
     border-radius: var(--radius-card);
-    padding: clamp(var(--space-2xl), 5vw, var(--space-4xl));
+    padding: clamp(var(--space-xl), 3.5vw, var(--space-3xl));
     overflow: hidden;
   }
-  .tst__mark { display: block; font-family: var(--font-serif); font-size: clamp(3.5rem, 2rem + 5vw, 6rem); line-height: 0.6; color: var(--color-accent); height: 0.5em; user-select: none; }
+  .tst__mark { display: block; font-family: var(--font-serif); font-size: clamp(3rem, 1.8rem + 4vw, 5rem); line-height: 0.6; color: var(--color-accent); height: 0.5em; user-select: none; }
   .tst__feature-quote { margin: 0; }
   .tst__feature-quote p {
     font-family: var(--font-sans); font-weight: 500;
-    font-size: var(--text-2xl); line-height: 1.28; letter-spacing: -0.01em;
+    font-size: var(--text-2xl); line-height: 1.24; letter-spacing: -0.01em;
     color: var(--color-dark-text); margin: 0; max-width: 30ch;
   }
 
-  .tst__attr { display: flex; flex-direction: column; gap: 2px; margin-top: var(--space-xl); padding-top: var(--space-md); border-top: 1px solid var(--line-on-light); }
+  .tst__attr { display: flex; flex-direction: column; gap: 2px; margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px solid var(--line-on-light); }
   .tst__attr--dark { border-top-color: var(--line-on-dark); }
   .tst__name { font-style: normal; font-size: var(--text-base); font-weight: 600; color: inherit; }
   .tst__role { font-size: var(--text-sm); color: var(--color-text-secondary); }

@@ -28,6 +28,7 @@
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Story from '../components/sections/Story.astro';
+import Timeline from '../components/sections/Timeline.astro';
 import SectionWrapper from '../components/ui/SectionWrapper.astro';
 import Button from '../components/ui/Button.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
@@ -53,6 +54,12 @@ const mv = t.mijnVerhaal;
     (see Story.astro — checked via Astro.url.pathname on that component).
   -->
   <Story />
+
+  <!--
+    Timeline — Soly journey as visual credibility (moved here from the homepage).
+    Navy documentary band with milestones + count-up numbers.
+  -->
+  <Timeline />
 
   <!-- ── Arc 1: De start van Soly ─────────────────────────────────────── -->
   <SectionWrapper id="verhaal-start" labelledBy="verhaal-start-heading" variant="default">

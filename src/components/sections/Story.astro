@@ -1,14 +1,14 @@
 ---
 /**
- * Story.astro — Personal story, warm editorial · v4.0
+ * Story.astro — Personal story, warm editorial · source-locked
  *
- * A warm, light editorial spread: large portrait, an asymmetric reading column
- * with scannable passages, and a big closing statement that lands the promise.
- * Modern sans throughout; a single short serif accent on the closing kicker.
- * Copy verbatim from locale strings. id="verhaal" preserved (hero CTA target).
+ * Story copy is VERBATIM from Input homepage Milan.docx §Sectie 4 (4 paragraphs
+ * + signature). Warm, light editorial spread: portrait + asymmetric reading
+ * column. Modern sans throughout (no isolated serif treatment). The portrait is
+ * NOT hidden behind a reveal — it always renders.
  *
- * Shared component: also the opening band on /mijn-verhaal & /en/about — the
- * teaser link is suppressed there (isMijnVerhaalPage guard).
+ * Shared component: also the opening band on /mijn-verhaal & /en/about (the
+ * teaser link is suppressed there via the isMijnVerhaalPage guard).
  */
 import { Picture } from 'astro:assets';
 import SectionWrapper from '../ui/SectionWrapper.astro';
@@ -18,7 +18,7 @@ import portraitSrc from '../../assets/photos/milan-story-portrait.jpg';
 
 const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
-const { eyebrow, heading, body, signature, imageAlt, closing, closingAccent } = t.story;
+const { eyebrow, heading, body, signature, imageAlt } = t.story;
 
 const currentPath = Astro.url.pathname;
 const base = import.meta.env.BASE_URL;
@@ -27,18 +27,13 @@ const isMijnVerhaalPage =
   norm(currentPath) === norm(`${base}mijn-verhaal`) ||
   norm(currentPath) === norm(`${base}en/about`);
 const teaserLink = isEn ? getRelativeLocaleUrl('en', 'about') : `${base}mijn-verhaal`;
-
-const accIdx = closing.indexOf(closingAccent);
-const closeBefore = accIdx !== -1 ? closing.slice(0, accIdx) : closing;
-const closeAfter = accIdx !== -1 ? closing.slice(accIdx + closingAccent.length) : '';
 ---
 
 <SectionWrapper id="verhaal" labelledBy="story-heading" variant="warm">
   <div class="story">
-
     <div class="story__grid">
-      <!-- Portrait -->
-      <figure class="story__portrait" data-anim="clip">
+      <!-- Portrait — always visible (no reveal clip) -->
+      <figure class="story__portrait">
         <Picture
           src={portraitSrc}
           formats={['avif', 'webp']}
@@ -56,7 +51,7 @@ const closeAfter = accIdx !== -1 ? closing.slice(accIdx + closingAccent.length) 
         <h2 id="story-heading" class="story__heading">{heading}</h2>
         <div class="story__body">
           {body.map((p: string, i: number) => (
-            <p class={i === 0 ? 'story__lede' : undefined}>{p}</p>
+            <p class={i === 0 ? 'story__lede' : (i === body.length - 1 ? 'story__final' : undefined)}>{p}</p>
           ))}
         </div>
         <div class="story__sign">
@@ -64,40 +59,30 @@ const closeAfter = accIdx !== -1 ? closing.slice(accIdx + closingAccent.length) 
           <span class="story__sign-role">{isEn ? 'Founder, Coach & Speaker' : 'Founder, Coach & Spreker'}</span>
         </div>
         {!isMijnVerhaalPage && (
-          <a href={teaserLink} class="story__teaser">
-            {t.mijnVerhaal.teaserLink}
-          </a>
+          <a href={teaserLink} class="story__teaser">{t.mijnVerhaal.teaserLink}</a>
         )}
       </div>
     </div>
-
-    <!-- Closing statement -->
-    <p class="story__closing" data-anim>
-      <span class="story__closing-kicker serif">{isEn ? 'The promise' : 'De belofte'}</span>
-      <span class="story__closing-line">
-        {closeBefore}<span class="hl">{closingAccent}</span>{closeAfter}
-      </span>
-    </p>
-
   </div>
 </SectionWrapper>
 
 <style>
-  .story { display: flex; flex-direction: column; gap: clamp(var(--space-2xl), 5vw, var(--space-4xl)); }
-
+  .story { display: flex; flex-direction: column; }
   .story__grid { display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-xl), 4vw, var(--space-4xl)); align-items: start; }
-  @media (min-width: 900px) { .story__grid { grid-template-columns: 0.85fr 1fr; } }
+  @media (min-width: 900px) { .story__grid { grid-template-columns: 0.82fr 1fr; } }
 
   .story__portrait { margin: 0; border-radius: var(--radius-card); overflow: hidden; background: var(--color-surface); aspect-ratio: 4 / 5; }
   @media (min-width: 900px) { .story__portrait { position: sticky; top: var(--space-3xl); } }
   .story__portrait-img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; }
 
   .story__text { display: flex; flex-direction: column; gap: var(--space-lg); }
-  .story__eyebrow { font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-warm); margin: 0; }
+  .story__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-warm); margin: 0; }
   .story__heading { font-size: var(--text-3xl); line-height: 1.04; margin: 0; max-width: 20ch; }
-  .story__body { display: flex; flex-direction: column; gap: var(--space-lg); max-width: 60ch; }
+  .story__body { display: flex; flex-direction: column; gap: var(--space-lg); max-width: 62ch; }
   .story__body p { font-size: var(--text-base); line-height: 1.68; color: var(--color-text-secondary); margin: 0; }
   .story__lede { font-size: var(--text-lg) !important; line-height: 1.55 !important; color: var(--color-text) !important; }
+  /* Final sentence carries the promise — emphasised in the same sans system. */
+  .story__final { color: var(--color-text) !important; font-weight: 500; }
 
   .story__sign { display: flex; flex-direction: column; gap: 2px; padding-top: var(--space-lg); border-top: 1px solid var(--line-on-light); }
   .story__sign-name { font-size: var(--text-lg); font-weight: 680; color: var(--color-text); }
@@ -110,11 +95,5 @@ const closeAfter = accIdx !== -1 ? closing.slice(accIdx + closingAccent.length) 
     transition: text-decoration-color var(--duration-fast) var(--ease-out);
   }
   .story__teaser:hover { text-decoration-color: var(--color-accent); }
-
-  /* Closing statement */
-  .story__closing { display: flex; flex-direction: column; gap: var(--space-md); margin: 0; padding-top: clamp(var(--space-xl), 3vw, var(--space-3xl)); border-top: 1px solid var(--line-on-light); }
-  .story__closing-kicker { font-size: var(--text-lg); color: var(--color-warm); }
-  .story__closing-line { font-family: var(--font-sans); font-weight: 700; font-size: var(--text-3xl); line-height: 1.06; letter-spacing: -0.02em; color: var(--color-text); max-width: 22ch; }
-
   @media (prefers-reduced-motion: reduce) { .story__teaser { transition: none; } }
 </style>
