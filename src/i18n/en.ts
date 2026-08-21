@@ -60,6 +60,8 @@ export const en = {
       { value: '180', label: 'employees' },
       { value: '9',   label: 'markets' },
     ],
+    /** Small supporting proof line for the hero proof-card (derived from the docx story). */
+    proofLine: 'From kitchen table to 9 markets',
     /** Overlapping hero card — truthful CTA drawn from the existing coaching offer. */
     card: {
       eyebrow: '1:1 Coaching',

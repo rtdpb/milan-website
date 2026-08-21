@@ -54,6 +54,8 @@ export const nl = {
       { value: '180', label: 'medewerkers' },
       { value: '9',   label: 'markten' },
     ],
+    /** Small supporting proof line for the hero proof-card (derived from the docx story). */
+    proofLine: 'Van keukentafel naar 9 markten',
     /** Overlapping hero card — truthful CTA drawn from the existing coaching offer. */
     card: {
       eyebrow: '1:1 Coaching',
