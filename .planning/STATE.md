@@ -141,6 +141,12 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | Phase 05 P03 | 5 | 1 tasks | 1 files |
 | Phase 05 P02 | 8 | 3 tasks | 11 files |
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260821-m2d | Homepage levendig: scroll-progressbar, richere reveal-varianten + parallax, opbouwende cijfers (9/~180/~1M), tekenende groeicurve-SVG | 2026-08-21 | 1c5d0b0 | [260821-m2d-maak-de-homepage-levendig-scroll-progres](./quick/260821-m2d-maak-de-homepage-levendig-scroll-progres/) |
+
 ## Next Step
 
 Phase 5 Plan 01 complete. Book page tracer delivered: bilingual /boek + /en/book, BookInterestForm (2-field, 7-state, XSS-safe), dual interest capture (IS_SENTINEL-gated Substack + Web3Forms notify), Boek nav/footer enabled both locales, hreflang cross-linked, BOOK-01 requirement satisfied. Next: Phase 5 Plan 02 (analytics + sticky CTA — Plausible install, PlausibleScript.astro, StickyCTA.astro, 4 goal events, GROW-01).
