@@ -1,0 +1,118 @@
+---
+/**
+ * JourneyRoute.astro
+ * A self-made "route" illustration of Milan's journey — the shape itself tells
+ * the story: a climb (kitchen table → 9 countries → 180 people / ~1M panels),
+ * a turn (burnout), the fall (bankruptcy), and the recovery (now, as a coach).
+ *
+ * Meaningful, not decorative: each node is a real milestone from the timeline,
+ * and the peak/trough/recover silhouette mirrors the copy ("de route in het kort").
+ *
+ * Animation (reduced-motion safe):
+ *   - The route line draws itself on scroll via the shared .draw-path utility
+ *     (parent [data-anim].is-in → global.css transitions stroke-dashoffset to 0).
+ *   - Milestone nodes + labels pop in sequence (staggered by --n) once the
+ *     wrapper is in view. Under prefers-reduced-motion everything is shown at rest.
+ *
+ * Self-contained fixed viewBox → no layout fragility. Labels hide < 760px
+ * (the detailed timeline list carries the same content for small screens / a11y).
+ *
+ * Props:
+ *   nodes    — 6 short milestone labels (index-mapped to the fixed route points)
+ *   ariaLabel— accessible description of the whole route
+ */
+interface Props {
+  nodes: string[];
+  ariaLabel: string;
+}
+const { nodes, ariaLabel } = Astro.props;
+
+/* Fixed anchor points — the emotional arc. Nodes sit exactly on the path. */
+const POS = [
+  { x: 90,  y: 200 }, // start (low)
+  { x: 260, y: 150 }, // climbing
+  { x: 430, y: 85  }, // peak
+  { x: 600, y: 130 }, // the turn
+  { x: 760, y: 205 }, // trough (lowest)
+  { x: 910, y: 110 }, // recovery
+];
+const LINE =
+  'M90,200 C170,186 205,168 260,150 C330,128 365,104 430,85 ' +
+  'C500,65 560,107 600,130 C670,168 700,201 760,205 C830,209 865,140 910,110';
+
+const pts = POS.map((p, i) => ({ ...p, label: nodes[i] ?? '', accent: i === POS.length - 1 }));
+---
+
+<figure class="jr" role="img" aria-label={ariaLabel}>
+  <svg class="jr__svg" viewBox="0 0 1000 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <!-- Faint baseline for the "chart" grounding -->
+    <line x1="90" y1="238" x2="910" y2="238" stroke="var(--line-on-dark)" stroke-width="1.5" stroke-dasharray="2 8" />
+
+    <!-- The route line — draws on scroll -->
+    <path class="jr__line draw-path" style="--draw-len: 1500" stroke-dasharray="1500"
+      d={LINE} stroke="var(--color-dark-text-soft)" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Milestone nodes + labels, sequenced by --n -->
+    {pts.map((p, i) => (
+      <g style={`--n: ${i}`}>
+        {p.accent && (
+          <circle class="jr__halo" cx={p.x} cy={p.y} r="15" fill="var(--color-accent)" opacity="0.18" />
+        )}
+        <circle
+          class={`jr__node${p.accent ? ' jr__node--accent' : ''}`}
+          cx={p.x} cy={p.y} r={p.accent ? 9 : 7}
+        />
+        <text
+          class="jr__label"
+          x={p.x} y={p.y + 36}
+          text-anchor={i === 0 ? 'start' : i === pts.length - 1 ? 'end' : 'middle'}
+        >{p.label}</text>
+      </g>
+    ))}
+  </svg>
+</figure>
+
+<style>
+  .jr { margin: 0; width: 100%; }
+  .jr__svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+  /* Nodes — dark-text dots; the final "now" node carries the single yellow accent. */
+  .jr__node { fill: var(--color-dark-text); }
+  .jr__node--accent { fill: var(--color-accent); }
+
+  /* Label typography — small editorial caps, in the site sans. */
+  .jr__label {
+    font-family: var(--font-sans);
+    font-size: 21px; font-weight: 600; letter-spacing: 0.03em;
+    fill: var(--color-dark-text-soft);
+  }
+
+  /* Pop-in: nodes + halo scale up, labels fade — staggered by --n, after the
+     line has begun drawing. Triggered by the parent [data-anim] wrapper. */
+  .jr__node, .jr__halo {
+    opacity: 0; transform: scale(0.3);
+    transform-box: fill-box; transform-origin: center;
+    transition: opacity 380ms var(--ease-out), transform 480ms var(--ease-out);
+    transition-delay: calc(600ms + var(--n, 0) * 150ms);
+  }
+  .jr__label {
+    opacity: 0;
+    transition: opacity 380ms var(--ease-out);
+    transition-delay: calc(720ms + var(--n, 0) * 150ms);
+  }
+  :global([data-anim].is-in) .jr__node,
+  :global([data-anim].is-in) .jr__halo { opacity: 1; transform: scale(1); }
+  :global([data-anim].is-in) .jr__halo { opacity: 0.18; }
+  :global([data-anim].is-in) .jr__label { opacity: 1; }
+
+  /* Small screens: the shape stays, labels defer to the detailed list below. */
+  @media (max-width: 760px) { .jr__label { display: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jr__node, .jr__halo, .jr__label {
+      opacity: 1 !important; transform: none !important; transition: none !important;
+    }
+    .jr__halo { opacity: 0.18 !important; }
+  }
+</style>

@@ -9,7 +9,7 @@
  */
 import { Picture } from 'astro:assets';
 import SectionWrapper from '../ui/SectionWrapper.astro';
-import GrowthCurve from '../ui/GrowthCurve.astro';
+import JourneyRoute from '../ui/JourneyRoute.astro';
 import { getStrings } from '../../i18n/utils';
 import journeyImg from '../../assets/photos/milan-energy-mission.jpg';
 
@@ -48,16 +48,6 @@ const tl = t.timeline;
           </div>
         </div>
 
-        <!--
-          Growth curve SVG — draws itself on scroll via stroke-dashoffset.
-          Trigger: parent [data-anim] wrapper; the existing IntersectionObserver
-          adds .is-in which triggers the CSS transition in global.css.
-          No new observer. Reduced-motion: shown fully drawn (global.css rule).
-          (260821-m2d)
-        -->
-        <div data-anim class="tl__curve-wrap">
-          <GrowthCurve ariaLabel={tl.growthCurveAriaLabel} />
-        </div>
       </div>
 
       <figure class="tl__photo">
@@ -72,6 +62,16 @@ const tl = t.timeline;
         />
       </figure>
     </header>
+
+    <!--
+      JourneyRoute — the "route in het kort": a self-made illustration of the
+      real milestones whose silhouette (climb → peak → fall → recover) tells the
+      story. Draws + pops in on scroll (parent [data-anim]). The detailed list
+      below carries the same beats as text (a11y / small screens).
+    -->
+    <div data-anim class="tl__journey">
+      <JourneyRoute nodes={tl.journeyNodes} ariaLabel={tl.journeyAriaLabel} />
+    </div>
 
     <ol class="tl__list">
       {tl.items.map((item, i) => (
@@ -131,8 +131,8 @@ const tl = t.timeline;
     color: var(--color-dark-text-soft);
   }
 
-  /* ── Growth curve wrapper ──────────────────────────────────────────── */
-  .tl__curve-wrap { margin-top: var(--space-sm); }
+  /* ── Journey route figure ──────────────────────────────────────────── */
+  .tl__journey { width: 100%; }
 
   .tl__photo { margin: 0; border-radius: var(--radius-card); overflow: hidden; background: var(--color-navy-2); aspect-ratio: 4 / 3; }
   .tl__photo-img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; display: block; }

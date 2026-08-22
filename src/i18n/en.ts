@@ -172,6 +172,9 @@ export const en = {
     solarPanelsLabel: 'solar panels',
     /** aria-label for the GrowthCurve SVG */
     growthCurveAriaLabel: "Soly's growth curve",
+    /** JourneyRoute figure — 6 short node labels (mapped by index to the route) + aria-label */
+    journeyNodes: ['Kitchen table', '9 countries', '180 people', 'Burnout', 'Bankruptcy', 'Now'],
+    journeyAriaLabel: "Milan's route: from the kitchen table to 9 countries and nearly a million solar panels, through burnout and bankruptcy, to now as a founder coach.",
     items: [
       { kicker: 'The start',  stat: '',    statLabel: '',          title: 'Founding Soly',                              text: 'Started from the conviction that clean energy had to be accessible to everyone.' },
       { kicker: 'Expansion',  stat: '9',   statLabel: 'markets',   title: 'Scaling internationally',                    text: 'From one market to nine countries — each with its own team, pace and culture.' },

@@ -171,6 +171,9 @@ export const nl = {
     solarPanelsLabel: 'zonnepanelen',
     /** aria-label for the GrowthCurve SVG */
     growthCurveAriaLabel: 'Groeicurve van Soly',
+    /** JourneyRoute figure — 6 short node labels (mapped by index to the route) + aria-label */
+    journeyNodes: ['Keukentafel', '9 landen', '180 mensen', 'Burn-out', 'Faillissement', 'Nu'],
+    journeyAriaLabel: 'De route van Milan: van de keukentafel naar 9 landen en bijna één miljoen zonnepanelen, via burn-out en faillissement, tot nu als founder-coach.',
     items: [
       { kicker: 'De start',  stat: '',    statLabel: '',            title: 'De oprichting van Soly',                    text: 'Begonnen vanuit de overtuiging dat schone energie voor iedereen bereikbaar moest zijn.' },
       { kicker: 'Expansie',  stat: '9',   statLabel: 'markten',     title: 'Internationaal opschalen',                  text: 'Van één markt naar negen landen — elk met een eigen team, tempo en cultuur.' },
