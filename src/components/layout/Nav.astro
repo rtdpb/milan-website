@@ -48,6 +48,11 @@ const oppositeLocale = isEn ? 'nl' : 'en';
 const oppositeSlug   = isEn ? (enToNl[currentSlug] ?? '') : (nlToEn[currentSlug] ?? '');
 const switchHref     = getRelativeLocaleUrl(oppositeLocale, oppositeSlug);
 
+// Wordmark: only the first name ("Milan") is bold; the rest of the name stays
+// in a regular weight (feedback). Kept uppercase — only the weight differs.
+const [wmFirst, ...wmRestParts] = SITE_NAME.split(' ');
+const wmRest = wmRestParts.join(' ');
+
 // Phase 3 Plan 03: nieuwsbrief enabled — /nieuwsbrief page now exists; boek still disabled
 const currentPath = Astro.url.pathname;
 
@@ -84,7 +89,7 @@ const navItems = isEn
 
     <!-- Wordmark (left) -->
     <a href={import.meta.env.BASE_URL} class="site-header__wordmark" aria-label={`${SITE_NAME} — ${t.nav.homeAria}`}>
-      {SITE_NAME}
+      <span class="wm-first">{wmFirst}</span> <span class="wm-rest">{wmRest}</span>
     </a>
 
     <!-- Desktop Navigation -->
@@ -200,7 +205,7 @@ const navItems = isEn
 >
   <div class="mobile-nav__inner">
     <div class="mobile-nav__header">
-      <span class="mobile-nav__wordmark">{SITE_NAME}</span>
+      <span class="mobile-nav__wordmark"><span class="wm-first">{wmFirst}</span> <span class="wm-rest">{wmRest}</span></span>
       <button
         class="mobile-nav__close"
         id="nav-close"
@@ -478,14 +483,19 @@ const navItems = isEn
   .site-header__wordmark {
     font-family: var(--font-sans);
     font-size: 1.0625rem;  /* 17px on mobile — keeps room for the hamburger */
-    font-weight: 800;
+    font-weight: 500;      /* base weight — only "Milan" is bold (feedback) */
     letter-spacing: 0.02em;   /* caps read better with slight positive tracking */
-    text-transform: uppercase; /* feedback: MILAN VAN DER MEULEN (bold) */
+    text-transform: uppercase; /* feedback: uppercase; only "Milan" is bold */
     color: var(--color-text);
     text-decoration: none;
     white-space: nowrap;
     flex-shrink: 0;
   }
+  /* Only the first name is bold; the remainder of the name is regular weight. */
+  .site-header__wordmark .wm-first,
+  .mobile-nav__wordmark .wm-first { font-weight: 800; }
+  .site-header__wordmark .wm-rest,
+  .mobile-nav__wordmark .wm-rest { font-weight: 400; }
   @media (min-width: 960px) {
     .site-header__wordmark { font-size: 1.25rem; }  /* 20px logotype on desktop */
   }
@@ -752,7 +762,7 @@ const navItems = isEn
   .mobile-nav__wordmark {
     font-family: var(--font-sans);
     font-size: 1rem;
-    font-weight: 800;
+    font-weight: 500;  /* base weight — only "Milan" is bold (feedback) */
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--color-text);

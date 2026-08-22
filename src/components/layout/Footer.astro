@@ -21,6 +21,10 @@ const base = import.meta.env.BASE_URL;
 const contactHref = isEn ? getRelativeLocaleUrl('en', 'contact') : `${base}contact`;
 const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}privacybeleid`;
 
+// Wordmark: only the first name ("Milan") is bold; the rest stays regular (feedback).
+const [wmFirst, ...wmRestParts] = SITE_NAME.split(' ');
+const wmRest = wmRestParts.join(' ');
+
 const navItems = isEn
   ? [
       { label: t.nav.coaching,    href: getRelativeLocaleUrl('en', 'coaching') },
@@ -44,7 +48,7 @@ const navItems = isEn
     <!-- Top: brand statement + contact CTA -->
     <div class="ft__top">
       <div class="ft__brand">
-        <a href={base} class="ft__wordmark" aria-label={`${SITE_NAME} — ${t.nav.homeAria}`}>{SITE_NAME}</a>
+        <a href={base} class="ft__wordmark" aria-label={`${SITE_NAME} — ${t.nav.homeAria}`}><span class="wm-first">{wmFirst}</span> <span class="wm-rest">{wmRest}</span></a>
         <p class="ft__tagline">{t.footer.tagline}</p>
       </div>
       <a href={contactHref} class="ft__cta">
@@ -134,13 +138,15 @@ const navItems = isEn
     display: inline-block;
     font-family: var(--font-sans);
     font-size: var(--text-2xl);
-    font-weight: 800;
+    font-weight: 500;  /* base weight — only "Milan" is bold (feedback) */
     letter-spacing: 0.02em;
-    text-transform: uppercase; /* match the header logo: MILAN VAN DER MEULEN (bold) */
+    text-transform: uppercase; /* match the header logo; only "Milan" is bold */
     line-height: 1;
     color: var(--color-dark-text);
     text-decoration: none;
   }
+  .ft__wordmark .wm-first { font-weight: 800; }
+  .ft__wordmark .wm-rest { font-weight: 400; }
   .ft__wordmark:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; border-radius: var(--radius-sm); }
   .ft__tagline { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-dark-text-soft); margin: var(--space-sm) 0 0; }
 
