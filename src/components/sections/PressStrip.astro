@@ -2,13 +2,15 @@
 /**
  * PressStrip.astro — "Benoemd in" credibility strip
  *
- * Layout: the label sits on the LEFT, vertically centred, and the outlet names
- * run to the RIGHT of it in a subtle continuous marquee (feedback). These are
- * text wordmarks, not official logos — swap each for the outlet's real SVG when
- * assets arrive (rendered greyscale to keep this quiet grey look). Motion pauses
- * on hover and is disabled under prefers-reduced-motion.
+ * Layout: the label sits on the LEFT, vertically centred, and the outlet logos
+ * run to the RIGHT of it in a subtle continuous marquee (feedback). Each outlet
+ * renders as a monochrome SVG wordmark logo (pressLogos.ts) in the strip's quiet
+ * grey — swap any entry for the outlet's official SVG when assets arrive. Falls
+ * back to the plain outlet name if no logo is defined. Motion pauses on hover and
+ * is disabled under prefers-reduced-motion.
  */
 import { getStrings } from '../../i18n/utils';
+import { pressLogos } from './pressLogos';
 
 const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
@@ -20,8 +22,18 @@ const logos = t.pressStrip.logos;
     <p class="press__label">{t.pressStrip.eyebrow}</p>
     <div class="press__marquee" role="list" aria-label={isEn ? 'Media coverage of Milan van der Meulen' : 'Media-uitingen van Milan van der Meulen'}>
       <div class="press__track">
-        {logos.map((o) => (<span class="press__name" role="listitem">{o}</span>))}
-        {logos.map((o) => (<span class="press__name" aria-hidden="true">{o}</span>))}
+        {logos.map((o) => (
+          <span class="press__name" role="listitem">
+            {pressLogos[o]
+              ? (<><Fragment set:html={pressLogos[o]} /><span class="sr-only">{o}</span></>)
+              : o}
+          </span>
+        ))}
+        {logos.map((o) => (
+          <span class="press__name" aria-hidden="true">
+            {pressLogos[o] ? <Fragment set:html={pressLogos[o]} /> : o}
+          </span>
+        ))}
       </div>
     </div>
   </div>
@@ -60,11 +72,17 @@ const logos = t.pressStrip.logos;
   }
   .press__marquee:hover .press__track { animation-play-state: paused; }
   .press__name {
-    font-size: clamp(1.05rem, 0.95rem + 0.6vw, 1.5rem); font-weight: 600; letter-spacing: -0.01em;
+    display: inline-flex; align-items: center;
     color: var(--color-text); opacity: 0.42; white-space: nowrap; line-height: 1;
     transition: opacity var(--duration-base) var(--ease-out);
   }
   .press__name:hover { opacity: 0.85; }
+  /* Logos scale by height; width follows the SVG's aspect ratio. currentColor
+     inherits the grey above, so each logo stays monochrome in the strip. */
+  .press__name :global(svg) {
+    height: clamp(22px, 1rem + 0.9vw, 30px); width: auto; display: block;
+    overflow: visible;
+  }
   @keyframes pressScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
   @media (prefers-reduced-motion: reduce) {
