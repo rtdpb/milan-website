@@ -243,6 +243,63 @@ export const en = {
     legalEntity:  'Milan van der Meulen is a trade name of YM Holding B.V. · CoC 63057298',
   },
 
+  // ── Privacy Policy Page ─────────────────────────────────────────────────────
+  privacy: {
+    pageTitle: 'Privacy policy — Milan van der Meulen',
+    pageDesc:  'How Milan van der Meulen (YM Holding B.V.) handles your personal data.',
+    eyebrow:   'Legal',
+    heading:   'Privacy policy',
+    intro:     'We attach great importance to protecting your personal data. In this privacy policy we explain which data we collect, why we do so, and how we handle your data with care.',
+    sections: [
+      {
+        heading: 'Which personal data do we process?',
+        body: [
+          'We only process personal data that you actively provide to us or that is collected automatically when you use our website.',
+          'This may include:',
+        ],
+        items: ['Name', 'Email address', 'Phone number', 'Company name', 'Contents of contact or intake forms', 'IP address', 'Data about your visit to the website (e.g. pages, time, browser)'],
+        note: '',
+      },
+      {
+        heading: 'How we use your data',
+        body: ['We use your personal data solely for the following purposes:'],
+        items: ['To contact you in response to a request or message', 'To deliver our services (such as coaching or talks)', 'To schedule introductory or intake calls', 'To improve our website and services', 'For administrative and legal obligations'],
+        note: 'We do not use your data for unsolicited marketing and never sell it to third parties.',
+      },
+      {
+        heading: 'Legal bases for processing',
+        body: ['We process personal data on the basis of:'],
+        items: ['your consent', 'the performance of an agreement or preparation thereof', 'a legitimate interest (such as business operations and website analytics)', 'a legal obligation (where applicable)'],
+        note: '',
+      },
+      {
+        heading: 'Sharing data',
+        body: ['We only share your personal data with third parties where necessary for:'],
+        items: ['delivering our services', 'the use of IT services (such as email, hosting, analytics)', 'complying with legal obligations'],
+        note: '',
+      },
+      {
+        heading: 'Cookies',
+        body: ['We use functional and analytical cookies to make the website work properly and to analyse usage. For analytical cookies (such as Google Analytics), IP addresses are anonymised where possible.'],
+        items: [],
+        note: '',
+      },
+      {
+        heading: 'Retention period',
+        body: ['We do not retain personal data longer than necessary for the purpose for which it was collected, unless we are legally required to keep it longer.'],
+        items: [],
+        note: '',
+      },
+      {
+        heading: 'Changes to this policy',
+        body: ['We reserve the right to amend this privacy policy. The most current version is always available on our website.'],
+        items: [],
+        note: '',
+      },
+    ],
+    entity: 'Milan van der Meulen is a trade name of YM Holding B.V. · CoC 63057298',
+  },
+
   // ── Contact Page ─────────────────────────────────────────────────────────
   contact: {
     pageTitle:      'Contact — Milan van der Meulen',

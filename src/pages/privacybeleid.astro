@@ -1,0 +1,61 @@
+---
+/**
+ * privacybeleid.astro — Privacy policy (route: /privacybeleid)
+ * Full text supplied by the client (feedbackronde/Feedback homepage.docx).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionWrapper from '../components/ui/SectionWrapper.astro';
+import { getStrings } from '../i18n/utils';
+
+const t = getStrings(Astro.currentLocale);
+const p = t.privacy;
+---
+
+<BaseLayout title={p.pageTitle} description={p.pageDesc} nlSlug="privacybeleid" enSlug="privacy">
+
+  <SectionWrapper id="privacy" variant="default" labelledBy="privacy-heading">
+    <article class="legal">
+      <header class="legal__head">
+        <p class="legal__eyebrow">{p.eyebrow}</p>
+        <h1 id="privacy-heading" class="legal__title">{p.heading}</h1>
+        <p class="legal__intro">{p.intro}</p>
+      </header>
+
+      <ol class="legal__sections">
+        {p.sections.map((sec) => (
+          <li class="legal__section">
+            <h2 class="legal__section-title">{sec.heading}</h2>
+            {sec.body.map((para: string) => <p class="legal__p">{para}</p>)}
+            {sec.items.length > 0 && (
+              <ul class="legal__list">
+                {sec.items.map((it: string) => <li>{it}</li>)}
+              </ul>
+            )}
+            {sec.note && <p class="legal__p">{sec.note}</p>}
+          </li>
+        ))}
+      </ol>
+
+      <p class="legal__entity">{p.entity}</p>
+    </article>
+  </SectionWrapper>
+
+</BaseLayout>
+
+<style>
+  .legal { max-width: 760px; }
+  .legal__head { display: flex; flex-direction: column; gap: var(--space-md); margin-bottom: clamp(var(--space-xl), 4vw, var(--space-3xl)); }
+  .legal__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0; }
+  .legal__title { font-size: var(--text-3xl); line-height: 1.05; letter-spacing: -0.02em; margin: 0; color: var(--color-text); }
+  .legal__intro { font-size: var(--text-lg); line-height: 1.55; color: var(--color-text-secondary); margin: 0; }
+
+  .legal__sections { list-style: none; margin: 0; padding: 0; counter-reset: sec; display: flex; flex-direction: column; gap: clamp(var(--space-xl), 3vw, var(--space-2xl)); }
+  .legal__section { counter-increment: sec; }
+  .legal__section-title { position: relative; font-size: var(--text-xl); line-height: 1.2; margin: 0 0 var(--space-md); color: var(--color-text); }
+  .legal__section-title::before { content: counter(sec) '. '; color: var(--color-text-secondary); font-weight: 600; }
+  .legal__p { font-size: var(--text-base); line-height: 1.7; color: var(--color-text-secondary); margin: 0 0 var(--space-sm); }
+  .legal__list { margin: var(--space-sm) 0 0; padding-left: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-xs); }
+  .legal__list li { font-size: var(--text-base); line-height: 1.5; color: var(--color-text); }
+
+  .legal__entity { margin-top: clamp(var(--space-xl), 4vw, var(--space-3xl)); padding-top: var(--space-lg); border-top: 1px solid var(--line-on-light); font-size: var(--text-xs); color: var(--color-text-secondary); }
+</style>

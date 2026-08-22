@@ -19,6 +19,7 @@ const isEn = Astro.currentLocale === 'en';
 const base = import.meta.env.BASE_URL;
 
 const contactHref = isEn ? getRelativeLocaleUrl('en', 'contact') : `${base}contact`;
+const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}privacybeleid`;
 
 const navItems = isEn
   ? [
@@ -69,7 +70,7 @@ const navItems = isEn
         <p class="ft__col-heading">{t.footer.legalHeading}</p>
         <ul class="ft__list" role="list">
           <li>
-            <span class="ft__muted" role="link" aria-disabled="true" tabindex="-1" title={t.common.disabledTooltip}>{t.footer.privacy}</span>
+            <a href={privacyHref} class="ft__link">{t.footer.privacy}</a>
           </li>
           <li>
             <span class="ft__muted" role="link" aria-disabled="true" tabindex="-1" title={t.common.disabledTooltip}>{t.footer.terms}</span>

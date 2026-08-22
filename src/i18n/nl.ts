@@ -246,6 +246,64 @@ export const nl = {
     legalEntity: 'Milan van der Meulen is een handelsnaam van YM Holding B.V. · KvK 63057298',
   },
 
+  // ── Privacybeleid Page ────────────────────────────────────────────────────
+  // Full text verbatim from feedbackronde/Feedback homepage.docx.
+  privacy: {
+    pageTitle: 'Privacybeleid — Milan van der Meulen',
+    pageDesc:  'Hoe Milan van der Meulen (YM Holding B.V.) omgaat met jouw persoonsgegevens.',
+    eyebrow:   'Juridisch',
+    heading:   'Privacybeleid',
+    intro:     'Wij hechten veel waarde aan de bescherming van jouw persoonsgegevens. In deze privacy policy leggen wij uit welke gegevens wij verzamelen, waarom we dat doen en hoe wij zorgvuldig met jouw gegevens omgaan.',
+    sections: [
+      {
+        heading: 'Welke persoonsgegevens verwerken wij?',
+        body: [
+          'Wij verwerken uitsluitend persoonsgegevens die jij actief aan ons verstrekt of die automatisch worden verzameld bij het gebruik van onze website.',
+          'Dit kan onder andere zijn:',
+        ],
+        items: ['Naam', 'E-mailadres', 'Telefoonnummer', 'Bedrijfsnaam', 'Inhoud van contact- of intakeformulieren', 'IP-adres', 'Gegevens over jouw bezoek aan de website (bijv. pagina’s, tijdstip, browser)'],
+        note: '',
+      },
+      {
+        heading: 'Hoe we je data gebruiken',
+        body: ['Wij gebruiken jouw persoonsgegevens uitsluitend voor de volgende doeleinden:'],
+        items: ['Om contact met je op te nemen naar aanleiding van een aanvraag of bericht', 'Om onze diensten (zoals coaching of lezingen) te kunnen leveren', 'Voor het plannen van kennismakingsgesprekken of intakegesprekken', 'Om onze website en dienstverlening te verbeteren', 'Voor administratieve en wettelijke verplichtingen'],
+        note: 'Wij gebruiken jouw gegevens niet voor ongevraagde marketing en verkopen deze nooit aan derden.',
+      },
+      {
+        heading: 'Grondslagen voor verwerking',
+        body: ['Wij verwerken persoonsgegevens op basis van:'],
+        items: ['jouw toestemming', 'de uitvoering van een overeenkomst of voorbereiding daarop', 'een gerechtvaardigd belang (zoals bedrijfsvoering en website-analyse)', 'een wettelijke verplichting (indien van toepassing)'],
+        note: '',
+      },
+      {
+        heading: 'Delen van gegevens',
+        body: ['Wij delen jouw persoonsgegevens alleen met derden als dat noodzakelijk is voor:'],
+        items: ['het uitvoeren van onze dienstverlening', 'het gebruik van IT-diensten (zoals e-mail, hosting, analytics)', 'het voldoen aan wettelijke verplichtingen'],
+        note: '',
+      },
+      {
+        heading: 'Cookies',
+        body: ['Wij gebruiken functionele en analytische cookies om de website goed te laten werken en het gebruik te analyseren. Bij analytische cookies (zoals Google Analytics) worden IP-adressen waar mogelijk geanonimiseerd.'],
+        items: [],
+        note: '',
+      },
+      {
+        heading: 'Bewaartermijn',
+        body: ['Wij bewaren persoonsgegevens niet langer dan noodzakelijk is voor het doel waarvoor ze zijn verzameld, tenzij wij wettelijk verplicht zijn gegevens langer te bewaren.'],
+        items: [],
+        note: '',
+      },
+      {
+        heading: 'Veranderingen aan dit beleid',
+        body: ['Wij behouden ons het recht voor deze privacy policy te wijzigen. De meest actuele versie is altijd beschikbaar op onze website.'],
+        items: [],
+        note: '',
+      },
+    ],
+    entity: 'Milan van der Meulen is een handelsnaam van YM Holding B.V. · KvK 63057298',
+  },
+
   // ── Contact Page (PAGE-04) ──────────────────────────────────────────────
   contact: {
     pageTitle:      'Contact — Milan van der Meulen',

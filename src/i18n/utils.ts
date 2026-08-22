@@ -76,6 +76,7 @@ export const nlToEn: Record<string, string> = {
   'nieuwsbrief':  'newsletter',
   'contact':      'contact',
   'boek':         'book',       // Phase 5 — BOOK-01
+  'privacybeleid':'privacy',
 };
 
 /**
