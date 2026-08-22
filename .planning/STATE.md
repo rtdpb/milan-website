@@ -147,6 +147,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 |---|-------------|------|--------|-----------|
 | 260821-m2d | Homepage levendig: scroll-progressbar, richere reveal-varianten + parallax, opbouwende cijfers (9/~180/~1M), tekenende groeicurve-SVG | 2026-08-21 | 1c5d0b0 | [260821-m2d-maak-de-homepage-levendig-scroll-progres](./quick/260821-m2d-maak-de-homepage-levendig-scroll-progres/) |
 | 260822-nyx | Hero pakkender (contained geanimeerde deco-figuren) + herbruikbare .draw-path scroll-draw utility + zelfgetekende figuren (papieren vliegtuig Newsletter, underline-swoosh Samenwerken) | 2026-08-22 | cb44c8a | [260822-nyx-hero-pakkender-animated-figures](./quick/260822-nyx-hero-pakkender-animated-figures/) |
+| 260822-tss | Feedbackronde Milan: homepage-punten + rebuild Coaching/Spreker/Mijn verhaal + nieuwe Privacybeleid-pagina (NL+EN), Substack gekoppeld, Samenwerken pricing-cards, vette wordmark, "Benoemd in" rij-layout — gebouwd + gedeployed | 2026-08-22 | ad634b4 | [260822-tss-feedback-round](./quick/260822-tss-feedback-round/) |
 
 ## Next Step
 
