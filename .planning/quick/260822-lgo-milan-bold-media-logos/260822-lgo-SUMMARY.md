@@ -29,13 +29,23 @@ Gebouwd (0 errors, 16 pagina's) en visueel gecontroleerd via Playwright.
 - Gedeelde component → geldt voor homepage én coaching, NL + EN.
 - Visueel bevestigd (reduced-motion crop): alle 7 logo's renderen in grijs.
 
+**3. Samenwerken #12 — nieuwsbrief licht, spreker/coaching donker**
+- Gratis Nieuwsbrief-kaart nu in lichte stijl, links (spant beide rijen);
+  Presentatie + 1:1 Coaching donker, verticaal gestapeld rechts → nadruk op
+  de betaalde diensten. Verving de eerdere "3 donkere kaarten naast elkaar".
+
+**4. Nieuwsbrief inline mailveld**
+- Newsletter.astro: inline `Mailadres`-invoerveld + knop. Native GET-submit
+  stuurt het adres naar Substack `/subscribe?email=…` (werkt zonder JS, geen
+  nep-succes). JS vuurt alleen de Plausible-goal. Doorstuur-notitie behouden.
+
 ## Let op / vervolg
 
 - De logo's zijn **typografische reproducties** (geen officiële merkbestanden
   aangeleverd). Officiële SVG's kunnen 1-op-1 in `pressLogos.ts` per outlet
   vervangen worden (houd `fill/stroke="currentColor"` aan voor het grijs).
-- Nog niet gecommit/gepusht = niet gedeployed. Push naar master triggert
-  auto-deploy naar GitHub Pages (afwachten op go van gebruiker).
+- Samenwerken-layout (#12) is een interpretatie van "verticaal + nieuwsbrief
+  licht"; exacte ordening/verhouding makkelijk bij te stellen.
 
 ## Verificatie
 
