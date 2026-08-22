@@ -223,22 +223,36 @@ const parseStat = (v: string) => {
     text-transform: uppercase; color: var(--color-text-secondary);
   }
 
-  /* ── Desktop: two-column grid, tall & commanding (text left, big photo) ──── */
+  /* ── Desktop: text left, full-bleed photo running to the right screen edge ──
+     The inner grid drops its max-width and right padding so the media column
+     reaches the viewport edge (magazine-cover feel). The left padding is
+     computed to stay aligned with the rest of the site's container, so the copy
+     lines up with every section below. Section overflow:clip is the safety net —
+     nothing can ever cause a horizontal scrollbar. */
   @media (min-width: 900px) {
     .hero__inner {
+      max-width: none;
+      margin-inline: 0;
+      padding-left: max(var(--gutter), calc((100vw - var(--max-width)) / 2 + var(--gutter)));
+      padding-right: 0;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
-      align-items: stretch;                /* let the photo fill the row height */
-      gap: clamp(var(--space-2xl), 5vw, var(--space-5xl));
-      min-height: min(86vh, 800px);        /* commands the viewport on open */
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+      align-items: stretch;                /* photo fills the row height */
+      gap: clamp(var(--space-2xl), 5vw, var(--space-4xl));
+      min-height: min(90vh, 880px);        /* commands the viewport on open */
     }
     .hero__text { justify-content: center; }   /* vertically centre the copy */
-    .hero__title { font-size: clamp(3rem, 1.4rem + 3.8vw, 4.5rem); }
-    .hero__media { justify-self: end; height: 100%; }
+    .hero__title { font-size: clamp(3.2rem, 1.1rem + 4.6vw, 5rem); }
+    .hero__media { height: 100%; justify-self: stretch; }
     .hero__figure {
       aspect-ratio: auto;                  /* height-driven, not aspect-capped */
       height: 100%;
       width: 100%;
+      /* Square the right corners — they sit on the screen edge. */
+      border-radius: clamp(20px, 2vw, 32px) 0 0 clamp(20px, 2vw, 32px);
+    }
+    .hero__accent {
+      border-radius: clamp(20px, 2vw, 32px) 0 0 clamp(20px, 2vw, 32px);
     }
   }
 
