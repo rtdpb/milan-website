@@ -270,7 +270,7 @@ export const en = {
     pageDesc:   '1:1 coaching for founders who are scaling. From someone who built, lost, and rose again — not a theoretical framework, but lived experience.',
     eyebrow:    '1:1 Coaching',
     heroTitle:  'The right choices are priceless',
-    heroImageAlt: 'Milan van der Meulen on stage during a talk.',
+    heroImageAlt: 'Portrait of Milan van der Meulen.',
     intro: [
       'You have market fit. Your team is running. And still this phase feels heavier than the last. More pressure, more people depending on you, more decisions you have to make alone because no one around you knows exactly what it is like to be in it.',
       'I know that phase. Together with my brother I built a company from the kitchen table to nine countries with 180 employees, raised more than 50 million in capital from parties like Shell and ABP, and experienced first-hand what growth does to a company and to a person. I have seen the good decisions work, and watched the wrong ones take their toll. That lived experience — including the bankruptcy and my own burnout — is exactly why entrepreneurs ask for me: not for a consultant with a theoretical framework, but for someone who has stood in the middle of it.',
