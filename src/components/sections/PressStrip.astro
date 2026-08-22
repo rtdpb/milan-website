@@ -1,11 +1,12 @@
 ---
 /**
- * PressStrip.astro — "Bekend van" moving credibility marquee
+ * PressStrip.astro — "Benoemd in" credibility strip
  *
- * The outlet NAMES scroll in a subtle continuous marquee (life/movement). These
- * are text wordmarks, not official logos — swap each for the outlet's real SVG
- * when assets arrive. Motion pauses on hover and is fully disabled (static,
- * wrapped) under prefers-reduced-motion.
+ * Layout: the label sits on the LEFT, vertically centred, and the outlet names
+ * run to the RIGHT of it in a subtle continuous marquee (feedback). These are
+ * text wordmarks, not official logos — swap each for the outlet's real SVG when
+ * assets arrive (rendered greyscale to keep this quiet grey look). Motion pauses
+ * on hover and is disabled under prefers-reduced-motion.
  */
 import { getStrings } from '../../i18n/utils';
 
@@ -15,11 +16,13 @@ const logos = t.pressStrip.logos;
 ---
 
 <section class="press" aria-label={isEn ? 'Media coverage' : 'Media-uitingen'}>
-  <p class="press__label">{t.pressStrip.eyebrow}</p>
-  <div class="press__marquee" role="list" aria-label={isEn ? 'Media coverage of Milan van der Meulen' : 'Media-uitingen van Milan van der Meulen'}>
-    <div class="press__track">
-      {logos.map((o) => (<span class="press__name" role="listitem">{o}</span>))}
-      {logos.map((o) => (<span class="press__name" aria-hidden="true">{o}</span>))}
+  <div class="press__inner">
+    <p class="press__label">{t.pressStrip.eyebrow}</p>
+    <div class="press__marquee" role="list" aria-label={isEn ? 'Media coverage of Milan van der Meulen' : 'Media-uitingen van Milan van der Meulen'}>
+      <div class="press__track">
+        {logos.map((o) => (<span class="press__name" role="listitem">{o}</span>))}
+        {logos.map((o) => (<span class="press__name" aria-hidden="true">{o}</span>))}
+      </div>
     </div>
   </div>
 </section>
@@ -30,28 +33,34 @@ const logos = t.pressStrip.logos;
     border-top: 1px solid var(--line-on-light);
     border-bottom: 1px solid var(--line-on-light);
     padding-block: clamp(var(--space-lg), 2.5vw, var(--space-xl));
-    display: flex; flex-direction: column; gap: var(--space-md);
     overflow: clip;
   }
+  /* Row: label left (vertically centred) · names running to the right. */
+  .press__inner {
+    max-width: var(--max-width); width: 100%; margin-inline: auto;
+    padding-inline: var(--gutter);
+    display: flex; align-items: center;
+    gap: clamp(var(--space-md), 3vw, var(--space-2xl));
+  }
   .press__label {
-    max-width: var(--max-width); width: 100%; margin: 0 auto; padding-inline: var(--gutter);
-    font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--color-text-tertiary);
+    flex-shrink: 0; margin: 0; white-space: nowrap;
+    font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--color-text-tertiary);
   }
   .press__marquee {
-    position: relative; width: 100%; overflow: hidden;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    position: relative; flex: 1 1 0; min-width: 0; overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 88%, transparent);
+            mask-image: linear-gradient(90deg, #000 0%, #000 88%, transparent);
   }
   .press__track {
     display: flex; align-items: center; width: max-content;
     gap: clamp(var(--space-2xl), 6vw, var(--space-5xl));
-    padding-inline: clamp(var(--space-2xl), 6vw, var(--space-5xl));
+    padding-right: clamp(var(--space-2xl), 6vw, var(--space-5xl));
     animation: pressScroll 38s linear infinite;
   }
   .press__marquee:hover .press__track { animation-play-state: paused; }
   .press__name {
-    font-size: clamp(1.1rem, 0.95rem + 0.8vw, 1.6rem); font-weight: 600; letter-spacing: -0.01em;
+    font-size: clamp(1.05rem, 0.95rem + 0.6vw, 1.5rem); font-weight: 600; letter-spacing: -0.01em;
     color: var(--color-text); opacity: 0.42; white-space: nowrap; line-height: 1;
     transition: opacity var(--duration-base) var(--ease-out);
   }
@@ -59,10 +68,7 @@ const logos = t.pressStrip.logos;
   @keyframes pressScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
   @media (prefers-reduced-motion: reduce) {
-    .press__track {
-      animation: none; flex-wrap: wrap; justify-content: center; width: auto;
-      max-width: var(--max-width); margin-inline: auto; row-gap: var(--space-sm);
-    }
+    .press__track { animation: none; flex-wrap: wrap; width: auto; row-gap: var(--space-sm); padding-right: 0; }
     .press__marquee { -webkit-mask-image: none; mask-image: none; }
     .press__name[aria-hidden='true'] { display: none; }
   }
