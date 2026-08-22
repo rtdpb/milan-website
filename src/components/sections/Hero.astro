@@ -55,35 +55,21 @@ const parseStat = (v: string) => {
 
     <div class="hero__media">
       <!--
-        Self-made decorative figures — CONTAINED inside this relative wrapper,
-        pointer-events:none + aria-hidden so they never affect layout, focus,
-        or the a11y tree. The section clips overflow, so nothing can blow out
-        the page. (hero-fragile-avoid-absolute-overlap: the robust grid above
-        is untouched — decoration lives only in this box.)
+        One bold, intentional element (no scattered icons): a solid yellow brand
+        slab offset behind the photo so it peeks at the edges and reads as a
+        confident layered composition. Contained in this relative wrapper,
+        pointer-events:none + aria-hidden; the section clips overflow so the
+        robust grid above cannot be disturbed (hero-fragile-avoid-absolute-overlap).
       -->
-      <span class="hero__deco hero__deco--frame" aria-hidden="true"></span>
-
-      <!-- Slow-rotating dashed ring, peeking from behind the top-right corner -->
-      <svg class="hero__deco hero__deco--ring" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-        <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="1.5"
-          stroke-dasharray="4 9" stroke-linecap="round" />
-      </svg>
-
-      <!-- Floating accent cluster (the single yellow accent lives here) -->
-      <svg class="hero__deco hero__deco--dots" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-        <circle cx="22" cy="78" r="7" fill="var(--color-accent)" />
-        <circle cx="46" cy="62" r="4" stroke="var(--color-text)" stroke-width="2" opacity="0.45" />
-        <path d="M66 50 h12 M72 44 v12" stroke="var(--color-text)" stroke-width="2"
-          stroke-linecap="round" opacity="0.4" />
-      </svg>
+      <span class="hero__accent" aria-hidden="true"></span>
 
       <figure class="hero__figure">
         <Picture
           src={heroImage}
           formats={['avif', 'webp']}
           fallbackFormat="webp"
-          widths={[640, 900, 1200, 1600]}
-          sizes="(max-width: 899px) 100vw, 50vw"
+          widths={[640, 900, 1200, 1600, 2000]}
+          sizes="(max-width: 899px) 100vw, 52vw"
           alt={isEn
             ? 'Milan van der Meulen speaking on stage against a yellow and blue backdrop.'
             : 'Milan van der Meulen spreekt op het podium met geel en blauw decor.'}
@@ -173,59 +159,39 @@ const parseStat = (v: string) => {
   .hero__cta--ghost { background: transparent; color: var(--color-text); border-color: var(--line-on-light-strong); }
   .hero__cta--ghost:hover { border-color: var(--color-text); transform: translateY(-2px); }
 
-  /* ── Media wrapper — positioning context for contained decoration ──────────
-     The photo box keeps its exact sizing; decoration is absolutely positioned
-     against this wrapper only, so the robust grid above cannot be disturbed. */
+  /* ── Media wrapper — positioning context for the bold accent slab ──────────
+     The photo sits on top; the accent is absolutely positioned against this
+     wrapper only, so the robust grid above cannot be disturbed. */
   .hero__media { position: relative; width: 100%; }
 
-  /* Decorative figures — never interactive, never in the a11y tree. */
-  .hero__deco { position: absolute; pointer-events: none; }
-
-  /* Offset hairline frame behind the photo — editorial "double frame" depth. */
-  .hero__deco--frame {
-    inset: 0; z-index: 0;
-    border: 1.5px solid var(--line-on-light-strong);
-    border-radius: clamp(16px, 1.6vw, 24px);
+  /* Bold brand slab — offset behind the photo, peeking at the edges. */
+  .hero__accent {
+    position: absolute; z-index: 0; pointer-events: none;
+    inset: 0;
+    border-radius: clamp(20px, 2vw, 32px);
+    background: var(--color-accent);
+    transform: translate(-18px, 20px) scale(0.98);
+    transform-origin: bottom left;
     opacity: 0;
-    animation: heroFrameIn 900ms var(--ease-out) 520ms both;
+    animation: heroAccentIn 900ms var(--ease-out) 160ms both;
   }
 
-  /* Slow-rotating dashed ring, peeking from behind the top-right corner. */
-  .hero__deco--ring {
-    z-index: 0;
-    width: clamp(84px, 13vw, 148px); height: auto;
-    top: clamp(-30px, -2.4vw, -18px); right: clamp(-26px, -2.2vw, -14px);
-    color: var(--line-on-light-strong);
-    opacity: 0;
-    animation: heroDecoFade 800ms var(--ease-out) 700ms both,
-               heroSpin 30s linear 700ms infinite;
-  }
-
-  /* Floating accent cluster at the bottom-left — the single yellow accent. */
-  .hero__deco--dots {
-    z-index: 2;
-    width: clamp(64px, 9vw, 100px); height: auto;
-    bottom: clamp(-20px, -1.6vw, -10px); left: clamp(-24px, -2vw, -12px);
-    opacity: 0;
-    animation: heroDecoFade 800ms var(--ease-out) 860ms both,
-               heroFloat 7s var(--ease-in-out) 860ms infinite;
-  }
-
-  /* ── Photograph — capped, fixed aspect box (never enlarges) ────────────── */
+  /* ── Photograph — big, commanding, lifted off the page ─────────────────── */
   .hero__figure {
     position: relative; z-index: 1;
     margin: 0;
-    border-radius: clamp(16px, 1.6vw, 24px);
+    border-radius: clamp(20px, 2vw, 32px);
     overflow: hidden;
     background: var(--color-accent);
-    aspect-ratio: 16 / 11;      /* mobile: gentle landscape crop */
+    aspect-ratio: 4 / 5;        /* mobile: strong portrait presence */
+    box-shadow: var(--shadow-float);
   }
   .hero__figure :global(picture) { display: block; width: 100%; height: 100%; }
   .hero__figure :global(img.hero__photo) {
     width: 100%; height: 100%; object-fit: cover;
-    object-position: 50% 18%;   /* bias toward the top so the head is never cut */
+    object-position: 50% 15%;   /* bias toward the top so the head is never cut */
     display: block;
-    animation: heroMask 1000ms var(--ease-out) both;
+    animation: heroReveal 1200ms var(--ease-out) both;
   }
 
   /* ── Proof + stats row — full width, hairline top rule, normal flow ────── */
@@ -257,19 +223,21 @@ const parseStat = (v: string) => {
     text-transform: uppercase; color: var(--color-text-secondary);
   }
 
-  /* ── Desktop: two-column grid (text left, photo right) ─────────────────── */
+  /* ── Desktop: two-column grid, tall & commanding (text left, big photo) ──── */
   @media (min-width: 900px) {
     .hero__inner {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      align-items: center;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+      align-items: stretch;                /* let the photo fill the row height */
       gap: clamp(var(--space-2xl), 5vw, var(--space-5xl));
+      min-height: min(86vh, 800px);        /* commands the viewport on open */
     }
-    .hero__title { font-size: clamp(2.6rem, 1.4rem + 3vw, 3.75rem); }
-    .hero__media { justify-self: end; }
+    .hero__text { justify-content: center; }   /* vertically centre the copy */
+    .hero__title { font-size: clamp(3rem, 1.4rem + 3.8vw, 4.5rem); }
+    .hero__media { justify-self: end; height: 100%; }
     .hero__figure {
-      aspect-ratio: 4 / 5;                 /* portrait framing beside the text */
-      max-height: min(64vh, 600px);
+      aspect-ratio: auto;                  /* height-driven, not aspect-capped */
+      height: 100%;
       width: 100%;
     }
   }
@@ -279,28 +247,25 @@ const parseStat = (v: string) => {
     animation: heroRise 700ms var(--ease-out) both;
     animation-delay: calc(var(--d, 0) * 90ms + 120ms);
   }
-  @keyframes heroMask {
-    from { clip-path: inset(0 100% 0 0); }
-    to   { clip-path: inset(0 0 0 0); }
+  /* Photo entrance: a left→right wipe with a slow inward settle (Ken Burns). */
+  @keyframes heroReveal {
+    from { clip-path: inset(0 100% 0 0); transform: scale(1.1); }
+    to   { clip-path: inset(0 0 0 0);   transform: scale(1); }
   }
   @keyframes heroRise {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: none; }
   }
-  /* Decoration motion (subtle, editorial — the photo itself never drifts). */
-  @keyframes heroFrameIn {
-    from { opacity: 0; transform: translate(0, 0); }
-    to   { opacity: 1; transform: translate(-18px, 18px); }
+  /* Accent slab settles into its offset resting position. */
+  @keyframes heroAccentIn {
+    from { opacity: 0; transform: translate(0, 0) scale(0.9); }
+    to   { opacity: 1; transform: translate(-18px, 20px) scale(0.98); }
   }
-  @keyframes heroDecoFade { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
-  @keyframes heroSpin { to { transform: rotate(360deg); } }
 
   @media (prefers-reduced-motion: reduce) {
     .hero__photo, .hero__eyebrow, .hero__title, .hero__subtext, .hero__ctas { animation: none !important; }
     .hero__cta, .hero__cta svg { transition: none; }
-    /* Decoration: pin to final resting state, no continuous motion. */
-    .hero__deco { animation: none !important; opacity: 1; }
-    .hero__deco--frame { transform: translate(-18px, 18px); }
+    /* Accent: pin to final resting state, no motion. */
+    .hero__accent { animation: none !important; opacity: 1; transform: translate(-18px, 20px) scale(0.98); }
   }
 </style>
