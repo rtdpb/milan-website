@@ -269,32 +269,58 @@ export const nl = {
 
   // ── Coaching Page (PAGE-01) ──────────────────────────────────────────────
   coaching: {
-    pageTitle:  'Coaching voor Founders — Milan van der Meulen',
-    pageDesc:   '1:1 coaching voor founders die klaar zijn voor de volgende stap. Sparringpartner die zelf heeft gebouwd, verloren en weer opgestaan.',
+    pageTitle:  'Coaching voor founders — Milan van der Meulen',
+    pageDesc:   '1:1 coaching voor founders die schalen. Van iemand die zelf bouwde, verloor en weer opstond — geen theoretisch raamwerk, maar doorleefde ervaring.',
     eyebrow:    '1:1 Coaching',
-    heading:    'Schalen zonder jezelf te verliezen',
-    body: [
-      'Na tien jaar bouwen, internationaal uitbreiden naar 9 landen, 180 medewerkers aansturen — en uiteindelijk het faillissement doormaken — weet ik wat er op het spel staat als founder. Niet vanuit theorie, maar van dichtbij.',
-      'Ik coach founders die klaar zijn voor de volgende stap, maar voelen dat de huidige manier van werken niet duurzaam is. Samen kijken we wat er werkelijk nodig is: betere delegatie, scherpere keuzes, of juist ruimte om te stoppen met wat niet werkt.',
-      'Dit is geen gestandaardiseerd coachingprogramma. Het is een intensief 1:1 traject waarbij ik als sparringpartner meeden vanuit doorleefde ervaring.',
+    heroTitle:  'De juiste keuzes zijn onbetaalbaar',
+    heroImageAlt: 'Milan van der Meulen in gesprek met ondernemers.',
+    intro: [
+      'Je hebt marktfit. Je team draait. En toch voelt deze fase zwaarder dan de vorige. Meer druk, meer mensen die van je afhankelijk zijn, meer beslissingen die je in je eentje moet nemen omdat niemand om je heen precies weet hoe het is om hierin te zitten.',
+      'Ik ken die fase. Ik heb samen met mijn broer een bedrijf opgebouwd van keukentafel tot in negen landen met 180 medewerkers, meer dan 50 miljoen kapitaal opgehaald bij partijen als Shell en ABP, en heb aan den lijve ondervonden wat groei met een bedrijf en met een mens doet. Ik heb de goede beslissingen zien werken, maar de verkeerde besluiten ook hun tol zien eisen. Die doorleefde ervaring, inclusief het faillissement en mijn eigen burn-out, is precies waarom ondernemers mij vragen: niet om een consultant met een theoretisch raamwerk, maar om iemand die er middenin heeft gestaan.',
+      'In een coachingtraject werk ik intensief met een klein aantal founders tegelijk. Geen algemene tips, maar sparring op de beslissingen die er nu echt toe doen: slim schalen, de juiste hire maken, zorgen dat je een team bouwt dat meegroeit in plaats van breekt, fundingstrategie, en hoe je zelf overeind blijft terwijl de druk toeneemt. Ik ben rechtstreeks bereikbaar tussen de sessies door, zodat je nooit weken hoeft te wachten met een vraag die niet kan wachten. Daar zijn we ten slotte ondernemers voor.',
     ],
-    offerHeading:  'Wat we samen doen',
-    offerEyebrow:  'Aanpak',
-    offerCards: [
+    packagesHeading: 'Pakketten',
+    priceOnRequest:  'Prijs op aanvraag',
+    packages: [
       {
-        title:       'Scherpe diagnose',
-        description: 'We starten met een eerlijk gesprek over waar je nu staat en wat je tegenhoudt. Geen standaard intake — gewoon een direct gesprek tussen twee ondernemers.',
+        name:     'Losse sessie',
+        desc:     'Snel advies nodig? Boek een losse sessie van 45 minuten. Je kunt je onderwerp van tevoren sturen zodat we snel de diepte in kunnen. Je verlaat de sessie met een eerlijk inzicht en een concrete next step.',
+        features: ['45 minuten sessie', 'Inclusief korte voorbereiding', '10% korting op een 2e sessie'],
+        cta:      'Boek sessie',
       },
       {
-        title:       'Intensieve begeleiding',
-        description: 'Regelmatige 1:1 sessies, gericht op de keuzes die ertoe doen. Delegeren, groeien, loslaten — wat je nodig hebt, niet wat het programma voorschrijft.',
-      },
-      {
-        title:       'Directe sparring',
-        description: 'Je kunt me bereiken als je een klankbord nodig hebt buiten de sessies om. Ik denk mee op het moment dat het er echt toe doet.',
+        name:     'Coaching programma',
+        desc:     'Doorlopende coaching van iemand die weet hoe het is om een bedrijf te bouwen. Uiteraard onder voorbehoud van een goede kennismaking.',
+        features: ['2× 60 minuten coaching per maand', '1× deep-dive dag per kwartaal', 'Toegang tot relevant netwerk', 'Onbeperkt contact via WhatsApp', 'Maandelijks opzegbaar'],
+        cta:      'Plan kennismaking',
       },
     ],
-    testimonialEyebrow: 'Wat anderen zeggen',
+    reviewsHeading: 'Wat anderen zeggen',
+    reviews: [
+      {
+        quote: 'It was incredible speaking with Milan. He was exceptionally generous with his thoughts, and I gained immense value from our conversation. As a true industry expert, his ‘headline’ advice has already given me a clear path to transforming our outreach strategy. I’m very much looking forward to our future conversations. Thank you, Milan, for your time and insight!',
+        name:  'Amber',
+        role:  '',
+      },
+      {
+        quote: 'Milan heeft ons bedrijf de commerciële richting gegeven die nodig is om schaalbaar te kunnen groeien',
+        name:  'Yang Soo Kloosterhof',
+        role:  'CEO Powerchainger',
+      },
+    ],
+    trajectHeading: 'Voorbeeld van een coachingtraject',
+    trajectSteps: [
+      { label: 'Week 1',   title: 'Jou en je bedrijf leren kennen', text: 'Je uitdagingen begrijpen en wat je weerhoudt om verder te groeien. De eerste inzichten komen al boven tafel.' },
+      { label: 'Week 2–4', title: 'Momentum bouwen',                text: 'Deep dives op de kernuitdagingen. Acties formuleren en doorvoeren. Maximaal inzicht krijgen in je bedrijfsprocessen.' },
+      { label: 'Verder',   title: 'Constante begeleiding',           text: 'Naast de sessies hebben we doorlopend contact. Elk kwartaal een strategiedag waarop we samen naar de toekomstige groei kijken. In deze fase koppel ik je ook aan relevante contacten in mijn netwerk.' },
+    ],
+    faqHeading: 'Veelgestelde vragen',
+    faq: [
+      { q: 'Hoe starten we?', a: 'Nadat je het contactformulier hebt ingevuld neem ik contact met je op voor een kennismaking. Bij een wederzijdse match kunnen we starten.' },
+      { q: 'Hoelang duurt een traject?', a: 'Mijn doel is om zoveel mogelijk waarde toe te voegen. Zodra jij of ik voelen dat dit verzadigd is, kan het traject op elk moment stoppen (met een opzegtermijn van 1 maand).' },
+      { q: 'Moet ik iets voorbereiden voor een sessie?', a: 'In principe lopen we tijdens de sessie door het vraagstuk heen. Je mag in vertrouwelijkheid van tevoren informatie delen ter voorbereiding.' },
+      { q: 'Waar is dit niet voor?', a: 'Het is belangrijk om transparant te zijn over je vraagstuk en het niet mooier te maken dan het is. Ik hanteer een eerlijke, duidelijke stijl om je maximaal te helpen de juiste keuze te maken. Je staat dus open voor feedback en andere inzichten.' },
+    ],
     ctaHeading:    'Klaar voor de volgende stap?',
     ctaPrimary:    'Plan kennismaking',
     ctaSecondary:  'Meer over mij',

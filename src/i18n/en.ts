@@ -266,32 +266,58 @@ export const en = {
 
   // ── Coaching Page ─────────────────────────────────────────────────────────
   coaching: {
-    pageTitle:  'Coaching for Founders — Milan van der Meulen',
-    pageDesc:   '1:1 coaching for founders ready for the next step. A sparring partner who has built, lost, and risen again.',
+    pageTitle:  'Coaching for founders — Milan van der Meulen',
+    pageDesc:   '1:1 coaching for founders who are scaling. From someone who built, lost, and rose again — not a theoretical framework, but lived experience.',
     eyebrow:    '1:1 Coaching',
-    heading:    'Scale without losing yourself',
-    body: [
-      'After ten years of building, expanding internationally into 9 countries, managing 180 employees — and ultimately going through bankruptcy — I know what is at stake as a founder. Not from theory, but from up close.',
-      'I coach founders who are ready for the next step, but feel that their current way of working is not sustainable. Together we look at what is truly needed: better delegation, sharper choices, or simply the space to stop what is not working.',
-      'This is not a standardised coaching programme. It is an intensive 1:1 trajectory where I think alongside you from lived experience.',
+    heroTitle:  'The right choices are priceless',
+    heroImageAlt: 'Milan van der Meulen in conversation with entrepreneurs.',
+    intro: [
+      'You have market fit. Your team is running. And still this phase feels heavier than the last. More pressure, more people depending on you, more decisions you have to make alone because no one around you knows exactly what it is like to be in it.',
+      'I know that phase. Together with my brother I built a company from the kitchen table to nine countries with 180 employees, raised more than 50 million in capital from parties like Shell and ABP, and experienced first-hand what growth does to a company and to a person. I have seen the good decisions work, and watched the wrong ones take their toll. That lived experience — including the bankruptcy and my own burnout — is exactly why entrepreneurs ask for me: not for a consultant with a theoretical framework, but for someone who has stood in the middle of it.',
+      'In a coaching trajectory I work intensively with a small number of founders at a time. No general tips, but sparring on the decisions that truly matter now: scaling smartly, making the right hire, building a team that grows with you instead of breaking, funding strategy, and how to stay standing yourself as the pressure rises. I am directly reachable between sessions, so you never have to wait weeks with a question that cannot wait. After all, that is what we are entrepreneurs for.',
     ],
-    offerHeading:  'What we work on together',
-    offerEyebrow:  'Approach',
-    offerCards: [
+    packagesHeading: 'Packages',
+    priceOnRequest:  'Price on request',
+    packages: [
       {
-        title:       'Sharp diagnosis',
-        description: 'We start with an honest conversation about where you are now and what is holding you back. No standard intake — just a direct conversation between two entrepreneurs.',
+        name:     'Single session',
+        desc:     'Need quick advice? Book a single 45-minute session. You can send your topic in advance so we can go deep quickly. You leave the session with an honest insight and a concrete next step.',
+        features: ['45-minute session', 'Includes short preparation', '10% off a 2nd session'],
+        cta:      'Book a session',
       },
       {
-        title:       'Intensive guidance',
-        description: 'Regular 1:1 sessions focused on the decisions that matter. Delegating, growing, letting go — what you need, not what the programme prescribes.',
-      },
-      {
-        title:       'Direct sparring',
-        description: 'You can reach me when you need a sounding board between sessions. I think alongside you at the moment it truly counts.',
+        name:     'Coaching programme',
+        desc:     'Ongoing coaching from someone who knows what it is like to build a company. Subject to a good mutual introduction, of course.',
+        features: ['2× 60-minute coaching per month', '1× deep-dive day per quarter', 'Access to a relevant network', 'Unlimited contact via WhatsApp', 'Cancellable monthly'],
+        cta:      'Schedule intro call',
       },
     ],
-    testimonialEyebrow: 'What others say',
+    reviewsHeading: 'What others say',
+    reviews: [
+      {
+        quote: 'It was incredible speaking with Milan. He was exceptionally generous with his thoughts, and I gained immense value from our conversation. As a true industry expert, his ‘headline’ advice has already given me a clear path to transforming our outreach strategy. I’m very much looking forward to our future conversations. Thank you, Milan, for your time and insight!',
+        name:  'Amber',
+        role:  '',
+      },
+      {
+        quote: 'Milan gave our company the commercial direction it needs to grow in a scalable way',
+        name:  'Yang Soo Kloosterhof',
+        role:  'CEO Powerchainger',
+      },
+    ],
+    trajectHeading: 'Example of a coaching trajectory',
+    trajectSteps: [
+      { label: 'Week 1',   title: 'Getting to know you and your company', text: 'Understanding your challenges and what is holding you back from growing further. The first insights already surface.' },
+      { label: 'Week 2–4', title: 'Building momentum',                     text: 'Deep dives on the core challenges. Formulating and implementing actions. Getting maximum insight into your business processes.' },
+      { label: 'Beyond',   title: 'Continuous guidance',                   text: 'Alongside the sessions we stay in ongoing contact. Every quarter a strategy day where we look together at future growth. In this phase I also connect you to relevant contacts in my network.' },
+    ],
+    faqHeading: 'Frequently asked questions',
+    faq: [
+      { q: 'How do we start?', a: 'After you fill in the contact form I get in touch for an introduction. If there is a mutual match, we can start.' },
+      { q: 'How long does a trajectory last?', a: 'My goal is to add as much value as possible. As soon as you or I feel that has run its course, the trajectory can stop at any time (with a one-month notice period).' },
+      { q: 'Do I need to prepare anything for a session?', a: 'In principle we work through the question during the session. You may share information in confidence beforehand to prepare.' },
+      { q: 'What is this not for?', a: 'It is important to be transparent about your question and not make it look better than it is. I use an honest, clear style to help you make the right choice — so you are open to feedback and other perspectives.' },
+    ],
     ctaHeading:    'Ready for the next step?',
     ctaPrimary:    'Schedule intro call',
     ctaSecondary:  'More about me',

@@ -1,382 +1,236 @@
 ---
 /**
- * coaching.astro — Coaching landing page (PAGE-01)
+ * coaching.astro — Coaching landing page (rebuilt from client feedback round)
  *
- * Source: PLAN 02-02 Task 2, 02-UI-SPEC.md §/coaching (PAGE-01), D-07, D-12
+ * Section order (feedbackronde/Coaching pagina.docx):
+ *   1. Header image with overlaid title "De juiste keuzes zijn onbetaalbaar"
+ *   2. "Benoemd in" press strip (reused)
+ *   3. Description (3 paragraphs)
+ *   4. Packages (2) — features + price-on-request + CTA (prices hidden per client)
+ *   5. Reviews (Amber + Yang Soo)
+ *   6. Example coaching trajectory (3 steps)
+ *   7. FAQ (native details/summary accordion)
+ *   8. CTA band + Newsletter
  *
- * Section order (UI-SPEC §/coaching):
- *   1. Hero — eyebrow, H1, subtext, primary CTA (Plan kennismaking), ghost secondary (Meer over mij)
- *   2. Offer / Approach — SectionWrapper dark (one dark band per page), 3 Cards staggered RevealOnScroll
- *   3. Photo support — networking photo via astro:assets <Picture>
- *   4. Testimonial — single Yang Soo Kloosterhof card (nl.testimonials.items[0], D-07)
- *   5. CTA band — Plan kennismaking → /contact?type=coaching
- *   6. Newsletter — reused Newsletter.astro
- *
- * SEO (D-12): unique title + description via BaseLayout → BaseHead.
- * Dark band rule: exactly ONE dark band (the offer section) per page.
- * Yellow rule: primary CTA button only (D-02); no yellow backgrounds or decorations.
- * Internal hrefs: import.meta.env.BASE_URL prefix (PATTERNS.md §BASE_URL, no href="#").
+ * Yellow used sparingly (accents/one primary CTA). Internal hrefs use BASE_URL;
+ * the single-session CTA points at the external intro.co booking link.
  */
-
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionWrapper from '../components/ui/SectionWrapper.astro';
-import Card from '../components/ui/Card.astro';
 import Button from '../components/ui/Button.astro';
-import RevealOnScroll from '../components/ui/RevealOnScroll.astro';
+import PressStrip from '../components/sections/PressStrip.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
 import { Picture } from 'astro:assets';
-import networkingSrc from '../assets/photos/milan-networking.jpg';
+import heroSrc from '../assets/photos/milan-networking.jpg';
 import { getStrings } from '../i18n/utils';
+import { INTRO_CALL_URL } from '../config';
 
-// Phase 4: locale-parameterized strings (Astro.currentLocale is 'nl' at root)
 const t = getStrings(Astro.currentLocale);
-const { pageTitle, pageDesc, eyebrow, heading, body, offerHeading, offerEyebrow, offerCards, testimonialEyebrow, ctaHeading, ctaPrimary, ctaSecondary, networkingAlt } = t.coaching;
-const testimonial = t.testimonials.items[0]; // Yang Soo Kloosterhof — coaching-relevant (D-07)
+const c = t.coaching;
+const base = import.meta.env.BASE_URL;
+const contactCoaching = `${base}contact?type=coaching`;
+const verhaalHref = `${base}mijn-verhaal`;
+
+// Package CTA targets: session → external intro.co; programme → contact.
+const pkgHref = [INTRO_CALL_URL, contactCoaching];
+const pkgExternal = [true, false];
+
+const arrow = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
 ---
 
-<BaseLayout title={pageTitle} description={pageDesc}>
+<BaseLayout title={c.pageTitle} description={c.pageDesc}>
 
-  <!-- 1. Hero: typographic hero, no hero photo (UI-SPEC §/coaching: typographic hero) -->
-  <SectionWrapper id="coaching-hero" labelledBy="coaching-hero-heading" variant="default">
-    <div class="coaching-hero">
-      <p class="coaching-hero__eyebrow">{eyebrow}</p>
-      <h1 id="coaching-hero-heading" class="coaching-hero__heading">
-        {heading}
-      </h1>
-      <div class="coaching-hero__body">
-        {body.map((paragraph: string) => (
-          <p>{paragraph}</p>
-        ))}
-      </div>
-      <div class="coaching-hero__ctas">
-        <Button href={`${import.meta.env.BASE_URL}contact?type=coaching`} variant="primary">
-          {ctaPrimary}
-        </Button>
-        <Button href={`${import.meta.env.BASE_URL}mijn-verhaal`} variant="ghost">
-          {ctaSecondary}
-        </Button>
+  <!-- 1. Header image with overlaid title -->
+  <header class="chero">
+    <Picture
+      src={heroSrc}
+      formats={['avif', 'webp']}
+      widths={[768, 1200, 1600, 2000]}
+      sizes="100vw"
+      alt={c.heroImageAlt}
+      priority
+      class="chero__img"
+    />
+    <div class="chero__scrim"></div>
+    <div class="chero__inner">
+      <p class="chero__eyebrow">{c.eyebrow}</p>
+      <h1 class="chero__title">{c.heroTitle}</h1>
+    </div>
+  </header>
+
+  <!-- 2. Benoemd in -->
+  <PressStrip />
+
+  <!-- 3. Description -->
+  <SectionWrapper id="coaching-intro" variant="default">
+    <div class="cintro" data-anim>
+      {c.intro.map((p: string) => <p>{p}</p>)}
+    </div>
+  </SectionWrapper>
+
+  <!-- 4. Packages -->
+  <SectionWrapper id="coaching-packages" variant="surface" labelledBy="coaching-packages-heading">
+    <h2 id="coaching-packages-heading" class="sec-heading" data-anim>{c.packagesHeading}</h2>
+    <div class="pkgs">
+      {c.packages.map((pkg, i: number) => (
+        <article class={`pkg${i === 1 ? ' pkg--feature' : ''}`} data-anim data-anim-variant="scale" style={`--i: ${i}`}>
+          <h3 class="pkg__name">{pkg.name}</h3>
+          <p class="pkg__price">{c.priceOnRequest}</p>
+          <p class="pkg__desc">{pkg.desc}</p>
+          <ul class="pkg__features">
+            {pkg.features.map((f: string) => (
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+          <a
+            class={`pkg__cta${i === 1 ? ' pkg__cta--primary' : ''}`}
+            href={pkgHref[i]}
+            {...(pkgExternal[i] ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            {pkg.cta}<Fragment set:html={arrow} />
+          </a>
+        </article>
+      ))}
+    </div>
+  </SectionWrapper>
+
+  <!-- 5. Reviews -->
+  <SectionWrapper id="coaching-reviews" variant="default" labelledBy="coaching-reviews-heading">
+    <h2 id="coaching-reviews-heading" class="sec-heading" data-anim>{c.reviewsHeading}</h2>
+    <div class="reviews">
+      {c.reviews.map((r, i: number) => (
+        <figure class="review" data-anim style={`--i: ${i}`}>
+          <blockquote class="review__quote">{r.quote}</blockquote>
+          <figcaption class="review__by">
+            <span class="review__name">{r.name}</span>
+            {r.role && <span class="review__role">{r.role}</span>}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </SectionWrapper>
+
+  <!-- 6. Example trajectory -->
+  <SectionWrapper id="coaching-traject" variant="dark" labelledBy="coaching-traject-heading">
+    <h2 id="coaching-traject-heading" class="sec-heading sec-heading--light" data-anim>{c.trajectHeading}</h2>
+    <ol class="traject">
+      {c.trajectSteps.map((s, i: number) => (
+        <li class="traject__step" data-anim style={`--i: ${i}`}>
+          <span class="traject__label">{s.label}</span>
+          <h3 class="traject__title">{s.title}</h3>
+          <p class="traject__text">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </SectionWrapper>
+
+  <!-- 7. FAQ -->
+  <SectionWrapper id="coaching-faq" variant="default" labelledBy="coaching-faq-heading">
+    <h2 id="coaching-faq-heading" class="sec-heading" data-anim>{c.faqHeading}</h2>
+    <div class="faq" data-anim>
+      {c.faq.map((item) => (
+        <details class="faq__item">
+          <summary class="faq__q">
+            {item.q}
+            <svg class="faq__chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <p class="faq__a">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </SectionWrapper>
+
+  <!-- 8. CTA band -->
+  <SectionWrapper id="coaching-cta" variant="surface" labelledBy="coaching-cta-heading">
+    <div class="ccta">
+      <h2 id="coaching-cta-heading" class="ccta__heading">{c.ctaHeading}</h2>
+      <div class="ccta__actions">
+        <Button href={contactCoaching} variant="primary">{c.ctaPrimary}</Button>
+        <Button href={verhaalHref} variant="ghost">{c.ctaSecondary}</Button>
       </div>
     </div>
   </SectionWrapper>
 
-  <!-- 2. Offer / Approach: ONE dark band for this page (UI-SPEC dark band rule) -->
-  <SectionWrapper id="coaching-offer" labelledBy="coaching-offer-heading" variant="dark">
-    <div class="coaching-offer">
-      <p class="coaching-offer__eyebrow">{offerEyebrow}</p>
-      <h2 id="coaching-offer-heading" class="coaching-offer__heading">
-        {offerHeading}
-      </h2>
-      <div class="coaching-offer__cards">
-        {offerCards.map((card: { title: string; description: string }, i: number) => (
-          <RevealOnScroll delay={i * 80}>
-            <Card variant="dark">
-              <div class="coaching-card">
-                <h3 class="coaching-card__title">{card.title}</h3>
-                <p class="coaching-card__description">{card.description}</p>
-              </div>
-            </Card>
-          </RevealOnScroll>
-        ))}
-      </div>
-
-      <!-- Supporting photo: networking context image (UI-SPEC §Image Pipeline) -->
-      <RevealOnScroll delay={240}>
-        <div class="coaching-offer__photo">
-          <Picture
-            src={networkingSrc}
-            formats={['avif', 'webp']}
-            widths={[400, 600, 800]}
-            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 40vw, 420px"
-            loading="lazy"
-            alt={networkingAlt}
-            class="coaching-offer__img"
-          />
-        </div>
-      </RevealOnScroll>
-    </div>
-  </SectionWrapper>
-
-  <!-- 3. Testimonial: single Yang Soo Kloosterhof card (D-07, verbatim attribution) -->
-  <SectionWrapper id="coaching-testimonial" labelledBy="coaching-testimonial-heading" variant="default">
-    <div class="coaching-testimonial">
-      <p class="coaching-testimonial__eyebrow">{testimonialEyebrow}</p>
-      <h2 id="coaching-testimonial-heading" class="visually-hidden">Testimonial</h2>
-      <RevealOnScroll>
-        <Card variant="default">
-          <div class="testimonial-card">
-            <blockquote class="testimonial-card__quote">
-              <p>"{testimonial.quote}"</p>
-            </blockquote>
-            <footer class="testimonial-card__attribution">
-              <span class="testimonial-card__name">{testimonial.name}</span>
-              <span class="testimonial-card__role">{testimonial.role}</span>
-            </footer>
-          </div>
-        </Card>
-      </RevealOnScroll>
-    </div>
-  </SectionWrapper>
-
-  <!-- 4. CTA band: terminal conversion section -->
-  <SectionWrapper id="coaching-cta" labelledBy="coaching-cta-heading" variant="surface">
-    <div class="coaching-cta">
-      <h2 id="coaching-cta-heading" class="coaching-cta__heading">
-        {ctaHeading}
-      </h2>
-      <div class="coaching-cta__actions">
-        <Button href={`${import.meta.env.BASE_URL}contact?type=coaching`} variant="primary">
-          {ctaPrimary}
-        </Button>
-        <Button href={`${import.meta.env.BASE_URL}mijn-verhaal`} variant="ghost">
-          {ctaSecondary}
-        </Button>
-      </div>
-    </div>
-  </SectionWrapper>
-
-  <!-- 5. Newsletter: reused section (UI-SPEC §/coaching) -->
   <Newsletter />
 
 </BaseLayout>
 
 <style>
-  /* ── Hero ─────────────────────────────────────────────────────────────── */
-  .coaching-hero {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
-    max-width: 720px;
-    padding-block: var(--space-2xl);
-  }
+  /* Shared section heading */
+  .sec-heading { font-size: var(--text-3xl); line-height: 1.08; margin: 0 0 clamp(var(--space-lg), 3vw, var(--space-2xl)); color: var(--color-text); }
+  .sec-heading--light { color: var(--color-dark-text); }
 
-  @media (min-width: 768px) {
-    .coaching-hero {
-      padding-block: var(--space-4xl);
-    }
-  }
+  /* ── 1. Header image + overlaid title ─────────────────────────────────── */
+  .chero { position: relative; width: 100%; min-height: clamp(360px, 60vh, 560px); display: flex; align-items: flex-end; overflow: clip; }
+  .chero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+  .chero__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(16,18,21,0.15) 0%, rgba(16,18,21,0.35) 45%, rgba(16,18,21,0.82) 100%); }
+  .chero__inner { position: relative; width: 100%; max-width: var(--max-width); margin-inline: auto; padding: var(--gutter); padding-bottom: clamp(var(--space-xl), 4vw, var(--space-3xl)); display: flex; flex-direction: column; gap: var(--space-sm); }
+  .chero__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin: 0; }
+  .chero__title { font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4rem); line-height: 1.02; letter-spacing: -0.03em; font-weight: 730; color: var(--color-dark-text); margin: 0; max-width: 20ch; text-wrap: balance; }
 
-  .coaching-hero__eyebrow {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
+  /* ── 3. Intro ─────────────────────────────────────────────────────────── */
+  .cintro { display: flex; flex-direction: column; gap: var(--space-lg); max-width: 68ch; }
+  .cintro p { font-size: var(--text-lg); line-height: 1.6; color: var(--color-text-secondary); margin: 0; }
+  .cintro p:first-child { color: var(--color-text); font-weight: 500; }
 
-  .coaching-hero__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-5xl);
-    font-weight: 600;
-    line-height: 1.1;
-    color: var(--color-text);
-    text-wrap: balance;
-    margin: 0;
-  }
+  /* ── 4. Packages ──────────────────────────────────────────────────────── */
+  .pkgs { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); align-items: start; }
+  @media (min-width: 820px) { .pkgs { grid-template-columns: 1fr 1fr; } }
+  .pkg { display: flex; flex-direction: column; gap: var(--space-md); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: clamp(var(--space-lg), 3vw, var(--space-2xl)); height: 100%; }
+  .pkg--feature { background: var(--color-ink); border-color: transparent; }
+  .pkg__name { font-size: var(--text-xl); margin: 0; color: var(--color-text); }
+  .pkg--feature .pkg__name { color: var(--color-dark-text); }
+  .pkg__price { font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0; }
+  .pkg--feature .pkg__price { color: var(--color-accent); }
+  .pkg__desc { font-size: var(--text-base); line-height: 1.6; color: var(--color-text-secondary); margin: 0; }
+  .pkg--feature .pkg__desc { color: var(--color-dark-text-soft); }
+  .pkg__features { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-sm); }
+  .pkg__features li { display: flex; align-items: flex-start; gap: var(--space-sm); font-size: var(--text-base); color: var(--color-text); }
+  .pkg--feature .pkg__features li { color: var(--color-dark-text); }
+  .pkg__features svg { color: var(--color-accent); flex-shrink: 0; margin-top: 3px; }
+  .pkg__cta { display: inline-flex; align-items: center; gap: var(--space-sm); align-self: flex-start; margin-top: auto; height: 52px; padding-inline: var(--space-lg); border-radius: var(--radius-pill); font-size: var(--text-sm); font-weight: 700; text-decoration: none; border: 1px solid var(--line-on-light-strong); color: var(--color-text); background: transparent; transition: transform var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+  .pkg__cta:hover { transform: translateY(-2px); border-color: var(--color-text); }
+  .pkg--feature .pkg__cta { color: var(--color-ink); border-color: transparent; }
+  .pkg__cta--primary { background: var(--color-accent); color: var(--color-accent-ink) !important; border-color: transparent; }
+  .pkg__cta--primary:hover { background: var(--color-accent-dark); }
+  .pkg__cta :global(svg) { transition: transform var(--duration-fast) var(--ease-out); }
+  .pkg__cta:hover :global(svg) { transform: translateX(3px); }
 
-  .coaching-hero__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-    max-width: 640px;
-  }
+  /* ── 5. Reviews ───────────────────────────────────────────────────────── */
+  .reviews { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
+  @media (min-width: 820px) { .reviews { grid-template-columns: 1fr 1fr; } }
+  .review { margin: 0; display: flex; flex-direction: column; gap: var(--space-md); background: var(--color-surface); border-radius: var(--radius-card); padding: clamp(var(--space-lg), 2.5vw, var(--space-xl)); }
+  .review__quote { margin: 0; font-size: var(--text-base); line-height: 1.6; color: var(--color-text); }
+  .review__by { display: flex; flex-direction: column; gap: 2px; }
+  .review__name { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); }
+  .review__role { font-size: var(--text-xs); color: var(--color-text-secondary); }
 
-  .coaching-hero__body p {
-    font-family: var(--font-body);
-    font-size: var(--text-base);
-    font-weight: 400;
-    line-height: 1.6;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
+  /* ── 6. Trajectory ────────────────────────────────────────────────────── */
+  .traject { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: var(--space-lg); counter-reset: step; }
+  @media (min-width: 820px) { .traject { grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); } }
+  .traject__step { display: flex; flex-direction: column; gap: var(--space-sm); padding-top: var(--space-md); border-top: 2px solid var(--line-on-dark-strong); }
+  .traject__label { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }
+  .traject__title { font-size: var(--text-xl); margin: 0; color: var(--color-dark-text); }
+  .traject__text { font-size: var(--text-base); line-height: 1.6; color: var(--color-dark-text-soft); margin: 0; }
 
-  .coaching-hero__ctas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
-    align-items: center;
-  }
+  /* ── 7. FAQ ───────────────────────────────────────────────────────────── */
+  .faq { max-width: 800px; border-top: 1px solid var(--line-on-light); }
+  .faq__item { border-bottom: 1px solid var(--line-on-light); }
+  .faq__q { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); cursor: pointer; list-style: none; padding: var(--space-lg) 0; font-size: var(--text-lg); font-weight: 600; color: var(--color-text); }
+  .faq__q::-webkit-details-marker { display: none; }
+  .faq__chev { flex-shrink: 0; transition: transform var(--duration-fast) var(--ease-out); }
+  .faq__item[open] .faq__chev { transform: rotate(180deg); }
+  .faq__a { margin: 0 0 var(--space-lg); font-size: var(--text-base); line-height: 1.65; color: var(--color-text-secondary); max-width: 68ch; }
 
-  /* ── Offer section (dark band) ────────────────────────────────────────── */
-  .coaching-offer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2xl);
-  }
+  /* ── 8. CTA band ──────────────────────────────────────────────────────── */
+  .ccta { display: flex; flex-direction: column; align-items: center; gap: var(--space-xl); text-align: center; }
+  .ccta__heading { font-size: var(--text-3xl); line-height: 1.1; margin: 0; color: var(--color-text); text-wrap: balance; }
+  .ccta__actions { display: flex; flex-wrap: wrap; gap: var(--space-md); justify-content: center; }
 
-  .coaching-offer__eyebrow {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    /* Yellow accent on eyebrow in dark section — D-02 rule: one per dark section */
-    color: var(--color-dark-text);
-    border-left: 4px solid var(--color-accent);
-    padding-left: var(--space-sm);
-    margin: 0;
-  }
-
-  .coaching-offer__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    font-weight: 600;
-    line-height: 1.15;
-    color: var(--color-dark-text);
-    margin: 0;
-    text-wrap: balance;
-  }
-
-  .coaching-offer__cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
-  }
-
-  @media (min-width: 768px) {
-    .coaching-offer__cards {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  /* ── Offer card content ─────────────────────────────────────────────── */
-  .coaching-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-  }
-
-  .coaching-card__title {
-    font-family: var(--font-display);
-    font-size: var(--text-2xl);
-    font-weight: 600;
-    line-height: 1.2;
-    color: var(--color-dark-text);
-    margin: 0;
-  }
-
-  .coaching-card__description {
-    font-family: var(--font-body);
-    font-size: var(--text-base);
-    font-weight: 400;
-    line-height: 1.6;
-    color: var(--color-dark-text);
-    opacity: 0.85;
-    margin: 0;
-  }
-
-  /* ── Photo (supporting context) ──────────────────────────────────────── */
-  .coaching-offer__photo {
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    max-width: 480px;
-  }
-
-  .coaching-offer__img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: var(--radius-lg);
-    object-fit: cover;
-  }
-
-  /* ── Testimonial section ──────────────────────────────────────────────── */
-  .coaching-testimonial {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
-    max-width: 640px;
-  }
-
-  .coaching-testimonial__eyebrow {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  /* ── Testimonial card content ────────────────────────────────────────── */
-  .testimonial-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .testimonial-card__quote {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: var(--text-base);
-    font-weight: 400;
-    line-height: 1.6;
-    color: var(--color-text);
-  }
-
-  .testimonial-card__quote p {
-    margin: 0;
-  }
-
-  .testimonial-card__attribution {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .testimonial-card__name {
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--color-text);
-  }
-
-  .testimonial-card__role {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 400;
-    color: var(--color-text-secondary);
-  }
-
-  /* ── CTA band ────────────────────────────────────────────────────────── */
-  .coaching-cta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-xl);
-    text-align: center;
-    padding-block: var(--space-2xl);
-  }
-
-  .coaching-cta__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    font-weight: 600;
-    line-height: 1.15;
-    color: var(--color-text);
-    text-wrap: balance;
-    margin: 0;
-  }
-
-  .coaching-cta__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* ── Visually hidden utility ─────────────────────────────────────────── */
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  @media (prefers-reduced-motion: reduce) {
+    .pkg__cta, .pkg__cta :global(svg), .faq__chev { transition: none; }
   }
 </style>

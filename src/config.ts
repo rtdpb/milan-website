@@ -59,6 +59,13 @@ export const TODO_WEB3FORMS_ACCESS_KEY = 'TODO_WEB3FORMS_ACCESS_KEY';
 export const TODO_CALENDLY_URL = 'TODO_CALENDLY_URL';
 
 /**
+ * Intro.co booking link for a single paid coaching session ("Boek sessie").
+ * Supplied by Milan (feedback round). External — open in a new tab.
+ * Used in: src/pages/coaching.astro (+ en) package 1 CTA.
+ */
+export const INTRO_CALL_URL = 'https://intro.co/milanvandermeulen';
+
+/**
  * LinkedIn profile URL.
  * TODO: supply LinkedIn profile URL (Phase 1 / any phase — waiting on user).
  * Used in: header LinkedIn icon, footer LinkedIn icon, JSON-LD sameAs.
