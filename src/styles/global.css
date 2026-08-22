@@ -163,6 +163,22 @@ a { color: inherit; text-decoration-skip-ink: auto; }
   transition: stroke-dashoffset var(--duration-draw) var(--ease-draw);
 }
 
+/* ── Generic self-drawing line-art (reusable) ─────────────────────────────
+ * Any <path>/<circle> etc. with class .draw-path inside a [data-anim] wrapper
+ * draws itself when the wrapper enters the viewport. The element must set its
+ * own stroke-dasharray + starting stroke-dashoffset (equal values → invisible),
+ * then this rule animates the offset to 0. Use --draw-delay for stagger.
+ * Parallels .growth-curve__path but not tied to that one figure.
+ */
+.draw-path {
+  stroke-dashoffset: var(--draw-len, 1000);
+}
+[data-anim].is-in .draw-path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--duration-draw) var(--ease-draw);
+  transition-delay: var(--draw-delay, 0ms);
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-anim] {
     opacity: 1 !important;
@@ -182,8 +198,9 @@ a { color: inherit; text-decoration-skip-ink: auto; }
   [data-parallax] {
     transform: none !important;
   }
-  /* Growth curve: show fully drawn with no transition. */
-  .growth-curve__path {
+  /* Growth curve + generic self-drawing line-art: show fully drawn, no motion. */
+  .growth-curve__path,
+  .draw-path {
     stroke-dashoffset: 0 !important;
     transition: none !important;
   }
