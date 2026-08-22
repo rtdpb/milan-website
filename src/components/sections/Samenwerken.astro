@@ -106,18 +106,10 @@ const [news, talk, coach] = s.cards;
   .sw__heading { font-size: var(--text-3xl); margin: 0; }
   .sw__subtext { font-size: var(--text-lg); line-height: 1.55; color: var(--color-text-secondary); margin: 0; }
 
-  /* Vertical stack of full-width cards (feedback): nieuwsbrief licht bovenaan,
-     dan spreker + coaching in de donkere kleurstelling met meer nadruk. */
-  .sw__grid { display: flex; flex-direction: column; gap: clamp(var(--space-md), 2vw, var(--space-lg)); }
-
-  /* Desktop: each card becomes a horizontal media | content split.
-     Scoped under .sw__grid so these win over the later .sw__card base rules. */
-  @media (min-width: 820px) {
-    .sw__grid .sw__card--news,
-    .sw__grid .sw__card--talk { display: grid; grid-template-columns: 1fr 1.15fr; align-items: stretch; }
-    .sw__grid .sw__talk-media,
-    .sw__grid .sw__coach-media { aspect-ratio: auto; height: 100%; min-height: 320px; }
-  }
+  /* 3 cards side by side (feedback: "naast elkaar"): nieuwsbrief in de lichte
+     kleur, spreker + coaching in de donkere kleurstelling. Stacks on mobile. */
+  .sw__grid { display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-md), 2vw, var(--space-lg)); }
+  @media (min-width: 900px) { .sw__grid { grid-template-columns: repeat(3, 1fr); align-items: stretch; } }
 
   .sw__card {
     position: relative; display: flex; flex-direction: column;
@@ -130,7 +122,7 @@ const [news, talk, coach] = s.cards;
   .sw__label { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-secondary); }
   .sw__label--light { color: var(--color-dark-text-soft); }
   .sw__tag { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-accent-ink); background: var(--color-accent); padding: 2px 8px; border-radius: var(--radius-pill); }
-  .sw__card-title { font-size: var(--text-xl); line-height: 1.08; margin: 0; color: var(--color-text); }
+  .sw__card-title { font-size: var(--text-xl); line-height: 1.1; margin: 0; color: var(--color-text); hyphens: auto; overflow-wrap: break-word; }
   .sw__card-title--light { color: var(--color-dark-text); }
   .sw__card-desc { font-size: var(--text-base); line-height: 1.55; margin: 0; color: var(--color-text-secondary); }
   .sw__card-desc--light { color: var(--color-dark-text-soft); }
@@ -159,28 +151,25 @@ const [news, talk, coach] = s.cards;
     display: flex; align-items: center; justify-content: center;
     padding: clamp(var(--space-lg), 2.4vw, var(--space-2xl));
   }
-  .sw__news-visual svg { width: min(200px, 70%); height: auto; display: block; }
-  @media (min-width: 820px) {
-    .sw__news-visual { height: 100%; background: rgba(20, 22, 29, 0.035); }
-  }
+  .sw__news-visual svg { width: min(200px, 62%); height: auto; display: block; }
+  .sw__news-visual { aspect-ratio: 16 / 10; background: rgba(20, 22, 29, 0.035); }
 
   /* 02 Presentatie — navy, photo on top */
   .sw__card--talk { background: var(--color-navy); }
   .sw__talk-media { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: var(--color-navy-2); }
   .sw__talk-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; }
 
-  /* 03 Coaching — ink premium */
-  .sw__card--coach { background: var(--color-ink); display: grid; grid-template-columns: 1fr; }
-  @media (min-width: 820px) { .sw__card--coach { grid-template-columns: 5fr 7fr; align-items: stretch; } }
-  .sw__coach-media { position: relative; min-height: 240px; }
+  /* 03 Coaching — ink premium (same vertical card shape as the other two) */
+  .sw__card--coach { background: var(--color-ink); }
+  .sw__coach-media { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; }
   .sw__coach-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
-  .sw__coach-content { display: flex; flex-direction: column; gap: var(--space-md); padding: clamp(var(--space-xl), 3vw, var(--space-3xl)); }
-  .sw__coach-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); flex-wrap: wrap; }
-  .sw__coach-title { font-size: var(--text-2xl); max-width: 18ch; }
+  .sw__coach-content { display: flex; flex-direction: column; gap: var(--space-sm); flex: 1; padding: clamp(var(--space-lg), 2.4vw, var(--space-2xl)); }
+  .sw__coach-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm); flex-wrap: wrap; }
+  .sw__coach-title { font-size: var(--text-xl); max-width: 18ch; }
   .sw__scarcity { display: inline-flex; align-items: center; gap: var(--space-sm); padding: 6px 14px; border: 1px solid var(--line-on-dark-strong); border-radius: var(--radius-pill); font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-dark-text); }
   .sw__scarcity-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); }
-  /* Coaching CTA keeps the yellow base (.sw__cta-btn) but sits snug under the copy. */
-  .sw__coach-content .sw__cta-btn { margin-top: var(--space-sm); }
+  /* Coaching CTA sits at the bottom of the card (equal-height 3-up row). */
+  .sw__coach-content .sw__cta-btn { margin-top: auto; }
   .sw__card--coach:hover .sw__cta-btn { background: var(--color-accent-dark); }
 
   @media (prefers-reduced-motion: reduce) { .sw__card, .sw__cta-btn, .sw__cta-btn :global(svg) { transition: none; } }
