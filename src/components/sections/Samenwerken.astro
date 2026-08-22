@@ -33,6 +33,13 @@ const [news, talk, coach] = s.cards;
   <div class="sw">
     <header class="sw__head" data-anim>
       <h2 id="samenwerken-heading" class="sw__heading">{s.heading}</h2>
+      <!-- Self-made underline flourish — draws itself on scroll (shared .draw-path). -->
+      <svg class="sw__flourish" viewBox="0 0 200 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path class="draw-path" style="--draw-len: 260" stroke-dasharray="260"
+          d="M4 15 C 40 6, 90 6, 130 12 C 150 15, 168 14, 190 6"
+          stroke="var(--color-text)" stroke-width="2.5" stroke-linecap="round" opacity="0.55" />
+        <circle cx="190" cy="6" r="3.5" fill="var(--color-accent)" />
+      </svg>
       <p class="sw__subtext">{s.subtext}</p>
     </header>
 
@@ -104,6 +111,7 @@ const [news, talk, coach] = s.cards;
   .sw { display: flex; flex-direction: column; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); }
   .sw__head { display: flex; flex-direction: column; gap: var(--space-md); max-width: 54ch; }
   .sw__heading { font-size: var(--text-3xl); margin: 0; }
+  .sw__flourish { width: clamp(150px, 26vw, 220px); height: auto; display: block; margin-block: calc(var(--space-xs) * -1) calc(var(--space-xs) * -1); }
   .sw__subtext { font-size: var(--text-lg); line-height: 1.55; color: var(--color-text-secondary); margin: 0; }
 
   .sw__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
