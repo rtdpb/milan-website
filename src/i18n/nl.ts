@@ -273,7 +273,7 @@ export const nl = {
     pageDesc:   '1:1 coaching voor founders die schalen. Van iemand die zelf bouwde, verloor en weer opstond — geen theoretisch raamwerk, maar doorleefde ervaring.',
     eyebrow:    '1:1 Coaching',
     heroTitle:  'De juiste keuzes zijn onbetaalbaar',
-    heroImageAlt: 'Milan van der Meulen in gesprek met ondernemers.',
+    heroImageAlt: 'Milan van der Meulen op het podium tijdens een presentatie.',
     intro: [
       'Je hebt marktfit. Je team draait. En toch voelt deze fase zwaarder dan de vorige. Meer druk, meer mensen die van je afhankelijk zijn, meer beslissingen die je in je eentje moet nemen omdat niemand om je heen precies weet hoe het is om hierin te zitten.',
       'Ik ken die fase. Ik heb samen met mijn broer een bedrijf opgebouwd van keukentafel tot in negen landen met 180 medewerkers, meer dan 50 miljoen kapitaal opgehaald bij partijen als Shell en ABP, en heb aan den lijve ondervonden wat groei met een bedrijf en met een mens doet. Ik heb de goede beslissingen zien werken, maar de verkeerde besluiten ook hun tol zien eisen. Die doorleefde ervaring, inclusief het faillissement en mijn eigen burn-out, is precies waarom ondernemers mij vragen: niet om een consultant met een theoretisch raamwerk, maar om iemand die er middenin heeft gestaan.',
