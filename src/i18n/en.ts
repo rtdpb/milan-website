@@ -156,8 +156,8 @@ export const en = {
     heading:  'Why I now share what I have learned',
     // Faithful translation of the VERBATIM 4-paragraph docx story (§Sectie 4).
     body: [
-      "My entrepreneurship didn't begin with a business plan, but with a conviction: that entrepreneurship plays an essential role in solving big challenges. At nineteen I decided to put my energy into the energy transition and, together with my brother, founded Soly. What began as an idealistic initiative grew, over more than ten years, into an internationally operating company in nine countries, with nearly one million solar panels installed. We built our own technology, developed scalable commercial structures, and created a culture where people, impact and performance came together.",
-      'But my story is not a smooth success story. Alongside growth, recognition and impact, I also came to know the hard sides of entrepreneurship. We made choices under pressure, worked with investors, grew faster than was sometimes comfortable, and ultimately saw how a construct focused above all on speed and returns can break even strong impact-driven companies.',
+      "My entrepreneurship didn't begin with a business plan, but with a conviction: that entrepreneurship plays an essential role in solving big challenges. At nineteen I decided to put my energy into the energy transition and, together with my brother, founded Soly. What began as an idealistic initiative grew, over more than ten years, into an internationally operating company in nine countries, with nearly one million solar panels installed and more than 50 million in investment. We built our own technology, developed scalable commercial structures, and created a culture where people, impact and performance came together.",
+      'But my story is not a smooth success story. Alongside growth, recognition and impact, I also came to know the hard sides of entrepreneurship. We made choices under pressure, worked with international investors, grew faster than was sometimes comfortable, and ultimately saw how a construct focused above all on speed and returns can break even strong impact-driven companies.',
       'I lost myself in a burnout. And not long after, the company. The bankruptcy of Soly became a turning point: painful, confronting, and at the same time formative. That experience sharpened my vision. I have experienced first-hand what works — and what does not — when scaling a company with a strong mission. I know how important strategy, culture, focus and the right kind of capital are. And I know how damaging the wrong incentives can be.',
       'Now I bring together everything I have learned. Not as a consultant, not as a traditional investor, but as a hands-on partner. With my experience I stand beside you as a founder. I help you scale your business without losing yourself.',
     ],
@@ -329,6 +329,24 @@ export const en = {
     pageTitle:  'My Story — Milan van der Meulen',
     pageDesc:   "The honest story of Soly: international expansion into 9 countries, 180 employees, and the bankruptcy that changed everything.",
     eyebrow:    'My story',
+
+    // ── Header ────────────────────────────────────────────────────────────
+    heroEyebrow:  'The story behind Soly',
+    heroTitle:    'Lived lessons',
+    heroImageAlt: 'Milan van der Meulen on stage.',
+
+    // ── In the media ──────────────────────────────────────────────────────
+    mediaHeading: 'In the media',
+    media: [
+      { outlet: 'De Telegraaf',            title: 'Passie voor duurzaamheid',                              url: 'https://www.telegraaf.nl/financieel/passie-voor-duurzaamheid/64785275.html' },
+      { outlet: 'RTL Nieuws',              title: 'Coöperatief ondernemen met zonne-energie',              url: 'https://www.rtl.nl/nieuws/economie/artikel/5428413/cooperatief-ondernemen-zonneenergie-zonnepanelen-soly-rabobank' },
+      { outlet: 'BNR',                     title: 'De Top van Nederland — over Soly en zonnepanelen',      url: 'https://www.bnr.nl/podcast/de-top-van-nederland/10506690/milan-van-der-meulen-soly-97-procent-van-de-zonnepanelen-komen-uit-china-die-van-ons-dus-ook' },
+      { outlet: 'NOS',                     title: 'Er is ook hoop, zegt Al Gore met nieuwe klimaatfilm',   url: 'https://nos.nl/artikel/2186295-er-is-ook-hoop-zegt-al-gore-met-nieuwe-klimaatfilm' },
+      { outlet: 'Dagblad van het Noorden', title: 'Patrick en Milan veroveren Europa met Soly',            url: 'https://www.dvhn.nl/economie/patrick-en-milan-veroveren-europa-met-zonne-energiebedrijf-soly-uit-groningen/156787544.html' },
+      { outlet: 'Leeuwarder Courant',      title: 'Mega-investering voor zonnepanelenbedrijf Soly',        url: 'https://www.lc.nl/economie/mega-investering-voor-zonnepanelenbedrijf-soly-van-broers-milan-en-patrick-van-der-meulen-uit-leeuwarden/157134939.html' },
+      { outlet: 'MT/Sprout',               title: 'De groeilessen van Milan van der Meulen',               url: 'https://mtsprout.nl/groei/milan-van-der-meulen-enienl-groeilessen' },
+      { outlet: 'De Ondernemer',           title: 'Soly haalt 30 miljoen groeikapitaal op',                url: 'https://www.deondernemer.nl/innovatie/zonne-energiebedrijf-soly-haalt-30-miljoen-groeikapitaal-op-voor-verdere-expansie~1671f0b' },
+    ],
 
     // ── Arc 1: The beginning ──────────────────────────────────────────────
     arc1Eyebrow: 'The beginning',

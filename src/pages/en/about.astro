@@ -1,211 +1,103 @@
 ---
 /**
  * src/pages/en/about.astro — EN "My Story" page (route: /en/about)
- * NL analog: src/pages/mijn-verhaal.astro (NL slug: mijn-verhaal)
- *
- * Thin EN wrapper. Astro.currentLocale resolves to 'en' for all /en/* pages.
- *
- * Four EN page-wrapper transformations (04-PATTERNS.md §EN page wrappers):
- *   1. Import paths use ../../ (one level deeper due to en/ subdirectory)
- *   2. import {getStrings} from '../../i18n/utils' + const t = getStrings(Astro.currentLocale)
- *   3. nl.mijnVerhaal.* → t.mijnVerhaal.*
- *   4. Internal CTAs use getRelativeLocaleUrl('en', <en-slug>)
- *
- * Translated slug: nlSlug="mijn-verhaal" enSlug="about" — passed to BaseLayout
- * so BaseHead emits correct hreflang alternates (/mijn-verhaal ↔ /en/about).
- *
- * Story.astro isMijnVerhaalPage guard already extended to match /about (Plan 01 deviation).
- *
- * Phase 4: I18N-02, D-06
+ * Mirrors src/pages/mijn-verhaal.astro with EN strings.
  */
-
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionWrapper from '../../components/ui/SectionWrapper.astro';
 import Story from '../../components/sections/Story.astro';
 import Timeline from '../../components/sections/Timeline.astro';
-import SectionWrapper from '../../components/ui/SectionWrapper.astro';
-import Button from '../../components/ui/Button.astro';
-import Newsletter from '../../components/sections/Newsletter.astro';
+import Samenwerken from '../../components/sections/Samenwerken.astro';
+import { Picture } from 'astro:assets';
+import heroSrc from '../../assets/photos/milan-hero-stage.jpg';
 import { getStrings } from '../../i18n/utils';
-import { getRelativeLocaleUrl } from 'astro:i18n';
 
-// Astro.currentLocale is 'en' automatically for /en/* pages at build time.
 const t = getStrings(Astro.currentLocale);
 const mv = t.mijnVerhaal;
+const awards = t.spreker.awards;
+const awardsHeading = t.spreker.awardsHeading;
+const extArrow = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>`;
 ---
 
-<BaseLayout
-  title={mv.pageTitle}
-  description={mv.pageDesc}
-  nlSlug="mijn-verhaal"
-  enSlug="about"
->
+<BaseLayout title={mv.pageTitle} description={mv.pageDesc} nlSlug="mijn-verhaal" enSlug="about">
 
-  <!--
-    Opening dark band — the Story.astro component reused wholesale.
-    id="verhaal" is the in-page anchor. On this page it becomes the page-top band.
-    The teaser link inside Story.astro is conditionally hidden on this page
-    (Story.astro guard extended to match /about in Plan 01).
-  -->
+  <header class="mhero">
+    <Picture
+      src={heroSrc}
+      formats={['avif', 'webp']}
+      widths={[768, 1200, 1600, 2000, 2400]}
+      sizes="100vw"
+      alt={mv.heroImageAlt}
+      priority
+      class="mhero__img"
+    />
+    <div class="mhero__scrim"></div>
+    <div class="mhero__inner">
+      <p class="mhero__eyebrow">{mv.heroEyebrow}</p>
+      <h1 class="mhero__title">{mv.heroTitle}</h1>
+    </div>
+  </header>
+
   <Story />
 
-  <!-- Timeline — Soly journey (moved here from the homepage). -->
+  <SectionWrapper id="verhaal-media" variant="surface" labelledBy="verhaal-media-heading">
+    <h2 id="verhaal-media-heading" class="sec-heading" data-anim>{mv.mediaHeading}</h2>
+    <ul class="media" data-anim>
+      {mv.media.map((m) => (
+        <li>
+          <a class="media__item" href={m.url} target="_blank" rel="noopener noreferrer">
+            <span class="media__outlet">{m.outlet}</span>
+            <span class="media__title">{m.title}</span>
+            <Fragment set:html={extArrow} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </SectionWrapper>
+
   <Timeline />
 
-  <!-- ── Arc 1: The beginning ──────────────────────────────────────────── -->
-  <SectionWrapper id="verhaal-start" labelledBy="verhaal-start-heading" variant="default">
-    <div class="verhaal-section">
-      <p class="verhaal-eyebrow">{mv.arc1Eyebrow}</p>
-      <h2 id="verhaal-start-heading" class="verhaal-heading">{mv.arc1Heading}</h2>
-      <div class="prose">
-        {mv.arc1Body.map((p) => <p>{p}</p>)}
-      </div>
-    </div>
+  <SectionWrapper id="verhaal-awards" variant="default" labelledBy="verhaal-awards-heading">
+    <h2 id="verhaal-awards-heading" class="sec-heading" data-anim>{awardsHeading}</h2>
+    <ul class="awards" data-anim>
+      {awards.map((a) => (
+        <li class="award">
+          <span class="award__title">{a.title}</span>
+          <span class="award__meta">{a.by} · {a.date}</span>
+        </li>
+      ))}
+    </ul>
   </SectionWrapper>
 
-  <!-- ── Arc 2: International expansion ──────────────────────────────── -->
-  <SectionWrapper id="verhaal-expansie" labelledBy="verhaal-expansie-heading" variant="surface">
-    <div class="verhaal-section">
-      <p class="verhaal-eyebrow">{mv.arc2Eyebrow}</p>
-      <h2 id="verhaal-expansie-heading" class="verhaal-heading">{mv.arc2Heading}</h2>
-      <div class="prose">
-        {mv.arc2Body.map((p) => <p>{p}</p>)}
-      </div>
-    </div>
-  </SectionWrapper>
-
-  <!-- ── Arc 3: The bankruptcy ─────────────────────────────────────────── -->
-  <SectionWrapper id="verhaal-faillissement" labelledBy="verhaal-faillissement-heading" variant="default">
-    <div class="verhaal-section">
-      <p class="verhaal-eyebrow">{mv.arc3Eyebrow}</p>
-      <h2 id="verhaal-faillissement-heading" class="verhaal-heading">{mv.arc3Heading}</h2>
-      <div class="prose">
-        {mv.arc3Body.map((p) => <p>{p}</p>)}
-      </div>
-    </div>
-  </SectionWrapper>
-
-  <!-- ── Arc 4: Today ───────────────────────────────────────────────────── -->
-  <SectionWrapper id="verhaal-vandaag" labelledBy="verhaal-vandaag-heading" variant="surface">
-    <div class="verhaal-section">
-      <p class="verhaal-eyebrow">{mv.arc4Eyebrow}</p>
-      <h2 id="verhaal-vandaag-heading" class="verhaal-heading">{mv.arc4Heading}</h2>
-      <div class="prose">
-        {mv.arc4Body.map((p) => <p>{p}</p>)}
-      </div>
-    </div>
-  </SectionWrapper>
-
-  <!-- ── Terminal CTA: into the lead flow ──────────────────────────────── -->
-  <SectionWrapper id="verhaal-cta" labelledBy="verhaal-cta-heading" variant="default">
-    <div class="verhaal-cta-section">
-      <p class="verhaal-eyebrow verhaal-cta-eyebrow">{mv.ctaEyebrow}</p>
-      <h2 id="verhaal-cta-heading" class="verhaal-heading verhaal-cta-heading">{mv.ctaHeading}</h2>
-      <div class="verhaal-cta-row">
-        <!--
-          Primary CTA routes into the EN contact form with type=coaching pre-selected.
-          Uses getRelativeLocaleUrl so base path is handled automatically (04-PATTERNS.md).
-        -->
-        <Button
-          href={getRelativeLocaleUrl('en', 'contact') + '?type=coaching'}
-          variant="primary"
-        >
-          {mv.ctaPrimary}
-        </Button>
-        <!--
-          Ghost secondary — links to the EN Speaking page.
-          getRelativeLocaleUrl used for EN-internal link (04-PATTERNS.md §Internal href).
-        -->
-        <Button
-          href={getRelativeLocaleUrl('en', 'speaking')}
-          variant="secondary"
-        >
-          {mv.ctaSecondary}
-        </Button>
-      </div>
-    </div>
-  </SectionWrapper>
-
-  <!-- ── Newsletter — reused bottom section ────────────────────────────── -->
-  <Newsletter />
+  <Samenwerken />
 
 </BaseLayout>
 
 <style>
-  /* ── Shared verhaal section layout ─────────────────────────────────── */
-  .verhaal-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);   /* 32px between eyebrow → heading → prose */
-    max-width: 800px;       /* section container cap */
-  }
+  .sec-heading { font-size: var(--text-3xl); line-height: 1.08; margin: 0 0 clamp(var(--space-lg), 3vw, var(--space-2xl)); color: var(--color-text); }
 
-  /* ── Eyebrow label ──────────────────────────────────────────────────── */
-  .verhaal-eyebrow {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-    margin: 0;
-    line-height: 1.4;
-  }
+  .mhero { position: relative; width: 100%; min-height: clamp(420px, 66vh, 620px); display: flex; align-items: flex-end; overflow: clip; }
+  .mhero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+  .mhero__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(16,18,21,0.10) 0%, rgba(16,18,21,0.35) 45%, rgba(16,18,21,0.82) 100%); }
+  .mhero__inner { position: relative; width: 100%; max-width: var(--max-width); margin-inline: auto; padding: var(--gutter); padding-bottom: clamp(var(--space-xl), 4vw, var(--space-3xl)); display: flex; flex-direction: column; gap: var(--space-sm); }
+  .mhero__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin: 0; }
+  .mhero__title { font-size: clamp(2.5rem, 1.2rem + 4.4vw, 4.5rem); line-height: 1.0; letter-spacing: -0.03em; font-weight: 730; color: var(--color-dark-text); margin: 0; max-width: 16ch; text-wrap: balance; }
 
-  /* ── Section heading ────────────────────────────────────────────────── */
-  .verhaal-heading {
-    font-family: var(--font-display);
-    font-size: var(--text-2xl);
-    font-weight: 600;
-    line-height: 1.2;
-    color: var(--color-text);
-    margin: 0;
-    text-wrap: balance;
-  }
+  .media { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: var(--space-sm); }
+  @media (min-width: 760px) { .media { grid-template-columns: 1fr 1fr; gap: var(--space-md); } }
+  .media__item { display: flex; align-items: baseline; gap: var(--space-md); padding: var(--space-md) var(--space-lg); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-decoration: none; transition: transform var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out); }
+  .media__item:hover { transform: translateY(-2px); border-color: var(--line-on-light-strong); }
+  .media__outlet { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-secondary); white-space: nowrap; flex-shrink: 0; min-width: 9ch; }
+  .media__title { font-size: var(--text-sm); color: var(--color-text); line-height: 1.35; flex: 1; }
+  .media__item :global(svg) { color: var(--color-text-secondary); flex-shrink: 0; align-self: center; transition: transform var(--duration-fast) var(--ease-out); }
+  .media__item:hover :global(svg) { transform: translate(2px, -2px); }
 
-  @media (min-width: 1024px) {
-    .verhaal-heading {
-      font-size: var(--text-3xl);
-    }
-  }
+  .awards { list-style: none; margin: 0; padding: 0; max-width: 760px; border-top: 1px solid var(--line-on-light); }
+  .award { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-lg); padding: var(--space-md) 0; border-bottom: 1px solid var(--line-on-light); }
+  .award__title { font-size: var(--text-base); font-weight: 600; color: var(--color-text); }
+  .award__meta { font-size: var(--text-xs); letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-text-secondary); white-space: nowrap; flex-shrink: 0; }
 
-  /* ── Prose column — reading-measure constraint (UI-SPEC §Typography) ── */
-  /* max-width: 680px for all long-form narrative columns */
-  .prose {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);   /* 24px between paragraphs */
-    max-width: 680px;       /* Reading measure (UI-SPEC §Long-form prose constraint) */
-  }
-
-  .prose p {
-    font-family: var(--font-body);
-    font-size: var(--text-base);   /* 16–18px — body size */
-    font-weight: 400;
-    line-height: 1.6;
-    color: var(--color-text);
-    margin: 0;
-  }
-
-  /* ── Terminal CTA section ───────────────────────────────────────────── */
-  .verhaal-cta-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
-    max-width: 680px;
-  }
-
-  .verhaal-cta-eyebrow {
-    /* Inherits .verhaal-eyebrow — no override needed */
-  }
-
-  .verhaal-cta-heading {
-    /* Inherits .verhaal-heading */
-  }
-
-  .verhaal-cta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);   /* 16px between buttons */
-    align-items: center;
+  @media (prefers-reduced-motion: reduce) {
+    .media__item, .media__item :global(svg) { transition: none; }
   }
 </style>
