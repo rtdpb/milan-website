@@ -2,6 +2,9 @@ node_modules/
 dist/
 .astro/
 
+# Local Playwright screenshot output (dev-only visual checks)
+screenshots/
+
 # Full-res photo originals — never commit as production assets
 fotos/
 assets/originals/

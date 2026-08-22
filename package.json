@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
+    "snap": "astro build && node scripts/screenshot.js",
     "astro": "astro"
   },
   "dependencies": {
@@ -18,6 +19,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
+    "playwright": "^1.62.1",
     "typescript": "^5.0.0"
   }
 }
