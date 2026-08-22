@@ -94,11 +94,14 @@ const tl = t.timeline;
 </SectionWrapper>
 
 <style>
-  .tl { display: flex; flex-direction: column; gap: clamp(var(--space-2xl), 5vw, var(--space-4xl)); }
+  /* Compacter vertical rhythm (feedback: sectie was te groot). */
+  .tl { display: flex; flex-direction: column; gap: clamp(var(--space-lg), 3vw, var(--space-2xl)); }
 
   /* ── Header ───────────────────────────────────────────────────────────── */
   .tl__head { display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); align-items: center; }
   @media (min-width: 900px) { .tl__head { grid-template-columns: 1.15fr 0.85fr; } }
+  /* Cap the header photo so it doesn't inflate the row height (compacter). */
+  @media (min-width: 900px) { .tl__photo { max-height: 360px; } }
   .tl__head-text { display: flex; flex-direction: column; gap: var(--space-md); }
   .tl__eyebrow { font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin: 0; }
   .tl__heading { font-size: var(--text-3xl); color: var(--color-dark-text); margin: 0; max-width: 20ch; }
@@ -142,7 +145,7 @@ const tl = t.timeline;
   .tl__item {
     position: relative;
     padding-left: clamp(var(--space-xl), 4vw, var(--space-2xl));
-    padding-bottom: clamp(var(--space-xl), 4vw, var(--space-3xl));
+    padding-bottom: clamp(var(--space-md), 2.5vw, var(--space-xl));
   }
   /* Rail line — decorative, drawn per item so it's continuous. */
   .tl__item::before {

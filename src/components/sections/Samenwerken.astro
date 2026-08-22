@@ -106,12 +106,17 @@ const [news, talk, coach] = s.cards;
   .sw__heading { font-size: var(--text-3xl); margin: 0; }
   .sw__subtext { font-size: var(--text-lg); line-height: 1.55; color: var(--color-text-secondary); margin: 0; }
 
-  .sw__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
-  @media (min-width: 760px) {
-    .sw__grid { grid-template-columns: 5fr 7fr; }
-    .sw__card--news { grid-column: 1; }
-    .sw__card--talk { grid-column: 2; }
-    .sw__card--coach { grid-column: 1 / -1; }
+  /* Vertical stack of full-width cards (feedback): nieuwsbrief licht bovenaan,
+     dan spreker + coaching in de donkere kleurstelling met meer nadruk. */
+  .sw__grid { display: flex; flex-direction: column; gap: clamp(var(--space-md), 2vw, var(--space-lg)); }
+
+  /* Desktop: each card becomes a horizontal media | content split.
+     Scoped under .sw__grid so these win over the later .sw__card base rules. */
+  @media (min-width: 820px) {
+    .sw__grid .sw__card--news,
+    .sw__grid .sw__card--talk { display: grid; grid-template-columns: 1fr 1.15fr; align-items: stretch; }
+    .sw__grid .sw__talk-media,
+    .sw__grid .sw__coach-media { aspect-ratio: auto; height: 100%; min-height: 320px; }
   }
 
   .sw__card {
@@ -148,10 +153,16 @@ const [news, talk, coach] = s.cards;
   .sw__card--news:hover .sw__cta-btn--ink { background: #000; }
   .sw__card--talk:hover .sw__cta-btn--light { background: #fff; }
 
-  /* 01 Newsletter — cream/white with yellow details (restrained) */
-  .sw__card--news { background: var(--color-bg-2); border: 1px solid var(--color-border); }
-  .sw__news-visual { padding: clamp(var(--space-lg), 2.4vw, var(--space-2xl)) clamp(var(--space-lg), 2.4vw, var(--space-2xl)) 0; }
-  .sw__news-visual svg { width: min(150px, 55%); height: auto; display: block; }
+  /* 01 Newsletter — light card (feedback: nieuwsbrief in de lichte kleur) */
+  .sw__card--news { background: var(--color-surface); border: 1px solid var(--color-border); }
+  .sw__news-visual {
+    display: flex; align-items: center; justify-content: center;
+    padding: clamp(var(--space-lg), 2.4vw, var(--space-2xl));
+  }
+  .sw__news-visual svg { width: min(200px, 70%); height: auto; display: block; }
+  @media (min-width: 820px) {
+    .sw__news-visual { height: 100%; background: rgba(20, 22, 29, 0.035); }
+  }
 
   /* 02 Presentatie — navy, photo on top */
   .sw__card--talk { background: var(--color-navy); }
@@ -160,7 +171,7 @@ const [news, talk, coach] = s.cards;
 
   /* 03 Coaching — ink premium */
   .sw__card--coach { background: var(--color-ink); display: grid; grid-template-columns: 1fr; }
-  @media (min-width: 900px) { .sw__card--coach { grid-template-columns: 5fr 7fr; align-items: stretch; } }
+  @media (min-width: 820px) { .sw__card--coach { grid-template-columns: 5fr 7fr; align-items: stretch; } }
   .sw__coach-media { position: relative; min-height: 240px; }
   .sw__coach-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
   .sw__coach-content { display: flex; flex-direction: column; gap: var(--space-md); padding: clamp(var(--space-xl), 3vw, var(--space-3xl)); }
