@@ -26,14 +26,14 @@ const navItems = isEn
       { label: t.nav.spreker,     href: getRelativeLocaleUrl('en', 'speaking') },
       { label: t.nav.nieuwsbrief, href: getRelativeLocaleUrl('en', 'newsletter') },
       { label: t.nav.mijnVerhaal, href: getRelativeLocaleUrl('en', 'about') },
-      { label: t.nav.boek,        href: getRelativeLocaleUrl('en', 'book') },
+      // 'Boek' omitted (feedback — added back later).
     ]
   : [
       { label: t.nav.coaching,    href: `${base}coaching` },
       { label: t.nav.spreker,     href: `${base}spreker` },
       { label: t.nav.nieuwsbrief, href: `${base}nieuwsbrief` },
       { label: t.nav.mijnVerhaal, href: `${base}mijn-verhaal` },
-      { label: t.nav.boek,        href: `${base}boek` },
+      // 'Boek' omitted (feedback — added back later).
     ];
 ---
 
@@ -95,9 +95,10 @@ const navItems = isEn
       </div>
     </div>
 
-    <!-- Base: copyright -->
+    <!-- Base: copyright + legal entity -->
     <div class="ft__base">
       <p class="ft__copyright">{t.footer.copyright}</p>
+      <p class="ft__legal">{t.footer.legalEntity}</p>
     </div>
 
   </div>
@@ -187,8 +188,9 @@ const navItems = isEn
   }
 
   /* ── Base ─────────────────────────────────────────────────────────────── */
-  .ft__base { padding-top: var(--space-lg); border-top: 1px solid var(--line-on-dark); }
+  .ft__base { padding-top: var(--space-lg); border-top: 1px solid var(--line-on-dark); display: flex; flex-direction: column; gap: var(--space-xs); }
   .ft__copyright { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-dark-text-soft); margin: 0; }
+  .ft__legal { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-dark-text-soft); opacity: 0.8; margin: 0; }
 
   @media (prefers-reduced-motion: reduce) {
     .ft__cta, .ft__cta svg, .ft__link { transition: none; }

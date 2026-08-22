@@ -42,6 +42,8 @@ export const nl = {
   hero: {
     eyebrow:   'Founder · Coach · Spreker',
     h1:        'Je bedrijf schalen, zonder jezelf te verliezen',
+    /** Word in h1 to highlight with the yellow underline (feedback: 'schalen', niet 'verliezen'). */
+    hlWord:    'schalen',
     subtext:   'Ik help ondernemers met lef hun bedrijf schalen. Niet vanuit abstracte theorie, maar vanuit doorleefde ervaring.',
     ctaPrimary:   'Contact',
     ctaSecondary: 'Mijn verhaal',
@@ -50,12 +52,13 @@ export const nl = {
     usp3: '9 markten',
     /** Proof points, integrated into the hero panel (numbers verbatim, D-03). */
     stats: [
-      { value: '12+', label: 'jaar ervaring' },
-      { value: '180', label: 'medewerkers' },
-      { value: '9',   label: 'markten' },
+      { value: '12+',   label: 'jaar ervaring' },
+      { value: '€200M', label: 'gerealiseerde omzet' },
+      { value: '180',   label: 'medewerkers' },
+      { value: '9',     label: 'markten' },
     ],
     /** Small supporting proof line for the hero proof-card (derived from the docx story). */
-    proofLine: 'Van keukentafel naar 9 markten',
+    proofLine: 'Van de keukentafel naar internationale scale-up',
     /** Overlapping hero card — truthful CTA drawn from the existing coaching offer. */
     card: {
       eyebrow: '1:1 Coaching',
@@ -66,7 +69,7 @@ export const nl = {
 
   // ── Press Strip (HOME-03) ────────────────────────────────────────────────
   pressStrip: {
-    eyebrow: 'Bekend van',
+    eyebrow: 'Benoemd in',
     /** title attribute on individual logo placeholder chips */
     logoPlaceholderTitle: 'Logo volgt',
     /** aria-label suffix on individual logo placeholder chips ("{outlet} — {suffix}") */
@@ -77,6 +80,7 @@ export const nl = {
       'MT Sprout',
       'Quote',
       'NOS',
+      'RTL Nieuws',
       'EenVandaag',
       'Telegraaf',
       'De Ondernemer',
@@ -91,8 +95,8 @@ export const nl = {
     subtext: 'Laat je inspireren via mijn nieuwsbrief of persoonlijke lezing. Of zet de volgende stap in de groei van je bedrijf met exclusieve coaching.',
     /** aria-label for the collaboration options grid */
     ariaLabel: 'Samenwerkingsopties',
-    /** Scarcity line — derived directly from the docx coaching body ("maximaal 8 founders"). */
-    exclusiveLabel: 'Maximaal 8 founders',
+    /** Scarcity line — feedback: 'nog 4 plekken'. */
+    exclusiveLabel: 'Nog 4 plekken',
     cards: [
       {
         label:       'Nieuwsbrief',
@@ -109,9 +113,9 @@ export const nl = {
         cta:         'Boek lezing',
       },
       {
-        label:       '1:1 Coaching',
+        label:       'Exclusieve ondersteuning',
         tag:         '',
-        title:       'Exclusieve ondersteuning',
+        title:       '1:1 Coaching',
         description: 'Ik begeleid maximaal 8 founders 1-op-1. Met persoonlijke coaching groei je slimmer, trek je de juiste investeerders aan en voorkom je fouten die de groei van je bedrijf vertragen. Geen langdurige trajecten, maar direct opzegbaar wanneer jij denkt dat mijn waarde ophoudt.',
         cta:         'Plan kennismaking',
       },
@@ -238,6 +242,8 @@ export const nl = {
     privacy:    'Privacybeleid',
     terms:      'Algemene voorwaarden',
     copyright:  '© 2026 Milan van der Meulen. Alle rechten voorbehouden.',
+    /** Legal entity line (feedback). */
+    legalEntity: 'Milan van der Meulen is een handelsnaam van YM Holding B.V. · KvK 63057298',
   },
 
   // ── Contact Page (PAGE-04) ──────────────────────────────────────────────

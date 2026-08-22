@@ -48,6 +48,8 @@ export const en = {
   hero: {
     eyebrow:      'Founder · Coach · Speaker',
     h1:           'Scale your business, without losing yourself',
+    /** Word in h1 to highlight with the yellow underline (feedback: 'scale', not 'losing'). */
+    hlWord:       'Scale',
     subtext:      'I help bold entrepreneurs scale their business — not from abstract theory, but from lived experience.',
     ctaPrimary:   'Contact',
     ctaSecondary: 'My story',
@@ -56,12 +58,13 @@ export const en = {
     usp3: '9 markets',       // D-03: verbatim number
     /** Proof points, integrated into the hero panel (numbers verbatim, D-03). */
     stats: [
-      { value: '12+', label: 'years experience' },
-      { value: '180', label: 'employees' },
-      { value: '9',   label: 'markets' },
+      { value: '12+',   label: 'years experience' },
+      { value: '€200M', label: 'revenue generated' },
+      { value: '180',   label: 'employees' },
+      { value: '9',     label: 'markets' },
     ],
     /** Small supporting proof line for the hero proof-card (derived from the docx story). */
-    proofLine: 'From kitchen table to 9 markets',
+    proofLine: 'From kitchen table to international scale-up',
     /** Overlapping hero card — truthful CTA drawn from the existing coaching offer. */
     card: {
       eyebrow: '1:1 Coaching',
@@ -83,6 +86,7 @@ export const en = {
       'MT Sprout',
       'Quote',
       'NOS',
+      'RTL Nieuws',
       'EenVandaag',
       'Telegraaf',
       'De Ondernemer',
@@ -96,7 +100,7 @@ export const en = {
     heading: 'Work with me',
     subtext: 'Get inspired through my newsletter or a personal talk. Or take the next step in growing your business with exclusive coaching.',
     ariaLabel: 'Collaboration options',
-    exclusiveLabel: 'Maximum of 8 founders',
+    exclusiveLabel: 'Only 4 spots left',
     cards: [
       {
         label:       'Newsletter',
@@ -113,9 +117,9 @@ export const en = {
         cta:         'Book a talk',
       },
       {
-        label:       '1:1 Coaching',
+        label:       'Exclusive support',
         tag:         '',
-        title:       'Exclusive support',
+        title:       '1:1 Coaching',
         description: 'I guide a maximum of 8 founders one-on-one. With personal coaching you grow smarter, attract the right investors, and avoid mistakes that slow your growth. No lengthy programmes — cancellable the moment you feel my value ends.',
         cta:         'Schedule intro call',
       },
@@ -235,6 +239,8 @@ export const en = {
     privacy:      'Privacy policy',
     terms:        'Terms and conditions',
     copyright:    '© 2026 Milan van der Meulen. All rights reserved.',
+    /** Legal entity line (feedback). */
+    legalEntity:  'Milan van der Meulen is a trade name of YM Holding B.V. · CoC 63057298',
   },
 
   // ── Contact Page ─────────────────────────────────────────────────────────

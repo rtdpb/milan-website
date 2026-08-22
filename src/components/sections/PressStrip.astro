@@ -15,7 +15,7 @@ const logos = t.pressStrip.logos;
 ---
 
 <section class="press" aria-label={isEn ? 'Media coverage' : 'Media-uitingen'}>
-  <p class="press__label">{isEn ? 'Featured in' : 'Bekend van'}</p>
+  <p class="press__label">{t.pressStrip.eyebrow}</p>
   <div class="press__marquee" role="list" aria-label={isEn ? 'Media coverage of Milan van der Meulen' : 'Media-uitingen van Milan van der Meulen'}>
     <div class="press__track">
       {logos.map((o) => (<span class="press__name" role="listitem">{o}</span>))}
