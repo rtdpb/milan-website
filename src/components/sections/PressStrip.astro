@@ -10,12 +10,13 @@
  * Motion pauses on hover and is disabled under prefers-reduced-motion.
  */
 import { getStrings } from '../../i18n/utils';
-import { pressLogoFiles } from './pressLogos';
+import { pressLogoFiles, pressLogoSquare } from './pressLogos';
 
 const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 const logos = t.pressStrip.logos;
 const base = import.meta.env.BASE_URL;
+const logoClass = (o: string) => `press__logo-img${pressLogoSquare[o] ? ' press__logo-img--mark' : ''}`;
 ---
 
 <section class="press" aria-label={isEn ? 'Media coverage' : 'Media-uitingen'}>
@@ -26,14 +27,14 @@ const base = import.meta.env.BASE_URL;
         {logos.map((o) => (
           <span class="press__name" role="listitem">
             {pressLogoFiles[o]
-              ? (<><img class="press__logo-img" src={base + pressLogoFiles[o]} alt="" aria-hidden="true" loading="lazy" /><span class="sr-only">{o}</span></>)
+              ? (<><img class={logoClass(o)} src={base + pressLogoFiles[o]} alt="" aria-hidden="true" loading="lazy" /><span class="sr-only">{o}</span></>)
               : o}
           </span>
         ))}
         {logos.map((o) => (
           <span class="press__name" aria-hidden="true">
             {pressLogoFiles[o]
-              ? <img class="press__logo-img" src={base + pressLogoFiles[o]} alt="" aria-hidden="true" loading="lazy" />
+              ? <img class={logoClass(o)} src={base + pressLogoFiles[o]} alt="" aria-hidden="true" loading="lazy" />
               : o}
           </span>
         ))}
@@ -89,6 +90,9 @@ const base = import.meta.env.BASE_URL;
     height: clamp(20px, 0.9rem + 0.9vw, 28px); width: auto; display: block;
     filter: grayscale(1);
   }
+  /* Square icon-marks (no wordmark asset available) get a bit more height so
+     they read at a similar weight to the horizontal wordmarks. */
+  .press__logo-img--mark { height: clamp(28px, 1.2rem + 1.2vw, 38px); }
   @keyframes pressScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
   @media (prefers-reduced-motion: reduce) {
