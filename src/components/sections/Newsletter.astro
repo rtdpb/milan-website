@@ -20,6 +20,28 @@ const { statement, subtext, cta, disclaimer } = t.newsletter;
 
 <SectionWrapper id="nieuwsbrief" labelledBy="newsletter-heading" variant="surface">
   <div class="nl">
+    <!--
+      Self-made paper-plane figure — thematic (a newsletter takes flight).
+      The flight trail + plane outline draw themselves on scroll via the shared
+      .draw-path utility (parent [data-anim].is-in). Decorative only:
+      pointer-events:none + aria-hidden, and hidden on narrow screens so it can
+      never crowd the copy.
+    -->
+    <div class="nl__deco" data-anim aria-hidden="true">
+      <svg viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path class="draw-path" style="--draw-len: 240" stroke-dasharray="240"
+          d="M6 112 C 44 108, 46 72, 84 66" stroke="var(--color-text)"
+          stroke-width="2" stroke-linecap="round" opacity="0.5" />
+        <g stroke="var(--color-text)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+          <path class="draw-path" style="--draw-len: 320; --draw-delay: 280ms" stroke-dasharray="320"
+            d="M158 34 L96 18 L112 54 L100 92 Z" />
+          <path class="draw-path" style="--draw-len: 140; --draw-delay: 460ms" stroke-dasharray="140"
+            d="M112 54 L158 34" />
+        </g>
+        <circle cx="158" cy="34" r="4.5" fill="var(--color-accent)" />
+      </svg>
+    </div>
+
     <div class="nl__text" data-anim>
       <p class="nl__eyebrow">{t.nav.nieuwsbrief}</p>
       <h2 id="newsletter-heading" class="nl__statement">{statement}</h2>
@@ -68,8 +90,18 @@ const { statement, subtext, cta, disclaimer } = t.newsletter;
 </script>
 
 <style>
-  .nl { display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); align-items: end; }
+  .nl { position: relative; display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); align-items: end; }
   @media (min-width: 900px) { .nl { grid-template-columns: 1.4fr 0.6fr; } }
+
+  /* Paper-plane figure — hidden on narrow screens; parks in the empty top-right. */
+  .nl__deco { display: none; }
+  @media (min-width: 900px) {
+    .nl__deco {
+      display: block; position: absolute; top: -10px; right: 0; z-index: 0;
+      width: clamp(130px, 13vw, 176px); pointer-events: none;
+    }
+    .nl__deco svg { width: 100%; height: auto; display: block; }
+  }
 
   .nl__text { display: flex; flex-direction: column; gap: var(--space-md); }
   .nl__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0; }
