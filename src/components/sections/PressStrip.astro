@@ -3,18 +3,19 @@
  * PressStrip.astro — "Benoemd in" credibility strip
  *
  * Layout: the label sits on the LEFT, vertically centred, and the outlet logos
- * run to the RIGHT of it in a subtle continuous marquee (feedback). Each outlet
- * renders as a monochrome SVG wordmark logo (pressLogos.ts) in the strip's quiet
- * grey — swap any entry for the outlet's official SVG when assets arrive. Falls
- * back to the plain outlet name if no logo is defined. Motion pauses on hover and
- * is disabled under prefers-reduced-motion.
+ * run to the RIGHT of it in a subtle continuous marquee (feedback). Outlets with
+ * a real logo file (pressLogos.ts → /public/press-logos) render as an <img>,
+ * forced to greyscale via CSS so the strip stays quiet and monochrome ("in dat
+ * grijs"); outlets without a file fall back to their plain name in the same grey.
+ * Motion pauses on hover and is disabled under prefers-reduced-motion.
  */
 import { getStrings } from '../../i18n/utils';
-import { pressLogos } from './pressLogos';
+import { pressLogoFiles } from './pressLogos';
 
 const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 const logos = t.pressStrip.logos;
+const base = import.meta.env.BASE_URL;
 ---
 
 <section class="press" aria-label={isEn ? 'Media coverage' : 'Media-uitingen'}>
@@ -24,14 +25,16 @@ const logos = t.pressStrip.logos;
       <div class="press__track">
         {logos.map((o) => (
           <span class="press__name" role="listitem">
-            {pressLogos[o]
-              ? (<><Fragment set:html={pressLogos[o]} /><span class="sr-only">{o}</span></>)
+            {pressLogoFiles[o]
+              ? (<><img class="press__logo-img" src={base + pressLogoFiles[o]} alt="" aria-hidden="true" loading="lazy" /><span class="sr-only">{o}</span></>)
               : o}
           </span>
         ))}
         {logos.map((o) => (
           <span class="press__name" aria-hidden="true">
-            {pressLogos[o] ? <Fragment set:html={pressLogos[o]} /> : o}
+            {pressLogoFiles[o]
+              ? <img class="press__logo-img" src={base + pressLogoFiles[o]} alt="" aria-hidden="true" loading="lazy" />
+              : o}
           </span>
         ))}
       </div>
@@ -71,17 +74,20 @@ const logos = t.pressStrip.logos;
     animation: pressScroll 38s linear infinite;
   }
   .press__marquee:hover .press__track { animation-play-state: paused; }
+  /* Text-fallback outlets inherit these type styles; the grey comes from the
+     colour + opacity. Real logos (below) sit in the same box. */
   .press__name {
-    display: inline-flex; align-items: center;
-    color: var(--color-text); opacity: 0.42; white-space: nowrap; line-height: 1;
+    display: inline-flex; align-items: center; white-space: nowrap; line-height: 1;
+    color: var(--color-text); opacity: 0.5;
+    font-size: clamp(1.05rem, 0.95rem + 0.6vw, 1.5rem); font-weight: 600; letter-spacing: -0.01em;
     transition: opacity var(--duration-base) var(--ease-out);
   }
   .press__name:hover { opacity: 0.85; }
-  /* Logos scale by height; width follows the SVG's aspect ratio. currentColor
-     inherits the grey above, so each logo stays monochrome in the strip. */
-  .press__name :global(svg) {
-    height: clamp(22px, 1rem + 0.9vw, 30px); width: auto; display: block;
-    overflow: visible;
+  /* Real logo files: scale by height, forced to greyscale so the strip stays
+     monochrome ("in dat grijs"). */
+  .press__logo-img {
+    height: clamp(20px, 0.9rem + 0.9vw, 28px); width: auto; display: block;
+    filter: grayscale(1);
   }
   @keyframes pressScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
