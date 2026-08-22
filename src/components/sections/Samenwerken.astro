@@ -2,10 +2,12 @@
 /**
  * Samenwerken.astro — Three ways to work together, as "pricing"-style cards.
  *
- * Client feedback: present the three services side by side as feature-list cards
- * (à la a pricing table), all in the dark "1:1 coaching" style. Each card: label
- * (+ Gratis tag / scarcity), title, short tagline, a checkmark feature list, and
- * a CTA. No photos. Yellow used as the accent (checks + CTA), per the coaching card.
+ * Client feedback (#12): present the services as pricing-style feature-list cards.
+ * The free Newsletter card uses a LIGHT style and sits on the left; the two paid
+ * services (Presentatie + Coaching) use the dark "1:1 coaching" style and stack on
+ * the right, so the emphasis falls on them. Each card: label (+ Gratis tag /
+ * scarcity), title, short tagline, a checkmark feature list, and a CTA. No photos.
+ * Yellow used as the accent (checks + CTA) throughout.
  *
  * Routes: Nieuwsbrief → /nieuwsbrief · Presentatie → /contact?type=lezing ·
  *         Coaching → /contact?type=coaching
@@ -36,7 +38,7 @@ const check = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
 
     <div class="sw__grid" role="list" aria-label={s.ariaLabel}>
       {s.cards.map((card, i: number) => (
-        <a href={hrefs[i]} class="sw__card" role="listitem" data-anim data-anim-variant="scale" style={`--i: ${i}`}>
+        <a href={hrefs[i]} class={`sw__card${i === 0 ? ' sw__card--light' : ''}`} role="listitem" data-anim data-anim-variant="scale" style={`--i: ${i}`}>
           <div class="sw__card-head">
             <span class="sw__label-row">
               <span class="sw__label">{card.label}</span>
@@ -68,11 +70,17 @@ const check = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
   .sw__heading { font-size: var(--text-3xl); margin: 0; }
   .sw__subtext { font-size: var(--text-lg); line-height: 1.55; color: var(--color-text-secondary); margin: 0; }
 
-  /* 3 pricing-style cards side by side; stack on mobile. */
+  /* Pricing-style cards; stack on mobile. On desktop the free Newsletter card
+     (light) sits on the left spanning both rows, and the two paid services
+     (Presentatie + Coaching, dark) stack vertically on the right so the accent
+     falls on them (feedback #12: nieuwsbrief licht, spreker/coaching donker). */
   .sw__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
-  @media (min-width: 900px) { .sw__grid { grid-template-columns: repeat(3, 1fr); align-items: stretch; } }
+  @media (min-width: 900px) {
+    .sw__grid { grid-template-columns: 0.9fr 1.1fr; align-items: stretch; }
+    .sw__card--light { grid-column: 1; grid-row: 1 / span 2; }
+  }
 
-  /* All cards in the dark "1:1 coaching" style. */
+  /* Paid services use the dark "1:1 coaching" style. */
   .sw__card {
     display: flex; flex-direction: column; gap: var(--space-lg);
     background: var(--color-ink); border-radius: var(--radius-card);
@@ -90,6 +98,13 @@ const check = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
   .sw__scarcity-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); }
   .sw__title { font-size: var(--text-2xl); line-height: 1.08; margin: 0; color: var(--color-dark-text); hyphens: auto; }
   .sw__tagline { font-size: var(--text-base); line-height: 1.5; color: var(--color-dark-text-soft); margin: 0; }
+
+  /* ── Light variant (Newsletter) — quiet card so the dark paid cards pop. ── */
+  .sw__card--light { background: var(--color-bg); border: 1px solid var(--line-on-light); }
+  .sw__card--light .sw__label { color: var(--color-text-secondary); }
+  .sw__card--light .sw__title { color: var(--color-text); }
+  .sw__card--light .sw__tagline { color: var(--color-text-secondary); }
+  .sw__card--light .sw__features li { color: var(--color-text); }
 
   .sw__features { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-sm); }
   .sw__features li { display: flex; align-items: flex-start; gap: var(--space-sm); font-size: var(--text-base); line-height: 1.4; color: var(--color-dark-text); }
