@@ -345,12 +345,14 @@ export const nl = {
     packages: [
       {
         name:     'Losse sessie',
+        price:    '€ 200 eenmalig',
         desc:     'Snel advies nodig? Boek een losse sessie van 45 minuten. Je kunt je onderwerp van tevoren sturen zodat we snel de diepte in kunnen. Je verlaat de sessie met een eerlijk inzicht en een concrete next step.',
         features: ['45 minuten sessie', 'Inclusief korte voorbereiding', '10% korting op een 2e sessie'],
         cta:      'Boek sessie',
       },
       {
         name:     'Coaching programma',
+        price:    '€ 1.495 per maand',
         desc:     'Doorlopende coaching van iemand die weet hoe het is om een bedrijf te bouwen. Uiteraard onder voorbehoud van een goede kennismaking.',
         features: ['2× 60 minuten coaching per maand', '1× deep-dive dag per kwartaal', 'Toegang tot relevant netwerk', 'Onbeperkt contact via WhatsApp', 'Maandelijks opzegbaar'],
         cta:      'Plan kennismaking',

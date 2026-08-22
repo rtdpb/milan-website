@@ -6,7 +6,7 @@
  *   1. Header image with overlaid title "De juiste keuzes zijn onbetaalbaar"
  *   2. "Benoemd in" press strip (reused)
  *   3. Description (3 paragraphs)
- *   4. Packages (2) — features + price-on-request + CTA (prices hidden per client)
+ *   4. Packages (2) — features + price + CTA (prices shown per client feedback)
  *   5. Reviews (Amber + Yang Soo)
  *   6. Example coaching trajectory (3 steps)
  *   7. FAQ (native details/summary accordion)
@@ -78,7 +78,7 @@ const arrow = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
       {c.packages.map((pkg, i: number) => (
         <article class={`pkg${i === 1 ? ' pkg--feature' : ''}`} data-anim data-anim-variant="scale" style={`--i: ${i}`}>
           <h3 class="pkg__name">{pkg.name}</h3>
-          <p class="pkg__price">{c.priceOnRequest}</p>
+          <p class="pkg__price">{pkg.price ?? c.priceOnRequest}</p>
           <p class="pkg__desc">{pkg.desc}</p>
           <ul class="pkg__features">
             {pkg.features.map((f: string) => (

@@ -341,12 +341,14 @@ export const en = {
     packages: [
       {
         name:     'Single session',
+        price:    '€200 one-off',
         desc:     'Need quick advice? Book a single 45-minute session. You can send your topic in advance so we can go deep quickly. You leave the session with an honest insight and a concrete next step.',
         features: ['45-minute session', 'Includes short preparation', '10% off a 2nd session'],
         cta:      'Book a session',
       },
       {
         name:     'Coaching programme',
+        price:    '€1,495 per month',
         desc:     'Ongoing coaching from someone who knows what it is like to build a company. Subject to a good mutual introduction, of course.',
         features: ['2× 60-minute coaching per month', '1× deep-dive day per quarter', 'Access to a relevant network', 'Unlimited contact via WhatsApp', 'Cancellable monthly'],
         cta:      'Schedule intro call',
