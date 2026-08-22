@@ -61,6 +61,12 @@ export const TODO_WEB3FORMS_ACCESS_KEY = 'TODO_WEB3FORMS_ACCESS_KEY';
 export const TODO_CALENDLY_URL = 'TODO_CALENDLY_URL';
 
 /**
+ * Athenas speaker-booking page. Milan works exclusively with Athenas for talks.
+ * External — open in a new tab. Used in: src/pages/spreker.astro (+ en/speaking).
+ */
+export const ATHENAS_URL = 'https://www.athenas.nl/sprekers/milan-van-der-meulen/';
+
+/**
  * Intro.co booking link for a single paid coaching session ("Boek sessie").
  * Supplied by Milan (feedback round). External — open in a new tab.
  * Used in: src/pages/coaching.astro (+ en) package 1 CTA.

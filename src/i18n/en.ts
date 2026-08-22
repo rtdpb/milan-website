@@ -377,33 +377,41 @@ export const en = {
   // ── Spreker / Speaking Page ───────────────────────────────────────────────
   spreker: {
     pageTitle:  'Speaker — Milan van der Meulen',
-    pageDesc:   'Milan speaks for teams, events and conferences on entrepreneurship, scaling, and honest leadership. Book him for your event.',
+    pageDesc:   'Milan tells the honest story behind Soly: building, breaking, and starting over. Book him as a speaker via Athenas.',
     eyebrow:    'Speaker',
-    heading:    'An honest story about building, failing, and rising again',
-    body: [
-      'I built Soly from a startup into a company with 180 employees in 9 countries. And I watched it fall. I tell that story not with the romanticism that tends to get woven around it later, but as it was.',
-      'I speak for entrepreneurship organisations, corporates, and events about scaling, leadership, and the moments when you are truly tested as a founder. Honest, direct, and straight from real experience.',
+    heroTitle:  'A story that stays with you',
+    heroImageAlt: 'Milan van der Meulen speaking on stage.',
+    intro: [
+      'At nineteen I started, with my brother at the kitchen table, on what would become Soly: a company that grew to nine countries, with capital from Shell and pension fund ABP, and nearly a million solar panels installed. On 25 November 2025 that same company, after 12.5 years of building, went bankrupt.',
+      'I share that story not for sympathy, but because it holds the lessons most success stories skip. About successful growth and entrepreneurial adventures. About how the wrong incentives can break a strong company from within. About leadership under pressure, and what happens when your own limits gave out long before your company did.',
+      'This is not a polished success story with a neat ending. It is an honest, incisive reconstruction of building, breaking, and starting over. With concrete lessons for anyone who carries responsibility for growth, capital, or people.',
     ],
-    aanbodHeading:  'Talks and keynotes',
-    aanbodEyebrow:  'Offer',
-    aanbodCards: [
-      {
-        title:       'Scale without breaking',
-        description: "On the choices, mistakes, and lessons from Soly's international expansion. What works when building a team across multiple markets — and what really doesn't.",
-      },
-      {
-        title:       'Honest leadership',
-        description: 'Leadership is not about having all the answers. It is about asking the right questions — and the courage to do what is necessary, even when it hurts.',
-      },
-      {
-        title:       'The entrepreneur behind the company',
-        description: 'How do you stay yourself as a founder under pressure? On identity, choices, and the difference between growing as a business and growing as a person.',
-      },
+    infoBlocks: [
+      { title: 'Who it is for', text: 'Entrepreneurs, directors, and investors dealing with growth, scale, capital, or leadership under pressure. Suited to corporate events, investor gatherings, industry associations, and leadership programmes.' },
+      { title: 'What you get', text: 'A personal story, backed by concrete lessons. No abstract theory, but what really happens inside an international scale-up. Tailored to your audience and the setting of your event.' },
     ],
-    testimonialEyebrow: 'What others say',
+    bookingHeading: 'Booking',
+    bookingText: 'I work exclusively with Athenas. Use the button below to get in touch about availability and fee.',
+    testimonialsHeading: 'What others say',
+    testimonials: [
+      { quote: 'Inspiring and confronting story from this young entrepreneur.', name: 'S. Koot', role: 'Jonge Ondernemers Club Plus' },
+      { quote: 'A uniquely personal entrepreneurial story.', name: 'P. de Boer', role: 'NHL Stenden' },
+      { quote: 'Not only the successes were shared, but above all the pitfalls and getting back up. An impressive entrepreneurial story of dreams and perseverance into international success.', name: 'Oranjewoud Export Academy', role: '' },
+      { quote: 'Milan and Patrick van der Meulen gave a great presentation about the necessity of entrepreneurship. Nice young men who connected well with our audience of entrepreneurs and students!', name: 'Hogeschool InHolland', role: '' },
+    ],
+    spokenAtHeading: 'Previously spoke at',
+    spokenAt: ['ABN AMRO MeesPierson', 'World Youth Forum', 'Sziget Festival', 'University College London', 'Energy Tech Summit', 'Ennatuurlijk', 'Van Hall Larenstein', 'NHL Stenden', 'Plus Supermarkt', 'Rabobank', 'Hanze University of Applied Sciences', 'Van Dorp Installaties', 'University of Groningen', 'Mazda', 'Climate Reality Project'],
+    awardsHeading: 'Awards and milestones',
+    awards: [
+      { title: 'Best For The World™ 2022: Environment', by: 'B Corp', date: 'Jan 2022' },
+      { title: 'FD Gazelle (mid-sized)', by: 'FD', date: 'Mar 2022' },
+      { title: 'Technology Fast 50 2021', by: 'Deloitte', date: 'Jan 2021' },
+      { title: 'Best For The World™ 2021: Environment', by: 'B Corp', date: 'Jan 2021' },
+      { title: 'Duurzame Jonge 100', by: 'DJ100', date: 'Jun 2017' },
+      { title: "Sprout Top 3 'Best young entrepreneurs of 2016'", by: 'Sprout', date: 'Jun 2016' },
+    ],
     ctaHeading:   'Book Milan for your event',
-    ctaPrimary:   'Book a talk',
-    speakingAlt:  'Milan explaining a chart during a presentation.',
+    ctaPrimary:   'Book via Athenas',
   },
 
   // ── Nieuwsbrief / Newsletter Page ────────────────────────────────────────
