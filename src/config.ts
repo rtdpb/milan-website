@@ -31,7 +31,9 @@ export const SITE_URL = 'https://milanvandermeulen.nl'; // TODO: confirm domain 
  * Note: strip any trailing slash from the supplied URL before replacing.
  * Used in: Nieuwsbrief CTA (nav), newsletter signup section, "Schrijf je gratis in" button.
  */
-export const TODO_SUBSTACK_URL = 'TODO_SUBSTACK_URL';
+// Typed as `string` (not the literal) so the `=== 'TODO_SUBSTACK_URL'` sentinel
+// checks across the app remain valid comparisons now that a real URL is set.
+export const TODO_SUBSTACK_URL: string = 'https://milanvandermeulen.substack.com';
 
 /**
  * Contact page — resolved in Phase 2 (D-11).
