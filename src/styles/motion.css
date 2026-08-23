@@ -77,8 +77,8 @@
       animation-range: cover 0% cover 100%;
     }
     @keyframes liv-drift {
-      from { transform: translateY(30px); }
-      to   { transform: translateY(-30px); }
+      from { transform: translateY(46px); }
+      to   { transform: translateY(-46px); }
     }
   }
 }
@@ -114,12 +114,15 @@
     .hero__parallax {
       animation: liv-hero-photo linear both;
       animation-timeline: scroll(root block);
-      animation-range: 0 92vh;
+      animation-range: 0 100vh;
       will-change: transform;
     }
+    /* Clearly-visible vertical parallax: the photo is kept slightly overscanned
+       (scale 1.14 → ~7% headroom on each edge) so it can drift ±5% vertically as
+       you scroll without ever revealing a gap. The image lags the page = parallax. */
     @keyframes liv-hero-photo {
-      from { transform: scale(1.001); }
-      to   { transform: scale(1.07) translateY(1.6%); }
+      from { transform: translateY(-5%) scale(1.14); }
+      to   { transform: translateY(5%)  scale(1.14); }
     }
 
     /* Timeline: a yellow rail fills top→bottom as the milestones scroll past,
