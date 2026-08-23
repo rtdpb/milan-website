@@ -40,14 +40,28 @@ const LINE =
   'M90,200 C170,186 205,168 260,150 C330,128 365,104 430,85 ' +
   'C500,65 560,107 600,130 C670,168 700,201 760,205 C830,209 865,140 910,110';
 
-const pts = POS.map((p, i) => ({ ...p, label: nodes[i] ?? '', accent: i === POS.length - 1 }));
+/* Per-node label placement so text never crosses the curve: peaks get their
+   label ABOVE the node, valleys/rising points BELOW. Anchors keep the first/last
+   labels inside the frame. (dy is relative to the node's y.) */
+const LABELS = [
+  { dy: 40,  anchor: 'start'  as const }, // Keukentafel — low start, below
+  { dy: 40,  anchor: 'middle' as const }, // 9 landen — rising, below
+  { dy: 42,  anchor: 'middle' as const }, // 180 mensen — peak; below is clear (line is highest here)
+  { dy: -26, anchor: 'middle' as const }, // Burn-out — above (line falls away below-right)
+  { dy: 44,  anchor: 'middle' as const }, // Faillissement — trough, below
+  { dy: 40,  anchor: 'end'    as const }, // Nu — recovery end, below
+];
+const pts = POS.map((p, i) => ({
+  ...p,
+  label: nodes[i] ?? '',
+  accent: i === POS.length - 1,
+  dy: LABELS[i]?.dy ?? 40,
+  anchor: LABELS[i]?.anchor ?? 'middle',
+}));
 ---
 
 <figure class="jr" role="img" aria-label={ariaLabel}>
-  <svg class="jr__svg" viewBox="0 0 1000 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <!-- Faint baseline for the "chart" grounding -->
-    <line x1="90" y1="238" x2="910" y2="238" stroke="var(--line-on-dark)" stroke-width="1.5" stroke-dasharray="2 8" />
-
+  <svg class="jr__svg" viewBox="0 0 1000 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <!-- The route line — draws on scroll -->
     <path class="jr__line draw-path" style="--draw-len: 1500" stroke-dasharray="1500"
       d={LINE} stroke="var(--color-dark-text-soft)" stroke-width="2.5"
@@ -64,9 +78,9 @@ const pts = POS.map((p, i) => ({ ...p, label: nodes[i] ?? '', accent: i === POS.
           cx={p.x} cy={p.y} r={p.accent ? 9 : 7}
         />
         <text
-          class="jr__label"
-          x={p.x} y={p.y + 36}
-          text-anchor={i === 0 ? 'start' : i === pts.length - 1 ? 'end' : 'middle'}
+          class={`jr__label${p.accent ? ' jr__label--accent' : ''}`}
+          x={p.x} y={p.y + p.dy}
+          text-anchor={p.anchor}
         >{p.label}</text>
       </g>
     ))}
@@ -84,9 +98,11 @@ const pts = POS.map((p, i) => ({ ...p, label: nodes[i] ?? '', accent: i === POS.
   /* Label typography — small editorial caps, in the site sans. */
   .jr__label {
     font-family: var(--font-sans);
-    font-size: 21px; font-weight: 600; letter-spacing: 0.03em;
+    font-size: 19px; font-weight: 600; letter-spacing: 0.02em;
     fill: var(--color-dark-text-soft);
   }
+  /* The final "Nu" label carries the yellow accent, matching its node. */
+  .jr__label--accent { fill: var(--color-accent); font-weight: 700; }
 
   /* Pop-in: nodes + halo scale up, labels fade — staggered by --n, after the
      line has begun drawing. Triggered by the parent [data-anim] wrapper. */
