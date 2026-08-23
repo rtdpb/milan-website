@@ -102,19 +102,6 @@ const tl = t.timeline;
   /* ── Header ───────────────────────────────────────────────────────────── */
   .tl__head { display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); align-items: center; }
   @media (min-width: 900px) { .tl__head { grid-template-columns: 1.15fr 0.85fr; } }
-  /* Pinned header on desktop: the heading + stats stay in view while the
-     milestones scroll past beneath them (opaque navy so content passes cleanly
-     behind). Degrades to normal flow where sticky/positioning isn't honoured. */
-  @media (min-width: 1000px) {
-    .tl__head {
-      position: sticky;
-      top: calc(76px + var(--space-lg));
-      z-index: 2;
-      background: var(--color-navy);
-      padding-bottom: var(--space-lg);
-      border-bottom: 1px solid var(--line-on-dark);
-    }
-  }
   /* Cap the header photo so it doesn't inflate the row height (compacter). */
   @media (min-width: 900px) { .tl__photo { max-height: 360px; } }
   .tl__head-text { display: flex; flex-direction: column; gap: var(--space-md); }
