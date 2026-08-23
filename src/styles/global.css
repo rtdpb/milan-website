@@ -7,6 +7,9 @@
 
 @import './reset.css';
 @import './tokens.css';
+/* Scroll-linked ("scrubbed") motion layer (260824-liv) — imported last so it
+   enhances the JS reveal system below. Fully guarded (reduced-motion + @supports). */
+@import './motion.css';
 
 /* ── Body base ──────────────────────────────────────────────────────────────── */
 body {

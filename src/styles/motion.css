@@ -1,0 +1,84 @@
+/*
+ * src/styles/motion.css
+ * Scroll-linked ("scrubbed") motion layer · 260824-liv
+ *
+ * Progressive enhancement layered ON TOP of the JS reveal system in global.css.
+ * The point: make motion feel CONNECTED TO THE SCROLL (sevora-style) instead of
+ * one-shot reveals that fire once and then sit still.
+ *
+ * DOUBLE-GUARDED — this whole file only ever applies when BOTH are true:
+ *   @media (prefers-reduced-motion: no-preference)  → respects the OS setting
+ *   @supports (animation-timeline: view())          → only where CSS scroll
+ *                                                      timelines exist (Chromium
+ *                                                      115+, Safari 26+)
+ * On every other browser, or under reduced motion, NOTHING here applies and the
+ * existing [data-anim]/[data-reveal] JS reveal (or the fully-visible no-JS
+ * fallback) stays in charge. No content can ever get stuck hidden.
+ *
+ * NO JS, NO layout changes — transform/opacity only (keeps the hero robust,
+ * see hero-fragile-avoid-absolute-overlap).
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+
+    /* ── 1. Reveals become scrubbed to viewport entry ──────────────────────
+     * The `both` fill keeps the element in its `from` state before the range
+     * (hidden) and its `to` state after (fully shown) — so an animated reveal
+     * safely supersedes the transition-based one. Each element carries its own
+     * view() timeline, so groups ripple organically as each item enters.
+     * Range uses the `entry` phase only, so the reveal always COMPLETES as the
+     * element rises into view (even for the last block above the footer). */
+    [data-anim],
+    [data-reveal] {
+      opacity: 1;                 /* JS baseline no longer needed on support */
+      transform: none;
+      animation: liv-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 82%;
+    }
+
+    @keyframes liv-rise {
+      from { opacity: 0; transform: translateY(38px) scale(0.985); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* Directional / scale variants — scrubbed equivalents of global.css. */
+    [data-anim][data-anim-variant='left']  { animation-name: liv-left; }
+    [data-anim][data-anim-variant='right'] { animation-name: liv-right; }
+    [data-anim][data-anim-variant='scale'] { animation-name: liv-scale; }
+    @keyframes liv-left  { from { opacity: 0; transform: translateX(-44px); } to { opacity: 1; transform: none; } }
+    @keyframes liv-right { from { opacity: 0; transform: translateX(44px);  } to { opacity: 1; transform: none; } }
+    @keyframes liv-scale { from { opacity: 0; transform: scale(0.9);         } to { opacity: 1; transform: none; } }
+
+    /* ── 2. Ken-Burns media ────────────────────────────────────────────────
+     * Photos drift + scale the whole time they cross the viewport, so they feel
+     * alive rather than pinned. Add .anim-kenburns to an element that WRAPS an
+     * <img> whose parent has overflow:hidden/clip (so the scale never bleeds).
+     * The inner image must be object-fit:cover (already true on all headers). */
+    .anim-kenburns img {
+      animation: liv-kenburns linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+      transform-origin: 50% 42%;
+      will-change: transform;
+    }
+    @keyframes liv-kenburns {
+      from { transform: scale(1.14) translateY(-1.5%); }
+      to   { transform: scale(1.02) translateY(1.5%); }
+    }
+
+    /* ── 3. Subtle parallax drift for decorative / secondary elements ───────
+     * Opt in with .anim-drift — the element rises gently as it scrolls past.
+     * Purely decorative; keep the travel small so nothing reads as detached. */
+    .anim-drift {
+      animation: liv-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    @keyframes liv-drift {
+      from { transform: translateY(30px); }
+      to   { transform: translateY(-30px); }
+    }
+  }
+}
