@@ -44,6 +44,13 @@ export const TODO_SUBSTACK_URL: string = 'https://milanvandermeulen.substack.com
 export const CONTACT_URL = `${import.meta.env.BASE_URL}contact`;
 
 /**
+ * Real contact email address (supplied by Milan).
+ * Used by the contact form's mailto submission + the direct-mail fallback link
+ * (src/components/forms/ContactForm.astro), shared by NL + EN contact pages.
+ */
+export const CONTACT_EMAIL = 'Milan@oio-impact.com';
+
+/**
  * Web3Forms access key — generated at web3forms.com against Milan's email.
  * TODO Phase 2: replace with real key from Web3Forms dashboard.
  * Safe to commit once real: it is a public client-side identifier, not a secret.

@@ -149,6 +149,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 260822-nyx | Hero pakkender (contained geanimeerde deco-figuren) + herbruikbare .draw-path scroll-draw utility + zelfgetekende figuren (papieren vliegtuig Newsletter, underline-swoosh Samenwerken) | 2026-08-22 | cb44c8a | [260822-nyx-hero-pakkender-animated-figures](./quick/260822-nyx-hero-pakkender-animated-figures/) |
 | 260822-tss | Feedbackronde Milan: homepage-punten + rebuild Coaching/Spreker/Mijn verhaal + nieuwe Privacybeleid-pagina (NL+EN), Substack gekoppeld, Samenwerken pricing-cards, vette wordmark, "Benoemd in" rij-layout — gebouwd + gedeployed | 2026-08-22 | ad634b4 | [260822-tss-feedback-round](./quick/260822-tss-feedback-round/) |
 | 260822-lgo | Feedback-audit + 4 punten: wordmark alleen "Milan" vet; "Benoemd in" echte monochrome SVG-logo's i.p.v. platte tekst; Samenwerken #12 (nieuwsbrief licht + spreker/coaching donker, nadruk rechts); nieuwsbrief inline mailveld (Substack) — gebouwd + visueel gecontroleerd + gedeployed | 2026-08-22 | 4974d3b | [260822-lgo-milan-bold-media-logos](./quick/260822-lgo-milan-bold-media-logos/) |
+| 260824-cmf | Contactformulier van Web3Forms → mailto (CONTACT_EMAIL = Milan@oio-impact.com): JS mailto-composer + no-JS enctype=text/plain fallback + zichtbare directe mailto-link; NL+EN via gedeelde component; nieuwsbrief ongewijzigd (inline veld boven officiële embed) — gebouwd (0 errors, 16 pagina's) | 2026-08-24 | _pending_ | [260824-cmf-contact-mailto](./quick/260824-cmf-contact-mailto/) |
 
 ## Next Step
 

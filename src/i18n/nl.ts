@@ -326,6 +326,10 @@ export const nl = {
     errorMsg:       'Er is iets misgegaan. Probeer het opnieuw of mail me direct.',
     errorNetwork:   'Geen verbinding. Controleer je internetverbinding en probeer opnieuw.',
     emailSubject:   'Nieuw bericht via milanvandermeulen.nl',
+    /** Shown after the mailto opens the visitor's mail app. */
+    mailtoNote:     'Je mailprogramma opent met je bericht erin — controleer en verstuur.',
+    /** No-JS / fallback line before the direct mailto link. */
+    mailtoFallbackPre: 'Werkt de knop niet? Mail direct naar',
   },
 
   // ── Coaching Page (PAGE-01) ──────────────────────────────────────────────

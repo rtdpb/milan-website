@@ -1,24 +1,23 @@
 ---
 /**
  * ContactForm.astro
- * Web3Forms progressive-enhancement contact form (PAGE-04, D-01, D-02, D-03, D-04).
+ * Contact form that composes an email to CONTACT_EMAIL via `mailto:` (PAGE-04).
  *
- * NO-JS PATH: native POST form submits to https://api.web3forms.com/submit
- * directly — form delivers email without JavaScript.
+ * Rationale (feedback 260824-cmf): Milan supplied a real inbox
+ * (Milan@oio-impact.com) but no server/Web3Forms key. Instead of a backend the
+ * form now opens the visitor's own mail client with the message pre-composed —
+ * honest, zero-infra, and works on a static host. Shared by NL + EN contact
+ * pages (labels come from getStrings(Astro.currentLocale)).
  *
- * JS PATH: submit intercepted (preventDefault), POSTed via fetch as JSON.
- * On {success:true}: form hidden, static Dutch success string shown.
- * On {success:false} or thrown fetch: form stays visible, static error string shown.
+ * NO-JS PATH: native form posts to `mailto:CONTACT_EMAIL` with
+ * enctype="text/plain", so the browser still opens the mail client with the
+ * field values in the body. A visible direct mailto link is shown as an
+ * always-works fallback.
  *
- * SECURITY RULES (T-2-02, T-2-04, T-2-05):
- * - Result strings are ONLY from nl.contact — NEVER echoed from API response or user input.
- * - ?type= query param validated against fixed option set (CSS.escape guard); unknown → ignored.
- * - With placeholder key, form submits to Web3Forms which rejects it → API error path (State 7).
- *   Success state is NEVER faked.
- *
- * HONEYPOT (T-2-01, D-03):
- * - A hidden checkbox with name botcheck (display:none, tabindex=-1, aria-hidden).
- *   Web3Forms requires a checkbox for honeypot detection, not type=hidden.
+ * JS PATH: submit intercepted (preventDefault). Builds a nicely formatted
+ * `mailto:` (localised subject + labelled body) and navigates to it, then shows
+ * a static polite note. No fake success/network states — delivery happens in
+ * the user's mail app.
  *
  * ACCESSIBILITY:
  * - Every field has a visible <label for> (never placeholder-only).
@@ -26,11 +25,11 @@
  * - aria-required="true" on required fields + native required attribute.
  * - Autocomplete attributes on Naam and Mailadres.
  *
- * Source: 02-PATTERNS.md §ContactForm.astro, 02-UI-SPEC.md §State Machine,
- *         02-RESEARCH.md §Pattern 3, PLAN 02-01 Task 2
+ * SECURITY: result strings come ONLY from i18n — never echoed from user input.
+ * ?type= is validated against a fixed allowlist before pre-selecting the topic.
  */
 
-import { TODO_WEB3FORMS_ACCESS_KEY } from '../../config';
+import { CONTACT_EMAIL } from '../../config';
 import { getStrings } from '../../i18n/utils';
 
 // Phase 4: locale-parameterized contact strings
@@ -44,53 +43,30 @@ const {
   labelEmail,
   labelBericht,
   ctaSubmit,
-  ctaSubmitting,
-  successMsg,
-  errorMsg,
-  errorNetwork,
   emailSubject,
+  mailtoNote,
+  mailtoFallbackPre,
 } = t.contact;
 ---
 
-<!-- ContactForm: Web3Forms progressive-enhancement form (02-01 Task 2) -->
+<!-- ContactForm: mailto composer (260824-cmf) -->
 <div class="contact-form-wrap">
-  <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
   <form
     id="contact-form"
-    method="POST"
-    action="https://api.web3forms.com/submit"
+    method="post"
+    enctype="text/plain"
+    action={`mailto:${CONTACT_EMAIL}`}
     novalidate
     class="contact-form"
-    data-submit={ctaSubmit}
-    data-submitting={ctaSubmitting}
-    data-success={successMsg}
-    data-error={errorMsg}
-    data-network={errorNetwork}
+    data-email={CONTACT_EMAIL}
+    data-subject={emailSubject}
+    data-note={mailtoNote}
+    data-l-name={labelNaam}
+    data-l-email={labelEmail}
+    data-l-subject={labelOnderwerp}
+    data-l-message={labelBericht}
   >
-    <!-- Hidden: Web3Forms access key — public client-side identifier (T-2-03) -->
-    <!-- TODO: replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts -->
-    <input type="hidden" name="access_key" value={TODO_WEB3FORMS_ACCESS_KEY} />
-
-    <!-- Hidden: locale-resolved subject line for Web3Forms email subject (CR-01) -->
-    <input type="hidden" name="subject" value={emailSubject} />
-
-    <!-- Hidden: redirect for no-JS path (Web3Forms default thank-you page) -->
-    <input type="hidden" name="redirect" value="https://web3forms.com/success" />
-
-    <!-- Honeypot: botcheck checkbox (must be checkbox for Web3Forms — T-2-01, D-03) -->
-    <input
-      type="checkbox"
-      name="botcheck"
-      style="display:none"
-      tabindex="-1"
-      aria-hidden="true"
-    />
-
     <!-- Topic (subject/type) select — pre-selectable via ?type= query param (D-08) -->
-    <!-- WR-04: field name changed from Dutch "onderwerp" to English "topic" so Web3Forms
-         emails show self-explanatory field labels for both NL and EN submissions.
-         Option *values* remain Dutch constants (algemeen/lezing/coaching) because the
-         ?type= allowlist and pre-selection logic depend on them (see JS island below). -->
     <div class="form-group">
       <label for="contact-onderwerp" class="form-label">
         {labelOnderwerp}
@@ -107,7 +83,6 @@ const {
     </div>
 
     <!-- Name — required -->
-    <!-- WR-04: field name changed from Dutch "naam" to English "name" -->
     <div class="form-group">
       <label for="contact-naam" class="form-label">
         {labelNaam}<span aria-hidden="true"> *</span>
@@ -140,7 +115,6 @@ const {
     </div>
 
     <!-- Message — required -->
-    <!-- WR-04: field name changed from Dutch "bericht" to English "message" -->
     <div class="form-group">
       <label for="contact-bericht" class="form-label">
         {labelBericht}<span aria-hidden="true"> *</span>
@@ -155,7 +129,7 @@ const {
       ></textarea>
     </div>
 
-    <!-- Submit button — aria-describedby ties to result region for a11y (mirrors BookInterestForm) -->
+    <!-- Submit — aria-describedby ties to result region for a11y -->
     <button
       type="submit"
       id="contact-submit"
@@ -166,136 +140,92 @@ const {
     </button>
   </form>
 
-  <!-- Result region: hidden until JS resolves success or error (aria-live for AT) -->
+  <!-- Always-works fallback: direct mail link (also the no-JS path) -->
+  <p class="contact-mailto-fallback">
+    {mailtoFallbackPre}{' '}
+    <a href={`mailto:${CONTACT_EMAIL}`} class="contact-mailto-link">{CONTACT_EMAIL}</a>
+  </p>
+
+  <!-- Result region: polite note after the mail client opens (aria-live for AT) -->
   <div id="contact-result" aria-live="polite" hidden></div>
 </div>
 
-<!-- JS island: query-param pre-selection + fetch submit handler (D-04, D-08) -->
-<!-- Follows Nav.astro IIFE pattern: one IIFE, 'use strict', null guards, TS casts -->
+<!-- JS island: query-param pre-selection + mailto composer -->
 <script>
   (function () {
     'use strict';
 
-    // ── Element refs + null guards ──────────────────────────────────────────
-    const form      = document.getElementById('contact-form') as HTMLFormElement | null;
-    const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
-    const resultEl  = document.getElementById('contact-result') as HTMLElement | null;
-    const selectEl  = document.getElementById('contact-onderwerp') as HTMLSelectElement | null;
+    const form     = document.getElementById('contact-form') as HTMLFormElement | null;
+    const resultEl = document.getElementById('contact-result') as HTMLElement | null;
+    const selectEl = document.getElementById('contact-onderwerp') as HTMLSelectElement | null;
 
-    if (!form || !submitBtn || !resultEl || !selectEl) return;
-
-    // After the null check, use non-null refs inside closures (Nav.astro pattern):
+    if (!form) return;
     const f = form!;
-    const s = submitBtn!;
-    const r = resultEl!;
-    const sel = selectEl!;
 
-    // ── Read copy from data-* attributes on the form element ──────────────
-    // Strings come from nl.contact (set in template above) — single source of truth.
-    const copySubmit     = f.dataset.submit     || 'Verstuur bericht';
-    const copySubmitting = f.dataset.submitting || 'Versturen…';
-    const copySuccess    = f.dataset.success    || '';
-    const copyError      = f.dataset.error      || '';
-    const copyNetwork    = f.dataset.network    || '';
-    // CR-01: read key from hidden input[name="access_key"] — single source of truth,
-    // avoids duplicating the value in a redundant data-key DOM attribute.
-    const accessKeyInput = f.querySelector('input[name="access_key"]') as HTMLInputElement | null;
-    const accessKey      = accessKeyInput ? accessKeyInput.value : '';
+    // ── Copy + config from data-* attributes (single source of truth) ──────
+    const email       = f.dataset.email    || '';
+    const subjectBase = f.dataset.subject  || '';
+    const note        = f.dataset.note     || '';
+    const lName       = f.dataset.lName    || 'Naam';
+    const lEmail      = f.dataset.lEmail   || 'Mailadres';
+    const lSubject    = f.dataset.lSubject || 'Onderwerp';
+    const lMessage    = f.dataset.lMessage || 'Bericht';
 
-    // ── State 2: Placeholder key detection (UI-SPEC State 2, D-02) ─────────
-    if (accessKey === 'TODO_WEB3FORMS_ACCESS_KEY') {
-      console.warn(
-        '[ContactForm] Web3Forms access key is a placeholder — form will not deliver email. ' +
-        'Replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts.'
-      );
+    // ── Query-param pre-selection (D-08) — validated against allowlist ──────
+    if (selectEl) {
+      const params = new URLSearchParams(window.location.search);
+      const typeParam = params.get('type');
+      const ALLOWED_TYPES = new Set(['algemeen', 'lezing', 'coaching']);
+      if (typeParam && ALLOWED_TYPES.has(typeParam)) {
+        selectEl.value = typeParam;
+      }
     }
 
-    // ── State 3: Query-param pre-selection (D-08, T-2-04) ──────────────────
-    // Read ?type= from window.location.search (client-side only; static builds
-    // cannot read search params at build time). Only valid option values are applied.
-    const params = new URLSearchParams(window.location.search);
-    const typeParam = params.get('type');
-    // Validate directly against the fixed allowlist — do NOT build a querySelector
-    // from user input (CSS.escape does not escape `"`, so `?type=coaching"` would
-    // throw a SyntaxError and crash the island — WR-01).
-    const ALLOWED_TYPES = new Set(['algemeen', 'lezing', 'coaching']);
-    if (typeParam && ALLOWED_TYPES.has(typeParam)) {
-      sel.value = typeParam;
-    }
-    // Unknown / unmatched values are silently ignored → remains "algemeen" default
-
-    // ── Helper: show error in result region, re-enable button ──────────────
-    function showError(message: string) {
-      const errorP = document.createElement('p');
-      errorP.className = 'form-error';
-      errorP.textContent = message;
-      r.innerHTML = '';
-      r.appendChild(errorP);
-      r.hidden = false;
-
-      // Re-enable submit button and restore label
-      s.disabled = false;
-      s.textContent = copySubmit;
-      (s as HTMLElement).style.opacity = '';
-    }
-
-    // ── State 4–7: Fetch submit handler ────────────────────────────────────
-    f.addEventListener('submit', async function (e) {
+    // ── Submit → build mailto and open the visitor's mail client ───────────
+    f.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      // Validate required fields before submitting. The form carries `novalidate`
-      // (so the browser doesn't block the no-JS path pre-Web3Forms), so the JS path
-      // must run the check itself and surface native messages (WR-02).
+      // novalidate carries the no-JS path; the JS path validates itself (WR-02).
       if (!f.checkValidity()) {
         f.reportValidity();
         return;
       }
 
-      // State 4: Submitting — disable button, change label text, dim opacity
-      s.disabled = true;
-      s.textContent = copySubmitting;
-      (s as HTMLElement).style.opacity = '0.7';
+      const fd = new FormData(f);
+      const name    = String(fd.get('name') || '');
+      const sender  = String(fd.get('email') || '');
+      const message = String(fd.get('message') || '');
+      const topicText = selectEl ? selectEl.options[selectEl.selectedIndex].text : '';
 
-      // Clear any previous result
-      r.hidden = true;
-      r.innerHTML = '';
+      const subject = subjectBase + (topicText ? ' — ' + topicText : '');
+      const body =
+        lName + ': ' + name + '\n' +
+        lEmail + ': ' + sender + '\n' +
+        lSubject + ': ' + topicText + '\n\n' +
+        message;
 
-      try {
-        const data = Object.fromEntries(new FormData(f));
-        const response = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
+      const url =
+        'mailto:' + email +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
 
-        const json = await response.json();
+      // Fire Plausible 'Contact: Submit' goal (GROW-01, D-05)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (typeof (window as any).plausible === 'function') {
+        (window as any).plausible('Contact: Submit');
+      }
 
-        if (json && json.success === true) {
-          // Fire Plausible 'Contact: Submit' goal (GROW-01, D-05)
-          // Guard: typeof check is belt-and-suspenders alongside the queue guard
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          if (typeof (window as any).plausible === 'function') {
-            (window as any).plausible('Contact: Submit');
-          }
+      // Open the mail client
+      window.location.href = url;
 
-          // State 6: Success — hide form, show STATIC success message
-          // NEVER echo json.message or any user input into the DOM (T-2-02)
-          (f as HTMLElement).hidden = true;
-          const successP = document.createElement('p');
-          successP.className = 'form-success';
-          successP.textContent = copySuccess;
-          r.appendChild(successP);
-          r.hidden = false;
-        } else {
-          // State 7: API error (invalid key, rate limit, etc.)
-          showError(copyError);
-        }
-      } catch (_err) {
-        // State 7: Network error (no connection, CORS, etc.)
-        showError(copyNetwork);
+      // Static polite note — never echoes user input (T-2-02)
+      if (resultEl) {
+        const p = document.createElement('p');
+        p.className = 'form-success';
+        p.textContent = note;
+        resultEl.innerHTML = '';
+        resultEl.appendChild(p);
+        resultEl.hidden = false;
       }
     });
   })();
@@ -397,24 +327,34 @@ const {
     cursor: not-allowed;
   }
 
+  /* ── Direct-mail fallback (always works / no-JS path) ─────────────────────── */
+  .contact-mailto-fallback {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: var(--space-lg) 0 0;
+    line-height: 1.5;
+  }
+  .contact-mailto-link {
+    color: var(--color-text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .contact-mailto-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
   /* ── Result region ────────────────────────────────────────────────────────── */
-  /* Success: neutral --color-text (not yellow — UI-SPEC State 6) */
+  /* Success/note: neutral --color-text (not yellow — UI-SPEC State 6) */
   .form-success {
     font-family: var(--font-body);
     font-size: var(--text-lg);   /* 18–22px */
     font-weight: 400;
     color: var(--color-text);
     line-height: 1.5;
-    margin: 0;
-  }
-
-  /* Error: --color-destructive (#C0392B) — not yellow (D-02, UI-SPEC State 7) */
-  .form-error {
-    font-family: var(--font-body);
-    font-size: var(--text-base); /* 16–18px */
-    font-weight: 400;
-    color: var(--color-destructive);
-    line-height: 1.5;
-    margin: 0;
+    margin: var(--space-md) 0 0;
   }
 </style>

@@ -322,6 +322,10 @@ export const en = {
     errorMsg:       'Something went wrong. Please try again or email me directly.',
     errorNetwork:   'No connection. Check your internet and try again.',
     emailSubject:   'New message via milanvandermeulen.nl',
+    /** Shown after the mailto opens the visitor's mail app. */
+    mailtoNote:     'Your email app will open with your message ready — review and send.',
+    /** No-JS / fallback line before the direct mailto link. */
+    mailtoFallbackPre: "Button not working? Email directly at",
   },
 
   // ── Coaching Page ─────────────────────────────────────────────────────────
