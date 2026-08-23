@@ -24,7 +24,7 @@ const tl = t.timeline;
     <header class="tl__head">
       <div class="tl__head-text" data-anim>
         <p class="tl__eyebrow">{tl.eyebrow}</p>
-        <h2 id="timeline-heading" class="tl__heading">{tl.heading}</h2>
+        <h2 id="timeline-heading" class="tl__heading kin">{tl.heading}</h2>
         <p class="tl__intro">{tl.intro}</p>
 
         <!--
@@ -74,6 +74,8 @@ const tl = t.timeline;
     </div>
 
     <ol class="tl__list">
+      <!-- Decorative: yellow rail that fills as the milestones scroll past (motion.css). -->
+      <span class="tl__rail-fill" aria-hidden="true"></span>
       {tl.items.map((item, i) => (
         <li class="tl__item" data-anim style={`--i: ${i}`}>
           <span class="tl__dot" aria-hidden="true"></span>
@@ -100,6 +102,19 @@ const tl = t.timeline;
   /* ── Header ───────────────────────────────────────────────────────────── */
   .tl__head { display: grid; grid-template-columns: 1fr; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); align-items: center; }
   @media (min-width: 900px) { .tl__head { grid-template-columns: 1.15fr 0.85fr; } }
+  /* Pinned header on desktop: the heading + stats stay in view while the
+     milestones scroll past beneath them (opaque navy so content passes cleanly
+     behind). Degrades to normal flow where sticky/positioning isn't honoured. */
+  @media (min-width: 1000px) {
+    .tl__head {
+      position: sticky;
+      top: calc(76px + var(--space-lg));
+      z-index: 2;
+      background: var(--color-navy);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--line-on-dark);
+    }
+  }
   /* Cap the header photo so it doesn't inflate the row height (compacter). */
   @media (min-width: 900px) { .tl__photo { max-height: 360px; } }
   .tl__head-text { display: flex; flex-direction: column; gap: var(--space-md); }
@@ -141,7 +156,10 @@ const tl = t.timeline;
   .tl__photo-img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; display: block; }
 
   /* ── Vertical timeline (single continuous left rail) ──────────────────── */
-  .tl__list { list-style: none; margin: 0; padding: 0; max-width: 760px; }
+  .tl__list { position: relative; list-style: none; margin: 0; padding: 0; max-width: 760px; }
+  /* Yellow progress rail overlaid on the grey per-item rails; scaleY driven by
+     scroll in motion.css. Decorative (aria-hidden); absent = just the grey rail. */
+  .tl__rail-fill { position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--color-accent); z-index: 0; transform: scaleY(0); transform-origin: top center; }
   .tl__item {
     position: relative;
     padding-left: clamp(var(--space-xl), 4vw, var(--space-2xl));

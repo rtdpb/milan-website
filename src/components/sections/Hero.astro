@@ -70,18 +70,22 @@ const parseStat = (v: string) => {
       <span class="hero__accent" aria-hidden="true"></span>
 
       <figure class="hero__figure">
-        <Picture
-          src={heroImage}
-          formats={['avif', 'webp']}
-          fallbackFormat="webp"
-          widths={[640, 900, 1200, 1600, 2000]}
-          sizes="(max-width: 899px) 100vw, 52vw"
-          alt={isEn
-            ? 'Milan van der Meulen speaking on stage against a yellow and blue backdrop.'
-            : 'Milan van der Meulen spreekt op het podium met geel en blauw decor.'}
-          priority
-          class="hero__photo"
-        />
+        <!-- Parallax wrapper: scroll-linked scale/drift (motion.css) lives here so
+             it never fights the image's one-time load reveal on .hero__photo. -->
+        <div class="hero__parallax">
+          <Picture
+            src={heroImage}
+            formats={['avif', 'webp']}
+            fallbackFormat="webp"
+            widths={[640, 900, 1200, 1600, 2000]}
+            sizes="(max-width: 899px) 100vw, 52vw"
+            alt={isEn
+              ? 'Milan van der Meulen speaking on stage against a yellow and blue backdrop.'
+              : 'Milan van der Meulen spreekt op het podium met geel en blauw decor.'}
+            priority
+            class="hero__photo"
+          />
+        </div>
       </figure>
     </div>
   </div>
@@ -192,6 +196,8 @@ const parseStat = (v: string) => {
     aspect-ratio: 4 / 5;        /* mobile: strong portrait presence */
     box-shadow: var(--shadow-float);
   }
+  /* Parallax wrapper fills the clipped figure; scroll-linked transform in motion.css. */
+  .hero__parallax { position: absolute; inset: 0; }
   .hero__figure :global(picture) { display: block; width: 100%; height: 100%; }
   .hero__figure :global(img.hero__photo) {
     width: 100%; height: 100%; object-fit: cover;
