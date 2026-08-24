@@ -16,20 +16,20 @@
  */
 export const speakerLogoFiles: Record<string, string> = {
   'ABN AMRO MeesPierson': 'speaker-logos/abnamro.svg',
+  'World Youth Forum': 'speaker-logos/world-youth-forum.png',
   'Sziget Festival': 'speaker-logos/sziget.svg',
   'University College London': 'speaker-logos/ucl.svg',
   'Energy Tech Summit': 'speaker-logos/energy-tech-summit.png',
+  Ennatuurlijk: 'speaker-logos/ennatuurlijk.svg',
   'Van Hall Larenstein': 'speaker-logos/van-hall-larenstein.png',
+  'NHL Stenden': 'speaker-logos/nhl-stenden.svg',
   'Plus Supermarkt': 'speaker-logos/plus.svg',
   Rabobank: 'speaker-logos/rabobank.svg',
   'Hanze University of Applied Sciences': 'speaker-logos/hanze.png',
   'Van Dorp Installaties': 'speaker-logos/van-dorp.svg',
   'University of Groningen': 'speaker-logos/rug.svg',
   Mazda: 'speaker-logos/mazda.svg',
-  // No clean, monochrome-friendly asset sourced yet (fall back to the org name):
-  // 'World Youth Forum', 'NHL Stenden', 'Climate Reality Project', 'Ennatuurlijk'
-  // (Ennatuurlijk's only asset is a filled shape that flattens to a white blob
-  // under the brightness(0) invert(1) filter — needs a proper wordmark).
+  'Climate Reality Project': 'speaker-logos/climate-reality.svg',
 };
 
 /**
