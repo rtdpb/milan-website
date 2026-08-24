@@ -11,9 +11,11 @@ import { Picture } from 'astro:assets';
 import heroSrc from '../../assets/photos/milan-speaking-graph.jpg';
 import { getStrings } from '../../i18n/utils';
 import { ATHENAS_URL } from '../../config';
+import { speakerLogoFiles, speakerLogoSquare } from '../../components/sections/speakerLogos';
 
 const t = getStrings(Astro.currentLocale);
 const s = t.spreker;
+const base = import.meta.env.BASE_URL;
 const arrow = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
 ---
 
@@ -86,7 +88,7 @@ const arrow = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
   </SectionWrapper>
 
   <!-- 7. Previously spoke at — dark logo-card grid + yellow CTA card + divider -->
-  <SectionWrapper id="spreker-spokenat" variant="surface" labelledBy="spreker-spokenat-heading">
+  <SectionWrapper id="spreker-spokenat" variant="ink" labelledBy="spreker-spokenat-heading">
     <div class="sat__intro" data-anim>
       <p class="sat__eyebrow">{s.spokenAtEyebrow}</p>
       <h2 id="spreker-spokenat-heading" class="sat__heading">{s.spokenAtHeading}</h2>
@@ -95,13 +97,14 @@ const arrow = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
 
     <div class="sat__grid" data-anim style="--i: 1">
       {s.spokenAt.map((org: string) => (
-        <div class="sat__card">
-          {/* Placeholder logo slot — replace with <img src="…" alt="…"> when logo is available */}
-          <span class="sat__logo-placeholder" aria-hidden="true"></span>
+        <div class={`sat__card${speakerLogoFiles[org] ? '' : ' sat__card--textonly'}`}>
+          {speakerLogoFiles[org]
+            ? (<span class="sat__logo-wrap"><img class={`sat__logo${speakerLogoSquare[org] ? ' sat__logo--mark' : ''}`} src={base + speakerLogoFiles[org]} alt="" aria-hidden="true" loading="lazy" /></span>)
+            : null}
           <span class="sat__org">{org}</span>
         </div>
       ))}
-      {/* Final cell: yellow "Book a talk" CTA card */}
+      {/* Final cell: yellow-outlined "Book a talk" CTA card */}
       <a class="sat__card sat__card--cta" href={ATHENAS_URL} target="_blank" rel="noopener noreferrer">
         <span class="sat__cta-label">{s.spokenAtCta}</span>
         <Fragment set:html={arrow} />
@@ -172,46 +175,52 @@ const arrow = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
   .quote__name { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); }
   .quote__role { font-size: var(--text-xs); color: var(--color-text-secondary); }
 
-  /* ── 7. Previously spoke at — dark logo-card grid ────────────────────── */
+  /* ── 7. Previously spoke at — dark logo-card grid (Milan's design) ─────── */
   .sat__intro { display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: clamp(var(--space-lg), 3vw, var(--space-2xl)); max-width: 52ch; }
-  .sat__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0; }
-  .sat__heading { font-size: var(--text-3xl); line-height: 1.08; margin: 0; color: var(--color-text); }
-  .sat__subtext { font-size: var(--text-base); line-height: 1.6; color: var(--color-text-secondary); margin: 0; }
+  .sat__eyebrow { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent); margin: 0; }
+  .sat__heading { font-size: var(--text-3xl); line-height: 1.08; margin: 0; color: var(--color-dark-text); }
+  .sat__subtext { font-size: var(--text-base); line-height: 1.6; color: var(--color-dark-text-soft); margin: 0; }
 
-  .sat__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
-  @media (min-width: 760px) { .sat__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-md); } }
+  .sat__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-sm); }
+  @media (min-width: 560px) { .sat__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-md); } }
   @media (min-width: 960px) { .sat__grid { grid-template-columns: repeat(4, 1fr); } }
 
   .sat__card {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: var(--space-sm); text-align: center;
-    background: var(--color-ink); border: 1px solid var(--line-on-dark);
+    display: flex; flex-direction: row; align-items: center; justify-content: flex-start;
+    gap: var(--space-md); text-align: left;
+    background: var(--color-ink-2); border: 1px solid var(--line-on-dark);
     border-radius: var(--radius-lg);
-    padding: clamp(var(--space-md), 2vw, var(--space-xl));
-    min-height: 100px;
+    padding: clamp(var(--space-md), 1.6vw, var(--space-lg));
+    min-height: 84px;
   }
+  .sat__card--textonly { justify-content: center; text-align: center; }
 
-  .sat__logo-placeholder {
-    display: block; width: 40px; height: 24px;
-    background: var(--line-on-dark-strong); border-radius: 3px;
+  .sat__logo-wrap { flex-shrink: 0; width: 64px; display: flex; align-items: center; justify-content: center; }
+  .sat__logo {
+    max-width: 100%; max-height: 30px; width: auto; height: auto; display: block;
+    filter: brightness(0) invert(1); opacity: 0.92;
   }
+  /* Square icon-marks read small at wordmark height — give them a bit more. */
+  .sat__logo--mark { max-height: 42px; }
 
   .sat__org { font-size: var(--text-sm); font-weight: 600; color: var(--color-dark-text-soft); line-height: 1.3; }
 
   .sat__card--cta {
-    background: var(--color-accent); border-color: var(--color-accent);
-    flex-direction: row; justify-content: center;
+    background: transparent; border: 1.5px solid var(--color-accent);
+    flex-direction: row; justify-content: center; align-items: center;
     gap: var(--space-sm); text-decoration: none;
     transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
   }
-  .sat__card--cta:hover { background: var(--color-accent-dark); border-color: var(--color-accent-dark); transform: translateY(-3px); }
-  .sat__cta-label { font-size: var(--text-sm); font-weight: 700; color: var(--color-accent-ink); white-space: nowrap; }
-  .sat__card--cta :global(svg) { color: var(--color-accent-ink); transition: transform var(--duration-fast) var(--ease-out); }
+  .sat__card--cta:hover { background: var(--color-accent); transform: translateY(-3px); }
+  .sat__cta-label { font-size: var(--text-sm); font-weight: 700; color: var(--color-accent); white-space: nowrap; transition: color var(--duration-fast) var(--ease-out); }
+  .sat__card--cta :global(svg) { color: var(--color-accent); transition: transform var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); }
+  .sat__card--cta:hover .sat__cta-label,
+  .sat__card--cta:hover :global(svg) { color: var(--color-accent-ink); }
   .sat__card--cta:hover :global(svg) { transform: translateX(3px); }
 
   .sat__more { display: flex; align-items: center; gap: var(--space-md); margin-top: clamp(var(--space-lg), 3vw, var(--space-xl)); }
-  .sat__more-line { flex: 1; height: 1px; background: var(--line-on-light-strong); }
-  .sat__more-text { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-text-secondary); white-space: nowrap; flex-shrink: 0; }
+  .sat__more-line { flex: 1; height: 1px; background: var(--line-on-dark); }
+  .sat__more-text { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-dark-text-soft); white-space: nowrap; flex-shrink: 0; }
 
   .awards { list-style: none; margin: 0; padding: 0; max-width: 760px; border-top: 1px solid var(--line-on-light); }
   .award { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-lg); padding: var(--space-md) 0; border-bottom: 1px solid var(--line-on-light); }
