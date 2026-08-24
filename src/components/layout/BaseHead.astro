@@ -137,8 +137,10 @@ const personSchema = {
 <!-- Plausible Analytics — production-gated, inert until TODO_PLAUSIBLE_DOMAIN supplied (D-06) -->
 <PlausibleScript />
 
-<!-- Favicon (interim SVG — replace with brand favicon when supplied) -->
-<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+<!-- Favicon — brand mark (yellow "M") supplied by the client. -->
+<link rel="icon" type="image/png" sizes="32x32" href={`${base}favicon-32.png`} />
+<link rel="icon" type="image/png" sizes="16x16" href={`${base}favicon-16.png`} />
+<link rel="apple-touch-icon" sizes="180x180" href={`${base}apple-touch-icon.png`} />
 
 <!-- Self-hosted @font-face (base-aware — see frontmatter). is:inline so Vite leaves url() untouched. -->
 <style is:inline set:html={fontFaceCss}></style>
