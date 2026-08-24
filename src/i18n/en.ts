@@ -317,13 +317,13 @@ export const en = {
     pageDesc:       'Get in touch about coaching, a keynote, or a general question. Milan responds personally.',
     heading:        "Let's get acquainted",
     subtext:        'Fill in the form and I will get back to you as soon as possible.',
-    labelOnderwerp: 'Subject',
-    optionAlgemeen: 'General',
-    optionLezing:   'Book a talk',
-    optionCoaching: 'Schedule intro call',
     labelNaam:      'Name',
     labelEmail:     'Email address',
     labelBericht:   'Message',
+    labelBedrijf:   'Company name',
+    labelTelefoon:  'Phone number',
+    privacyConsentPre:  'I agree to the ',
+    privacyConsentLink: 'privacy policy',
     ctaSubmit:      'Send message',
     ctaSubmitting:  'Sending…',
     successMsg:     "Thank you! I'll be in touch soon.",
@@ -332,8 +332,6 @@ export const en = {
     emailSubject:   'New message via milanvandermeulen.nl',
     /** Shown after the mailto opens the visitor's mail app. */
     mailtoNote:     'Your email app will open with your message ready — review and send.',
-    /** No-JS / fallback line before the direct mailto link. */
-    mailtoFallbackPre: "Button not working? Email directly at",
   },
 
   // ── Coaching Page ─────────────────────────────────────────────────────────

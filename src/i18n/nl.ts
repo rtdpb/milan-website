@@ -321,13 +321,13 @@ export const nl = {
     pageDesc:       'Neem contact op voor coaching, een lezing of een algemene vraag. Milan reageert persoonlijk.',
     heading:        'Laten we kennismaken',
     subtext:        'Vul het formulier in en ik neem zo snel mogelijk contact met je op.',
-    labelOnderwerp: 'Onderwerp',
-    optionAlgemeen: 'Algemeen',
-    optionLezing:   'Boek lezing',
-    optionCoaching: 'Plan kennismaking',
     labelNaam:      'Naam',
     labelEmail:     'Mailadres',
     labelBericht:   'Bericht',
+    labelBedrijf:   'Naam bedrijf',
+    labelTelefoon:  'Telefoonnummer',
+    privacyConsentPre:  'Ik ga akkoord met het ',
+    privacyConsentLink: 'privacybeleid',
     ctaSubmit:      'Verstuur bericht',
     ctaSubmitting:  'Versturen…',
     successMsg:     'Bedankt! Ik neem snel contact met je op.',
@@ -336,8 +336,6 @@ export const nl = {
     emailSubject:   'Nieuw bericht via milanvandermeulen.nl',
     /** Shown after the mailto opens the visitor's mail app. */
     mailtoNote:     'Je mailprogramma opent met je bericht erin — controleer en verstuur.',
-    /** No-JS / fallback line before the direct mailto link. */
-    mailtoFallbackPre: 'Werkt de knop niet? Mail direct naar',
   },
 
   // ── Coaching Page (PAGE-01) ──────────────────────────────────────────────

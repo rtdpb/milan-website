@@ -3,16 +3,15 @@
  * ContactForm.astro
  * Contact form that composes an email to CONTACT_EMAIL via `mailto:` (PAGE-04).
  *
- * Rationale (feedback 260824-cmf): Milan supplied a real inbox
- * (Milan@oio-impact.com) but no server/Web3Forms key. Instead of a backend the
- * form now opens the visitor's own mail client with the message pre-composed —
- * honest, zero-infra, and works on a static host. Shared by NL + EN contact
- * pages (labels come from getStrings(Astro.currentLocale)).
+ * Overhauled in 260824-jd5:
+ * - Removed subject dropdown + mailtoFallbackPre line
+ * - Added optional Naam bedrijf + Telefoonnummer fields
+ * - Added required privacy-consent checkbox linking to privacy page
+ * - Submit button restyled as yellow pill CTA with arrow (matches site's primary CTAs)
  *
  * NO-JS PATH: native form posts to `mailto:CONTACT_EMAIL` with
  * enctype="text/plain", so the browser still opens the mail client with the
- * field values in the body. A visible direct mailto link is shown as an
- * always-works fallback.
+ * field values in the body.
  *
  * JS PATH: submit intercepted (preventDefault). Builds a nicely formatted
  * `mailto:` (localised subject + labelled body) and navigates to it, then shows
@@ -23,33 +22,37 @@
  * - Every field has a visible <label for> (never placeholder-only).
  * - aria-live="polite" on result region for screen reader announcements.
  * - aria-required="true" on required fields + native required attribute.
- * - Autocomplete attributes on Naam and Mailadres.
+ * - Autocomplete attributes on all appropriate fields.
  *
  * SECURITY: result strings come ONLY from i18n — never echoed from user input.
- * ?type= is validated against a fixed allowlist before pre-selecting the topic.
  */
 
 import { CONTACT_EMAIL } from '../../config';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { getStrings } from '../../i18n/utils';
 
 // Phase 4: locale-parameterized contact strings
 const t = getStrings(Astro.currentLocale);
 const {
-  labelOnderwerp,
-  optionAlgemeen,
-  optionLezing,
-  optionCoaching,
   labelNaam,
   labelEmail,
   labelBericht,
+  labelBedrijf,
+  labelTelefoon,
+  privacyConsentPre,
+  privacyConsentLink,
   ctaSubmit,
   emailSubject,
   mailtoNote,
-  mailtoFallbackPre,
 } = t.contact;
+
+// Privacy policy href — NL: /privacybeleid, EN: /en/privacy
+const isEn = (Astro.currentLocale ?? 'nl') === 'en';
+const base = import.meta.env.BASE_URL;
+const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}privacybeleid`;
 ---
 
-<!-- ContactForm: mailto composer (260824-cmf) -->
+<!-- ContactForm: mailto composer (260824-jd5 overhaul) -->
 <div class="contact-form-wrap">
   <form
     id="contact-form"
@@ -63,25 +66,10 @@ const {
     data-note={mailtoNote}
     data-l-name={labelNaam}
     data-l-email={labelEmail}
-    data-l-subject={labelOnderwerp}
     data-l-message={labelBericht}
+    data-l-company={labelBedrijf}
+    data-l-phone={labelTelefoon}
   >
-    <!-- Topic (subject/type) select — pre-selectable via ?type= query param (D-08) -->
-    <div class="form-group">
-      <label for="contact-onderwerp" class="form-label">
-        {labelOnderwerp}
-      </label>
-      <select
-        id="contact-onderwerp"
-        name="topic"
-        class="form-input"
-      >
-        <option value="algemeen" selected>{optionAlgemeen}</option>
-        <option value="lezing">{optionLezing}</option>
-        <option value="coaching">{optionCoaching}</option>
-      </select>
-    </div>
-
     <!-- Name — required -->
     <div class="form-group">
       <label for="contact-naam" class="form-label">
@@ -114,6 +102,34 @@ const {
       />
     </div>
 
+    <!-- Company name — optional -->
+    <div class="form-group">
+      <label for="contact-bedrijf" class="form-label">
+        {labelBedrijf}
+      </label>
+      <input
+        id="contact-bedrijf"
+        type="text"
+        name="company"
+        autocomplete="organization"
+        class="form-input"
+      />
+    </div>
+
+    <!-- Phone number — optional -->
+    <div class="form-group">
+      <label for="contact-telefoon" class="form-label">
+        {labelTelefoon}
+      </label>
+      <input
+        id="contact-telefoon"
+        type="tel"
+        name="phone"
+        autocomplete="tel"
+        class="form-input"
+      />
+    </div>
+
     <!-- Message — required -->
     <div class="form-group">
       <label for="contact-bericht" class="form-label">
@@ -129,35 +145,44 @@ const {
       ></textarea>
     </div>
 
-    <!-- Submit — aria-describedby ties to result region for a11y -->
+    <!-- Privacy consent — required -->
+    <div class="form-consent">
+      <input
+        type="checkbox"
+        id="contact-privacy"
+        name="privacy"
+        required
+        aria-required="true"
+        class="form-consent__box"
+      />
+      <label for="contact-privacy" class="form-consent__label">
+        {privacyConsentPre}<a href={privacyHref} class="form-consent__link">{privacyConsentLink}</a>
+      </label>
+    </div>
+
+    <!-- Submit — yellow pill CTA with arrow (matches site's primary CTAs) -->
     <button
       type="submit"
       id="contact-submit"
-      class="btn btn--primary contact-submit"
+      class="contact-submit"
       aria-describedby="contact-result"
     >
       {ctaSubmit}
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
   </form>
-
-  <!-- Always-works fallback: direct mail link (also the no-JS path) -->
-  <p class="contact-mailto-fallback">
-    {mailtoFallbackPre}{' '}
-    <a href={`mailto:${CONTACT_EMAIL}`} class="contact-mailto-link">{CONTACT_EMAIL}</a>
-  </p>
 
   <!-- Result region: polite note after the mail client opens (aria-live for AT) -->
   <div id="contact-result" aria-live="polite" hidden></div>
 </div>
 
-<!-- JS island: query-param pre-selection + mailto composer -->
+<!-- JS island: mailto composer -->
 <script>
   (function () {
     'use strict';
 
     const form     = document.getElementById('contact-form') as HTMLFormElement | null;
     const resultEl = document.getElementById('contact-result') as HTMLElement | null;
-    const selectEl = document.getElementById('contact-onderwerp') as HTMLSelectElement | null;
 
     if (!form) return;
     const f = form!;
@@ -168,18 +193,9 @@ const {
     const note        = f.dataset.note     || '';
     const lName       = f.dataset.lName    || 'Naam';
     const lEmail      = f.dataset.lEmail   || 'Mailadres';
-    const lSubject    = f.dataset.lSubject || 'Onderwerp';
     const lMessage    = f.dataset.lMessage || 'Bericht';
-
-    // ── Query-param pre-selection (D-08) — validated against allowlist ──────
-    if (selectEl) {
-      const params = new URLSearchParams(window.location.search);
-      const typeParam = params.get('type');
-      const ALLOWED_TYPES = new Set(['algemeen', 'lezing', 'coaching']);
-      if (typeParam && ALLOWED_TYPES.has(typeParam)) {
-        selectEl.value = typeParam;
-      }
-    }
+    const lCompany    = f.dataset.lCompany || 'Naam bedrijf';
+    const lPhone      = f.dataset.lPhone   || 'Telefoonnummer';
 
     // ── Submit → build mailto and open the visitor's mail client ───────────
     f.addEventListener('submit', function (e) {
@@ -191,18 +207,23 @@ const {
         return;
       }
 
-      const fd = new FormData(f);
+      const fd      = new FormData(f);
       const name    = String(fd.get('name') || '');
       const sender  = String(fd.get('email') || '');
+      const company = String(fd.get('company') || '');
+      const phone   = String(fd.get('phone') || '');
       const message = String(fd.get('message') || '');
-      const topicText = selectEl ? selectEl.options[selectEl.selectedIndex].text : '';
 
-      const subject = subjectBase + (topicText ? ' — ' + topicText : '');
-      const body =
+      const subject = subjectBase;
+
+      let body =
         lName + ': ' + name + '\n' +
-        lEmail + ': ' + sender + '\n' +
-        lSubject + ': ' + topicText + '\n\n' +
-        message;
+        lEmail + ': ' + sender + '\n';
+
+      if (company) body += lCompany + ': ' + company + '\n';
+      if (phone)   body += lPhone   + ': ' + phone   + '\n';
+
+      body += '\n' + message;
 
       const url =
         'mailto:' + email +
@@ -261,9 +282,7 @@ const {
     display: block;
   }
 
-  /* ── Input / Select / Textarea ───────────────────────────────────────────── */
-  /* Newsletter pattern: 1.5px border (UI-SPEC §ContactForm field spec), height 48px,
-     font-size 1rem (iOS zoom prevention, FND-06), background --color-bg */
+  /* ── Input / Textarea ───────────────────────────────────────────────────── */
   .form-input {
     border: 1.5px solid var(--color-border);
     border-radius: var(--radius-md);    /* 8px */
@@ -280,7 +299,6 @@ const {
     transition:
       border-color var(--duration-fast) var(--ease-out),
       box-shadow   var(--duration-fast) var(--ease-out);
-    /* Reset select / textarea browser defaults */
     appearance: none;
     -webkit-appearance: none;
   }
@@ -294,16 +312,7 @@ const {
     line-height: 1.6;
   }
 
-  /* Select: custom dropdown arrow (after appearance:none) */
-  .form-group select.form-input {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235A5A52' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right var(--space-md) center;
-    padding-right: calc(var(--space-md) + 24px);
-    cursor: pointer;
-  }
-
-  /* Focus ring: 2px --color-accent with 2px offset (UI-SPEC §Form Input Focus States) */
+  /* Focus ring: 2px --color-accent with 2px offset */
   .form-input:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
@@ -315,46 +324,120 @@ const {
     color: var(--color-text-secondary);
   }
 
-  /* ── Submit button ────────────────────────────────────────────────────────── */
-  .contact-submit {
-    align-self: flex-start;
-    margin-top: var(--space-sm);
+  /* ── Privacy consent row ─────────────────────────────────────────────────── */
+  .form-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .form-consent__box {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    margin-top: 2px; /* optical alignment with label text */
+    border: 1.5px solid var(--color-border);
+    border-radius: 4px;
+    background-color: var(--color-bg);
     cursor: pointer;
-    border: none;
+    accent-color: var(--color-accent);
+    flex-shrink: 0;
   }
 
-  .contact-submit:disabled {
-    cursor: not-allowed;
+  .form-consent__box:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 
-  /* ── Direct-mail fallback (always works / no-JS path) ─────────────────────── */
-  .contact-mailto-fallback {
+  .form-consent__label {
     font-family: var(--font-body);
     font-size: var(--text-sm);
+    font-weight: 400;
     color: var(--color-text-secondary);
-    margin: var(--space-lg) 0 0;
     line-height: 1.5;
+    cursor: pointer;
+    /* Touch target: ensure the label is at least 44px tall */
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25ch;
   }
-  .contact-mailto-link {
+
+  .form-consent__link {
     color: var(--color-text);
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
-  .contact-mailto-link:focus-visible {
+
+  .form-consent__link:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
 
+  /* ── Submit button — yellow pill CTA ────────────────────────────────────── */
+  .contact-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    align-self: flex-start;
+    margin-top: var(--space-sm);
+    height: 54px;
+    padding-inline: var(--space-xl);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+    border: none;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .contact-submit:hover {
+    transform: translateY(-2px);
+    background-color: var(--color-accent-dark);
+  }
+
+  .contact-submit svg {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .contact-submit:hover svg {
+    transform: translateX(3px);
+  }
+
+  .contact-submit:focus-visible {
+    outline: 2px solid var(--color-accent-ink);
+    outline-offset: 3px;
+  }
+
+  .contact-submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
   /* ── Result region ────────────────────────────────────────────────────────── */
-  /* Success/note: neutral --color-text (not yellow — UI-SPEC State 6) */
   .form-success {
     font-family: var(--font-body);
-    font-size: var(--text-lg);   /* 18–22px */
+    font-size: var(--text-lg);
     font-weight: 400;
     color: var(--color-text);
     line-height: 1.5;
     margin: var(--space-md) 0 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-submit,
+    .contact-submit svg {
+      transition: none;
+    }
   }
 </style>
