@@ -119,7 +119,7 @@ export const nl = {
         tagline:     'Een eerlijk, indringend verhaal op maat voor jouw event.',
         features:    ['Persoonlijk verhaal met concrete lessen', 'Eerlijk over de successen én de valkuilen', 'Afgestemd op jouw publiek en setting'],
         subtext:     '',
-        cta:         'Boek lezing',
+        cta:         'Meer info',
       },
       {
         label:       'Exclusieve ondersteuning',
@@ -128,7 +128,7 @@ export const nl = {
         tagline:     'Intensieve 1-op-1 begeleiding voor een klein aantal founders.',
         features:    ['Sparring op de beslissingen die er echt toe doen', 'Onbeperkt contact tussen de sessies door', 'Direct opzegbaar, geen langdurig traject'],
         subtext:     '',
-        cta:         'Plan kennismaking',
+        cta:         'Meer info',
       },
     ],
   },
@@ -177,7 +177,7 @@ export const nl = {
   // ── Timeline (v4.0) — Milan's journey as visual credibility ──────────────
   // Narrative beats; numeric markers kept to verified facts (9 markten, 180 medewerkers, ~1M zonnepanelen).
   timeline: {
-    eyebrow: 'Het verhaal in cijfers',
+    eyebrow: 'Mijn ondernemersverhaal',
     heading: 'Van idee tot 9 landen, en opnieuw beginnen',
     intro:   'Twaalf jaar bouwen, groeien, verliezen en weer opstaan. De route in het kort.',
     marketsLabel: '9 markten in Europa',
@@ -407,7 +407,7 @@ export const nl = {
     eyebrow:    'Mijn verhaal',
 
     // ── Header ────────────────────────────────────────────────────────────
-    heroEyebrow:  'Het verhaal achter Soly',
+    heroEyebrow:  'Mijn ondernemersverhaal',
     heroTitle:    'Doorleefde lessen',
     heroImageAlt: 'Milan van der Meulen op het podium.',
 

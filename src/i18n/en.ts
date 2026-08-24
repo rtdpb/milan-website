@@ -123,7 +123,7 @@ export const en = {
         tagline:     'An honest, incisive story tailored to your event.',
         features:    ['A personal story with concrete lessons', 'Honest about the wins and the pitfalls', 'Tailored to your audience and setting'],
         subtext:     '',
-        cta:         'Book a talk',
+        cta:         'More info',
       },
       {
         label:       'Exclusive support',
@@ -132,7 +132,7 @@ export const en = {
         tagline:     'Intensive one-on-one guidance for a small number of founders.',
         features:    ['Sparring on the decisions that truly matter', 'Unlimited contact between sessions', 'Cancellable monthly, no lengthy programme'],
         subtext:     '',
-        cta:         'Schedule intro call',
+        cta:         'More info',
       },
     ],
   },
@@ -178,7 +178,7 @@ export const en = {
 
   // ── Timeline (v4.0) — Milan's journey as visual credibility ──────────────
   timeline: {
-    eyebrow: 'The story in numbers',
+    eyebrow: 'My entrepreneurial story',
     heading: 'From idea to 9 countries, and starting over',
     intro:   'Twelve years of building, growing, losing, and rising again. The route in short.',
     marketsLabel: '9 markets across Europe',
@@ -403,7 +403,7 @@ export const en = {
     eyebrow:    'My story',
 
     // ── Header ────────────────────────────────────────────────────────────
-    heroEyebrow:  'The story behind Soly',
+    heroEyebrow:  'My entrepreneurial story',
     heroTitle:    'Lived lessons',
     heroImageAlt: 'Milan van der Meulen on stage.',
 
