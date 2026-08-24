@@ -26,7 +26,6 @@ import Hero from '../../components/sections/Hero.astro';
 import PressStrip from '../../components/sections/PressStrip.astro';
 import Samenwerken from '../../components/sections/Samenwerken.astro';
 import Testimonials from '../../components/sections/Testimonials.astro';
-import Story from '../../components/sections/Story.astro';
 import Timeline from '../../components/sections/Timeline.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
 import Articles from '../../components/sections/Articles.astro';
@@ -66,10 +65,10 @@ const t = getStrings(Astro.currentLocale);
   <Testimonials />
 
   <!--
-    Story — full-width dark personal story band, id="verhaal".
-    "Verhaal" anchor preserved so the hero secondary CTA still works on the EN page.
+    Story section removed from the homepage to match the NL homepage (client
+    feedback). The personal story lives on the dedicated /en/about page; the hero
+    "My story" CTA links there. Story.astro is still used by that page.
   -->
-  <Story />
 
   <!--
     Timeline — "The story in numbers" navy stats band (260821-m2d).
