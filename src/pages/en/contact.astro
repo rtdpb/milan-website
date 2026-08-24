@@ -34,24 +34,18 @@ const { pageTitle, pageDesc, heading, subtext } = t.contact;
 
 <BaseLayout title={pageTitle} description={pageDesc}>
 
-  <!-- Page header: H1 + subtext (UI-SPEC §/contact, PAGE-04) -->
-  <SectionWrapper id="contact-header" labelledBy="contact-heading" variant="default">
-    <div class="contact-header">
-      <h1 id="contact-heading" class="contact-header__heading">
-        {heading}
-      </h1>
-      <p class="contact-header__subtext">
-        {subtext}
-      </p>
-    </div>
-  </SectionWrapper>
-
-  <!-- Contact form: constrained to max-width 640px (UI-SPEC §/contact) -->
+  <!-- Header + form in one aligned 640px column, tight gap between them -->
   <!-- ContactForm reads getStrings(Astro.currentLocale) = 'en' automatically -->
-  <SectionWrapper id="contact-form-section" labelledBy="contact-form-label" variant="default">
-    <div class="contact-form-section">
-      <!-- Visually hidden label for the section landmark -->
-      <span id="contact-form-label" class="visually-hidden">Contact form</span>
+  <SectionWrapper id="contact-form-section" labelledBy="contact-heading" variant="default">
+    <div class="contact-col">
+      <div class="contact-header">
+        <h1 id="contact-heading" class="contact-header__heading">
+          {heading}
+        </h1>
+        <p class="contact-header__subtext">
+          {subtext}
+        </p>
+      </div>
       <ContactForm />
     </div>
   </SectionWrapper>
@@ -62,12 +56,20 @@ const { pageTitle, pageDesc, heading, subtext } = t.contact;
 </BaseLayout>
 
 <style>
+  /* ── Aligned column: header + form share one 640px left-aligned column,
+        with a tightened gap between the heading block and the form. ──────── */
+  .contact-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    max-width: 640px;
+  }
+
   /* ── Page header ──────────────────────────────────────────────────────── */
   .contact-header {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
-    max-width: 640px;  /* match form width for visual alignment */
   }
 
   .contact-header__heading {
@@ -89,21 +91,4 @@ const { pageTitle, pageDesc, heading, subtext } = t.contact;
     margin: 0;
   }
 
-  /* ── Form section: constrained to 640px (UI-SPEC §/contact) ─────────── */
-  .contact-form-section {
-    max-width: 640px;
-  }
-
-  /* ── Visually hidden utility (a11y — section label) ─────────────────── */
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
 </style>
