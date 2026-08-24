@@ -41,6 +41,7 @@
   --color-dark-text-soft: #A7ADBA;  /* Muted text on dark */
 
   --color-destructive:    #C0392B;  /* Form validation only */
+  --color-success:        #1F9D55;  /* Success / availability indicator — scarcity dot */
 
   /* Hairlines — translucent, read on any ground */
   --line-on-light:        rgba(20, 22, 29, 0.12);

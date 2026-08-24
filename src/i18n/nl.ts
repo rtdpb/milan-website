@@ -97,21 +97,28 @@ export const nl = {
     ariaLabel: 'Samenwerkingsopties',
     /** Scarcity line — feedback: 'nog 4 plekken'. */
     exclusiveLabel: 'Nog 4 plekken',
+    /** aria-label for the newsletter inline email form */
+    labelEmail: 'Mailadres',
     cards: [
       {
-        label:       'Nieuwsbrief',
+        // label/title swapped per feedback: label = eyebrow, title = big word
+        label:       'Een dosis inspiratie',
         tag:         'Gratis',
-        title:       'Een dosis inspiratie',
+        title:       'Nieuwsbrief',
         tagline:     'Elke maand een eerlijke les uit de praktijk, direct in je inbox.',
         features:    ['Persoonlijke lessen over bouwen & schalen', 'Over leiderschap, funding, stress en burnout', 'Gratis — maandelijks, geen spam'],
+        /** Replaces the checkmark list on card 0 (Newsletter). Empty on cards 1 & 2. */
+        subtext:     'Elke maand een eerlijke les uit de praktijk, direct in je inbox. Persoonlijke ervaringen over leiderschap, funding, stress, identiteit en groei.',
         cta:         'Schrijf je gratis in',
       },
       {
-        label:       'Presentatie',
+        // label/title swapped per feedback
+        label:       'Een uniek ondernemersverhaal',
         tag:         '',
-        title:       'Een uniek ondernemersverhaal',
+        title:       'Presentatie',
         tagline:     'Een eerlijk, indringend verhaal op maat voor jouw event.',
         features:    ['Persoonlijk verhaal met concrete lessen', 'Eerlijk over de successen én de valkuilen', 'Afgestemd op jouw publiek en setting'],
+        subtext:     '',
         cta:         'Boek lezing',
       },
       {
@@ -120,6 +127,7 @@ export const nl = {
         title:       '1:1 Coaching',
         tagline:     'Intensieve 1-op-1 begeleiding voor een klein aantal founders.',
         features:    ['Sparring op de beslissingen die er echt toe doen', 'Onbeperkt contact tussen de sessies door', 'Direct opzegbaar — geen langdurig traject'],
+        subtext:     '',
         cta:         'Plan kennismaking',
       },
     ],

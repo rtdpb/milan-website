@@ -101,21 +101,28 @@ export const en = {
     subtext: 'Get inspired through my newsletter or a personal talk. Or take the next step in growing your business with exclusive coaching.',
     ariaLabel: 'Collaboration options',
     exclusiveLabel: 'Only 4 spots left',
+    /** aria-label for the newsletter inline email form */
+    labelEmail: 'Email address',
     cards: [
       {
-        label:       'Newsletter',
+        // label/title swapped per feedback: label = eyebrow, title = big word
+        label:       'A dose of inspiration',
         tag:         'Free',
-        title:       'A dose of inspiration',
+        title:       'Newsletter',
         tagline:     'An honest lesson from real experience every month, straight to your inbox.',
         features:    ['Personal lessons on building & scaling', 'On leadership, funding, stress and burnout', 'Free — monthly, no spam'],
+        /** Replaces the checkmark list on card 0 (Newsletter). Empty on cards 1 & 2. */
+        subtext:     'An honest lesson from real experience every month, straight to your inbox. Personal experiences on leadership, funding, stress, identity and growth.',
         cta:         'Subscribe for free',
       },
       {
-        label:       'Talk',
+        // label/title swapped per feedback
+        label:       'A unique founder story',
         tag:         '',
-        title:       'A unique entrepreneurial story',
+        title:       'Talk',
         tagline:     'An honest, incisive story tailored to your event.',
         features:    ['A personal story with concrete lessons', 'Honest about the wins and the pitfalls', 'Tailored to your audience and setting'],
+        subtext:     '',
         cta:         'Book a talk',
       },
       {
@@ -124,6 +131,7 @@ export const en = {
         title:       '1:1 Coaching',
         tagline:     'Intensive one-on-one guidance for a small number of founders.',
         features:    ['Sparring on the decisions that truly matter', 'Unlimited contact between sessions', 'Cancellable monthly — no lengthy programme'],
+        subtext:     '',
         cta:         'Schedule intro call',
       },
     ],
