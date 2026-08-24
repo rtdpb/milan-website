@@ -27,7 +27,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionWrapper from '../components/ui/SectionWrapper.astro';
 import Card from '../components/ui/Card.astro';
-import Button from '../components/ui/Button.astro';
 import RevealOnScroll from '../components/ui/RevealOnScroll.astro';
 import PlaceholderBadge from '../components/ui/PlaceholderBadge.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
@@ -40,7 +39,7 @@ const t = getStrings(Astro.currentLocale);
 
 // ── Sentinel guard — decides placeholder vs live feed ───────────────────────
 const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
-const subscribeUrl = `${TODO_SUBSTACK_URL}/subscribe`;
+const subscribeUrl = `${TODO_SUBSTACK_URL.replace(/\/$/, '')}/subscribe`;
 const substackPublicationUrl = TODO_SUBSTACK_URL;
 
 // Archive: up to 10 items from Substack (vs 3 on homepage) — NEWS-01
@@ -74,14 +73,39 @@ if (IS_SENTINEL) {
       </h1>
       <p class="nieuwsbrief-hero__subtext">{t.nieuwsbrief.subtext}</p>
       <div class="nieuwsbrief-hero__ctas">
-        <Button
-          href={IS_SENTINEL ? undefined : subscribeUrl}
-          variant="primary"
-          disabled={IS_SENTINEL}
-          {...(!IS_SENTINEL && { external: true })}
-        >
-          {t.nieuwsbrief.cta}
-        </Button>
+        {IS_SENTINEL ? (
+          <span
+            class="nieuwsbrief-hero__cta nieuwsbrief-hero__cta--disabled"
+            role="button"
+            aria-disabled="true"
+            tabindex="-1"
+            title="Binnenkort beschikbaar via Substack"
+          >
+            {t.nieuwsbrief.cta}
+          </span>
+        ) : (
+          <form
+            class="nieuwsbrief-hero__form"
+            action={subscribeUrl}
+            method="get"
+            target="_blank"
+          >
+            <label class="sr-only" for="nb-hero-email">{t.nieuwsbrief.labelEmail}</label>
+            <input
+              id="nb-hero-email"
+              type="email"
+              name="email"
+              required
+              placeholder={t.nieuwsbrief.labelEmail}
+              autocomplete="email"
+              class="nieuwsbrief-hero__input"
+            />
+            <button type="submit" class="nieuwsbrief-hero__cta">
+              {t.nieuwsbrief.cta}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </form>
+        )}
       </div>
     </div>
   </SectionWrapper>
@@ -217,6 +241,20 @@ if (IS_SENTINEL) {
 
 </BaseLayout>
 
+<script>
+  (function () {
+    'use strict';
+    var form = document.querySelector('.nieuwsbrief-hero__form');
+    if (!form) return;
+    form.addEventListener('submit', function () {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (typeof (window as any).plausible === 'function') {
+        (window as any).plausible('Newsletter: Subscribe');
+      }
+    });
+  })();
+</script>
+
 <style>
   /* ── Hero ─────────────────────────────────────────────────────────────── */
   /* Same layout contract as coaching.astro hero (D-03 / PATTERNS §nieuwsbrief.astro) */
@@ -269,6 +307,107 @@ if (IS_SENTINEL) {
     flex-wrap: wrap;
     gap: var(--space-md);
     align-items: center;
+  }
+
+  /* ── Hero inline email form ───────────────────────────────────────────── */
+  .nieuwsbrief-hero__form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    align-items: center;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .nieuwsbrief-hero__input {
+    flex: 1 1 240px;
+    min-width: 0;
+    height: 54px;
+    padding-inline: var(--space-lg);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 1rem; /* 16px — prevents iOS zoom */
+    line-height: 1;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .nieuwsbrief-hero__input::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.8;
+  }
+
+  .nieuwsbrief-hero__input:focus-visible {
+    outline: none;
+    border-color: var(--color-text);
+  }
+
+  .nieuwsbrief-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    height: 54px;
+    padding-inline: var(--space-xl);
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    border: none;
+    border-radius: var(--radius-pill);
+    font-family: inherit;
+    font-size: var(--text-base);
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .nieuwsbrief-hero__cta:not(.nieuwsbrief-hero__cta--disabled):hover {
+    transform: translateY(-2px);
+    background-color: var(--color-accent-dark);
+  }
+
+  .nieuwsbrief-hero__cta svg {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .nieuwsbrief-hero__cta:not(.nieuwsbrief-hero__cta--disabled):hover svg {
+    transform: translateX(3px);
+  }
+
+  .nieuwsbrief-hero__cta:focus-visible {
+    outline: 2px solid var(--color-accent-ink);
+    outline-offset: 3px;
+  }
+
+  .nieuwsbrief-hero__cta--disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* sr-only utility (for the hero email label) */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nieuwsbrief-hero__cta,
+    .nieuwsbrief-hero__cta svg,
+    .nieuwsbrief-hero__input {
+      transition: none;
+    }
   }
 
   /* ── Value-prop tiles ─────────────────────────────────────────────────── */

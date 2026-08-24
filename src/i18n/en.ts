@@ -518,6 +518,7 @@ export const en = {
     // D-02: explicit "written in Dutch" statement
     subtext:        'A monthly honest update on entrepreneurship, scaling, and the lessons I learn along the way. No spam, no tips you already know. Written in Dutch.',
     cta:            'Subscribe on Substack',
+    labelEmail:     'Email address',
     archiveHeading: 'Previously published',
     valueProps: [
       { label: 'Honest',    description: 'No glossy success stories — only what actually works.' },

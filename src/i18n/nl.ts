@@ -522,6 +522,7 @@ export const nl = {
     heading:        'Eerlijke lessen voor ondernemers die willen groeien',
     subtext:        'Elke maand een eerlijke update over ondernemen, schalen en de lessen die ik onderweg leer. Geen spam, geen tips die je al kent.',
     cta:            'Schrijf je in op Substack',
+    labelEmail:     'Mailadres',
     archiveHeading: 'Eerder verschenen',
     valueProps: [
       { label: 'Eerlijk',      description: 'Geen glansrijke succesverhalen — alleen wat echt werkt.' },
