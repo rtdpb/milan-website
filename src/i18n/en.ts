@@ -412,7 +412,7 @@ export const en = {
     media: [
       { outlet: 'De Telegraaf',            title: 'Passie voor duurzaamheid',                              url: 'https://www.telegraaf.nl/financieel/passie-voor-duurzaamheid/64785275.html' },
       { outlet: 'RTL Nieuws',              title: 'Coöperatief ondernemen met zonne-energie',              url: 'https://www.rtl.nl/nieuws/economie/artikel/5428413/cooperatief-ondernemen-zonneenergie-zonnepanelen-soly-rabobank' },
-      { outlet: 'BNR',                     title: 'De Top van Nederland — over Soly en zonnepanelen',      url: 'https://www.bnr.nl/podcast/de-top-van-nederland/10506690/milan-van-der-meulen-soly-97-procent-van-de-zonnepanelen-komen-uit-china-die-van-ons-dus-ook' },
+      { outlet: 'BNR',                     title: 'De Top van Nederland: over Soly en zonnepanelen',      url: 'https://www.bnr.nl/podcast/de-top-van-nederland/10506690/milan-van-der-meulen-soly-97-procent-van-de-zonnepanelen-komen-uit-china-die-van-ons-dus-ook' },
       { outlet: 'NOS',                     title: 'Er is ook hoop, zegt Al Gore met nieuwe klimaatfilm',   url: 'https://nos.nl/artikel/2186295-er-is-ook-hoop-zegt-al-gore-met-nieuwe-klimaatfilm' },
       { outlet: 'Dagblad van het Noorden', title: 'Patrick en Milan veroveren Europa met Soly',            url: 'https://www.dvhn.nl/economie/patrick-en-milan-veroveren-europa-met-zonne-energiebedrijf-soly-uit-groningen/156787544.html' },
       { outlet: 'Leeuwarder Courant',      title: 'Mega-investering voor zonnepanelenbedrijf Soly',        url: 'https://www.lc.nl/economie/mega-investering-voor-zonnepanelenbedrijf-soly-van-broers-milan-en-patrick-van-der-meulen-uit-leeuwarden/157134939.html' },
