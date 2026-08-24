@@ -154,6 +154,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 260824-lv2 | Levendigheid iteratie 2: Timeline pinned header (sticky, desktop) + zelfvullende gele rail (scroll), kinetische kop-accentstreep (.kin op Samenwerken+Timeline), hero-foto parallax op scroll. CSS-only, dubbel afgeschermd, geen JS/layout-risico — gebouwd (0 errors, 16 pagina's) | 2026-08-24 | f371751 | [260824-lv2-liveliness-iteration-2](./quick/260824-lv2-liveliness-iteration-2/) |
 | 260824-jd5 | Feedbackronde 2: LinkedIn-URL live (Nav+Footer echte anchors) · contactformulier-overhaul (dropdown weg, fallback-zin weg, Naam bedrijf + Telefoon toegevoegd, privacy-checkbox met link, submit als gele pill) · nieuwsbrief-hero inline Substack-mailveld · testimonial-foto's (Yang Soo + Ruud) · coaching full-bleed header (milan-networking, NL+EN) — gebouwd (0 errors, 16 pagina's) | 2026-08-24 | 6c05d09 | [260824-jd5-feedbackronde-2-linkedin-url-contactform](./quick/260824-jd5-feedbackronde-2-linkedin-url-contactform/) |
 | 260824-gak | Feedbackronde Milan: Samenwerken pricing-cards (Nieuwsbrief label/title omgewisseld + inline Substack-mailveld i.p.v. vinkjes; Presentatie label/title omgewisseld; Coaching "Nog 4 plekken"-stip groen + pulserend) + Testimonials herontworpen (3 donkere kaarten met monogram-avatars + carousel) + spreker "Eerder gesproken bij" herontworpen (donkere logo-kaartgrid + gele "Boek lezing"-CTA-kaart + "EN VELE ANDEREN"-divider), NL+EN — gebouwd (0 errors, 16 pagina's) | 2026-08-24 | c70c7e4 | [260824-gak-feedback-round-tweaks-to-samenwerken-pri](./quick/260824-gak-feedback-round-tweaks-to-samenwerken-pri/) |
+| 260824-l35 | Custom domain milanvandermeulen.com aan GitHub Pages gekoppeld: astro.config.mjs `site` → https://milanvandermeulen.com + `base` verwijderd (root-deploy), public/CNAME toegevoegd, custom domain via `gh api` geregistreerd, gepusht → deploy-workflow groen. Site LIVE op https://milanvandermeulen.com (HTTP+HTTPS 200). Follow-up: HTTPS-enforce aanzetten zodra cert klaar is | 2026-08-24 | cebe8f7 | [260824-l35-koppel-custom-domain-milanvandermeulen-c](./quick/260824-l35-koppel-custom-domain-milanvandermeulen-c/) |
 
 ## Next Step
 
@@ -162,7 +163,7 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 Phase 5 Plan 01 complete. Book page tracer delivered: bilingual /boek + /en/book, BookInterestForm (2-field, 7-state, XSS-safe), dual interest capture (IS_SENTINEL-gated Substack + Web3Forms notify), Boek nav/footer enabled both locales, hreflang cross-linked, BOOK-01 requirement satisfied. Next: Phase 5 Plan 02 (analytics + sticky CTA — Plausible install, PlausibleScript.astro, StickyCTA.astro, 4 goal events, GROW-01).
 
 ---
-*Last updated: 2026-08-24 after quick task 260824-gak execution*
+*Last updated: 2026-08-24 after quick task 260824-l35 execution (site live on milanvandermeulen.com)*
 
 ## Session
 
