@@ -1,116 +1,89 @@
 ---
 /**
- * Articles.astro — "Recente artikelen" with custom covers · source-locked concept
+ * Articles.astro — "Recente artikelen" with custom covers.
  *
- * Each card has a custom colourful cover (accent field + rising-line motif) — an
- * easy swap point for real thumbnails later.
- *
- * HONESTY (correction pass): no real articles have been supplied. While
- * TODO_SUBSTACK_URL is the sentinel the cards render as a CLEARLY-LABELLED concept
- * preview ("Voorbeeld" badge + a section note) and DO NOT show fabricated
- * dates / read-times / links. Once the Substack feed is live, fetchSubstackFeed()
- * supplies real posts (with real dates/read-times) and each card becomes a link.
+ * HONESTY (client feedback): this section is HIDDEN until there are REAL articles.
+ * No placeholder / "Voorbeeld" cards are ever shown. It renders only when the
+ * Substack feed actually returns posts; once Milan publishes, the cards appear
+ * automatically (real titles, dates, read-times, links). Custom colourful covers
+ * are an easy swap point for real thumbnails later.
  */
 import SectionWrapper from '../ui/SectionWrapper.astro';
 import { getStrings } from '../../i18n/utils';
 import { TODO_SUBSTACK_URL } from '../../config';
-import { fetchSubstackFeed, type ArticleCard, type PlaceholderCard } from '../../lib/rss';
+import { fetchSubstackFeed, type ArticleCard } from '../../lib/rss';
 
 const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
 const substackPublicationUrl = TODO_SUBSTACK_URL;
 
-let articles: ArticleCard[] | PlaceholderCard[];
-if (IS_SENTINEL) {
-  articles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
-} else {
-  const fetched = await fetchSubstackFeed(`${TODO_SUBSTACK_URL}/feed`, 3);
-  if (fetched.length === 0) {
-    console.warn('[Phase 3] Substack feed returned 0 items — rendering placeholder cards.');
-    articles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
-  } else { articles = fetched; }
+// Real posts only — empty until the Substack feed has content (no placeholders).
+let articles: ArticleCard[] = [];
+if (!IS_SENTINEL) {
+  articles = await fetchSubstackFeed(`${TODO_SUBSTACK_URL}/feed`, 3);
 }
+const hasArticles = articles.length > 0;
 
 const { heading, seeAll } = t.articles;
-const hrefOf = (a: ArticleCard | PlaceholderCard) => (a.isPlaceholder ? undefined : (a as ArticleCard).href);
-const exampleLabel = isEn ? 'Example' : 'Voorbeeld';
-const previewNote = isEn
-  ? 'A preview of this section — real articles appear once the newsletter or LinkedIn feed is connected.'
-  : 'Voorbeeld van deze sectie — echte artikelen verschijnen zodra de nieuwsbrief of LinkedIn-feed is gekoppeld.';
-
 const covers = ['cov--blue', 'cov--yellow', 'cov--coral'];
 const [lead, ...rest] = articles;
-const leadHref = hrefOf(lead);
-const LeadTag = leadHref ? 'a' : 'article';
-const leadAttrs = leadHref ? { href: leadHref, target: '_blank', rel: 'noopener noreferrer' } : {};
 const motif = `<svg class="art__motif" viewBox="0 0 200 120" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polyline points="0,104 34,84 64,92 100,52 132,64 168,26 200,40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 ---
 
-<SectionWrapper id="artikelen" labelledBy="articles-heading" variant="default">
-  <div class="art">
-    <header class="art__head" data-anim>
-      <div class="art__head-text">
-        <p class="art__eyebrow rule-label">{isEn ? 'Writing' : 'Schrijven'}</p>
-        <h2 id="articles-heading" class="art__heading">{heading}</h2>
-        {IS_SENTINEL && <p class="art__note">{previewNote}</p>}
-      </div>
-      {!IS_SENTINEL && (
+{hasArticles && (
+  <SectionWrapper id="artikelen" labelledBy="articles-heading" variant="default">
+    <div class="art">
+      <header class="art__head" data-anim>
+        <div class="art__head-text">
+          <p class="art__eyebrow rule-label">{isEn ? 'Writing' : 'Schrijven'}</p>
+          <h2 id="articles-heading" class="art__heading">{heading}</h2>
+        </div>
         <a href={substackPublicationUrl} target="_blank" rel="noopener noreferrer" class="art__seeall">
           {seeAll}
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
-      )}
-    </header>
+      </header>
 
-    <div class="art__grid">
-      <!-- Featured -->
-      <LeadTag class={`art__card art__card--lead${leadHref ? ' art__card--link' : ''}`} data-anim {...leadAttrs}>
-        <div class={`art__cover ${covers[0]}`}>
-          <Fragment set:html={motif} />
-          {lead.isPlaceholder && <span class="art__badge">{exampleLabel}</span>}
-          <span class="art__cover-cat">{lead.category}</span>
-        </div>
-        <div class="art__body">
-          <h3 class="art__title art__title--lead">{lead.title}</h3>
-          <p class="art__excerpt">{lead.excerpt}</p>
-          {!lead.isPlaceholder && (
+      <div class="art__grid">
+        <!-- Featured -->
+        <a class="art__card art__card--lead art__card--link" data-anim href={lead.href} target="_blank" rel="noopener noreferrer">
+          <div class={`art__cover ${covers[0]}`}>
+            <Fragment set:html={motif} />
+            <span class="art__cover-cat">{lead.category}</span>
+          </div>
+          <div class="art__body">
+            <h3 class="art__title art__title--lead">{lead.title}</h3>
+            <p class="art__excerpt">{lead.excerpt}</p>
             <div class="art__meta">
-              <span>{(lead as ArticleCard).date}</span><span class="art__dot" aria-hidden="true"></span><span>{(lead as ArticleCard).readTime}</span>
-              {leadHref && <span class="art__more">{t.common.readMore}</span>}
+              <span>{lead.date}</span><span class="art__dot" aria-hidden="true"></span><span>{lead.readTime}</span>
+              <span class="art__more">{t.common.readMore}</span>
             </div>
-          )}
-        </div>
-      </LeadTag>
+          </div>
+        </a>
 
-      <!-- Supporting -->
-      <div class="art__col">
-        {rest.map((a, i) => {
-          const href = hrefOf(a);
-          const Tag = href ? 'a' : 'article';
-          return (
-            <Tag class={`art__card art__card--sm${href ? ' art__card--link' : ''}`} data-anim style={`--i: ${i + 1}`} {...(href ? { href, target: '_blank', rel: 'noopener noreferrer' } : {})}>
+        <!-- Supporting -->
+        <div class="art__col">
+          {rest.map((a, i) => (
+            <a class="art__card art__card--sm art__card--link" data-anim style={`--i: ${i + 1}`} href={a.href} target="_blank" rel="noopener noreferrer">
               <div class={`art__cover art__cover--sm ${covers[(i + 1) % covers.length]}`}>
                 <Fragment set:html={motif} />
-                {a.isPlaceholder && <span class="art__badge">{exampleLabel}</span>}
                 <span class="art__cover-cat">{a.category}</span>
               </div>
               <div class="art__body">
                 <h3 class="art__title">{a.title}</h3>
-                {!a.isPlaceholder && (
-                  <div class="art__meta">
-                    <span>{(a as ArticleCard).date}</span><span class="art__dot" aria-hidden="true"></span><span>{(a as ArticleCard).readTime}</span>
-                    {href && <span class="art__more">{t.common.readMore}</span>}
-                  </div>
-                )}
+                <div class="art__meta">
+                  <span>{a.date}</span><span class="art__dot" aria-hidden="true"></span><span>{a.readTime}</span>
+                  <span class="art__more">{t.common.readMore}</span>
+                </div>
               </div>
-            </Tag>
-          );
-        })}
+            </a>
+          ))}
+        </div>
       </div>
     </div>
-  </div>
-</SectionWrapper>
+  </SectionWrapper>
+)}
 
 <style>
   .art { display: flex; flex-direction: column; gap: clamp(var(--space-xl), 4vw, var(--space-3xl)); }
@@ -118,7 +91,6 @@ const motif = `<svg class="art__motif" viewBox="0 0 200 120" fill="none" preserv
   .art__head-text { display: flex; flex-direction: column; gap: var(--space-sm); max-width: 46ch; }
   .art__eyebrow { margin: 0; }
   .art__heading { font-size: var(--text-3xl); margin: 0; }
-  .art__note { font-size: var(--text-sm); color: var(--color-text-secondary); margin: var(--space-xs) 0 0; }
   .art__seeall { display: inline-flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm); font-weight: 600; color: var(--color-text); text-decoration: none; }
   .art__seeall svg { transition: transform var(--duration-fast) var(--ease-out); }
   .art__seeall:hover svg { transform: translateX(4px); }
@@ -149,14 +121,6 @@ const motif = `<svg class="art__motif" viewBox="0 0 200 120" fill="none" preserv
   }
   .cov--blue .art__cover-cat, .cov--coral .art__cover-cat { color: var(--color-dark-text); }
   .cov--yellow .art__cover-cat { color: var(--color-accent-ink); }
-
-  /* Concept badge — visibly marks placeholder cards. */
-  .art__badge {
-    position: absolute; top: var(--space-md); left: var(--space-md); z-index: 2;
-    font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--color-text); background: var(--color-bg);
-    padding: 3px 9px; border-radius: var(--radius-pill); box-shadow: var(--shadow-sm);
-  }
 
   .art__body { display: flex; flex-direction: column; gap: var(--space-sm); padding: clamp(var(--space-md), 2vw, var(--space-lg)); flex: 1; }
   .art__card--lead .art__body { padding: clamp(var(--space-lg), 2.4vw, var(--space-xl)); gap: var(--space-md); }

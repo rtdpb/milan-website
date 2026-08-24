@@ -42,24 +42,13 @@ const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
 const subscribeUrl = `${TODO_SUBSTACK_URL.replace(/\/$/, '')}/subscribe`;
 const substackPublicationUrl = TODO_SUBSTACK_URL;
 
-// Archive: up to 10 items from Substack (vs 3 on homepage) — NEWS-01
-let archiveArticles: ArticleCard[] | PlaceholderCard[];
-
-if (IS_SENTINEL) {
-  // D-04: honest placeholder state while Substack URL not yet supplied
-  archiveArticles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
-} else {
-  // D-02: build-time RSS fetch (maxItems 10 for archive — 3 for homepage)
-  const feedUrl = `${TODO_SUBSTACK_URL}/feed`;
-  const fetched = await fetchSubstackFeed(feedUrl, 10);
-  if (fetched.length === 0) {
-    // D-06: feed failure or empty feed → honest placeholder + build-log warning
-    console.warn('[Phase 3] Substack feed returned 0 items — rendering placeholder cards.');
-    archiveArticles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
-  } else {
-    archiveArticles = fetched;
-  }
+// Archive: REAL issues only — hidden until the Substack feed has posts. No
+// placeholder cards (client: articles may only appear once we actually have them).
+let archiveArticles: ArticleCard[] | PlaceholderCard[] = [];
+if (!IS_SENTINEL) {
+  archiveArticles = await fetchSubstackFeed(`${TODO_SUBSTACK_URL}/feed`, 10);
 }
+const hasArchive = archiveArticles.length > 0;
 ---
 
 <BaseLayout title={t.nieuwsbrief.pageTitle} description={t.nieuwsbrief.pageDesc} nlSlug="nieuwsbrief" enSlug="newsletter">
@@ -129,7 +118,8 @@ if (IS_SENTINEL) {
   <!-- No duplication of signup markup — same component used on homepage -->
   <Newsletter />
 
-  <!-- 4. Archive: recent issues grid (UI-SPEC §2d — up to 10 items) -->
+  <!-- 4. Archive: recent issues grid — only when the feed has real posts (no placeholders) -->
+  {hasArchive && (
   <SectionWrapper id="nieuwsbrief-archief" labelledBy="nieuwsbrief-archief-heading" variant="default">
     <div class="nieuwsbrief-archief">
 
@@ -235,6 +225,7 @@ if (IS_SENTINEL) {
 
     </div>
   </SectionWrapper>
+  )}
 
   <!-- 5. Social proof — OMITTED per UI-SPEC §2e and HOME-11:
        No newsletter-specific quote exists. Must never fabricate or repurpose an off-topic one. -->
