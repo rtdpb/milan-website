@@ -108,8 +108,10 @@ const teaserLink = isEn ? getRelativeLocaleUrl('en', 'about') : `${base}mijn-ver
   .story__final { color: var(--color-text) !important; font-weight: 500; }
 
   .story__sign { display: flex; flex-direction: column; gap: var(--space-sm); padding-top: var(--space-lg); border-top: 1px solid var(--line-on-light); }
-  /* Handwritten signature (transparent PNG) — sits above the name. */
-  .story__sign-mark { height: clamp(52px, 7vw, 72px); width: auto; display: block; margin-left: -2px; }
+  /* Handwritten signature (transparent PNG) — sits above the name.
+     align-self:flex-start stops the column flex from stretching (and distorting)
+     the image to full width; width:auto keeps its true aspect ratio. */
+  .story__sign-mark { align-self: flex-start; height: clamp(58px, 8vw, 84px); width: auto; max-width: 260px; display: block; margin-left: -2px; }
   .story__sign-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg); flex-wrap: wrap; }
   .story__sign-meta { display: flex; flex-direction: column; gap: 2px; }
   .story__sign-name { font-size: var(--text-lg); font-weight: 680; color: var(--color-text); }
