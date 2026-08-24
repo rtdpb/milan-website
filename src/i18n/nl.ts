@@ -496,6 +496,10 @@ export const nl = {
       { quote: 'Milan en Patrick van der Meulen hebben een mooie presentatie gegeven over de noodzaak van ondernemerschap. Leuke jonge mannen, die goed aansloten bij onze doelgroep ondernemers en studenten!', name: 'Hogeschool InHolland', role: '' },
     ],
     spokenAtHeading: 'Eerder gesproken bij',
+    spokenAtEyebrow: 'SPREKER OP',
+    spokenAtSubtext: 'Van internationale podia tot lokale initiatieven. Een greep uit de organisaties waar ik mijn verhaal mocht delen.',
+    spokenAtMore:    'EN VELE ANDEREN',
+    spokenAtCta:     'Boek lezing',
     spokenAt: ['ABN AMRO MeesPierson', 'World Youth Forum', 'Sziget Festival', 'University College London', 'Energy Tech Summit', 'Ennatuurlijk', 'Van Hall Larenstein', 'NHL Stenden', 'Plus Supermarkt', 'Rabobank', 'Hanze University of Applied Sciences', 'Van Dorp Installaties', 'University of Groningen', 'Mazda', 'Climate Reality Project'],
     awardsHeading: 'Awards en mijlpalen',
     awards: [

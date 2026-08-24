@@ -492,6 +492,10 @@ export const en = {
       { quote: 'Milan and Patrick van der Meulen gave a great presentation about the necessity of entrepreneurship. Nice young men who connected well with our audience of entrepreneurs and students!', name: 'Hogeschool InHolland', role: '' },
     ],
     spokenAtHeading: 'Previously spoke at',
+    spokenAtEyebrow: 'SPEAKER AT',
+    spokenAtSubtext: 'From international stages to local initiatives. A selection of the organisations where I got to share my story.',
+    spokenAtMore:    'AND MANY OTHERS',
+    spokenAtCta:     'Book a talk',
     spokenAt: ['ABN AMRO MeesPierson', 'World Youth Forum', 'Sziget Festival', 'University College London', 'Energy Tech Summit', 'Ennatuurlijk', 'Van Hall Larenstein', 'NHL Stenden', 'Plus Supermarkt', 'Rabobank', 'Hanze University of Applied Sciences', 'Van Dorp Installaties', 'University of Groningen', 'Mazda', 'Climate Reality Project'],
     awardsHeading: 'Awards and milestones',
     awards: [
