@@ -157,6 +157,8 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 
 ## Next Step
 
+**Deferred (besloten 2026-08-24):** Analytics + periodiek bezoekersrapport met gedrags-verbetersuggesties — Milan wil dit, maar later. Volledig plan + provider-opties + activatiestappen staan in [ANALYTICS-PLAN.md](./ANALYTICS-PLAN.md). Plausible-scaffolding staat al klaar (gated op `TODO_PLAUSIBLE_DOMAIN`); idealiter activeren zodra het echte domein `milanvandermeulen.nl` live is.
+
 Phase 5 Plan 01 complete. Book page tracer delivered: bilingual /boek + /en/book, BookInterestForm (2-field, 7-state, XSS-safe), dual interest capture (IS_SENTINEL-gated Substack + Web3Forms notify), Boek nav/footer enabled both locales, hreflang cross-linked, BOOK-01 requirement satisfied. Next: Phase 5 Plan 02 (analytics + sticky CTA — Plausible install, PlausibleScript.astro, StickyCTA.astro, 4 goal events, GROW-01).
 
 ---
