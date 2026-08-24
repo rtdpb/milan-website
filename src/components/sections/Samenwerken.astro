@@ -54,10 +54,10 @@ const check = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
                 {card.tag && <span class="sw__tag">{card.tag}</span>}
               </span>
               <h3 class="sw__title">{card.title}</h3>
-              <p class="sw__tagline">{card.tagline}</p>
             </div>
 
-            {/* Subtext paragraph replaces the checkmark list on the Newsletter card */}
+            {/* Subtext paragraph is the ONLY body copy on the Newsletter card
+                (replaces both the tagline and the checkmark list per feedback). */}
             {card.subtext && <p class="sw__subtext-para">{card.subtext}</p>}
 
             {/* Inline email form — real GET form to Substack, no fake success state */}
