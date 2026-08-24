@@ -106,7 +106,7 @@ export const nl = {
         tag:         'Gratis',
         title:       'Nieuwsbrief',
         tagline:     'Elke maand een eerlijke les uit de praktijk, direct in je inbox.',
-        features:    ['Persoonlijke lessen over bouwen & schalen', 'Over leiderschap, funding, stress en burnout', 'Gratis — maandelijks, geen spam'],
+        features:    ['Persoonlijke lessen over bouwen & schalen', 'Over leiderschap, funding, stress en burnout', 'Gratis, maandelijks, geen spam'],
         /** Replaces the checkmark list on card 0 (Newsletter). Empty on cards 1 & 2. */
         subtext:     'Elke maand een eerlijke les uit de praktijk, direct in je inbox. Persoonlijke ervaringen over leiderschap, funding, stress, identiteit en groei.',
         cta:         'Schrijf je gratis in',
@@ -126,7 +126,7 @@ export const nl = {
         tag:         '',
         title:       '1:1 Coaching',
         tagline:     'Intensieve 1-op-1 begeleiding voor een klein aantal founders.',
-        features:    ['Sparring op de beslissingen die er echt toe doen', 'Onbeperkt contact tussen de sessies door', 'Direct opzegbaar — geen langdurig traject'],
+        features:    ['Sparring op de beslissingen die er echt toe doen', 'Onbeperkt contact tussen de sessies door', 'Direct opzegbaar, geen langdurig traject'],
         subtext:     '',
         cta:         'Plan kennismaking',
       },
@@ -167,7 +167,7 @@ export const nl = {
     body: [
       'Mijn ondernemerschap begon niet met een businessplan, maar met een overtuiging: dat ondernemerschap een wezenlijke rol speelt in het oplossen van grote vraagstukken. Op mijn negentiende besloot ik om mijn energie te steken in de energietransitie en richtte samen met mijn broer Soly op. Wat begon als een idealistisch initiatief groeide in ruim tien jaar uit tot een internationaal opererend bedrijf in negen landen, met bijna één miljoen geplaatste zonnepanelen en meer dan 50 miljoen aan investeringen. We bouwden eigen technologie, ontwikkelden schaalbare commerciële structuren en creëerden een cultuur waarin mensen, impact en prestaties samenkwamen.',
       'Maar mijn verhaal is geen glad succesverhaal. Naast groei, erkenning en impact leerde ik ook de harde kanten van ondernemerschap kennen. We maakten keuzes onder druk, werkten met internationale investeerders, groeiden sneller dan soms comfortabel was, en zagen uiteindelijk hoe een construct dat vooral gericht is op snelheid en rendement zelfs sterke impactbedrijven kan breken.',
-      'Ik verloor mijzelf in een burnout. En niet veel later het bedrijf. Het faillissement van Soly werd een kantelpunt: pijnlijk, confronterend en tegelijkertijd vormend. Juist die ervaring heeft mijn visie aangescherpt. Ik heb aan den lijve ondervonden wat werkt — en wat niet — bij het opschalen van een onderneming met een sterke missie. Ik weet hoe belangrijk strategie, cultuur, focus en de juiste vorm van kapitaal zijn. En ik weet hoe funest verkeerde prikkels kunnen zijn.',
+      'Ik verloor mijzelf in een burnout. En niet veel later het bedrijf. Het faillissement van Soly werd een kantelpunt: pijnlijk, confronterend en tegelijkertijd vormend. Juist die ervaring heeft mijn visie aangescherpt. Ik heb aan den lijve ondervonden wat werkt, en wat niet, bij het opschalen van een onderneming met een sterke missie. Ik weet hoe belangrijk strategie, cultuur, focus en de juiste vorm van kapitaal zijn. En ik weet hoe funest verkeerde prikkels kunnen zijn.',
       'Nu breng ik alles wat ik heb geleerd samen. Niet als consultant, niet als traditionele investeerder, maar als meewerkende partner. Met mijn ervaring sta ik naast jou als founder. Ik help je bedrijf te schalen zonder jezelf te verliezen.',
     ],
     signature: 'Milan van der Meulen',
@@ -178,7 +178,7 @@ export const nl = {
   // Narrative beats; numeric markers kept to verified facts (9 markten, 180 medewerkers, ~1M zonnepanelen).
   timeline: {
     eyebrow: 'Het verhaal in cijfers',
-    heading: 'Van idee tot 9 landen — en opnieuw beginnen',
+    heading: 'Van idee tot 9 landen, en opnieuw beginnen',
     intro:   'Twaalf jaar bouwen, groeien, verliezen en weer opstaan. De route in het kort.',
     marketsLabel: '9 markten in Europa',
     /** Third headline stat — verbatim from CLAUDE.md + story.body ("bijna één miljoen geplaatste zonnepanelen") */
@@ -191,10 +191,10 @@ export const nl = {
     journeyAriaLabel: 'De route van Milan: van de keukentafel naar 9 landen en bijna één miljoen zonnepanelen, via burn-out en faillissement, tot nu als founder-coach.',
     items: [
       { kicker: 'De start',  stat: '',    statLabel: '',            title: 'De oprichting van Soly',                    text: 'Begonnen vanuit de overtuiging dat schone energie voor iedereen bereikbaar moest zijn.' },
-      { kicker: 'Expansie',  stat: '9',   statLabel: 'markten',     title: 'Internationaal opschalen',                  text: 'Van één markt naar negen landen — elk met een eigen team, tempo en cultuur.' },
+      { kicker: 'Expansie',  stat: '9',   statLabel: 'markten',     title: 'Internationaal opschalen',                  text: 'Van één markt naar negen landen, elk met een eigen team, tempo en cultuur.' },
       { kicker: 'Groei',     stat: '180', statLabel: 'medewerkers', title: 'Een bedrijf dat niet meer in je hoofd past', text: 'Leiderschap op schaal: delegeren, vertrouwen, en leren loslaten.' },
       { kicker: 'De grens',  stat: '',    statLabel: '',            title: 'Burn-out',                                  text: 'Het punt waarop de manier waarop ik werkte niet langer houdbaar was.' },
-      { kicker: 'Het einde', stat: '',    statLabel: '',            title: 'Het faillissement',                         text: 'Het bedrijf waar ik alles in had gestoken, viel om. Geen romantiek — wel helderheid.' },
+      { kicker: 'Het einde', stat: '',    statLabel: '',            title: 'Het faillissement',                         text: 'Het bedrijf waar ik alles in had gestoken, viel om. Geen romantiek, wel helderheid.' },
       { kicker: 'Vandaag',   stat: '',    statLabel: '',            title: 'Coach & spreker',                           text: 'Ik geef door wat die jaren me leerden, aan founders die het eerder willen weten dan ik.' },
     ],
   },
@@ -260,7 +260,7 @@ export const nl = {
   // ── Privacybeleid Page ────────────────────────────────────────────────────
   // Full text verbatim from feedbackronde/Feedback homepage.docx.
   privacy: {
-    pageTitle: 'Privacybeleid — Milan van der Meulen',
+    pageTitle: 'Privacybeleid · Milan van der Meulen',
     pageDesc:  'Hoe Milan van der Meulen (YM Holding B.V.) omgaat met jouw persoonsgegevens.',
     eyebrow:   'Juridisch',
     heading:   'Privacybeleid',
@@ -317,7 +317,7 @@ export const nl = {
 
   // ── Contact Page (PAGE-04) ──────────────────────────────────────────────
   contact: {
-    pageTitle:      'Contact — Milan van der Meulen',
+    pageTitle:      'Contact · Milan van der Meulen',
     pageDesc:       'Neem contact op voor coaching, een lezing of een algemene vraag. Milan reageert persoonlijk.',
     heading:        'Laten we kennismaken',
     subtext:        'Vul het formulier in en ik neem zo snel mogelijk contact met je op.',
@@ -335,13 +335,13 @@ export const nl = {
     errorNetwork:   'Geen verbinding. Controleer je internetverbinding en probeer opnieuw.',
     emailSubject:   'Nieuw bericht via milanvandermeulen.nl',
     /** Shown after the mailto opens the visitor's mail app. */
-    mailtoNote:     'Je mailprogramma opent met je bericht erin — controleer en verstuur.',
+    mailtoNote:     'Je mailprogramma opent met je bericht erin. Controleer en verstuur.',
   },
 
   // ── Coaching Page (PAGE-01) ──────────────────────────────────────────────
   coaching: {
-    pageTitle:  'Coaching voor founders — Milan van der Meulen',
-    pageDesc:   '1:1 coaching voor founders die schalen. Van iemand die zelf bouwde, verloor en weer opstond — geen theoretisch raamwerk, maar doorleefde ervaring.',
+    pageTitle:  'Coaching voor founders · Milan van der Meulen',
+    pageDesc:   '1:1 coaching voor founders die schalen. Van iemand die zelf bouwde, verloor en weer opstond. Geen theoretisch raamwerk, maar doorleefde ervaring.',
     eyebrow:    '1:1 Coaching',
     heroTitle:  'De juiste keuzes zijn onbetaalbaar',
     heroImageAlt: 'Portret van Milan van der Meulen.',
@@ -384,7 +384,7 @@ export const nl = {
     trajectHeading: 'Voorbeeld van een coachingtraject',
     trajectSteps: [
       { label: 'Week 1',   title: 'Jou en je bedrijf leren kennen', text: 'Je uitdagingen begrijpen en wat je weerhoudt om verder te groeien. De eerste inzichten komen al boven tafel.' },
-      { label: 'Week 2–4', title: 'Momentum bouwen',                text: 'Deep dives op de kernuitdagingen. Acties formuleren en doorvoeren. Maximaal inzicht krijgen in je bedrijfsprocessen.' },
+      { label: 'Week 2-4', title: 'Momentum bouwen',                text: 'Deep dives op de kernuitdagingen. Acties formuleren en doorvoeren. Maximaal inzicht krijgen in je bedrijfsprocessen.' },
       { label: 'Verder',   title: 'Constante begeleiding',           text: 'Naast de sessies hebben we doorlopend contact. Elk kwartaal een strategiedag waarop we samen naar de toekomstige groei kijken. In deze fase koppel ik je ook aan relevante contacten in mijn netwerk.' },
     ],
     faqHeading: 'Veelgestelde vragen',
@@ -402,7 +402,7 @@ export const nl = {
 
   // ── Mijn Verhaal Page (PAGE-03) ─────────────────────────────────────────
   mijnVerhaal: {
-    pageTitle:  'Mijn verhaal — Milan van der Meulen',
+    pageTitle:  'Mijn verhaal · Milan van der Meulen',
     pageDesc:   'Het eerlijke verhaal van Soly: internationale expansie naar 9 landen, 180 medewerkers, en het faillissement dat alles veranderde.',
     eyebrow:    'Mijn verhaal',
 
@@ -428,7 +428,7 @@ export const nl = {
     arc1Eyebrow: 'De start',
     arc1Heading: 'Van overtuiging naar onderneming',
     arc1Body: [
-      'Ik begon Soly met de overtuiging dat schone energie voor iedereen bereikbaar moest zijn. Niet vanuit een businessplan of een investeerdersdeck, maar vanuit een oprecht geloof dat dit kon — en moest.',
+      'Ik begon Soly met de overtuiging dat schone energie voor iedereen bereikbaar moest zijn. Niet vanuit een businessplan of een investeerdersdeck, maar vanuit een oprecht geloof dat dit kon en moest.',
       'In de beginjaren was alles handmatig, alles improviserend, alles met een klein team dat harder werkte dan slim was. Maar het werkte. We groeiden, we leerden, en we bouwden iets dat echt waarde had voor mensen.',
     ],
 
@@ -436,7 +436,7 @@ export const nl = {
     arc2Eyebrow: 'De expansie',
     arc2Heading: 'Groeien naar 9 landen en 180 mensen',
     arc2Body: [
-      'Op een gegeven moment stond Soly in 9 landen. We hadden bijna 180 medewerkers. Zonnepanelen op daken van gezinnen in heel Europa. Dat klinkt als succes — en op veel manieren was het dat ook.',
+      'Op een gegeven moment stond Soly in 9 landen. We hadden bijna 180 medewerkers. Zonnepanelen op daken van gezinnen in heel Europa. Dat klinkt als succes, en op veel manieren was het dat ook.',
       'Maar internationaal schalen is iets anders dan schalen in je eigen markt. Elke markt vraagt om zijn eigen aanpak, zijn eigen mensen, zijn eigen tempo. Ik leerde dat de harde manier: door fouten die ik niet van tevoren had kunnen bedenken.',
       'Ik leerde wat het betekent om een bedrijf te bouwen dat niet meer past in je hoofd. Om beslissingen te nemen met onvolledige informatie. Om te vertrouwen op een team dat groter is dan je ooit voor mogelijk hield.',
     ],
@@ -445,7 +445,7 @@ export const nl = {
     arc3Eyebrow: 'Het faillissement',
     arc3Heading: 'Het bedrijf dat ik alles in had gestoken, viel om',
     arc3Body: [
-      'En toen viel het om. Soly ging failliet. Het bedrijf waar ik tien jaar lang alles in had gestoken — mijn energie, mijn tijd, mijn identiteit — was er opeens niet meer.',
+      'En toen viel het om. Soly ging failliet. Het bedrijf waar ik tien jaar lang alles in had gestoken (mijn energie, mijn tijd, mijn identiteit) was er opeens niet meer.',
       'Ik ga je de romantische versie niet geven. Het was zwaar. Er waren schuldeisers, mensen die werk verloren, partners die werden meegesleurd. Er waren nachten waarop ik niet wist hoe ik verder moest.',
       'Maar er was ook iets anders. Een helderheid die ik daarvoor nooit had. Over wat echt telt. Over wat ik werkelijk had geleerd. Over wie ik was als je het succes weghaalt.',
     ],
@@ -455,8 +455,8 @@ export const nl = {
     arc4Heading: 'Waarom ik nu mijn lessen deel',
     arc4Body: [
       'Vandaag help ik founders die op een kruispunt staan. Die weten dat ze groter kunnen worden, maar ook voelen dat de manier waarop ze nu werken niet duurzaam is.',
-      'Ik ben geen consultant met een framework. Ik ben geen coach die succes heeft gehad zonder ooit te zijn gevallen. Ik ben iemand die zelf heeft gebouwd, verloren, en weer is opgestaan — en die de lessen die dat opleverde nu doorgeeft aan anderen die het eerder willen leren dan ik deed.',
-      "Niet omdat ik alle antwoorden heb. Maar omdat ik de vragen ken — de echte vragen, die je jezelf 's avonds stelt als het bedrijf stil is en je alleen bent met je twijfels.",
+      'Ik ben geen consultant met een framework. Ik ben geen coach die succes heeft gehad zonder ooit te zijn gevallen. Ik ben iemand die zelf heeft gebouwd, verloren, en weer is opgestaan, en die de lessen die dat opleverde nu doorgeeft aan anderen die het eerder willen leren dan ik deed.',
+      "Niet omdat ik alle antwoorden heb. Maar omdat ik de vragen ken: de echte vragen, die je jezelf 's avonds stelt als het bedrijf stil is en je alleen bent met je twijfels.",
     ],
 
     // ── Terminal CTA ─────────────────────────────────────────────────────
@@ -470,7 +470,7 @@ export const nl = {
 
   // ── Spreker Page (PAGE-02) ────────────────────────────────────────────────
   spreker: {
-    pageTitle:  'Spreker — Milan van der Meulen',
+    pageTitle:  'Spreker · Milan van der Meulen',
     pageDesc:   'Milan vertelt het eerlijke verhaal achter Soly: bouwen, breken en opnieuw beginnen. Boek hem als spreker via Athenas.',
     eyebrow:    'Spreker',
     heroTitle:  'Een verhaal dat blijft hangen',
@@ -515,7 +515,7 @@ export const nl = {
 
   // ── Nieuwsbrief Page (NEWS-01) ──────────────────────────────────────────
   nieuwsbrief: {
-    pageTitle:      'Nieuwsbrief — Milan van der Meulen',
+    pageTitle:      'Nieuwsbrief · Milan van der Meulen',
     // Double-quoted to avoid TypeScript parse error on Dutch apostrophe (Rule 1 auto-fix pattern)
     pageDesc:       "Elke maand eerlijke lessen over ondernemen, schalen en leiderschap. Schrijf je in op Milan's Substack nieuwsbrief.",
     eyebrow:        'Nieuwsbrief',
@@ -525,7 +525,7 @@ export const nl = {
     labelEmail:     'Mailadres',
     archiveHeading: 'Eerder verschenen',
     valueProps: [
-      { label: 'Eerlijk',      description: 'Geen glansrijke succesverhalen — alleen wat echt werkt.' },
+      { label: 'Eerlijk',      description: 'Geen glansrijke succesverhalen, alleen wat echt werkt.' },
       { label: 'Praktisch',    description: 'Bruikbare lessen, direct uit de founder-praktijk.' },
       { label: 'Maandelijks',  description: 'Één update per maand, nooit meer.' },
     ],
@@ -533,13 +533,13 @@ export const nl = {
 
   // ── Book / Pre-order Page (BOOK-01, Phase 5) ──────────────────────────────
   boek: {
-    pageTitle:     'Boek — Milan van der Meulen',
+    pageTitle:     'Boek · Milan van der Meulen',
     pageDesc:      'Het boek dat Milan schrijft over schalen zonder jezelf te verliezen. Schrijf je in voor updates.',
     eyebrow:       'Binnenkort',
     heading:       'Een boek over schalen zonder jezelf te verliezen',
     body:          [
       'Ik schrijf een boek. Over wat ik heb geleerd in tien jaar bouwen, groeien en uiteindelijk failliet gaan.',
-      'Geen succesverhaal — een eerlijk verslag van wat er werkelijk gebeurt als je een bedrijf opschaalt.',
+      'Geen succesverhaal, een eerlijk verslag van wat er werkelijk gebeurt als je een bedrijf opschaalt.',
     ] as const,
     subtext:       'Schrijf je in voor updates en ontvang het nieuws als eerste.',
     ctaSubstack:   'Schrijf je in voor updates',

@@ -50,7 +50,7 @@ export const en = {
     h1:           'Scale your business, without losing yourself',
     /** Word in h1 to highlight with the yellow underline (feedback: 'scale', not 'losing'). */
     hlWord:       'Scale',
-    subtext:      'I help bold entrepreneurs scale their business — not from abstract theory, but from lived experience.',
+    subtext:      'I help bold entrepreneurs scale their business, not from abstract theory, but from lived experience.',
     ctaPrimary:   'Contact',
     ctaSecondary: 'My story',
     usp1: '12+ years',       // D-03: verbatim number, only unit translated
@@ -110,7 +110,7 @@ export const en = {
         tag:         'Free',
         title:       'Newsletter',
         tagline:     'An honest lesson from real experience every month, straight to your inbox.',
-        features:    ['Personal lessons on building & scaling', 'On leadership, funding, stress and burnout', 'Free — monthly, no spam'],
+        features:    ['Personal lessons on building & scaling', 'On leadership, funding, stress and burnout', 'Free, monthly, no spam'],
         /** Replaces the checkmark list on card 0 (Newsletter). Empty on cards 1 & 2. */
         subtext:     'An honest lesson from real experience every month, straight to your inbox. Personal experiences on leadership, funding, stress, identity and growth.',
         cta:         'Subscribe for free',
@@ -130,7 +130,7 @@ export const en = {
         tag:         '',
         title:       '1:1 Coaching',
         tagline:     'Intensive one-on-one guidance for a small number of founders.',
-        features:    ['Sparring on the decisions that truly matter', 'Unlimited contact between sessions', 'Cancellable monthly — no lengthy programme'],
+        features:    ['Sparring on the decisions that truly matter', 'Unlimited contact between sessions', 'Cancellable monthly, no lengthy programme'],
         subtext:     '',
         cta:         'Schedule intro call',
       },
@@ -169,7 +169,7 @@ export const en = {
     body: [
       "My entrepreneurship didn't begin with a business plan, but with a conviction: that entrepreneurship plays an essential role in solving big challenges. At nineteen I decided to put my energy into the energy transition and, together with my brother, founded Soly. What began as an idealistic initiative grew, over more than ten years, into an internationally operating company in nine countries, with nearly one million solar panels installed and more than 50 million in investment. We built our own technology, developed scalable commercial structures, and created a culture where people, impact and performance came together.",
       'But my story is not a smooth success story. Alongside growth, recognition and impact, I also came to know the hard sides of entrepreneurship. We made choices under pressure, worked with international investors, grew faster than was sometimes comfortable, and ultimately saw how a construct focused above all on speed and returns can break even strong impact-driven companies.',
-      'I lost myself in a burnout. And not long after, the company. The bankruptcy of Soly became a turning point: painful, confronting, and at the same time formative. That experience sharpened my vision. I have experienced first-hand what works — and what does not — when scaling a company with a strong mission. I know how important strategy, culture, focus and the right kind of capital are. And I know how damaging the wrong incentives can be.',
+      'I lost myself in a burnout. And not long after, the company. The bankruptcy of Soly became a turning point: painful, confronting, and at the same time formative. That experience sharpened my vision. I have experienced first-hand what works, and what does not, when scaling a company with a strong mission. I know how important strategy, culture, focus and the right kind of capital are. And I know how damaging the wrong incentives can be.',
       'Now I bring together everything I have learned. Not as a consultant, not as a traditional investor, but as a hands-on partner. With my experience I stand beside you as a founder. I help you scale your business without losing yourself.',
     ],
     signature: 'Milan van der Meulen',
@@ -179,7 +179,7 @@ export const en = {
   // ── Timeline (v4.0) — Milan's journey as visual credibility ──────────────
   timeline: {
     eyebrow: 'The story in numbers',
-    heading: 'From idea to 9 countries — and starting over',
+    heading: 'From idea to 9 countries, and starting over',
     intro:   'Twelve years of building, growing, losing, and rising again. The route in short.',
     marketsLabel: '9 markets across Europe',
     /** Third headline stat — verbatim number from CLAUDE.md + en.story.body ("nearly one million solar panels") */
@@ -192,10 +192,10 @@ export const en = {
     journeyAriaLabel: "Milan's route: from the kitchen table to 9 countries and nearly a million solar panels, through burnout and bankruptcy, to now as a founder coach.",
     items: [
       { kicker: 'The start',  stat: '',    statLabel: '',          title: 'Founding Soly',                              text: 'Started from the conviction that clean energy had to be accessible to everyone.' },
-      { kicker: 'Expansion',  stat: '9',   statLabel: 'markets',   title: 'Scaling internationally',                    text: 'From one market to nine countries — each with its own team, pace and culture.' },
+      { kicker: 'Expansion',  stat: '9',   statLabel: 'markets',   title: 'Scaling internationally',                    text: 'From one market to nine countries, each with its own team, pace and culture.' },
       { kicker: 'Growth',     stat: '180', statLabel: 'employees', title: 'A company that no longer fits in your head', text: 'Leadership at scale: delegating, trusting, and learning to let go.' },
       { kicker: 'The limit',  stat: '',    statLabel: '',          title: 'Burnout',                                    text: 'The point where the way I was working was no longer sustainable.' },
-      { kicker: 'The end',    stat: '',    statLabel: '',          title: 'The bankruptcy',                             text: 'The company I had given everything to fell apart. No romance — but clarity.' },
+      { kicker: 'The end',    stat: '',    statLabel: '',          title: 'The bankruptcy',                             text: 'The company I had given everything to fell apart. No romance, but clarity.' },
       { kicker: 'Today',      stat: '',    statLabel: '',          title: 'Coach & speaker',                            text: 'I pass on what those years taught me to founders who want to learn it sooner than I did.' },
     ],
   },
@@ -205,7 +205,7 @@ export const en = {
   newsletter: {
     heading:     'Stay informed',
     statement:   '5-minute read that can save you 5 years',
-    subtext:     'Subscribe to my monthly newsletter and receive personal lessons on how to build a company — from the kitchen table to nine countries. Written in Dutch.',
+    subtext:     'Subscribe to my monthly newsletter and receive personal lessons on how to build a company, from the kitchen table to nine countries. Written in Dutch.',
     labelEmail:  'Email address',
     cta:         'Subscribe',
     disclaimer:  'No spam. Unsubscribe whenever you want.',
@@ -228,7 +228,7 @@ export const en = {
       {
         category:  'Scaling',
         title:     'Scaling in 9 markets: what I would do differently',
-        excerpt:   'Looking back at international expansion — without the romanticism that tends to get woven around it later.',
+        excerpt:   'Looking back at international expansion, without the romanticism that tends to get woven around it later.',
         date:      'December 2025',
         readTime:  '7 min read',
       },
@@ -256,7 +256,7 @@ export const en = {
 
   // ── Privacy Policy Page ─────────────────────────────────────────────────────
   privacy: {
-    pageTitle: 'Privacy policy — Milan van der Meulen',
+    pageTitle: 'Privacy policy · Milan van der Meulen',
     pageDesc:  'How Milan van der Meulen (YM Holding B.V.) handles your personal data.',
     eyebrow:   'Legal',
     heading:   'Privacy policy',
@@ -313,7 +313,7 @@ export const en = {
 
   // ── Contact Page ─────────────────────────────────────────────────────────
   contact: {
-    pageTitle:      'Contact — Milan van der Meulen',
+    pageTitle:      'Contact · Milan van der Meulen',
     pageDesc:       'Get in touch about coaching, a keynote, or a general question. Milan responds personally.',
     heading:        "Let's get acquainted",
     subtext:        'Fill in the form and I will get back to you as soon as possible.',
@@ -331,19 +331,19 @@ export const en = {
     errorNetwork:   'No connection. Check your internet and try again.',
     emailSubject:   'New message via milanvandermeulen.nl',
     /** Shown after the mailto opens the visitor's mail app. */
-    mailtoNote:     'Your email app will open with your message ready — review and send.',
+    mailtoNote:     'Your email app will open with your message ready. Review and send.',
   },
 
   // ── Coaching Page ─────────────────────────────────────────────────────────
   coaching: {
-    pageTitle:  'Coaching for founders — Milan van der Meulen',
-    pageDesc:   '1:1 coaching for founders who are scaling. From someone who built, lost, and rose again — not a theoretical framework, but lived experience.',
+    pageTitle:  'Coaching for founders · Milan van der Meulen',
+    pageDesc:   '1:1 coaching for founders who are scaling. From someone who built, lost, and rose again. Not a theoretical framework, but lived experience.',
     eyebrow:    '1:1 Coaching',
     heroTitle:  'The right choices are priceless',
     heroImageAlt: 'Portrait of Milan van der Meulen.',
     intro: [
       'You have market fit. Your team is running. And still this phase feels heavier than the last. More pressure, more people depending on you, more decisions you have to make alone because no one around you knows exactly what it is like to be in it.',
-      'I know that phase. Together with my brother I built a company from the kitchen table to nine countries with 180 employees, raised more than 50 million in capital from parties like Shell and ABP, and experienced first-hand what growth does to a company and to a person. I have seen the good decisions work, and watched the wrong ones take their toll. That lived experience — including the bankruptcy and my own burnout — is exactly why entrepreneurs ask for me: not for a consultant with a theoretical framework, but for someone who has stood in the middle of it.',
+      'I know that phase. Together with my brother I built a company from the kitchen table to nine countries with 180 employees, raised more than 50 million in capital from parties like Shell and ABP, and experienced first-hand what growth does to a company and to a person. I have seen the good decisions work, and watched the wrong ones take their toll. That lived experience, including the bankruptcy and my own burnout, is exactly why entrepreneurs ask for me: not for a consultant with a theoretical framework, but for someone who has stood in the middle of it.',
       'In a coaching trajectory I work intensively with a small number of founders at a time. No general tips, but sparring on the decisions that truly matter now: scaling smartly, making the right hire, building a team that grows with you instead of breaking, funding strategy, and how to stay standing yourself as the pressure rises. I am directly reachable between sessions, so you never have to wait weeks with a question that cannot wait. After all, that is what we are entrepreneurs for.',
     ],
     packagesHeading: 'Packages',
@@ -380,7 +380,7 @@ export const en = {
     trajectHeading: 'Example of a coaching trajectory',
     trajectSteps: [
       { label: 'Week 1',   title: 'Getting to know you and your company', text: 'Understanding your challenges and what is holding you back from growing further. The first insights already surface.' },
-      { label: 'Week 2–4', title: 'Building momentum',                     text: 'Deep dives on the core challenges. Formulating and implementing actions. Getting maximum insight into your business processes.' },
+      { label: 'Week 2-4', title: 'Building momentum',                     text: 'Deep dives on the core challenges. Formulating and implementing actions. Getting maximum insight into your business processes.' },
       { label: 'Beyond',   title: 'Continuous guidance',                   text: 'Alongside the sessions we stay in ongoing contact. Every quarter a strategy day where we look together at future growth. In this phase I also connect you to relevant contacts in my network.' },
     ],
     faqHeading: 'Frequently asked questions',
@@ -388,7 +388,7 @@ export const en = {
       { q: 'How do we start?', a: 'After you fill in the contact form I get in touch for an introduction. If there is a mutual match, we can start.' },
       { q: 'How long does a trajectory last?', a: 'My goal is to add as much value as possible. As soon as you or I feel that has run its course, the trajectory can stop at any time (with a one-month notice period).' },
       { q: 'Do I need to prepare anything for a session?', a: 'In principle we work through the question during the session. You may share information in confidence beforehand to prepare.' },
-      { q: 'What is this not for?', a: 'It is important to be transparent about your question and not make it look better than it is. I use an honest, clear style to help you make the right choice — so you are open to feedback and other perspectives.' },
+      { q: 'What is this not for?', a: 'It is important to be transparent about your question and not make it look better than it is. I use an honest, clear style to help you make the right choice, so you are open to feedback and other perspectives.' },
     ],
     ctaHeading:    'Ready for the next step?',
     ctaPrimary:    'Schedule intro call',
@@ -398,7 +398,7 @@ export const en = {
 
   // ── Mijn Verhaal / About Page ─────────────────────────────────────────────
   mijnVerhaal: {
-    pageTitle:  'My Story — Milan van der Meulen',
+    pageTitle:  'My Story · Milan van der Meulen',
     pageDesc:   "The honest story of Soly: international expansion into 9 countries, 180 employees, and the bankruptcy that changed everything.",
     eyebrow:    'My story',
 
@@ -424,7 +424,7 @@ export const en = {
     arc1Eyebrow: 'The beginning',
     arc1Heading: 'From conviction to company',
     arc1Body: [
-      'I founded Soly with the conviction that clean energy had to be accessible to everyone. Not from a business plan or an investor deck, but from a genuine belief that this could — and should — happen.',
+      'I founded Soly with the conviction that clean energy had to be accessible to everyone. Not from a business plan or an investor deck, but from a genuine belief that this could, and should, happen.',
       "In the early years, everything was manual, everything was improvised, everything was done by a small team working harder than was wise. But it worked. We grew, we learned, and we built something that genuinely mattered to people.",
     ],
 
@@ -432,7 +432,7 @@ export const en = {
     arc2Eyebrow: 'The expansion',
     arc2Heading: 'Growing to 9 countries and 180 people',
     arc2Body: [
-      'At a certain point, Soly was operating in 9 countries. We had nearly 180 employees. Solar panels on the roofs of families across Europe. That sounds like success — and in many ways it was.',
+      'At a certain point, Soly was operating in 9 countries. We had nearly 180 employees. Solar panels on the roofs of families across Europe. That sounds like success, and in many ways it was.',
       'But scaling internationally is different from scaling in your home market. Every market demands its own approach, its own people, its own pace. I learned that the hard way: through mistakes I could not have anticipated.',
       'I learned what it means to build a company that no longer fits inside your head. To make decisions with incomplete information. To trust a team larger than you ever thought possible.',
     ],
@@ -441,7 +441,7 @@ export const en = {
     arc3Eyebrow: 'The bankruptcy',
     arc3Heading: 'The company I had given everything to fell apart',
     arc3Body: [
-      "And then it fell apart. Soly went bankrupt. The company I had poured ten years of my life into — my energy, my time, my identity — was suddenly gone.",
+      "And then it fell apart. Soly went bankrupt. The company I had poured ten years of my life into (my energy, my time, my identity) was suddenly gone.",
       "I won't give you the romanticised version. It was hard. There were creditors, people who lost jobs, partners who were dragged down with it. There were nights when I did not know how to move forward.",
       'But there was also something else. A clarity I had never had before. About what truly matters. About what I had genuinely learned. About who I was when you strip away the success.',
     ],
@@ -451,8 +451,8 @@ export const en = {
     arc4Heading: 'Why I now share what I have learned',
     arc4Body: [
       "Today I help founders at a crossroads. Those who know they can grow bigger, but also sense that the way they are working now is not sustainable.",
-      "I am not a consultant with a framework. I am not a coach who has been successful without ever having fallen. I am someone who has built, lost, and risen again — and who now passes on the lessons that produced to others who want to learn them sooner than I did.",
-      "Not because I have all the answers. But because I know the questions — the real ones, the ones you ask yourself at night when the company is quiet and you are alone with your doubts.",
+      "I am not a consultant with a framework. I am not a coach who has been successful without ever having fallen. I am someone who has built, lost, and risen again, and who now passes on the lessons that produced to others who want to learn them sooner than I did.",
+      "Not because I have all the answers. But because I know the questions: the real ones, the ones you ask yourself at night when the company is quiet and you are alone with your doubts.",
     ],
 
     // ── Terminal CTA ──────────────────────────────────────────────────────
@@ -466,7 +466,7 @@ export const en = {
 
   // ── Spreker / Speaking Page ───────────────────────────────────────────────
   spreker: {
-    pageTitle:  'Speaker — Milan van der Meulen',
+    pageTitle:  'Speaker · Milan van der Meulen',
     pageDesc:   'Milan tells the honest story behind Soly: building, breaking, and starting over. Book him as a speaker via Athenas.',
     eyebrow:    'Speaker',
     heroTitle:  'A story that stays with you',
@@ -510,7 +510,7 @@ export const en = {
 
   // ── Nieuwsbrief / Newsletter Page ────────────────────────────────────────
   nieuwsbrief: {
-    pageTitle:      'Newsletter — Milan van der Meulen',
+    pageTitle:      'Newsletter · Milan van der Meulen',
     // D-02: explicit "written in Dutch" statement
     pageDesc:       "A monthly honest update on entrepreneurship, scaling, and leadership. Subscribe to Milan's Substack newsletter. Written in Dutch.",
     eyebrow:        'Newsletter',
@@ -521,7 +521,7 @@ export const en = {
     labelEmail:     'Email address',
     archiveHeading: 'Previously published',
     valueProps: [
-      { label: 'Honest',    description: 'No glossy success stories — only what actually works.' },
+      { label: 'Honest',    description: 'No glossy success stories, only what actually works.' },
       { label: 'Practical', description: 'Actionable lessons, straight from the founder field.' },
       { label: 'Monthly',   description: 'One update per month, never more.' },
     ],
@@ -529,13 +529,13 @@ export const en = {
 
   // ── Book / Pre-order Page (BOOK-01, Phase 5) ──────────────────────────────
   boek: {
-    pageTitle:     'Book — Milan van der Meulen',
+    pageTitle:     'Book · Milan van der Meulen',
     pageDesc:      'The book Milan is writing about scaling without losing yourself. Sign up for updates.',
     eyebrow:       'Coming Soon',
     heading:       'A book about scaling without losing yourself',
     body:          [
       "I'm writing a book. About what I learned in ten years of building, growing, and ultimately failing.",
-      'Not a success story — an honest account of what really happens when you scale a company.',
+      'Not a success story, an honest account of what really happens when you scale a company.',
     ] as const,
     subtext:       'Sign up for updates and be the first to hear the news.',
     ctaSubstack:   'Subscribe for updates',
