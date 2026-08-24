@@ -8,12 +8,11 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // Deployed to a GitHub Pages PROJECT site under the rtdpb account:
-  //   https://rtdpb.github.io/milan-website/
-  // When the real domain (e.g. milanvandermeulen.nl) is ready:
-  //   set `site` to it and REMOVE `base` (root deploys need no base path).
-  site: 'https://rtdpb.github.io',
-  base: '/milan-website/',
+  // Deployed to GitHub Pages on the custom apex domain milanvandermeulen.com
+  // (public/CNAME pins the domain so it survives every workflow deploy).
+  // Root deploy — no `base` path. If the domain ever changes, update `site`
+  // and public/CNAME together.
+  site: 'https://milanvandermeulen.com',
   output: 'static',
   trailingSlash: 'ignore',
 
