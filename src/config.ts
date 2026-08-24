@@ -86,7 +86,9 @@ export const INTRO_CALL_URL = 'https://intro.co/milanvandermeulen';
  * Used in: header LinkedIn icon, footer LinkedIn icon, JSON-LD sameAs.
  * When wired: add rel="noopener noreferrer" to any target="_blank" anchor (T-01-04).
  */
-export const TODO_LINKEDIN_URL = 'TODO_LINKEDIN_URL';
+// Typed as `string` (not the literal) so the `=== 'TODO_LINKEDIN_URL'` sentinel
+// checks across the app remain valid comparisons now that a real URL is set.
+export const TODO_LINKEDIN_URL: string = 'https://www.linkedin.com/in/milan-van-der-meulen-04b92643/';
 
 /**
  * Privacy policy page.

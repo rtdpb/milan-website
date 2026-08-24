@@ -25,7 +25,9 @@
 
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { getStrings, nlToEn, enToNl } from '../../i18n/utils';
-import { SITE_NAME } from '../../config';
+import { SITE_NAME, TODO_LINKEDIN_URL } from '../../config';
+
+const linkedinLive = TODO_LINKEDIN_URL !== 'TODO_LINKEDIN_URL';
 
 // Phase 4: locale-parameterized strings + functional NL↔EN switch (D-07, I18N-01)
 const t = getStrings(Astro.currentLocale);
@@ -143,33 +145,35 @@ const navItems = isEn
         {isEn ? 'NL' : 'EN'}
       </a>
 
-      <!-- LinkedIn icon: disabled — TODO_LINKEDIN_URL in config.ts -->
-      <!--
-        TODO: wire href to real LinkedIn URL (TODO_LINKEDIN_URL in config.ts).
-        When wired: add target="_blank" rel="noopener noreferrer" (T-01-04 contract).
-        Current: aria-disabled span — no navigation.
-      -->
-      <span
-        class="linkedin-icon"
-        role="link"
-        aria-disabled="true"
-        aria-label={`${t.nav.linkedin} — ${t.common.disabledTooltip}`}
-        tabindex="-1"
-        title={t.common.disabledTooltip}
-      >
-        <!-- LinkedIn inline SVG (authorised static markup, T-01-06 accepted) -->
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-          focusable="false"
+      <!-- LinkedIn icon: live anchor when URL is set, disabled span as fallback -->
+      {linkedinLive ? (
+        <a
+          href={TODO_LINKEDIN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="linkedin-icon linkedin-icon--live"
+          aria-label={t.nav.linkedin}
+          title={t.nav.linkedin}
         >
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-      </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          <span class="sr-only">{t.nav.linkedin}</span>
+        </a>
+      ) : (
+        <span
+          class="linkedin-icon"
+          role="link"
+          aria-disabled="true"
+          aria-label={`${t.nav.linkedin} — ${t.common.disabledTooltip}`}
+          tabindex="-1"
+          title={t.common.disabledTooltip}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+        </span>
+      )}
 
       <!-- Hamburger toggle (mobile only — aria-expanded managed by JS island below) -->
       <!-- CR-04: data-label-* carry locale strings so the JS island can read them
@@ -267,19 +271,35 @@ const navItems = isEn
       >
         {isEn ? 'Nederlands' : 'English'}
       </a>
-      <span
-        class="mobile-nav__linkedin"
-        role="link"
-        aria-disabled="true"
-        aria-label={`${t.nav.linkedin} — ${t.common.disabledTooltip}`}
-        tabindex="-1"
-        title={t.common.disabledTooltip}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-        <span class="sr-only">{t.nav.linkedin}</span>
-      </span>
+      {linkedinLive ? (
+        <a
+          href={TODO_LINKEDIN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mobile-nav__linkedin mobile-nav__linkedin--live"
+          aria-label={t.nav.linkedin}
+          title={t.nav.linkedin}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          <span class="sr-only">{t.nav.linkedin}</span>
+        </a>
+      ) : (
+        <span
+          class="mobile-nav__linkedin"
+          role="link"
+          aria-disabled="true"
+          aria-label={`${t.nav.linkedin} — ${t.common.disabledTooltip}`}
+          tabindex="-1"
+          title={t.common.disabledTooltip}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          <span class="sr-only">{t.nav.linkedin}</span>
+        </span>
+      )}
     </div>
   </div>
 </div>
@@ -666,9 +686,39 @@ const navItems = isEn
     color: var(--color-text-secondary);  /* grey — NOT yellow (D-02) */
     opacity: 0.5;
     cursor: not-allowed;
+    text-decoration: none;
   }
   @media (min-width: 960px) {
     .linkedin-icon { display: inline-flex; }
+  }
+  /* Live anchor overrides — when the real URL is set */
+  a.linkedin-icon--live {
+    cursor: pointer;
+    opacity: 1;
+    transition: color var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
+  }
+  a.linkedin-icon--live:hover {
+    color: var(--color-text);
+    opacity: 1;
+  }
+  a.linkedin-icon--live:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  /* Mobile LinkedIn live overrides */
+  a.mobile-nav__linkedin--live {
+    cursor: pointer;
+    opacity: 1;
+    border-color: var(--line-on-light);
+    transition: color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+  }
+  a.mobile-nav__linkedin--live:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+  a.mobile-nav__linkedin--live:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 
   /* ── Hamburger Button ─────────────────────────────────────────────────── */
