@@ -23,8 +23,8 @@ const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
 const s = t.samenwerken;
 
-const lezingHref = isEn ? `${getRelativeLocaleUrl('en', 'contact')}?type=lezing` : `${import.meta.env.BASE_URL}contact?type=lezing`;
-const coachingHref = isEn ? `${getRelativeLocaleUrl('en', 'contact')}?type=coaching` : `${import.meta.env.BASE_URL}contact?type=coaching`;
+const lezingHref = isEn ? getRelativeLocaleUrl('en', 'speaking') : `${import.meta.env.BASE_URL}spreker`;
+const coachingHref = isEn ? getRelativeLocaleUrl('en', 'coaching') : `${import.meta.env.BASE_URL}coaching`;
 // hrefs[0] is unused (card 0 is a non-anchor container with inline form)
 const hrefs = ['', lezingHref, coachingHref];
 
