@@ -152,13 +152,14 @@ See: `.planning/PROJECT.md` (updated 2026-08-18)
 | 260824-cmf | Contactformulier van Web3Forms → mailto (CONTACT_EMAIL = Milan@oio-impact.com): JS mailto-composer + no-JS enctype=text/plain fallback + zichtbare directe mailto-link; NL+EN via gedeelde component; nieuwsbrief ongewijzigd (inline veld boven officiële embed) — gebouwd (0 errors, 16 pagina's) | 2026-08-24 | 0a31e7d | [260824-cmf-contact-mailto](./quick/260824-cmf-contact-mailto/) |
 | 260824-liv | Levendigheid iteratie 1: CSS-only scroll-gekoppelde ("scrubbed") motion-laag (motion.css) via animation-timeline: view()/scroll() — reveals nu gekoppeld aan scroll (data-anim + data-reveal), richtingsvarianten, .anim-kenburns op fullbleed-headers + coaching-portret (NL+EN). Dubbel afgeschermd (reduced-motion + @supports), geen JS/layout-risico — gebouwd (0 errors, 16 pagina's) | 2026-08-24 | e680cf8 | [260824-liv-homepage-liveliness-scroll](./quick/260824-liv-homepage-liveliness-scroll/) |
 | 260824-lv2 | Levendigheid iteratie 2: Timeline pinned header (sticky, desktop) + zelfvullende gele rail (scroll), kinetische kop-accentstreep (.kin op Samenwerken+Timeline), hero-foto parallax op scroll. CSS-only, dubbel afgeschermd, geen JS/layout-risico — gebouwd (0 errors, 16 pagina's) | 2026-08-24 | f371751 | [260824-lv2-liveliness-iteration-2](./quick/260824-lv2-liveliness-iteration-2/) |
+| 260824-gak | Feedbackronde Milan: Samenwerken pricing-cards (Nieuwsbrief label/title omgewisseld + inline Substack-mailveld i.p.v. vinkjes; Presentatie label/title omgewisseld; Coaching "Nog 4 plekken"-stip groen + pulserend) + Testimonials herontworpen (3 donkere kaarten met monogram-avatars + carousel) + spreker "Eerder gesproken bij" herontworpen (donkere logo-kaartgrid + gele "Boek lezing"-CTA-kaart + "EN VELE ANDEREN"-divider), NL+EN — gebouwd (0 errors, 16 pagina's) | 2026-08-24 | c70c7e4 | [260824-gak-feedback-round-tweaks-to-samenwerken-pri](./quick/260824-gak-feedback-round-tweaks-to-samenwerken-pri/) |
 
 ## Next Step
 
 Phase 5 Plan 01 complete. Book page tracer delivered: bilingual /boek + /en/book, BookInterestForm (2-field, 7-state, XSS-safe), dual interest capture (IS_SENTINEL-gated Substack + Web3Forms notify), Boek nav/footer enabled both locales, hreflang cross-linked, BOOK-01 requirement satisfied. Next: Phase 5 Plan 02 (analytics + sticky CTA — Plausible install, PlausibleScript.astro, StickyCTA.astro, 4 goal events, GROW-01).
 
 ---
-*Last updated: 2026-08-19 after Plan 04-01 execution*
+*Last updated: 2026-08-24 after quick task 260824-gak execution*
 
 ## Session
 
