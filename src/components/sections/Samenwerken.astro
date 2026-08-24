@@ -135,14 +135,15 @@ const check = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" strok
   .sw__heading { font-size: var(--text-3xl); margin: 0; }
   .sw__subtext { font-size: var(--text-lg); line-height: 1.55; color: var(--color-text-secondary); margin: 0; }
 
-  /* Pricing-style cards; stack on mobile. On desktop the free Newsletter card
-     (light) sits on the left spanning both rows, and the two paid services
-     (Presentatie + Coaching, dark) stack vertically on the right so the accent
-     falls on them (feedback #12: nieuwsbrief licht, spreker/coaching donker). */
-  .sw__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
-  @media (min-width: 900px) {
-    .sw__grid { grid-template-columns: 0.9fr 1.1fr; align-items: stretch; }
-    .sw__card--light { grid-column: 1; grid-row: 1 / span 2; }
+  /* Pricing-style cards, THREE side by side on desktop (feedback: "netjes naast
+     elkaar"). Newsletter (light) · Presentatie (dark) · Coaching (dark). Two-up
+     on tablet, single column on mobile. Cards stretch to equal height. */
+  .sw__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); align-items: stretch; }
+  @media (min-width: 640px) and (max-width: 959px) {
+    .sw__grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 960px) {
+    .sw__grid { grid-template-columns: repeat(3, 1fr); }
   }
 
   /* Paid services use the dark "1:1 coaching" style. */
