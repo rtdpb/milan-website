@@ -45,7 +45,7 @@ const motif = `<svg class="art__motif" viewBox="0 0 200 120" fill="none" preserv
         </a>
       </header>
 
-      <div class="art__grid">
+      <div class={`art__grid${rest.length === 0 ? ' art__grid--single' : ''}`}>
         <!-- Featured -->
         <a class="art__card art__card--lead art__card--link" data-anim href={lead.href} target="_blank" rel="noopener noreferrer">
           <div class={`art__cover ${covers[0]}`}>
@@ -62,7 +62,8 @@ const motif = `<svg class="art__motif" viewBox="0 0 200 120" fill="none" preserv
           </div>
         </a>
 
-        <!-- Supporting -->
+        <!-- Supporting (only when there is more than one post) -->
+        {rest.length > 0 && (
         <div class="art__col">
           {rest.map((a, i) => (
             <a class="art__card art__card--sm art__card--link" data-anim style={`--i: ${i + 1}`} href={a.href} target="_blank" rel="noopener noreferrer">
@@ -80,6 +81,7 @@ const motif = `<svg class="art__motif" viewBox="0 0 200 120" fill="none" preserv
             </a>
           ))}
         </div>
+        )}
       </div>
     </div>
   </SectionWrapper>
@@ -98,6 +100,10 @@ const motif = `<svg class="art__motif" viewBox="0 0 200 120" fill="none" preserv
   .art__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
   @media (min-width: 900px) { .art__grid { grid-template-columns: 1.1fr 0.9fr; align-items: start; } }
   .art__col { display: flex; flex-direction: column; gap: var(--space-lg); }
+
+  /* Single post: one constrained featured card — no empty second column. */
+  .art__grid--single { max-width: 640px; }
+  @media (min-width: 900px) { .art__grid--single { grid-template-columns: 1fr; } }
 
   .art__card {
     display: flex; flex-direction: column; overflow: hidden;
