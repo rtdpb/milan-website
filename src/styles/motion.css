@@ -117,12 +117,12 @@
       animation-range: 0 100vh;
       will-change: transform;
     }
-    /* Clearly-visible vertical parallax: the photo is kept slightly overscanned
-       (scale 1.14 → ~7% headroom on each edge) so it can drift ±5% vertically as
-       you scroll without ever revealing a gap. The image lags the page = parallax. */
+    /* Vertical parallax with minimal overscan so the photo stays sharp: scale 1.08
+       gives ~4% headroom on each edge, enough for a ±3% drift without ever showing
+       a gap. Less zoom than before (was 1.14) = crisper hero, effect preserved. */
     @keyframes liv-hero-photo {
-      from { transform: translateY(-5%) scale(1.14); }
-      to   { transform: translateY(5%)  scale(1.14); }
+      from { transform: translateY(-3%) scale(1.08); }
+      to   { transform: translateY(3%)  scale(1.08); }
     }
 
     /* Timeline: a yellow rail fills top→bottom as the milestones scroll past,
