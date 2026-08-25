@@ -201,7 +201,9 @@ const parseStat = (v: string) => {
   .hero__figure :global(picture) { display: block; width: 100%; height: 100%; }
   .hero__figure :global(img.hero__photo) {
     width: 100%; height: 100%; object-fit: cover;
-    object-position: 50% 15%;   /* bias toward the top so the head is never cut */
+    /* Shift the crop left + a touch down so his gesturing hands stay in frame
+       (they sit at the lower-left of the source) instead of being cut off. */
+    object-position: 36% 32%;
     display: block;
     animation: heroReveal 1200ms var(--ease-out) both;
   }
