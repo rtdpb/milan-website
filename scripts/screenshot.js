@@ -23,7 +23,7 @@ import { execSync } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
 import { setTimeout as sleep } from 'node:timers/promises';
 
-const BASE = '/milan-website/'; // keep in sync with astro.config.mjs `base`
+const BASE = '/'; // keep in sync with astro.config.mjs `base` (root deploy — no base path)
 const PORT = 4331;
 const HOST = '127.0.0.1'; // bind IPv4 explicitly — Node fetch resolves localhost to IPv4
 const origin = `http://${HOST}:${PORT}`;

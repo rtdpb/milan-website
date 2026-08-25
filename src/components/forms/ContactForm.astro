@@ -209,7 +209,6 @@ const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}priva
     const r = resultEl!;
 
     // ── Static copy from data-* attributes (single source of truth, XSS-safe) ──
-    const copySubmit     = f.dataset.submit     || 'Verstuur bericht';
     const copySubmitting = f.dataset.submitting || 'Versturen…';
     const copySuccess    = f.dataset.success    || '';
     const copyError      = f.dataset.error      || '';
