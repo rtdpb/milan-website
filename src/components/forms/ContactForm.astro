@@ -1,22 +1,19 @@
 ---
 /**
  * ContactForm.astro
- * Contact form that composes an email to CONTACT_EMAIL via `mailto:` (PAGE-04).
+ * Contact form that emails submissions straight to Milan via Web3Forms
+ * (260825-flj — replaced the earlier `mailto:` composer).
  *
- * Overhauled in 260824-jd5:
- * - Removed subject dropdown + mailtoFallbackPre line
- * - Added optional Naam bedrijf + Telefoonnummer fields
- * - Added required privacy-consent checkbox linking to privacy page
- * - Submit button restyled as yellow pill CTA with arrow (matches site's primary CTAs)
+ * DELIVERY: fetch POST JSON → https://api.web3forms.com/submit with the public
+ * access_key (config TODO_WEB3FORMS_ACCESS_KEY). The email lands in Milan's
+ * inbox (the address the key was generated against). No mail app opens, and no
+ * autoresponder is sent to the visitor — only Milan is notified.
  *
- * NO-JS PATH: native form posts to `mailto:CONTACT_EMAIL` with
- * enctype="text/plain", so the browser still opens the mail client with the
- * field values in the body.
+ * Mirrors the proven pattern in BookInterestForm.astro (same fetch flow,
+ * honeypot, static-copy result states).
  *
- * JS PATH: submit intercepted (preventDefault). Builds a nicely formatted
- * `mailto:` (localised subject + labelled body) and navigates to it, then shows
- * a static polite note. No fake success/network states — delivery happens in
- * the user's mail app.
+ * NO-JS PATH: native POST to Web3Forms with a `redirect` to the default
+ * thank-you page, so the form still delivers without JavaScript.
  *
  * ACCESSIBILITY:
  * - Every field has a visible <label for> (never placeholder-only).
@@ -24,10 +21,11 @@
  * - aria-required="true" on required fields + native required attribute.
  * - Autocomplete attributes on all appropriate fields.
  *
- * SECURITY: result strings come ONLY from i18n — never echoed from user input.
+ * SECURITY: result strings come ONLY from i18n — never echoed from the API
+ * response or user input. Honeypot botcheck checkbox blocks spam bots.
  */
 
-import { CONTACT_EMAIL } from '../../config';
+import { TODO_WEB3FORMS_ACCESS_KEY } from '../../config';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { getStrings } from '../../i18n/utils';
 
@@ -42,8 +40,11 @@ const {
   privacyConsentPre,
   privacyConsentLink,
   ctaSubmit,
+  ctaSubmitting,
+  successMsg,
+  errorMsg,
+  errorNetwork,
   emailSubject,
-  mailtoNote,
 } = t.contact;
 
 // Privacy policy href — NL: /privacybeleid, EN: /en/privacy
@@ -52,24 +53,41 @@ const base = import.meta.env.BASE_URL;
 const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}privacybeleid`;
 ---
 
-<!-- ContactForm: mailto composer (260824-jd5 overhaul) -->
+<!-- ContactForm: Web3Forms fetch submit (260825-flj) -->
 <div class="contact-form-wrap">
   <form
     id="contact-form"
-    method="post"
-    enctype="text/plain"
-    action={`mailto:${CONTACT_EMAIL}`}
+    method="POST"
+    action="https://api.web3forms.com/submit"
     novalidate
     class="contact-form"
-    data-email={CONTACT_EMAIL}
-    data-subject={emailSubject}
-    data-note={mailtoNote}
-    data-l-name={labelNaam}
-    data-l-email={labelEmail}
-    data-l-message={labelBericht}
-    data-l-company={labelBedrijf}
-    data-l-phone={labelTelefoon}
+    data-submit={ctaSubmit}
+    data-submitting={ctaSubmitting}
+    data-success={successMsg}
+    data-error={errorMsg}
+    data-network={errorNetwork}
   >
+    <!-- Hidden: Web3Forms access key — public client-side identifier -->
+    <input type="hidden" name="access_key" value={TODO_WEB3FORMS_ACCESS_KEY} />
+
+    <!-- Hidden: locale-resolved subject line for the email Milan receives -->
+    <input type="hidden" name="subject" value={emailSubject} />
+
+    <!-- Hidden: redirect for the no-JS path (Web3Forms default thank-you page) -->
+    <input type="hidden" name="redirect" value="https://web3forms.com/success" />
+
+    <!-- Type identifier: distinguishes contact emails from book-interest emails in the inbox -->
+    <input type="hidden" name="type" value="contact" />
+
+    <!-- Honeypot: botcheck checkbox (must be a checkbox for Web3Forms) -->
+    <input
+      type="checkbox"
+      name="botcheck"
+      style="display:none"
+      tabindex="-1"
+      aria-hidden="true"
+    />
+
     <!-- Name — required -->
     <div class="form-group">
       <label for="contact-naam" class="form-label">
@@ -172,81 +190,111 @@ const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}priva
     </button>
   </form>
 
-  <!-- Result region: polite note after the mail client opens (aria-live for AT) -->
+  <!-- Result region: hidden until JS resolves success or error (aria-live for AT) -->
   <div id="contact-result" aria-live="polite" hidden></div>
 </div>
 
-<!-- JS island: mailto composer -->
+<!-- JS island: Web3Forms fetch submit (mirrors BookInterestForm.astro) -->
 <script>
   (function () {
     'use strict';
 
     const form     = document.getElementById('contact-form') as HTMLFormElement | null;
+    const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
     const resultEl = document.getElementById('contact-result') as HTMLElement | null;
 
-    if (!form) return;
+    if (!form || !submitBtn || !resultEl) return;
     const f = form!;
+    const s = submitBtn!;
+    const r = resultEl!;
 
-    // ── Copy + config from data-* attributes (single source of truth) ──────
-    const email       = f.dataset.email    || '';
-    const subjectBase = f.dataset.subject  || '';
-    const note        = f.dataset.note     || '';
-    const lName       = f.dataset.lName    || 'Naam';
-    const lEmail      = f.dataset.lEmail   || 'Mailadres';
-    const lMessage    = f.dataset.lMessage || 'Bericht';
-    const lCompany    = f.dataset.lCompany || 'Naam bedrijf';
-    const lPhone      = f.dataset.lPhone   || 'Telefoonnummer';
+    // ── Static copy from data-* attributes (single source of truth, XSS-safe) ──
+    const copySubmit     = f.dataset.submit     || 'Verstuur bericht';
+    const copySubmitting = f.dataset.submitting || 'Versturen…';
+    const copySuccess    = f.dataset.success    || '';
+    const copyError      = f.dataset.error      || '';
+    const copyNetwork    = f.dataset.network    || '';
 
-    // ── Submit → build mailto and open the visitor's mail client ───────────
-    f.addEventListener('submit', function (e) {
+    // Preserve the submit button's arrow icon so we can restore it after states.
+    const submitHTML = s.innerHTML;
+
+    // ── Placeholder key detection ─────────────────────────────────────────
+    const accessKeyInput = f.querySelector('input[name="access_key"]') as HTMLInputElement | null;
+    const accessKey      = accessKeyInput ? accessKeyInput.value : '';
+    if (accessKey === 'TODO_WEB3FORMS_ACCESS_KEY') {
+      console.warn(
+        '[ContactForm] Web3Forms access key is a placeholder — form will not deliver email. ' +
+        'Replace TODO_WEB3FORMS_ACCESS_KEY in src/config.ts.'
+      );
+    }
+
+    // ── Helper: show error in result region, re-enable button ──────────────
+    function showError(message: string) {
+      const errorP = document.createElement('p');
+      errorP.className = 'form-error';
+      errorP.textContent = message;
+      r.innerHTML = '';
+      r.appendChild(errorP);
+      r.hidden = false;
+
+      s.disabled = false;
+      s.innerHTML = submitHTML;
+      (s as HTMLElement).style.opacity = '';
+    }
+
+    // ── Fetch submit handler ────────────────────────────────────────────────
+    f.addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      // novalidate carries the no-JS path; the JS path validates itself (WR-02).
+      // novalidate carries the no-JS path; the JS path validates itself.
       if (!f.checkValidity()) {
         f.reportValidity();
         return;
       }
 
-      const fd      = new FormData(f);
-      const name    = String(fd.get('name') || '');
-      const sender  = String(fd.get('email') || '');
-      const company = String(fd.get('company') || '');
-      const phone   = String(fd.get('phone') || '');
-      const message = String(fd.get('message') || '');
+      // Submitting — disable button, swap label (drop the arrow icon), dim.
+      s.disabled = true;
+      s.textContent = copySubmitting;
+      (s as HTMLElement).style.opacity = '0.7';
 
-      const subject = subjectBase;
+      r.hidden = true;
+      r.innerHTML = '';
 
-      let body =
-        lName + ': ' + name + '\n' +
-        lEmail + ': ' + sender + '\n';
+      try {
+        const data = Object.fromEntries(new FormData(f));
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
 
-      if (company) body += lCompany + ': ' + company + '\n';
-      if (phone)   body += lPhone   + ': ' + phone   + '\n';
+        const json = await response.json();
 
-      body += '\n' + message;
+        if (json && json.success === true) {
+          // Fire Plausible 'Contact: Submit' goal (GROW-01, D-05)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          if (typeof (window as any).plausible === 'function') {
+            (window as any).plausible('Contact: Submit');
+          }
 
-      const url =
-        'mailto:' + email +
-        '?subject=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(body);
-
-      // Fire Plausible 'Contact: Submit' goal (GROW-01, D-05)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (typeof (window as any).plausible === 'function') {
-        (window as any).plausible('Contact: Submit');
-      }
-
-      // Open the mail client
-      window.location.href = url;
-
-      // Static polite note — never echoes user input (T-2-02)
-      if (resultEl) {
-        const p = document.createElement('p');
-        p.className = 'form-success';
-        p.textContent = note;
-        resultEl.innerHTML = '';
-        resultEl.appendChild(p);
-        resultEl.hidden = false;
+          // Success — hide form, show STATIC success message.
+          // NEVER echo json.message or user input into the DOM (DOM XSS safety).
+          (f as HTMLElement).hidden = true;
+          const successP = document.createElement('p');
+          successP.className = 'form-success';
+          successP.textContent = copySuccess;
+          r.appendChild(successP);
+          r.hidden = false;
+        } else {
+          // API error (invalid key, rate limit, etc.)
+          showError(copyError);
+        }
+      } catch (_err) {
+        // Network error (no connection, CORS, etc.)
+        showError(copyNetwork);
       }
     });
   })();
@@ -432,6 +480,17 @@ const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}priva
     color: var(--color-text);
     line-height: 1.5;
     margin: var(--space-md) 0 0;
+  }
+
+  /* Error: --color-destructive — not yellow */
+  .form-error {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 400;
+    color: var(--color-destructive);
+    line-height: 1.5;
+    margin: var(--space-md) 0 0;
+    word-wrap: break-word;
   }
 
   @media (prefers-reduced-motion: reduce) {

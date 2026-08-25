@@ -51,12 +51,15 @@ export const CONTACT_URL = `${import.meta.env.BASE_URL}contact`;
 export const CONTACT_EMAIL = 'Milan@oio-impact.com';
 
 /**
- * Web3Forms access key — generated at web3forms.com against Milan's email.
- * TODO Phase 2: replace with real key from Web3Forms dashboard.
- * Safe to commit once real: it is a public client-side identifier, not a secret.
- * Used in: src/components/forms/ContactForm.astro hidden input[name="access_key"]
+ * Web3Forms access key — generated at web3forms.com against Milan@oio-impact.com
+ * (form "Contactformulier website"). Public client-side identifier, not a secret —
+ * safe to commit. Submissions email straight to Milan's inbox.
+ * Used in: src/components/forms/ContactForm.astro + BookInterestForm.astro
+ *   hidden input[name="access_key"].
+ * Typed as `string` (not the literal) so the `=== 'TODO_WEB3FORMS_ACCESS_KEY'`
+ * placeholder sentinel in the forms still compiles now that a real key is set.
  */
-export const TODO_WEB3FORMS_ACCESS_KEY = 'TODO_WEB3FORMS_ACCESS_KEY';
+export const TODO_WEB3FORMS_ACCESS_KEY: string = 'eab3a773-c5de-44d1-9c3c-c2112dd75088';
 
 /**
  * Calendly scheduling link for "Plan kennismaking".
