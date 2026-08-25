@@ -11,7 +11,8 @@
 import SectionWrapper from '../ui/SectionWrapper.astro';
 import { getStrings } from '../../i18n/utils';
 import { TODO_SUBSTACK_URL } from '../../config';
-import { fetchSubstackFeed, type ArticleCard } from '../../lib/rss';
+import { fetchSubstackFeed, parseFeed, type ArticleCard } from '../../lib/rss';
+import feedSnapshot from '../../data/substack-feed.xml?raw';
 
 const t = getStrings(Astro.currentLocale);
 const isEn = (Astro.currentLocale ?? 'nl') === 'en';
@@ -22,6 +23,9 @@ const substackPublicationUrl = TODO_SUBSTACK_URL;
 let articles: ArticleCard[] = [];
 if (!IS_SENTINEL) {
   articles = await fetchSubstackFeed(`${TODO_SUBSTACK_URL}/feed`, 3);
+  // The GitHub Actions build can't reach Substack (403 from the datacenter IP),
+  // so fall back to the committed snapshot — refresh via `npm run articles:pull`.
+  if (articles.length === 0) articles = parseFeed(feedSnapshot, 3);
 }
 const hasArticles = articles.length > 0;
 

@@ -100,6 +100,54 @@ function formatPubDate(pubDate: string): string {
   return `${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+// ── Parse (pure) ────────────────────────────────────────────────────────────────
+
+/**
+ * Parses a Substack RSS XML string into ArticleCard objects (newest-first).
+ * Pure + deterministic — no network. Shared by the live fetch below AND by the
+ * committed-snapshot fallback in the page components (Substack 403s the GitHub
+ * Actions build IP, so the live fetch is unavailable in CI — see fetchSubstackFeed).
+ * Returns [] on empty/malformed input.
+ */
+export function parseFeed(xml: string, maxItems = 3): ArticleCard[] {
+  if (!xml) return [];
+  let parsed: any;
+  try {
+    parsed = parser.parse(xml);
+  } catch {
+    return [];
+  }
+  const rawItems = parsed?.rss?.channel?.item ?? [];
+
+  // Pitfall 2: fast-xml-parser returns a scalar object (not array) when the
+  // feed has exactly one <item>. Normalize to array before .map() to prevent
+  // a TypeError that would crash the build as soon as a second post is published.
+  const items: any[] = Array.isArray(rawItems) ? rawItems : [rawItems];
+
+  return items.filter(Boolean).slice(0, maxItems).map((item): ArticleCard => {
+    // content:encoded is the full article HTML — used ONLY for word count,
+    // never for display (no set:html). See T-3-02 / RESEARCH anti-patterns.
+    const content = item['content:encoded'] ?? item.description ?? '';
+
+    return {
+      category:      'Artikel',   // neutral static label — RSS has no category field (D-07)
+      title:         item.title ?? '',
+      // Strip HTML tags then decode entities before slicing — avoids literal
+      // entity strings (e.g. &#8217;) and mid-entity cuts in the 160-char excerpt.
+      // NEVER render RSS HTML directly (T-3-02).
+      excerpt:       decodeEntities(
+        (item.description ?? '').replace(/<[^>]+>/g, ' ')
+      ).replace(/\s+/g, ' ').trim().slice(0, 160),
+      date:          formatPubDate(item.pubDate ?? ''),
+      readTime:      wordCountToReadTime(content),
+      isPlaceholder: false,
+      // WR-02: item.link may be an object when atom:link siblings exist in the feed.
+      // fast-xml-parser exposes text content as '#text' when an element also has attributes.
+      href:          (typeof item.link === 'string' ? item.link : item.link?.['#text'] ?? ''),
+    };
+  });
+}
+
 // ── Main Export ───────────────────────────────────────────────────────────────
 
 /**
@@ -146,36 +194,7 @@ export async function fetchSubstackFeed(
       return [];
     }
     const xml = await res.text();
-    const parsed = parser.parse(xml);
-    const rawItems = parsed?.rss?.channel?.item ?? [];
-
-    // Pitfall 2: fast-xml-parser returns a scalar object (not array) when the
-    // feed has exactly one <item>. Normalize to array before .map() to prevent
-    // a TypeError that would crash the build as soon as a second post is published.
-    const items: any[] = Array.isArray(rawItems) ? rawItems : [rawItems];
-
-    return items.slice(0, maxItems).map((item): ArticleCard => {
-      // content:encoded is the full article HTML — used ONLY for word count,
-      // never for display (no set:html). See T-3-02 / RESEARCH anti-patterns.
-      const content = item['content:encoded'] ?? item.description ?? '';
-
-      return {
-        category:      'Artikel',   // neutral static label — RSS has no category field (D-07)
-        title:         item.title ?? '',
-        // Strip HTML tags then decode entities before slicing — avoids literal
-        // entity strings (e.g. &#8217;) and mid-entity cuts in the 160-char excerpt.
-        // NEVER render RSS HTML directly (T-3-02).
-        excerpt:       decodeEntities(
-          (item.description ?? '').replace(/<[^>]+>/g, ' ')
-        ).replace(/\s+/g, ' ').trim().slice(0, 160),
-        date:          formatPubDate(item.pubDate ?? ''),
-        readTime:      wordCountToReadTime(content),
-        isPlaceholder: false,
-        // WR-02: item.link may be an object when atom:link siblings exist in the feed.
-        // fast-xml-parser exposes text content as '#text' when an element also has attributes.
-        href:          (typeof item.link === 'string' ? item.link : item.link?.['#text'] ?? ''),
-      };
-    });
+    return parseFeed(xml, maxItems);
   } catch (err) {
     // Catch all: network errors (ENOTFOUND), XML parse errors, AbortError (timeout), etc.
     // Build must never fail on feed errors — D-06 / T-3-04.

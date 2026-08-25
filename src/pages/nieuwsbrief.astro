@@ -32,7 +32,8 @@ import PlaceholderBadge from '../components/ui/PlaceholderBadge.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
 import { getStrings } from '../i18n/utils';
 import { TODO_SUBSTACK_URL } from '../config';
-import { fetchSubstackFeed, type ArticleCard, type PlaceholderCard } from '../lib/rss';
+import { fetchSubstackFeed, parseFeed, type ArticleCard, type PlaceholderCard } from '../lib/rss';
+import feedSnapshot from '../data/substack-feed.xml?raw';
 
 // Phase 4: locale-parameterized strings (Astro.currentLocale is 'nl' at root)
 const t = getStrings(Astro.currentLocale);
@@ -47,6 +48,9 @@ const substackPublicationUrl = TODO_SUBSTACK_URL;
 let archiveArticles: ArticleCard[] | PlaceholderCard[] = [];
 if (!IS_SENTINEL) {
   archiveArticles = await fetchSubstackFeed(`${TODO_SUBSTACK_URL}/feed`, 10);
+  // CI can't reach Substack (403 from the datacenter IP) — fall back to the
+  // committed snapshot so the archive still renders (`npm run articles:pull`).
+  if (archiveArticles.length === 0) archiveArticles = parseFeed(feedSnapshot, 10);
 }
 const hasArchive = archiveArticles.length > 0;
 ---

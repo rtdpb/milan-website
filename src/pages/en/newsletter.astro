@@ -28,7 +28,8 @@ import PlaceholderBadge from '../../components/ui/PlaceholderBadge.astro';
 import Newsletter from '../../components/sections/Newsletter.astro';
 import { getStrings } from '../../i18n/utils';
 import { TODO_SUBSTACK_URL } from '../../config';
-import { fetchSubstackFeed, type ArticleCard, type PlaceholderCard } from '../../lib/rss';
+import { fetchSubstackFeed, parseFeed, type ArticleCard, type PlaceholderCard } from '../../lib/rss';
+import feedSnapshot from '../../data/substack-feed.xml?raw';
 
 // Astro.currentLocale is 'en' automatically for /en/* pages at build time.
 const t = getStrings(Astro.currentLocale);
@@ -38,24 +39,17 @@ const IS_SENTINEL = TODO_SUBSTACK_URL === 'TODO_SUBSTACK_URL';
 const subscribeUrl = `${TODO_SUBSTACK_URL}/subscribe`;
 const substackPublicationUrl = TODO_SUBSTACK_URL;
 
-// Archive: up to 10 items from Substack (vs 3 on homepage) — NEWS-01
-let archiveArticles: ArticleCard[] | PlaceholderCard[];
-
-if (IS_SENTINEL) {
-  // D-04: honest placeholder state while Substack URL not yet supplied
-  archiveArticles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
-} else {
-  // D-02: build-time RSS fetch (maxItems 10 for archive — 3 for homepage)
-  const feedUrl = `${TODO_SUBSTACK_URL}/feed`;
-  const fetched = await fetchSubstackFeed(feedUrl, 10);
-  if (fetched.length === 0) {
-    // D-06: feed failure or empty feed → honest placeholder + build-log warning
-    console.warn('[Phase 4 EN] Substack feed returned 0 items — rendering placeholder cards.');
-    archiveArticles = t.articles.items.map((item) => ({ ...item, isPlaceholder: true as const }));
-  } else {
-    archiveArticles = fetched;
-  }
+// Archive: REAL issues only — hidden until the Substack feed has posts. No
+// placeholder cards (client: articles only appear once we actually have them).
+// Mirrors the NL nieuwsbrief.astro path.
+let archiveArticles: ArticleCard[] | PlaceholderCard[] = [];
+if (!IS_SENTINEL) {
+  archiveArticles = await fetchSubstackFeed(`${TODO_SUBSTACK_URL}/feed`, 10);
+  // CI can't reach Substack (403 from the datacenter IP) — fall back to the
+  // committed snapshot so the archive still renders (`npm run articles:pull`).
+  if (archiveArticles.length === 0) archiveArticles = parseFeed(feedSnapshot, 10);
 }
+const hasArchive = archiveArticles.length > 0;
 ---
 
 <BaseLayout title={t.nieuwsbrief.pageTitle} description={t.nieuwsbrief.pageDesc} nlSlug="nieuwsbrief" enSlug="newsletter">
@@ -100,7 +94,8 @@ if (IS_SENTINEL) {
   <!-- 3. Signup: reuse Newsletter.astro as-is (EN text via Astro.currentLocale) -->
   <Newsletter />
 
-  <!-- 4. Archive: recent issues grid (up to 10 items) -->
+  <!-- 4. Archive: recent issues grid (up to 10 items) — only when the feed has real posts -->
+  {hasArchive && (
   <SectionWrapper id="nieuwsbrief-archief" labelledBy="nieuwsbrief-archief-heading" variant="default">
     <div class="nieuwsbrief-archief">
 
@@ -205,6 +200,7 @@ if (IS_SENTINEL) {
 
     </div>
   </SectionWrapper>
+  )}
 
 </BaseLayout>
 

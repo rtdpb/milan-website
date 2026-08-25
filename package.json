@@ -9,6 +9,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "snap": "astro build && node scripts/screenshot.js",
+    "articles:pull": "node scripts/pull-articles.mjs",
     "astro": "astro"
   },
   "dependencies": {
