@@ -25,6 +25,7 @@ export type ArticleCard = {
   readTime:      string;
   isPlaceholder: false;
   href:          string;   // real Substack post URL
+  image:         string;   // Substack cover image URL (from <enclosure>); '' if none
 };
 
 export type PlaceholderCard = {
@@ -89,6 +90,21 @@ function wordCountToReadTime(html: string): string {
  * Example: "Mon, 04 Aug 2026 10:00:00 GMT" → "augustus 2026"
  * Uses a hard-coded Dutch month-name array — no runtime locale dependency.
  */
+/**
+ * Right-sizes a Substack CDN image URL by injecting a width into its transform.
+ * Substack "fetch" URLs look like:
+ *   https://substackcdn.com/image/fetch/$s_!sig!,f_auto,q_auto:good,.../<encoded original>
+ * The `$s_!…!` signature is width-independent (Substack's own srcset reuses one
+ * signature across many widths), so injecting `w_<n>,c_limit,` yields a smaller,
+ * valid image instead of shipping the full-res original (asset discipline).
+ * Non-Substack or already-sized URLs are returned unchanged.
+ */
+export function substackImage(url: string, width: number): string {
+  if (!url) return '';
+  if (/,w_\d+/.test(url)) return url; // already carries a width
+  return url.replace(/(\/image\/fetch\/\$s_![^,]*,)/, `$1w_${width},c_limit,`);
+}
+
 function formatPubDate(pubDate: string): string {
   if (!pubDate) return '';          // guard: no pubDate in item
   const d = new Date(pubDate);
@@ -129,6 +145,14 @@ export function parseFeed(xml: string, maxItems = 3): ArticleCard[] {
     // never for display (no set:html). See T-3-02 / RESEARCH anti-patterns.
     const content = item['content:encoded'] ?? item.description ?? '';
 
+    // <enclosure url="…" type="image/…"> is the post's cover image. May be an
+    // array if the feed carries multiple enclosures — take the first image one.
+    const enc = Array.isArray(item.enclosure) ? item.enclosure[0] : item.enclosure;
+    const image =
+      enc && typeof enc === 'object' && String(enc['@_type'] ?? '').startsWith('image')
+        ? String(enc['@_url'] ?? '')
+        : '';
+
     return {
       category:      'Artikel',   // neutral static label — RSS has no category field (D-07)
       title:         item.title ?? '',
@@ -144,6 +168,7 @@ export function parseFeed(xml: string, maxItems = 3): ArticleCard[] {
       // WR-02: item.link may be an object when atom:link siblings exist in the feed.
       // fast-xml-parser exposes text content as '#text' when an element also has attributes.
       href:          (typeof item.link === 'string' ? item.link : item.link?.['#text'] ?? ''),
+      image,
     };
   });
 }
