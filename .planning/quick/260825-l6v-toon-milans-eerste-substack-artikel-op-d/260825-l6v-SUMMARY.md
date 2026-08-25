@@ -68,6 +68,22 @@ en `src/data/substack-feed.xml` committen.
 voorbeeldkaarten". Nu gelijkgetrokken met NL: snapshot-fallback + de archief-sectie
 wordt volledig verborgen als er geen echte posts zijn.
 
+## Follow-up — echte Substack-omslagfoto (op verzoek Milan)
+
+Milan wilde de afbeelding uit Substack overnemen i.p.v. de zelfgemaakte gekleurde
+cover. De feed levert die als `<enclosure>` (de post-omslagfoto).
+- **`src/lib/rss.ts`** — `image`-veld toegevoegd aan `ArticleCard` (uit
+  `enclosure[@_url]`, alleen als `type` met `image` begint) + helper
+  `substackImage(url, width)` die de Substack-CDN-URL op maat schaalt
+  (`w_,c_limit` injecteren — de `$s_!…!`-signature is width-onafhankelijk, dus de
+  volle 1600px-original hoeft niet geserveerd te worden: 1200px = ~200KB).
+- **`src/components/sections/Articles.astro`** — cover toont nu de echte foto
+  (`art__cover--photo` + `object-fit:cover`, lead w_1200 / supporting w_640) met
+  een onderscrim zodat het categorielabel leesbaar blijft; val terug op de
+  getekende motief-cover als een post geen afbeelding heeft.
+- Beeld laadt client-side van substackcdn.com (geen build-fetch), dus de 403-IP-
+  blokkade speelt hier niet.
+
 ## Verificatie
 
 - `npm run build` / `npm run snap` — 16 pagina's, 0 errors.
