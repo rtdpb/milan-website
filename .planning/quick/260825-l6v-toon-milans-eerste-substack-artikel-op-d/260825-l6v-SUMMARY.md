@@ -38,6 +38,15 @@ Geen wijziging nodig aan de feed-logica (`rss.ts`) of aan `config.ts`.
 - **`src/components/forms/ContactForm.astro`**: ongebruikte `copySubmit`-variabele
   verwijderd (build-warning uit de vorige quick-task 260825-flj opgeruimd).
 
+## Nagekomen fix — Substack 403 in CI
+
+Eerste deploy toonde het artikel NIET live: de GitHub Actions-build kreeg
+`Substack RSS fetch failed: 403 Forbidden`. Substack blokkeert requests met een
+lege/library-User-Agent (Node/undici default) — lokaal werkt het wél omdat het
+residentiële IP niet geblokkeerd wordt. **`src/lib/rss.ts`** stuurt nu een echte
+browser-`User-Agent` + RSS `Accept`-header mee, zodat de feed ook tijdens de
+CI-build laadt. Geverifieerd via de deploy-log (200 i.p.v. 403) + live pagina.
+
 ## Verificatie
 
 - `npm run build` / `npm run snap` — 16 pagina's, 0 errors.

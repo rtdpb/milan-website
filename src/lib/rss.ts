@@ -127,7 +127,19 @@ export async function fetchSubstackFeed(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(feedUrl, { signal: controller.signal });
+    // Substack returns 403 Forbidden to requests with an empty/library User-Agent
+    // (e.g. Node/undici's default) — which is what the GitHub Actions build sends,
+    // so the feed silently came back empty in CI while working locally. Send a
+    // real browser UA + RSS Accept header so the feed loads at build time too.
+    const res = await fetch(feedUrl, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+          '(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+        'Accept': 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+      },
+    });
     clearTimeout(timer);
     if (!res.ok) {
       console.warn(`[Phase 3] Substack RSS fetch failed: ${res.status} ${res.statusText}`);
