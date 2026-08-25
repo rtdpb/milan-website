@@ -78,9 +78,6 @@ const parseStat = (v: string) => {
             formats={['avif', 'webp']}
             fallbackFormat="webp"
             widths={[640, 900, 1200, 1600, 2000, 2400]}
-            /* object-fit:cover + the parallax overscan render the photo far larger
-               than the 52vw column, so advertise ~78vw — otherwise the browser
-               picks a too-small variant and the hero looks soft on retina. */
             sizes="(max-width: 899px) 100vw, 78vw"
             alt={isEn
               ? 'Milan van der Meulen speaking on stage against a yellow and blue backdrop.'
