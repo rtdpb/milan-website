@@ -374,7 +374,7 @@ const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}priva
   /* ── Privacy consent row ─────────────────────────────────────────────────── */
   .form-consent {
     display: flex;
-    align-items: flex-start;
+    align-items: center;   /* line the box up with the label's (centred) text */
     gap: var(--space-sm);
     margin-bottom: var(--space-lg);
   }
@@ -383,7 +383,6 @@ const privacyHref = isEn ? getRelativeLocaleUrl('en', 'privacy') : `${base}priva
     width: 20px;
     height: 20px;
     min-width: 20px;
-    margin-top: 2px; /* optical alignment with label text */
     border: 1.5px solid var(--color-border);
     border-radius: 4px;
     background-color: var(--color-bg);
